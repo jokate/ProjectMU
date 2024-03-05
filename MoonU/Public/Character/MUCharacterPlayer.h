@@ -7,12 +7,13 @@
 #include "Interface/SpaceTraveler.h"
 #include "Interface/Sprinter.h"
 #include "Interface/SuitEquipper.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public ACharacter, public ISuitEquipper, public ISprinter, public ISpaceTraveler
+class MOONU_API AMUCharacterPlayer : public ACharacter, public ISuitEquipper, public ISprinter, public ISpaceTraveler, public IGameplayTagWidgetOwner
 {
 	GENERATED_BODY()
 
@@ -69,6 +70,17 @@ public:
 	virtual void OnCharacterOutBasement() override;
 	virtual void OnCharacterInBasement() override;
 #pragma endregion
+
+#pragma region IGameplayTagWidgetOwner
+	virtual UUserWidget* GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual void ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual IGameplayTagWidgetOwner* GetGameplayTagWidgetOwner();	
+#pragma endregion
+	
 protected :
 	
 #pragma region Interaction

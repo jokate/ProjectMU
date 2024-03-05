@@ -10,7 +10,7 @@
 /**
  * 
  */
-static TObjectPtr<UMUGameSettings> Instance;
+static TObjectPtr<UMUGameSettings> GameSettingInstance;
 
 UCLASS(Config = Game)
 class MOONU_API UMUGameSettings : public UObject
@@ -20,12 +20,19 @@ class MOONU_API UMUGameSettings : public UObject
 public :
 
 	static const UMUGameSettings* Get();
-	
+
+#pragma region On Gameplay
 	UPROPERTY(Config)
 	FGameplayTag SuitInteractionTag;
 
 	UPROPERTY(Config)
 	FGameplayTag HelmetInteractionTag;
+#pragma endregion
+
+#pragma region UI GameplayTags
+	UPROPERTY(Config)
+	FGameplayTag HUDGameplayTag;
+#pragma endregion
 
 private:
 };

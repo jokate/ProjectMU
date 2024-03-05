@@ -5,10 +5,10 @@
 
 const UMUGameSettings* UMUGameSettings::Get()
 {
-	if (Instance == nullptr)
+	if (GameSettingInstance == nullptr)
 	{
-		Instance = GetMutableDefault<UMUGameSettings>();
+		GameSettingInstance = GetMutableDefault<UMUGameSettings>();
 	}
 
-	return Instance;
+	return GameSettingInstance;
 }

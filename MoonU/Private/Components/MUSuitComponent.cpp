@@ -3,7 +3,11 @@
 
 #include "Components/MUSuitComponent.h"
 
+#include "Data/MUGameSettings.h"
 #include "Interface/SuitEquipper.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
+#include "Interface/UI/Widget/HUDWidgetInterface.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values for this component's properties
 UMUSuitComponent::UMUSuitComponent()
@@ -89,6 +93,7 @@ void UMUSuitComponent::UseOxygen()
 	}
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount - OxygenUseAmount, 0.0f, MaxOxygenAmount);
+	OnUpdateOxygen();
 	UE_LOG(LogTemp, Log, TEXT("CurrentOxygen : %f"), CurrentOxygenAmount);
 }
 
@@ -100,7 +105,47 @@ void UMUSuitComponent::RecoverOxygen()
 	}
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount + OxygenRecoverAmount, 0.0f, MaxOxygenAmount);
+	OnUpdateOxygen();
 	UE_LOG(LogTemp, Log, TEXT("CurrentOxygen : %f"), CurrentOxygenAmount);
+}
+
+void UMUSuitComponent::OnUpdateOxygen()
+{
+	AActor* OwnerActor = GetOwner();
+
+	if (OwnerActor == nullptr)
+	{
+		return;
+	}
+
+	auto* GameplayTagWidgetOwner = Cast<IGameplayTagWidgetOwner>(OwnerActor);
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return;
+	}
+	const auto* GS = UMUGameSettings::Get();
+
+	if (GS == nullptr)
+	{
+		return;
+	}
+	
+	UUserWidget* Widget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(GS->HUDGameplayTag);
+
+	if (Widget == nullptr)
+	{
+		return;
+	}
+
+	auto* HUDWidgetInterface = Cast<IHUDWidgetInterface>(Widget);
+
+	if (HUDWidgetInterface == nullptr)
+	{
+		return;
+	}
+
+	HUDWidgetInterface->OnOxygenChanged(CurrentOxygenAmount);
 }
 
 void UMUSuitComponent::OnCharacterInBasement()

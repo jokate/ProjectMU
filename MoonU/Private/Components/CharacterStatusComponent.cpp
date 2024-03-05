@@ -3,7 +3,11 @@
 
 #include "Components/CharacterStatusComponent.h"
 
+#include "Data/MUGameSettings.h"
 #include "Interface/Sprinter.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
+#include "Interface/UI/Widget/HUDWidgetInterface.h"
+#include "Blueprint/UserWidget.h"
 
 
 // Sets default values for this component's properties
@@ -62,6 +66,7 @@ void UCharacterStatusComponent::UseStamina()
 	}
 
 	CurrentStamina = FMath::Clamp(CurrentStamina - StaminaDecreaseAmount, 0.0f, MaxStamina);
+	OnUpdateStamina();
 	UE_LOG(LogTemp, Log, TEXT("CurrentStamina : %f"), CurrentStamina);
 }
 
@@ -74,5 +79,45 @@ void UCharacterStatusComponent::RecoverStamina()
 	}
 
 	CurrentStamina = FMath::Clamp(CurrentStamina + StaminaRecoverAmount, 0.0f, MaxStamina);
+	OnUpdateStamina();
+}
+
+void UCharacterStatusComponent::OnUpdateStamina()
+{
+	AActor* OwnerActor = GetOwner();
+
+	if (OwnerActor == nullptr)
+	{
+		return;
+	}
+
+	auto* GameplayTagWidgetOwner = Cast<IGameplayTagWidgetOwner>(OwnerActor);
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return;
+	}
+	const auto* GS = UMUGameSettings::Get();
+
+	if (GS == nullptr)
+	{
+		return;
+	}
+	
+	UUserWidget* Widget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(GS->HUDGameplayTag);
+
+	if (Widget == nullptr)
+	{
+		return;
+	}
+
+	auto* HUDWidgetInterface = Cast<IHUDWidgetInterface>(Widget);
+
+	if (HUDWidgetInterface == nullptr)
+	{
+		return;
+	}
+
+	HUDWidgetInterface->OnStaminaChanged(CurrentStamina);
 }
 

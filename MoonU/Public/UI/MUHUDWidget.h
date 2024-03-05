@@ -4,17 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "MUHUDWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUHUDWidget : public UUserWidget
+class MOONU_API UMUHUDWidget : public UUserWidget, public IHUDWidgetInterface
 {
 	GENERATED_BODY()
-	
-public :
+
+	virtual void OnOxygenChanged(float InOxygen) override;
+
+	virtual void OnStaminaChanged(float InStamina) override;
+protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOxygenChanged_BP(float InOxygen);
 

@@ -44,6 +44,8 @@ protected:
 	UFUNCTION()
 	virtual void RecoverOxygen();
 #pragma endregion
+	
+	virtual void OnUpdateOxygen();
 
 protected:	
 	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Suit Activated")

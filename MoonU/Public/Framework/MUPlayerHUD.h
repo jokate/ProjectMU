@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "MUPlayerHUD.generated.h"
 
 class UMUHUDWidget;
@@ -12,14 +13,21 @@ class UMUHUDWidget;
  * 
  */
 UCLASS()
-class MOONU_API AMUPlayerHUD : public AHUD
+class MOONU_API AMUPlayerHUD : public AHUD, public IGameplayTagWidgetOwner
 {
 	GENERATED_BODY()
 
 public :
-	UPROPERTY(EditDefaultsOnly, Category = "HUD Widget")
-	TSubclassOf<UMUHUDWidget> HUDWidgetClass;
+	AMUPlayerHUD();
 
-	UPROPERTY(VisibleAnywhere, Category = "HUD Widget Instance")
-	TObjectPtr<UMUHUDWidget> HUDWidgetInstance;
+#pragma region IGameplayTagWidgetOwner
+	virtual UUserWidget* GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual void ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+#pragma endregion
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<class UGameplayTagWidgetContainer> GameplayTagWidgetContainer;
 };

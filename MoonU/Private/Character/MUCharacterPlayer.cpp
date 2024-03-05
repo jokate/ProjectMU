@@ -11,8 +11,10 @@
 #include "Components/CharacterStatusComponent.h"
 #include "Components/MUSuitComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Data/MUGameSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/HUD.h"
 #include "Interface/InteractableTarget.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -49,6 +51,7 @@ void AMUCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	const auto* GS = UMUGameSettings::Get();
 	SuitEquipDelegate.BindUObject(this, &AMUCharacterPlayer::SuitChanged);
 	HeadEquipDelegate.BindUObject(this, &AMUCharacterPlayer::HeadChanged);
 	
@@ -64,6 +67,8 @@ void AMUCharacterPlayer::BeginPlay()
 	
 	SuitComponent->SetSuitEquipped(false);
 	SuitComponent->SetHeadEquipped(false);
+
+	GetGameplayTagWidgetOwner()->ShowWidgetByGameplayTag(GS->HUDGameplayTag);
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -290,6 +295,73 @@ void AMUCharacterPlayer::OnCharacterInBasement()
 	SuitComponent->OnCharacterInBasement();
 }
 
+UUserWidget* AMUCharacterPlayer::GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return nullptr;
+	}
+
+	return GameplayTagWidgetOwner->GetWidgetByGameplayTag(InGameplayTag);
+}
+
+void AMUCharacterPlayer::ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return;
+	}
+
+	GameplayTagWidgetOwner->ShowWidgetByGameplayTag(InGameplayTag);
+}
+
+void AMUCharacterPlayer::HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return;
+	}
+
+	GameplayTagWidgetOwner->HideWidgetByGameplayTag(InGameplayTag);
+}
+
+IGameplayTagWidgetOwner* AMUCharacterPlayer::GetGameplayTagWidgetOwner()
+{
+	if (IsLocallyControlled() == false)
+	{
+		return nullptr;
+	}
+
+	auto* PlayerController = Cast<APlayerController>(GetController());
+
+	if (PlayerController == nullptr)
+	{
+		return nullptr;
+	}
+
+	auto* HUD = PlayerController->GetHUD();
+	
+	if (HUD == nullptr)
+	{
+		return nullptr;	
+	}
+
+	auto* GameplayTagWidgetOwner = Cast<IGameplayTagWidgetOwner>(HUD);
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return nullptr;
+	}
+
+	return GameplayTagWidgetOwner;
+}
+
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -311,7 +383,6 @@ void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
-	
 }
 
 void AMUCharacterPlayer::Look(const FInputActionValue& Value)

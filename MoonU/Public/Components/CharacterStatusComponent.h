@@ -34,6 +34,8 @@ private :
 
 	UFUNCTION()
 	void RecoverStamina();
+
+	void OnUpdateStamina();
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SprintStamina")
@@ -46,7 +48,7 @@ protected:
 	float StaminaDecreaseAmount = 1.0f;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina Decrease")
-	float StaminaRecoverAmount = 0.5f;
+	float StaminaRecoverAmount = 2.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Timer Interval")
 	float Interval = 0.1f;
