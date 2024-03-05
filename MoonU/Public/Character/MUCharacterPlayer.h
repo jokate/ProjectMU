@@ -25,6 +25,8 @@ protected:
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 public:	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -37,6 +39,10 @@ public:
 	virtual bool GetHeadEquipped() const override;
 
 	virtual bool GetSuitEquipped() const override;
+	
+	virtual void SetSuitEquipped(bool InSuitEquip) override;
+	
+	virtual void SetHeadEquipped(bool InSuitEquip) override;
 #pragma endregion
 
 #pragma region ISprinter
@@ -64,6 +70,14 @@ public:
 	virtual void OnCharacterInBasement() override;
 #pragma endregion
 protected :
+	
+#pragma region Interaction
+	void SphereTraceForInteraction();
+
+	void FilterInteraction(const TArray<FHitResult>& InHitResult);
+#pragma endregion
+	
+#pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
@@ -74,6 +88,7 @@ protected :
 	void Sprint(const FInputActionValue& Value);
 
 	void UnSprint(const FInputActionValue& Value);
+#pragma endregion
 	
 #pragma region SuitEventBind
 	UFUNCTION()
@@ -125,8 +140,11 @@ protected:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
 	TArray<USkeletalMeshComponent*> NormalBodyMeshComponents;
 
-	UPROPERTY(Transient, VisibleAnywhere, Category = "Test Value Runtime")
-	uint8 bSuitEquipped : 1;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction | Radius")
+	float InteractionRadius = 100.0f;
+
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Interaction | Actor")
+	TObjectPtr<AActor> CachedInteractionActor;
 	
 private : 
 	FSuitDelegate SuitEquipDelegate;

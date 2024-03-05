@@ -30,4 +30,8 @@ public:
 	virtual bool GetSuitEquipped() const = 0;
 
 	virtual bool GetHeadEquipped() const = 0;
+
+	virtual void SetSuitEquipped(bool InSuitEquip) = 0;
+	
+	virtual void SetHeadEquipped(bool InSuitEquip) = 0;
 };

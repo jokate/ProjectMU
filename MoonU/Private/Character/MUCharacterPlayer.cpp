@@ -13,6 +13,9 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interface/InteractableTarget.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 class UEnhancedInputLocalPlayerSubsystem;
@@ -20,7 +23,7 @@ class UEnhancedInputLocalPlayerSubsystem;
 AMUCharacterPlayer::AMUCharacterPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -59,9 +62,8 @@ void AMUCharacterPlayer::BeginPlay()
 		}
 	}
 	
-	SuitComponent->SetSuitEquipped(bSuitEquipped);
-	
-	bSuitEquipped = false;
+	SuitComponent->SetSuitEquipped(false);
+	SuitComponent->SetHeadEquipped(false);
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -70,6 +72,16 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	HeadEquipDelegate.Unbind();
 	
 	Super::EndPlay(EndPlayReason);
+}
+
+void AMUCharacterPlayer::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (IsLocallyControlled())
+	{
+		SphereTraceForInteraction();
+	}
 }
 
 // Called to bind functionality to input
@@ -115,6 +127,16 @@ bool AMUCharacterPlayer::GetSuitEquipped() const
 	return SuitComponent->GetSuitEquipped();
 }
 
+void AMUCharacterPlayer::SetSuitEquipped(bool InSuitEquip)
+{
+	SuitComponent->SetSuitEquipped(InSuitEquip);
+}
+
+void AMUCharacterPlayer::SetHeadEquipped(bool InSuitEquip)
+{
+	SuitComponent->SetHeadEquipped(InSuitEquip);
+}
+
 void AMUCharacterPlayer::OnSprint()
 {
 	auto* CharacterMove = GetCharacterMovement();
@@ -149,6 +171,104 @@ bool AMUCharacterPlayer::IsSprinting() const
 
 	return !MoveVector2D.IsNearlyZero();
 }
+
+void AMUCharacterPlayer::SphereTraceForInteraction()
+{
+	CachedInteractionActor = nullptr;
+	
+	//반경에 따른 탐색을 지정한다.
+	const FVector StartPoint = GetCharacterMovement()->GetActorFeetLocation();
+	const FVector EndPoint = StartPoint + FVector::UpVector;
+	TArray<FHitResult> OutHitResult;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes
+	{
+		UEngineTypes::ConvertToObjectType(ECC_GameTraceChannel1)
+	};
+	
+	UKismetSystemLibrary::SphereTraceMultiForObjects
+	(
+		this,
+		StartPoint,
+		EndPoint,
+		InteractionRadius
+		, ObjectTypes
+		, false
+		, TArray<AActor*>()
+		, EDrawDebugTrace::None
+		, OutHitResult
+		, true
+		);
+	
+	if (OutHitResult.Num() == 0)
+	{
+		return;
+	}
+
+	FilterInteraction(OutHitResult);
+}
+
+void AMUCharacterPlayer::FilterInteraction(const TArray<FHitResult>& InHitResult)
+{
+	// Line Cast를 통해서 조절을 해줘야 한다고 생각.
+	AController* PController = GetController();
+	if (PController == nullptr)
+	{
+		return;
+	}
+	
+	APlayerController* PlayerController = Cast<APlayerController>(PController);
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+	FVector StartLocation;
+	FRotator Direction;
+	GetActorEyesViewPoint(StartLocation, Direction);
+	FVector DirectionVector = UKismetMathLibrary::GetForwardVector(Direction);
+	FVector EndLocation = StartLocation + DirectionVector * InteractionRadius * 2;
+	
+	FHitResult OutHitResult;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes
+	{
+		UEngineTypes::ConvertToObjectType(ECC_GameTraceChannel1)
+	};
+	
+	UKismetSystemLibrary::LineTraceSingleForObjects
+	(
+		this,
+		StartLocation,
+		EndLocation,
+		ObjectTypes,
+		false,
+		TArray<AActor*>(),
+		EDrawDebugTrace::ForDuration,
+		OutHitResult,
+		true
+	);
+	
+	AActor* LineHitActor = OutHitResult.GetActor();
+	if (LineHitActor == nullptr)
+	{
+		return;
+	}
+	
+	for (const FHitResult& HitResult : InHitResult)
+	{
+		const AActor* HitActor = HitResult.GetActor();
+
+		if (HitActor == nullptr)
+		{
+			continue;
+		}
+
+		if (LineHitActor == HitActor)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Interaction Actor Detected!"));
+			CachedInteractionActor = LineHitActor;
+			break;
+		}
+	}
+}	
 
 void AMUCharacterPlayer::OnCharacterOutBasement()
 {
@@ -199,9 +319,15 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 
 void AMUCharacterPlayer::Interact(const FInputActionValue& Value)
 {
-	const bool PrevVal = bSuitEquipped;
-	bSuitEquipped = !PrevVal;
-	SuitComponent->SetSuitEquipped(bSuitEquipped);
+	if (CachedInteractionActor == nullptr)
+	{
+		return;
+	}
+
+	if (auto* InteractableTarget = Cast<IInteractableTarget>(CachedInteractionActor))
+	{
+		InteractableTarget->OnInteracted(this);
+	}
 }
 
 void AMUCharacterPlayer::Sprint(const FInputActionValue& Value)
@@ -220,6 +346,12 @@ void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)
 	{
 		SuitBodyMeshComponent->SetHiddenInGame(!bInSuitEquipped);
 		SuitBodyMeshComponent->SetCastShadow(bInSuitEquipped);
+	}
+
+	for (auto* NormalBodyMeshComponent : NormalBodyMeshComponents)
+	{
+		NormalBodyMeshComponent->SetHiddenInGame(bInSuitEquipped);
+		NormalBodyMeshComponent->SetCastShadow(!bInSuitEquipped);
 	}
 }
 

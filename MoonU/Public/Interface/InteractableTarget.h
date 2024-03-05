@@ -23,5 +23,6 @@ class MOONU_API IInteractableTarget
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	virtual void OnInteracted(AActor* InstigatorActor) = 0;
 	virtual const FGameplayTag& GetEntityTag() = 0;
 };

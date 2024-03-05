@@ -21,9 +21,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
-	virtual const FGameplayTag& GetEntityTag(); 
+#pragma region IInteractableTarget
+	virtual const FGameplayTag& GetEntityTag() override;
 
+	virtual void OnInteracted(AActor* InstigatorActor) override;
+#pragma endregion
+	
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UStaticMeshComponent> InteractableStaticMeshComponent;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FGameplayTag EntityTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	uint8 bRemainAfterInteraction : 1;
 };
