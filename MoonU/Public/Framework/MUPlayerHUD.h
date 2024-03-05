@@ -6,6 +6,8 @@
 #include "GameFramework/HUD.h"
 #include "MUPlayerHUD.generated.h"
 
+class UMUHUDWidget;
+
 /**
  * 
  */
@@ -15,4 +17,9 @@ class MOONU_API AMUPlayerHUD : public AHUD
 	GENERATED_BODY()
 
 public :
+	UPROPERTY(EditDefaultsOnly, Category = "HUD Widget")
+	TSubclassOf<UMUHUDWidget> HUDWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "HUD Widget Instance")
+	TObjectPtr<UMUHUDWidget> HUDWidgetInstance;
 };

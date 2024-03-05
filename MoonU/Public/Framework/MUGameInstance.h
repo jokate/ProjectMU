@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/MUGameSettings.h"
 #include "Engine/GameInstance.h"
 #include "MUGameInstance.generated.h"
 
@@ -13,4 +14,6 @@ UCLASS()
 class MOONU_API UMUGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
+	UMUGameInstance();
 };

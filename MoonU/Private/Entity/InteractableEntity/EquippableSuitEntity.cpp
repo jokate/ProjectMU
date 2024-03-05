@@ -3,6 +3,7 @@
 
 #include "Entity/InteractableEntity/EquippableSuitEntity.h"
 
+#include "Data/MUGameSettings.h"
 #include "Interface/SuitEquipper.h"
 #include "Library/MUFunctionLibrary.h"
 
@@ -25,9 +26,23 @@ void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 	{
 		return;
 	}
-	
-	SuitEquipper->SetSuitEquipped(true);	
-	SuitEquipper->SetHeadEquipped(true);
+
+	const auto* GS = UMUGameSettings::Get();
+
+	if (GS == nullptr)
+	{
+		return;
+	}
+
+	if (EntityTag.MatchesTag(GS->SuitInteractionTag))
+	{
+		SuitEquipper->SetSuitEquipped(true);
+	}
+
+	if (EntityTag.MatchesTag(GS->HelmetInteractionTag))
+	{
+		SuitEquipper->SetHeadEquipped(true);
+	}
 	
 }
 

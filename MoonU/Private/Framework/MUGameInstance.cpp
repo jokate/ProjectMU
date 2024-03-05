@@ -2,3 +2,8 @@
 
 
 #include "Framework/MUGameInstance.h"
+
+UMUGameInstance::UMUGameInstance()
+{
+	UMUGameSettings::Get();
+}

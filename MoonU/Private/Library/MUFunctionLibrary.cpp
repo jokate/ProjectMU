@@ -10,15 +10,3 @@ ACharacter* UMUFunctionLibrary::GetLocalPlayerCharacter(UObject* WorldObject)
 {
 	return UGameplayStatics::GetPlayerCharacter(WorldObject, 0);
 }
-
-UGameplayTagSubsystem* UMUFunctionLibrary::GetGameplaySubSystem(UObject* WorldObject)
-{
-	const UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldObject);
-
-	if (GameInstance == nullptr)
-	{
-		return nullptr;
-	}
-
-	return GameInstance->GetSubsystem<UGameplayTagSubsystem>();
-}
