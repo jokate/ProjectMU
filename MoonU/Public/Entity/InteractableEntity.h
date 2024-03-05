@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
+#include "Interface/InteractableTarget.h"
 #include "InteractableEntity.generated.h"
 
 UCLASS()
-class MOONU_API AInteractableEntity : public AActor
+class MOONU_API AInteractableEntity : public AActor, public IInteractableTarget
 {
 	GENERATED_BODY()
 
@@ -21,8 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual const FGameplayTag& GetEntityTag(); 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FGameplayTag EntityTag;

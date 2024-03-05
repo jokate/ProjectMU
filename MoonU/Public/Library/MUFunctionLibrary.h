@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Subsystem/GameplayTagSubsystem.h"
 #include "MUFunctionLibrary.generated.h"
 
 /**
@@ -17,4 +18,7 @@ class MOONU_API UMUFunctionLibrary : public UBlueprintFunctionLibrary
 public :
 	UFUNCTION(BlueprintCallable)
 	static ACharacter* GetLocalPlayerCharacter(UObject* WorldObject);
+
+	UFUNCTION(BlueprintCallable)
+	static UGameplayTagSubsystem* GetGameplaySubSystem(UObject* WorldObject);
 };
