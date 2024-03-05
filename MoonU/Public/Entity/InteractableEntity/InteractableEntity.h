@@ -25,6 +25,11 @@ protected:
 	virtual const FGameplayTag& GetEntityTag() override;
 
 	virtual void OnInteracted(AActor* InstigatorActor) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInteracted_BP(AActor* InstigatorActor);
+	
+	virtual const bool IsInteractable(AActor* InstigatorActor);
 #pragma endregion
 	
 public:
@@ -36,4 +41,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	uint8 bRemainAfterInteraction : 1;
+
+	UPROPERTY(SaveGame, VisibleAnywhere, BlueprintReadWrite)
+	uint8 bIsInteractable : 1;
 };

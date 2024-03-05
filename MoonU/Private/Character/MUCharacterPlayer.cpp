@@ -260,8 +260,18 @@ void AMUCharacterPlayer::FilterInteraction(const TArray<FHitResult>& InHitResult
 		{
 			continue;
 		}
+		
+		if (LineHitActor != HitActor)
+		{
+			continue;
+		}
+		auto* InteractableTarget = Cast<IInteractableTarget>(LineHitActor);
+		if (InteractableTarget == nullptr)
+		{
+			continue;
+		}
 
-		if (LineHitActor == HitActor)
+		if (InteractableTarget->IsInteractable(this))
 		{
 			UE_LOG(LogTemp, Log, TEXT("Interaction Actor Detected!"));
 			CachedInteractionActor = LineHitActor;

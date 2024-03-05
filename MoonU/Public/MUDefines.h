@@ -7,3 +7,5 @@
 #define WALK_SPEED 400.0f
 
 #define HEAD_BONE_NAME TEXT("head")
+
+#define SUIT_TAG TEXT("Gameplay.Interactable.Suit")

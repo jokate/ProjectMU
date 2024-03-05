@@ -4,6 +4,7 @@
 #include "Entity/InteractableEntity/EquippableSuitEntity.h"
 
 #include "Interface/SuitEquipper.h"
+#include "Library/MUFunctionLibrary.h"
 
 
 // Sets default values
@@ -24,7 +25,9 @@ void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 	{
 		return;
 	}
-
-	SuitEquipper->SetSuitEquipped(true);
+	
+	SuitEquipper->SetSuitEquipped(true);	
+	SuitEquipper->SetHeadEquipped(true);
+	
 }
 

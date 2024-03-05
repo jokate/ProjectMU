@@ -10,6 +10,7 @@ AInteractableEntity::AInteractableEntity()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	InteractableStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("InteractableMeshComponent");
+	bIsInteractable = true;
 }
 
 // Called when the game starts or when spawned
@@ -30,5 +31,14 @@ void AInteractableEntity::OnInteracted(AActor* InstigatorActor)
 	{
 		Destroy();	
 	}
+	else
+	{
+		bIsInteractable = false;
+	}
+}
+
+const bool AInteractableEntity::IsInteractable(AActor* InstigatorActor)
+{
+	return bIsInteractable;
 }
 

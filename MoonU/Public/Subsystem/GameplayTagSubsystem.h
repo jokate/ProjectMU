@@ -10,11 +10,14 @@
 /**
  * 
  */
-UCLASS(Config=Game)
+UCLASS()
 class MOONU_API UGameplayTagSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-
-	UPROPERTY(Config)
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FGameplayTag SuitInteractionTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FGameplayTag HelmetInteractionTag;
 };
