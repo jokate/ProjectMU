@@ -2,3 +2,15 @@
 
 
 #include "UI/MUInventoryWidget.h"
+
+void UMUInventoryWidget::OnInventoryUpdated()
+{
+	OnInventoryUpdated_BP();
+}
+
+void UMUInventoryWidget::OnWidgetShow()
+{
+	Super::OnWidgetShow();
+
+	OnInventoryUpdated();
+}

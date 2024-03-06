@@ -16,7 +16,7 @@ UGameplayTagWidgetContainer::UGameplayTagWidgetContainer()
 
 UUserWidget* UGameplayTagWidgetContainer::GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
 {
-	if (WidgetContainer.Contains(InGameplayTag) == false)
+	if (CheckContainsWidget(InGameplayTag) == false)
 	{
 		return nullptr;
 	}
@@ -26,43 +26,9 @@ UUserWidget* UGameplayTagWidgetContainer::GetWidgetByGameplayTag(const FGameplay
 
 void UGameplayTagWidgetContainer::ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
 {
-	AActor* OwnerActor = GetOwner();
-
-	if (OwnerActor == nullptr)
+	if (CheckContainsWidget(InGameplayTag) == false)
 	{
 		return;
-	}
-
-	AHUD* HUD = Cast<AHUD>(OwnerActor);
-	
-	if (HUD == nullptr)
-	{
-		return;
-	}
-
-	auto* PC = HUD->GetOwningPlayerController();
-
-	if (PC == nullptr)
-	{
-		return;
-	}
-		
-	if (WidgetClassMapping.Contains(InGameplayTag) == false)
-	{
-		return;
-	}
-	
-	if (WidgetContainer.Contains(InGameplayTag) == false)
-	{
-		TSubclassOf<UUserWidget> WidgetClass = WidgetClassMapping[InGameplayTag];
-		
-		if (WidgetClass == nullptr)
-		{
-			return;
-		}
-
-		UUserWidget* InstanceWidget = CreateWidget<UUserWidget>(PC, WidgetClass);
-		WidgetContainer.Emplace(InGameplayTag, InstanceWidget);
 	}
 	
 	UUserWidget* Widget = WidgetContainer[InGameplayTag];
@@ -77,30 +43,55 @@ void UGameplayTagWidgetContainer::ShowWidgetByGameplayTag(const FGameplayTag& In
 
 void UGameplayTagWidgetContainer::HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
 {
+	if (CheckContainsWidget(InGameplayTag) == false)
+	{
+		return;
+	}
+	
+	UUserWidget* Widget = WidgetContainer[InGameplayTag];
+	if (auto* NeedToHide = Cast<IMUWidgetInterface>(Widget))
+	{
+		NeedToHide->OnWidgetHide();
+	}
+	Widget->RemoveFromParent();
+}
+
+bool UGameplayTagWidgetContainer::IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag)
+{
+	if (WidgetContainer.Contains(InGameplayTag) == false)
+	{
+		return false;
+	}
+
+	return WidgetContainer[InGameplayTag]->IsInViewport();
+}
+
+const bool UGameplayTagWidgetContainer::CheckContainsWidget(const FGameplayTag& InGameplayTag)
+{
 	AActor* OwnerActor = GetOwner();
 
 	if (OwnerActor == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	AHUD* HUD = Cast<AHUD>(OwnerActor);
 	
 	if (HUD == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	auto* PC = HUD->GetOwningPlayerController();
 
 	if (PC == nullptr)
 	{
-		return;
+		return false;
 	}
 		
 	if (WidgetClassMapping.Contains(InGameplayTag) == false)
 	{
-		return;
+		return false;
 	}
 	
 	if (WidgetContainer.Contains(InGameplayTag) == false)
@@ -109,18 +100,14 @@ void UGameplayTagWidgetContainer::HideWidgetByGameplayTag(const FGameplayTag& In
 		
 		if (WidgetClass == nullptr)
 		{
-			return;
+			return false;
 		}
 		
-		UUserWidget* InstanceWidget = CreateWidget<UUserWidget>(PC, WidgetClass->StaticClass());
+		UUserWidget* InstanceWidget = CreateWidget<UUserWidget>(PC, WidgetClass);
 		WidgetContainer.Emplace(InGameplayTag, InstanceWidget);
 	}
-	UUserWidget* Widget = WidgetContainer[InGameplayTag];
-	if (auto* NeedToHide = Cast<IMUWidgetInterface>(Widget))
-	{
-		NeedToHide->OnWidgetHide();
-	}
-	Widget->RemoveFromParent();
+
+	return true;
 }
 
 

@@ -3,6 +3,11 @@
 
 #include "Components/InventoryComponent.h"
 
+#include "Data/MUGameSettings.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
+#include "Blueprint/UserWidget.h"
+#include "UI/MUInventoryWidget.h"
+
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -18,6 +23,7 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item, const int32 I
 	}
 
 	InventoryAmount.Add(Item, ItemAmount);
+	OnInventoryUpdated();
 }
 
 void UInventoryComponent::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
@@ -30,6 +36,33 @@ void UInventoryComponent::DisOwnInventory(const FInventoryData& Item, const int3
 		{
 			InventoryAmount.Remove(Item);
 		}
+	}
+	OnInventoryUpdated();
+}
+void UInventoryComponent::OnInventoryUpdated()
+{
+	const auto* GameSettings = UMUGameSettings::Get();
+	if (GameSettings == nullptr)
+	{
+		return;
+	}
+	
+	if (auto* TagWidgetOwner = GetOwner<IGameplayTagWidgetOwner>())
+	{
+		UUserWidget* Widget =TagWidgetOwner->GetWidgetByGameplayTag(GameSettings->InventoryUITag);
+
+		if (Widget == nullptr)
+		{
+			return;
+		}
+
+		auto* InvWidget = Cast<UMUInventoryWidget>(Widget);
+
+		if (InvWidget == nullptr)
+		{
+			return;
+		}
+		InvWidget->OnInventoryUpdated();
 	}
 }
 

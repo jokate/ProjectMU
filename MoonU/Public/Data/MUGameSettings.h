@@ -70,7 +70,7 @@ public :
 	FGameplayTag InteractInputTag;
 
 	UPROPERTY(Config)
-	FGameplayTag UIInputTag;
+	FGameplayTag InventoryUITag;
 
 	UPROPERTY(Config)
 	FGameplayTag SprintInputTag;

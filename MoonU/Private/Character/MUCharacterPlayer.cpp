@@ -121,6 +121,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->InteractInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Interact);
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Sprint);
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Completed, this, &AMUCharacterPlayer::UnSprint);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->InventoryUITag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::UIInputAction);
 	}
 
 }
@@ -399,6 +400,18 @@ IGameplayTagWidgetOwner* AMUCharacterPlayer::GetGameplayTagWidgetOwner()
 	return GameplayTagWidgetOwner;
 }
 
+bool AMUCharacterPlayer::IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag)
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return false;
+	}
+
+	return GameplayTagWidgetOwner->IsWidgetByGameplayTagInViewport(InGameplayTag);
+}
+
 void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item, const int32 ItemAmount)
 {
 	InventoryComponent->OwnInventory(Item, ItemAmount);
@@ -467,6 +480,23 @@ void AMUCharacterPlayer::Sprint(const FInputActionValue& Value)
 void AMUCharacterPlayer::UnSprint(const FInputActionValue& Value)
 {
 	OnUnsprint();
+}
+
+void AMUCharacterPlayer::UIInputAction(const FInputActionInstance& ActionData)
+{
+	if (auto* EnhancedInputComponent = Cast<UMUEnhancedInputComponent>(InputComponent))
+	{
+		const FGameplayTag& GameplayTag = EnhancedInputComponent->GetGameplayTagByInputAction(ActionData.GetSourceAction());
+
+		if (IsWidgetByGameplayTagInViewport(GameplayTag))
+		{
+			HideWidgetByGameplayTag(GameplayTag);
+		}
+		else
+		{
+			ShowWidgetByGameplayTag(GameplayTag);
+		}
+	}
 }
 
 void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)

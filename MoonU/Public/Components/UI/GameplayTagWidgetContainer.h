@@ -24,8 +24,11 @@ public:
 	virtual void ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
 
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+	
+	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
 #pragma endregion
 
+	const bool CheckContainsWidget(const FGameplayTag& InGameplayTag);
 public:
 protected :
 	UPROPERTY(Transient, VisibleAnywhere, Category = "GameplayTag Widget | Instances")

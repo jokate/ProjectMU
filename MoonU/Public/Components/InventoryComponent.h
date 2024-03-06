@@ -22,6 +22,8 @@ public :
 
 	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 protected:
+
+	void OnInventoryUpdated();
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

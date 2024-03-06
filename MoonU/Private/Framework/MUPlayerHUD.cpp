@@ -24,3 +24,8 @@ void AMUPlayerHUD::HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
 {
 	GameplayTagWidgetContainer->HideWidgetByGameplayTag(InGameplayTag);
 }
+
+bool AMUPlayerHUD::IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag)
+{
+	return GameplayTagWidgetContainer->IsWidgetByGameplayTagInViewport(InGameplayTag);
+}

@@ -26,6 +26,8 @@ public :
 	virtual void ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
 
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
+
+	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
 #pragma endregion
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

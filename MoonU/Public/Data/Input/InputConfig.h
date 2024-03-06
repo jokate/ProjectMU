@@ -21,14 +21,13 @@ struct FTaggedInputAction
 	GENERATED_BODY()
  
 public:
- 
 	UPROPERTY(EditDefaultsOnly)
 	const UInputAction* InputAction = nullptr;
  
 	UPROPERTY(EditDefaultsOnly, Meta = (Categories = "InputTag"))
 	FGameplayTag InputTag;
 };
- 
+
 /**
  *
  */

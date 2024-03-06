@@ -28,5 +28,7 @@ public:
 	virtual void ShowWidgetByGameplayTag(const FGameplayTag& InGameplayTag) = 0;
 
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) = 0;
+
+	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) = 0;
 	
 };

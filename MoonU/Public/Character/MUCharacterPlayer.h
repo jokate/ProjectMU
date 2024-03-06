@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputAction.h"
 #include "GameFramework/Character.h"
 #include "Interface/InventoryOwner.h"
 #include "Interface/SpaceTraveler.h"
@@ -80,7 +81,9 @@ public:
 
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
 
-	virtual IGameplayTagWidgetOwner* GetGameplayTagWidgetOwner();	
+	virtual IGameplayTagWidgetOwner* GetGameplayTagWidgetOwner();
+	
+	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
 #pragma endregion
 
 #pragma region IInventoryOwner
@@ -110,6 +113,9 @@ protected :
 	void Sprint(const FInputActionValue& Value);
 
 	void UnSprint(const FInputActionValue& Value);
+
+	void UIInputAction(const FInputActionInstance& ActionData);
+
 #pragma endregion
 	
 #pragma region SuitEventBind
