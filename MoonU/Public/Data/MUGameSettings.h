@@ -34,5 +34,25 @@ public :
 	FGameplayTag HUDGameplayTag;
 #pragma endregion
 
+#pragma region Equipment Upgrade Tag
+	UPROPERTY(Config)
+	FGameplayTag SuitOxygenUpgradeTag;
+
+	UPROPERTY(Config)
+	FGameplayTag SuitRecoveryUpgradeTag;
+#pragma endregion
+
+#pragma region Item Tag
+	UPROPERTY(Config)
+	FGameplayTag ComsumableItemTag;
+
+	UPROPERTY(Config)
+	FGameplayTag EquippableItemTag;
+
+	UPROPERTY(Config)
+	FGameplayTag CraftableItemTag;
+#pragma endregion 
+	
+	
 private:
 };

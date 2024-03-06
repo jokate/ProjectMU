@@ -393,15 +393,16 @@ IGameplayTagWidgetOwner* AMUCharacterPlayer::GetGameplayTagWidgetOwner()
 	return GameplayTagWidgetOwner;
 }
 
-void AMUCharacterPlayer::OwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item, const int32 ItemAmount)
 {
 	InventoryComponent->OwnInventory(Item, ItemAmount);
 }
 
-void AMUCharacterPlayer::DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+void AMUCharacterPlayer::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
 {
-	InventoryComponent->OwnInventory(Item, ItemAmount);
+	InventoryComponent->DisOwnInventory(Item, ItemAmount);
 }
+
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {

@@ -18,6 +18,21 @@ void AInteractableItemEntity::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MakeItemInfo();
+}
+
+void AInteractableItemEntity::MakeItemInfo()
+{
+	const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(ItemEntityName);
+
+	if (ItemData.ItemName == NAME_None)
+	{
+		return;
+	}
+
+	InventoryData.ItemID = ItemData.ItemID;
+
+	Amount = 1;
 }
 
 void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
@@ -31,14 +46,8 @@ void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
 		return;
 	}
 
-	const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(ItemEntityName);
-
-	if (ItemData.ItemName == NAME_None)
-	{
-		return;
-	}
+	InventoryOwner->OwnInventory(InventoryData, Amount);
 	
-	InventoryOwner->OwnInventory(ItemData, 1);
 }
 
 

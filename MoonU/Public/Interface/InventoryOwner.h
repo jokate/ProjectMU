@@ -23,7 +23,7 @@ class MOONU_API IInventoryOwner
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OwnInventory(const FItemDataRow& Item, const int32 ItemAmount) = 0;
+	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) = 0;
 
-	virtual void DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount) = 0;
+	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) = 0;
 };

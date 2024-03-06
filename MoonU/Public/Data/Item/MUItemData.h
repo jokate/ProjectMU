@@ -34,6 +34,33 @@ public :
 };
 
 USTRUCT(BlueprintType)
+struct FInventoryUpgradeData
+{
+	GENERATED_BODY()
+
+public :
+	FGameplayTag UpgradeTag;
+
+	int32 UpgradeAmount = 0;
+
+	bool operator==(const FInventoryUpgradeData& UpgradeData) const
+	{
+		return UpgradeTag.MatchesTag(UpgradeData.UpgradeTag) && UpgradeAmount == UpgradeData.UpgradeAmount;
+	}
+
+	bool operator==(const FGameplayTag& InGameplayTag) const
+	{
+		return UpgradeTag.MatchesTag(InGameplayTag);
+	}
+	
+};
+
+FORCEINLINE uint32 GetTypeHash(const FInventoryUpgradeData& InUpgradeData)
+{
+	return FCrc::MemCrc32(&InUpgradeData, sizeof(FInventoryUpgradeData));
+}
+//
+USTRUCT(BlueprintType)
 struct FInventoryData
 {
 	GENERATED_BODY()
@@ -43,10 +70,15 @@ public :
 	int32 ItemID = 0;
 
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	int32 ItemAmount = 0;
-
+	TArray<FInventoryUpgradeData> UpgradeDatas;
+	
 	bool operator==(const FInventoryData& Data) const
 	{
-		return ItemID == Data.ItemID;
+		return ItemID == Data.ItemID && UpgradeDatas == Data.UpgradeDatas;
 	}
 };
+
+FORCEINLINE uint32 GetTypeHash(const FInventoryData& InUpgradeData)
+{
+	return FCrc::MemCrc32(&InUpgradeData, sizeof(FInventoryData));
+}

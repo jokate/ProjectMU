@@ -10,7 +10,7 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UInventoryComponent : public UActorComponent, public IInventoryOwner
+class MOONU_API     UInventoryComponent : public UActorComponent, public IInventoryOwner
 {
 	GENERATED_BODY()
 
@@ -18,14 +18,14 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 public :
-	virtual void OwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 
-	virtual void DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<FInventoryData> InventoryData;
+	TMap<FInventoryData, int32> InventoryAmount;
 };

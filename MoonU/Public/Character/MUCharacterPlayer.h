@@ -84,9 +84,9 @@ public:
 #pragma endregion
 
 #pragma region IInventoryOwner
-	virtual void OwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 
-	virtual void DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 #pragma endregion
 	
 protected :
