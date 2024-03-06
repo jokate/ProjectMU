@@ -25,4 +25,6 @@ public:
 	virtual void OnOxygenChanged(float InOxygen) = 0;
 
 	virtual void OnStaminaChanged(float InStamina) = 0;
+	
+	virtual void OnInteratableObjectInBound(AActor* InteractableActor) = 0;
 };

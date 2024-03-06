@@ -87,6 +87,8 @@ protected :
 	void SphereTraceForInteraction();
 
 	void FilterInteraction(const TArray<FHitResult>& InHitResult);
+
+	void InteractionWidgetBoard();
 #pragma endregion
 	
 #pragma region InputActionEvent

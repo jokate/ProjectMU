@@ -18,10 +18,15 @@ class MOONU_API UMUHUDWidget : public UUserWidget, public IHUDWidgetInterface
 	virtual void OnOxygenChanged(float InOxygen) override;
 
 	virtual void OnStaminaChanged(float InStamina) override;
+
+	virtual void OnInteratableObjectInBound(AActor* InteractableActor) override;
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOxygenChanged_BP(float InOxygen);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnStaminaChanged_BP(float InStamina);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInteratableObjectInBound_BP(AActor* InteractableActor);
 };

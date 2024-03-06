@@ -12,3 +12,8 @@ void UMUHUDWidget::OnStaminaChanged(float InStamina)
 {
 	OnStaminaChanged_BP(InStamina);
 }
+
+void UMUHUDWidget::OnInteratableObjectInBound(AActor* InteractableActor)
+{
+	OnInteratableObjectInBound_BP(InteractableActor);
+}

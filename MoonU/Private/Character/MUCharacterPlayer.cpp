@@ -16,11 +16,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/HUD.h"
 #include "Interface/InteractableTarget.h"
+#include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "Blueprint/UserWidget.h"
 
-class UEnhancedInputLocalPlayerSubsystem;
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
 {
@@ -68,7 +69,10 @@ void AMUCharacterPlayer::BeginPlay()
 	SuitComponent->SetSuitEquipped(false);
 	SuitComponent->SetHeadEquipped(false);
 
-	GetGameplayTagWidgetOwner()->ShowWidgetByGameplayTag(GS->HUDGameplayTag);
+	if (auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner())
+	{
+		GameplayTagWidgetOwner->ShowWidgetByGameplayTag(GS->HUDGameplayTag);
+	}
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -86,6 +90,7 @@ void AMUCharacterPlayer::Tick(float DeltaSeconds)
 	if (IsLocallyControlled())
 	{
 		SphereTraceForInteraction();
+		InteractionWidgetBoard();
 	}
 }
 
@@ -283,7 +288,32 @@ void AMUCharacterPlayer::FilterInteraction(const TArray<FHitResult>& InHitResult
 			break;
 		}
 	}
-}	
+}
+
+void AMUCharacterPlayer::InteractionWidgetBoard()
+{
+	const auto* GS = UMUGameSettings::Get();
+
+	if (GS == nullptr)
+	{
+		return;
+	}
+	
+	if (auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner())
+	{
+		auto* Widget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(GS->HUDGameplayTag);
+
+		if (Widget == nullptr)
+		{
+			return;		
+		}
+
+		if (auto* HUDWidget = Cast<IHUDWidgetInterface>(Widget))
+		{
+			HUDWidget->OnInteratableObjectInBound(CachedInteractionActor);
+		}
+	}
+}
 
 void AMUCharacterPlayer::OnCharacterOutBasement()
 {
@@ -358,7 +388,7 @@ IGameplayTagWidgetOwner* AMUCharacterPlayer::GetGameplayTagWidgetOwner()
 	{
 		return nullptr;
 	}
-
+	
 	return GameplayTagWidgetOwner;
 }
 
