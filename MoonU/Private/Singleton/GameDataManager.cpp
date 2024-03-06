@@ -58,3 +58,15 @@ const FItemDataRow* UGameDataManager::GetItemDataRow(const int32 ItemId) const
 	return Item;
 }
 
+const FItemPoolStructRow* UGameDataManager::GetItemPoolRow(const FName& PoolName) const
+{
+	const FItemPoolStructRow* Row = ItemPoolTable->FindRow<FItemPoolStructRow>(PoolName, "");
+
+	if (Row == nullptr)
+	{
+		return nullptr;
+	}
+
+	return Row;
+}
+

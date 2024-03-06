@@ -20,4 +20,7 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	static const FItemDataRow GetItemDataRowById(const int32 InItemId);
+
+	UFUNCTION(BlueprintCallable)
+	static const FItemPoolStructRow GetItemPoolRow(const FName& InPoolId);
 };

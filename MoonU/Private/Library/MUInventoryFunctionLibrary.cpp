@@ -28,3 +28,15 @@ const FItemDataRow UMUInventoryFunctionLibrary::GetItemDataRowById(const int32 I
 
 	return *DataManager->GetItemDataRow(InItemId);
 }
+
+const FItemPoolStructRow UMUInventoryFunctionLibrary::GetItemPoolRow(const FName& InPoolId)
+{
+	const auto* DataManager = UGameDataManager::Get();
+
+	if (DataManager == nullptr)
+	{
+		return FItemPoolStructRow();
+	}
+
+	return *DataManager->GetItemPoolRow(InPoolId);
+}

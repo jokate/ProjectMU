@@ -3,6 +3,7 @@
 
 #include "Entity/InteractableEntity/InteractableItemEntity.h"
 
+#include "Data/MUGameSettings.h"
 #include "Interface/InventoryOwner.h"
 #include "Library/MUInventoryFunctionLibrary.h"
 
@@ -23,16 +24,45 @@ void AInteractableItemEntity::BeginPlay()
 
 void AInteractableItemEntity::MakeItemInfo()
 {
-	const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(ItemEntityName);
-
-	if (ItemData.ItemName == NAME_None)
+	const auto* GS = UMUGameSettings::Get();
+	if (GS == nullptr)
 	{
 		return;
 	}
+	
+	if (bIsLootingItem)
+	{
+		const FItemPoolStructRow ItemRow = UMUInventoryFunctionLibrary::GetItemPoolRow(ItemLootingName);
 
-	InventoryData.ItemID = ItemData.ItemID;
+		for (const auto& ItemPool : ItemRow.ItemPoolingData)
+		{
+			const FItemDropData& DropData = ItemPool.Value;
+			float RandomVal = FMath::RandRange(0.0f, 1.0f);
+			if (RandomVal <= DropData.Percentage)
+			{
+				for (const auto& DropPool : DropData.DropPools)
+				{
+					FInventoryPoolData InventoryPoolData;
+					
+					const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(DropPool.ItemName);
+					FInventoryData InvData;
+					InvData.ItemID = ItemData.ItemID;
 
-	Amount = 1;
+					if (ItemData.ItemGameplayTag == GS->EquippableItemTag)
+					{
+						InvData.UpgradeDatas = DropPool.UpgradeData;
+					}
+
+					const int32 Value = FMath::RandRange(DropPool.MinAmount, DropPool.MaxAmount);
+
+					InventoryPoolData.Data = InvData;
+					InventoryPoolData.Amount = Value;
+
+					InventoryData.Emplace(InventoryPoolData);
+				}
+			}
+		}
+	}
 }
 
 void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
@@ -46,7 +76,10 @@ void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
 		return;
 	}
 
-	InventoryOwner->OwnInventory(InventoryData, Amount);
+	for(const auto& Inventory : InventoryData)
+	{
+		InventoryOwner->OwnInventory(Inventory.Data, Inventory.Amount);
+	}
 	
 }
 

@@ -25,12 +25,13 @@ protected:
 public:
 	virtual void OnInteracted(AActor* InstigatorActor) override;
 
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FName ItemEntityName;
+	FName ItemLootingName;
 
+	UPROPERTY(EditDefaultsOnly)
+	uint8 bIsLootingItem : 1;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FInventoryData InventoryData;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 Amount = 0;
+	TArray<FInventoryPoolData> InventoryData;
 };

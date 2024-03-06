@@ -39,8 +39,10 @@ struct FInventoryUpgradeData
 	GENERATED_BODY()
 
 public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag UpgradeTag;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 UpgradeAmount = 0;
 
 	bool operator==(const FInventoryUpgradeData& UpgradeData) const
@@ -78,7 +80,62 @@ public :
 	}
 };
 
+
+USTRUCT(BlueprintType)
+struct FInventoryPoolData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FInventoryData Data;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 Amount;
+};
+
 FORCEINLINE uint32 GetTypeHash(const FInventoryData& InUpgradeData)
 {
 	return FCrc::MemCrc32(&InUpgradeData, sizeof(FInventoryData));
 }
+
+USTRUCT(BlueprintType)
+struct FItemDropPool
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemName = NAME_None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MinAmount = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxAmount = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FInventoryUpgradeData> UpgradeData;
+};
+
+USTRUCT(BlueprintType)
+struct FItemDropData
+{
+	GENERATED_BODY()
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FItemDropPool> DropPools;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Percentage = 0.0f;
+};
+
+
+USTRUCT(BlueprintType)
+struct FItemPoolStructRow : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, FItemDropData> ItemPoolingData;
+};

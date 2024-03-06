@@ -15,8 +15,6 @@ class MOONU_API UGameDataManager : public UObject
 	GENERATED_BODY()
 
 public :
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UDataTable> ItemTable;
 
 	virtual void PostLoad() override;
 	
@@ -26,6 +24,15 @@ public :
 
 	const FItemDataRow* GetItemDataRow(const int32 ItemId) const;
 
+	const FItemPoolStructRow* GetItemPoolRow(const FName& PoolName) const;
+	
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UDataTable> ItemTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UDataTable> ItemPoolTable;
+protected:
 	UPROPERTY(Transient, BlueprintReadWrite)
 	TMap<int32, FName> ItemTableMap;
 };
