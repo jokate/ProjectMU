@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
+#include "UI/MUWidget.h"
 #include "GameplayTagWidgetContainer.generated.h"
 
 

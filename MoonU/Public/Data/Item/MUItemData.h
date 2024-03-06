@@ -28,9 +28,6 @@ public :
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bIsStackable : 1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText ItemText;
 };
 
 USTRUCT(BlueprintType)
@@ -138,4 +135,20 @@ struct FItemPoolStructRow : public FTableRowBase
 public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName, FItemDropData> ItemPoolingData;
+};
+
+
+USTRUCT(BlueprintType)
+struct FItemDisplayDataRow : public FTableRowBase
+{
+	GENERATED_BODY()
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Image")
+	TObjectPtr<UTexture2D> ImageTexture;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Text")
+	FText ItemText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Description")
+	FText ItemDescription;
 };

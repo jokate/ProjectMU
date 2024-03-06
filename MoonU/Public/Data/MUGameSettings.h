@@ -32,6 +32,9 @@ public :
 #pragma region UI GameplayTags
 	UPROPERTY(Config)
 	FGameplayTag HUDGameplayTag;
+
+	UPROPERTY(Config)
+	FGameplayTag InventoryGameplayTag;
 #pragma endregion
 
 #pragma region Equipment Upgrade Tag
@@ -53,6 +56,24 @@ public :
 	FGameplayTag CraftableItemTag;
 #pragma endregion 
 	
-	
+#pragma region Input Action Tag
+	UPROPERTY(Config)
+	FGameplayTag MoveInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag LookInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag JumpInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag InteractInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag UIInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag SprintInputTag;
+#pragma endregion
 private:
 };

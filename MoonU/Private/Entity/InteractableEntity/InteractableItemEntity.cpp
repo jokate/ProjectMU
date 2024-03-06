@@ -38,7 +38,7 @@ void AInteractableItemEntity::MakeItemInfo()
 	for (const auto& ItemPool : ItemRow.ItemPoolingData)
 	{
 		const FItemDropData& DropData = ItemPool.Value;
-		float RandomVal = FMath::RandRange(0.0f, 1.0f);
+		const float RandomVal = FMath::RandRange(0.0f, 1.0f);
 		if (RandomVal <= DropData.Percentage)
 		{
 			for (const auto& DropPool : DropData.DropPools)

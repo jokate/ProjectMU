@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "MUWidget.h"
 #include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "MUHUDWidget.generated.h"
 
@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class MOONU_API UMUHUDWidget : public UUserWidget, public IHUDWidgetInterface
+class MOONU_API UMUHUDWidget : public UMUWidget, public IHUDWidgetInterface
 {
 	GENERATED_BODY()
 

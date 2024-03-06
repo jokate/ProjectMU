@@ -22,6 +22,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Components/InventoryComponent.h"
+#include "Components/Input/MUEnhancedInputComponent.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -99,22 +100,27 @@ void AMUCharacterPlayer::Tick(float DeltaSeconds)
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	const auto* GS = UMUGameSettings::Get();
+	if (GS == nullptr)
+	{
+		return;
+	}
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
+	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->JumpInputTag, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->JumpInputTag, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->MoveInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
 
 		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->LookInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
 
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Interact);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Sprint);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMUCharacterPlayer::UnSprint);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->InteractInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Interact);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Sprint);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Completed, this, &AMUCharacterPlayer::UnSprint);
 	}
 
 }

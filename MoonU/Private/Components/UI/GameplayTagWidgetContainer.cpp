@@ -3,7 +3,6 @@
 
 #include "Components/UI/GameplayTagWidgetContainer.h"
 
-#include "UnrealWidgetFwd.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/HUD.h"
@@ -16,7 +15,8 @@ UGameplayTagWidgetContainer::UGameplayTagWidgetContainer()
 }
 
 UUserWidget* UGameplayTagWidgetContainer::GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
-{	if (WidgetContainer.Contains(InGameplayTag) == false)
+{
+	if (WidgetContainer.Contains(InGameplayTag) == false)
 	{
 		return nullptr;
 	}
@@ -64,8 +64,15 @@ void UGameplayTagWidgetContainer::ShowWidgetByGameplayTag(const FGameplayTag& In
 		UUserWidget* InstanceWidget = CreateWidget<UUserWidget>(PC, WidgetClass);
 		WidgetContainer.Emplace(InGameplayTag, InstanceWidget);
 	}
+	
+	UUserWidget* Widget = WidgetContainer[InGameplayTag];
+	
+	Widget->AddToViewport();
 
-	WidgetContainer[InGameplayTag]->AddToViewport();
+	if (auto* NeedToShow = Cast<IMUWidgetInterface>(Widget))
+	{
+		NeedToShow->OnWidgetShow();
+	}
 }
 
 void UGameplayTagWidgetContainer::HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
@@ -108,8 +115,12 @@ void UGameplayTagWidgetContainer::HideWidgetByGameplayTag(const FGameplayTag& In
 		UUserWidget* InstanceWidget = CreateWidget<UUserWidget>(PC, WidgetClass->StaticClass());
 		WidgetContainer.Emplace(InGameplayTag, InstanceWidget);
 	}
-
-	WidgetContainer[InGameplayTag]->RemoveFromParent();
+	UUserWidget* Widget = WidgetContainer[InGameplayTag];
+	if (auto* NeedToHide = Cast<IMUWidgetInterface>(Widget))
+	{
+		NeedToHide->OnWidgetHide();
+	}
+	Widget->RemoveFromParent();
 }
 
 
