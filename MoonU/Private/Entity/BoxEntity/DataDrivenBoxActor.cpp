@@ -82,12 +82,12 @@ bool ADataDrivenBoxActor::CheckCharacterInBound(const FDataDrivenBox& DrivenBox)
 
 void ADataDrivenBoxActor::OnBoxInBound()
 {
-	UE_LOG(LogTemp, Log, TEXT("Character Is In Bound Event Executed"));
+	
 }
 
 void ADataDrivenBoxActor::OnBoxOutBound()
 {
-	UE_LOG(LogTemp, Log, TEXT("Character Is Out Bound Event Executed"));
+	
 }
 
 

@@ -11,6 +11,7 @@
 AInteractableItemEntity::AInteractableItemEntity()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
 }
 
 void AInteractableItemEntity::BeginPlay()

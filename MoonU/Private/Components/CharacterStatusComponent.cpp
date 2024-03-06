@@ -67,7 +67,6 @@ void UCharacterStatusComponent::UseStamina()
 
 	CurrentStamina = FMath::Clamp(CurrentStamina - StaminaDecreaseAmount, 0.0f, MaxStamina);
 	OnUpdateStamina();
-	UE_LOG(LogTemp, Log, TEXT("CurrentStamina : %f"), CurrentStamina);
 }
 
 void UCharacterStatusComponent::RecoverStamina()

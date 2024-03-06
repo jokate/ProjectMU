@@ -94,7 +94,6 @@ void UMUSuitComponent::UseOxygen()
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount - OxygenUseAmount, 0.0f, MaxOxygenAmount);
 	OnUpdateOxygen();
-	UE_LOG(LogTemp, Log, TEXT("CurrentOxygen : %f"), CurrentOxygenAmount);
 }
 
 void UMUSuitComponent::RecoverOxygen()
@@ -106,7 +105,6 @@ void UMUSuitComponent::RecoverOxygen()
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount + OxygenRecoverAmount, 0.0f, MaxOxygenAmount);
 	OnUpdateOxygen();
-	UE_LOG(LogTemp, Log, TEXT("CurrentOxygen : %f"), CurrentOxygenAmount);
 }
 
 void UMUSuitComponent::OnUpdateOxygen()
