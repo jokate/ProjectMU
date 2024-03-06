@@ -13,3 +13,12 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void UInventoryComponent::OwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+{
+	UE_LOG(LogTemp, Log, TEXT("Own Inventory! : Item Id %d"), Item.ItemID);
+}
+
+void UInventoryComponent::DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+{
+}

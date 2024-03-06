@@ -21,6 +21,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Components/InventoryComponent.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -34,6 +35,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	
 	SuitComponent = CreateDefaultSubobject<UMUSuitComponent>("Suit Component");
 	StatusComponent = CreateDefaultSubobject<UCharacterStatusComponent>("StatusComponent");
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -390,6 +392,16 @@ IGameplayTagWidgetOwner* AMUCharacterPlayer::GetGameplayTagWidgetOwner()
 	}
 	
 	return GameplayTagWidgetOwner;
+}
+
+void AMUCharacterPlayer::OwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+{
+	InventoryComponent->OwnInventory(Item, ItemAmount);
+}
+
+void AMUCharacterPlayer::DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount)
+{
+	InventoryComponent->OwnInventory(Item, ItemAmount);
 }
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)

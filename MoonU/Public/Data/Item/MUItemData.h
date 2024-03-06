@@ -32,3 +32,21 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText ItemText;
 };
+
+USTRUCT(BlueprintType)
+struct FInventoryData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
+	int32 ItemID = 0;
+
+	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
+	int32 ItemAmount = 0;
+
+	bool operator==(const FInventoryData& Data) const
+	{
+		return ItemID == Data.ItemID;
+	}
+};

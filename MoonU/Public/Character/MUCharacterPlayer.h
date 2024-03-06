@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/InventoryOwner.h"
 #include "Interface/SpaceTraveler.h"
 #include "Interface/Sprinter.h"
 #include "Interface/SuitEquipper.h"
@@ -14,6 +15,7 @@ struct FInputActionValue;
 
 UCLASS()
 class MOONU_API AMUCharacterPlayer : public ACharacter, public ISuitEquipper, public ISprinter, public ISpaceTraveler, public IGameplayTagWidgetOwner
+									,public IInventoryOwner
 {
 	GENERATED_BODY()
 
@@ -80,6 +82,12 @@ public:
 
 	virtual IGameplayTagWidgetOwner* GetGameplayTagWidgetOwner();	
 #pragma endregion
+
+#pragma region IInventoryOwner
+	virtual void OwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+
+	virtual void DisOwnInventory(const FItemDataRow& Item, const int32 ItemAmount) override;
+#pragma endregion
 	
 protected :
 	
@@ -143,7 +151,10 @@ protected:
 	TObjectPtr<class UMUSuitComponent> SuitComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<class UCharacterStatusComponent> StatusComponent;
+	TObjectPtr<class UCharacterStatusComponent>	 StatusComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<class UInventoryComponent> InventoryComponent;
 	
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
 	TArray<USkeletalMeshComponent*> HeadMeshComponents;

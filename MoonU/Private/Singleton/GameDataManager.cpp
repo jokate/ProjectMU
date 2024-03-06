@@ -4,6 +4,7 @@
 #include "Singleton/GameDataManager.h"
 
 #include "Data/Item/MUItemData.h"
+#include "EnvironmentQuery/EnvQueryDebugHelpers.h"
 
 void UGameDataManager::PostLoad()
 {
@@ -20,6 +21,8 @@ void UGameDataManager::PostLoad()
 				Item->ItemID = GetTypeHash(Item->ItemName);
 				ItemTable->AddRow(RowName, *Item);
 			}
+
+			ItemTableMap.Add(Item->ItemID, RowName);
 		}
 	}
 	
@@ -42,3 +45,16 @@ const FItemDataRow* UGameDataManager::GetItemDataRow(const FName& InNameId) cons
 	const FItemDataRow* Item = ItemTable->FindRow<FItemDataRow>(InNameId, "");
 	return Item;
 }
+
+const FItemDataRow* UGameDataManager::GetItemDataRow(const int32 ItemId) const
+{
+	if (ItemTableMap.Contains(ItemId) == false)
+	{
+		return nullptr;
+	}
+
+	const FItemDataRow* Item = ItemTable->FindRow<FItemDataRow>(ItemTableMap[ItemId], "");
+	
+	return Item;
+}
+
