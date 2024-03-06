@@ -18,8 +18,11 @@ AInteractableItemEntity::AInteractableItemEntity()
 void AInteractableItemEntity::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	MakeItemInfo();
+
+	if (bIsLootingItem)
+	{
+		MakeItemInfo();
+	}
 }
 
 void AInteractableItemEntity::MakeItemInfo()
@@ -30,36 +33,33 @@ void AInteractableItemEntity::MakeItemInfo()
 		return;
 	}
 	
-	if (bIsLootingItem)
+	const FItemPoolStructRow ItemRow = UMUInventoryFunctionLibrary::GetItemPoolRow(ItemLootingName);
+
+	for (const auto& ItemPool : ItemRow.ItemPoolingData)
 	{
-		const FItemPoolStructRow ItemRow = UMUInventoryFunctionLibrary::GetItemPoolRow(ItemLootingName);
-
-		for (const auto& ItemPool : ItemRow.ItemPoolingData)
+		const FItemDropData& DropData = ItemPool.Value;
+		float RandomVal = FMath::RandRange(0.0f, 1.0f);
+		if (RandomVal <= DropData.Percentage)
 		{
-			const FItemDropData& DropData = ItemPool.Value;
-			float RandomVal = FMath::RandRange(0.0f, 1.0f);
-			if (RandomVal <= DropData.Percentage)
+			for (const auto& DropPool : DropData.DropPools)
 			{
-				for (const auto& DropPool : DropData.DropPools)
-				{
-					FInventoryPoolData InventoryPoolData;
+				FInventoryPoolData InventoryPoolData;
 					
-					const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(DropPool.ItemName);
-					FInventoryData InvData;
-					InvData.ItemID = ItemData.ItemID;
+				const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(DropPool.ItemName);
+				FInventoryData InvData;
+				InvData.ItemID = ItemData.ItemID;
 
-					if (ItemData.ItemGameplayTag == GS->EquippableItemTag)
-					{
-						InvData.UpgradeDatas = DropPool.UpgradeData;
-					}
-
-					const int32 Value = FMath::RandRange(DropPool.MinAmount, DropPool.MaxAmount);
-
-					InventoryPoolData.Data = InvData;
-					InventoryPoolData.Amount = Value;
-
-					InventoryData.Emplace(InventoryPoolData);
+				if (ItemData.ItemGameplayTag == GS->EquippableItemTag)
+				{
+					InvData.UpgradeDatas = DropPool.UpgradeData;
 				}
+
+				const int32 Value = FMath::RandRange(DropPool.MinAmount, DropPool.MaxAmount);
+
+				InventoryPoolData.Data = InvData;
+				InventoryPoolData.Amount = Value;
+
+				InventoryData.Emplace(InventoryPoolData);
 			}
 		}
 	}
