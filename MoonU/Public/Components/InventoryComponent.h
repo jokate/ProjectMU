@@ -21,6 +21,11 @@ public :
 	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
 
 	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
+
+	virtual int32 GetMaxStorageAmount() const override;
+	
+	virtual const TMap<FInventoryData, int32>& GetTotalInventoryData() override;
+
 protected:
 
 	void OnInventoryUpdated();
@@ -28,9 +33,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TMap<FInventoryData, int32> InventoryAmount;
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory Max Amount")
 	int32 MaxInventoryAmount = 20;
 };

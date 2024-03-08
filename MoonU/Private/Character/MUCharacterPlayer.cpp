@@ -16,13 +16,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/HUD.h"
 #include "Interface/InteractableTarget.h"
-#include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Blueprint/UserWidget.h"
 #include "Components/InventoryComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
+#include "Interface/UI/Widget/MUWidgetInterface.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -316,9 +316,9 @@ void AMUCharacterPlayer::InteractionWidgetBoard()
 			return;		
 		}
 
-		if (auto* HUDWidget = Cast<IHUDWidgetInterface>(Widget))
+		if (auto* HUDWidget = Cast<IMUWidgetInterface>(Widget))
 		{
-			HUDWidget->OnInteratableObjectInBound(CachedInteractionActor);
+			HUDWidget->OnWidgetUpdatedByActor(CachedInteractionActor);
 		}
 	}
 }
@@ -420,6 +420,16 @@ void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item, const int32 It
 void AMUCharacterPlayer::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
 {
 	InventoryComponent->DisOwnInventory(Item, ItemAmount);
+}
+
+int32 AMUCharacterPlayer::GetMaxStorageAmount() const
+{
+	return InventoryComponent->GetMaxStorageAmount();
+}
+
+const TMap<FInventoryData, int32>& AMUCharacterPlayer::GetTotalInventoryData()
+{
+	return InventoryComponent->GetTotalInventoryData();
 }
 
 

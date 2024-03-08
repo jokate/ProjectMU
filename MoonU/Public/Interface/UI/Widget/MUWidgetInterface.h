@@ -25,4 +25,8 @@ public :
 	virtual void OnWidgetShow() = 0;
 
 	virtual void OnWidgetHide() = 0;
+
+	virtual void OnWidgetUpdated() = 0;
+
+	virtual void OnWidgetUpdatedByActor(AActor* InActor) = 0;
 };

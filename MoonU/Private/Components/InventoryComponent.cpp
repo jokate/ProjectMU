@@ -39,6 +39,17 @@ void UInventoryComponent::DisOwnInventory(const FInventoryData& Item, const int3
 	}
 	OnInventoryUpdated();
 }
+
+int32 UInventoryComponent::GetMaxStorageAmount() const
+{
+	return MaxInventoryAmount;
+}
+
+const TMap<FInventoryData, int32>& UInventoryComponent::GetTotalInventoryData()
+{
+	return InventoryAmount;
+}
+
 void UInventoryComponent::OnInventoryUpdated()
 {
 	const auto* GameSettings = UMUGameSettings::Get();
@@ -56,13 +67,10 @@ void UInventoryComponent::OnInventoryUpdated()
 			return;
 		}
 
-		auto* InvWidget = Cast<UMUInventoryWidget>(Widget);
-
-		if (InvWidget == nullptr)
+		if (auto* MUWidget = Cast<IMUWidgetInterface>(Widget))
 		{
-			return;
+			MUWidget->OnWidgetUpdated();
 		}
-		InvWidget->OnInventoryUpdated();
 	}
 }
 

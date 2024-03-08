@@ -26,4 +26,8 @@ public:
 	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) = 0;
 
 	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) = 0;
+
+	virtual int32 GetMaxStorageAmount() const = 0;
+
+	virtual const TMap<FInventoryData, int32>& GetTotalInventoryData() = 0;
 };

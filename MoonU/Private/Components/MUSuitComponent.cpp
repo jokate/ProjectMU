@@ -6,8 +6,8 @@
 #include "Data/MUGameSettings.h"
 #include "Interface/SuitEquipper.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
-#include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UI/Widget/MUWidgetInterface.h"
 
 // Sets default values for this component's properties
 UMUSuitComponent::UMUSuitComponent()
@@ -136,14 +136,14 @@ void UMUSuitComponent::OnUpdateOxygen()
 		return;
 	}
 
-	auto* HUDWidgetInterface = Cast<IHUDWidgetInterface>(Widget);
+	auto* HUDWidgetInterface = Cast<IMUWidgetInterface>(Widget);
 
 	if (HUDWidgetInterface == nullptr)
 	{
 		return;
 	}
 
-	HUDWidgetInterface->OnOxygenChanged(CurrentOxygenAmount);
+	HUDWidgetInterface->OnWidgetUpdated();
 }
 
 void UMUSuitComponent::OnCharacterInBasement()

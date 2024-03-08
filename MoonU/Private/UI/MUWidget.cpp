@@ -12,3 +12,14 @@ void UMUWidget::OnWidgetHide()
 {
 	OnWidgetHide_BP();
 }
+
+void UMUWidget::OnWidgetUpdated()
+{
+	OnWidgetUpdated_BP();
+}
+
+void UMUWidget::OnWidgetUpdatedByActor(AActor* InActor)
+{
+	OnWidgetUpdatedByActor_BP(InActor);
+}
+

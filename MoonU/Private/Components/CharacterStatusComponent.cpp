@@ -6,8 +6,8 @@
 #include "Data/MUGameSettings.h"
 #include "Interface/Sprinter.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
-#include "Interface/UI/Widget/HUDWidgetInterface.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UI/Widget/MUWidgetInterface.h"
 
 
 // Sets default values for this component's properties
@@ -110,13 +110,13 @@ void UCharacterStatusComponent::OnUpdateStamina()
 		return;
 	}
 
-	auto* HUDWidgetInterface = Cast<IHUDWidgetInterface>(Widget);
+	auto* HUDWidgetInterface = Cast<IMUWidgetInterface>(Widget);
 
 	if (HUDWidgetInterface == nullptr)
 	{
 		return;
 	}
 
-	HUDWidgetInterface->OnStaminaChanged(CurrentStamina);
+	HUDWidgetInterface->OnWidgetUpdated();
 }
 
