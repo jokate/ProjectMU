@@ -144,7 +144,7 @@ struct FItemDisplayDataRow : public FTableRowBase
 	GENERATED_BODY()
 public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Image")
-	TObjectPtr<UTexture2D> ImageTexture;
+	TSoftObjectPtr<UTexture2D> ImageTexture;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Text")
 	FText ItemText;

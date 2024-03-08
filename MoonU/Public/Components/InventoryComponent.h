@@ -30,4 +30,7 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TMap<FInventoryData, int32> InventoryAmount;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory Max Amount")
+	int32 MaxInventoryAmount = 20;
 };

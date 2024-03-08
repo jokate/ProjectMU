@@ -25,7 +25,11 @@ const FItemDataRow UMUInventoryFunctionLibrary::GetItemDataRowById(const int32 I
 	{
 		return FItemDataRow();
 	}
-
+	
+	if (InItemId == 0)
+	{
+		return FItemDataRow();
+	}
 	return *DataManager->GetItemDataRow(InItemId);
 }
 
