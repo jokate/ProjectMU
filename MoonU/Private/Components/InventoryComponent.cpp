@@ -3,6 +3,7 @@
 
 #include "Components/InventoryComponent.h"
 
+#include "IAutomationControllerManager.h"
 #include "Data/MUGameSettings.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "Blueprint/UserWidget.h"
@@ -54,9 +55,16 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 			}
 		}
 	}
-
+	
 	while(InItem.Amount > 0)
 	{
+		int32 Index;
+
+		if (InventoryData.Find(FInventoryData(), Index) == false)
+		{
+			break;
+		}
+		
 		if (InItem.Amount > ItemData.ItemMaxAmount)
 		{
 			FInventoryData TempItem;
@@ -65,13 +73,13 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 			TempItem.ItemID = InItem.ItemID;
 			TempItem.UpgradeDatas = InItem.UpgradeDatas;
 			
-			InventoryData.Add(TempItem);
+			InventoryData[Index] = TempItem;
 
 			InItem.Amount -= ItemData.ItemMaxAmount;
 		}
 		else
 		{
-			InventoryData.Add(InItem);
+			InventoryData[Index] = InItem;
 			InItem.Amount = 0;
 		}
 	}
@@ -122,5 +130,7 @@ void UInventoryComponent::OnInventoryUpdated()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InventoryData.Init(FInventoryData(), MaxInventoryAmount);
 }
 
