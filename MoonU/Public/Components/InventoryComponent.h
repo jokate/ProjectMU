@@ -28,6 +28,9 @@ public :
 
 protected:
 
+	UFUNCTION(BlueprintCallable)
+	void SwapSlot(int32 InSlot, int32 TargetSlot);
+	
 	void OnInventoryUpdated();
 	// Called when the game starts
 	virtual void BeginPlay() override;

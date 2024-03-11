@@ -22,7 +22,7 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 
 	if (InventoryData.Contains(InItem))
 	{
-		for (int32 i = InventoryData.Num() - 1; i >= 0; --i)
+		for (int32 i = 0; i < InventoryData.Num(); ++i)
 		{
 			if (InItem.Amount <= 0)
 			{
@@ -99,6 +99,12 @@ int32 UInventoryComponent::GetMaxStorageAmount() const
 const TArray<FInventoryData>& UInventoryComponent::GetTotalInventoryData()
 {
 	return InventoryData;
+}
+
+void UInventoryComponent::SwapSlot(int32 InSlot, int32 TargetSlot)
+{
+	InventoryData.Swap(InSlot, TargetSlot);
+	OnInventoryUpdated();
 }
 
 void UInventoryComponent::OnInventoryUpdated()
