@@ -3,11 +3,9 @@
 
 #include "Components/InventoryComponent.h"
 
-#include "IAutomationControllerManager.h"
 #include "Data/MUGameSettings.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "Blueprint/UserWidget.h"
-#include "Library/MUFunctionLibrary.h"
 #include "Library/MUInventoryFunctionLibrary.h"
 #include "UI/MUInventoryWidget.h"
 
