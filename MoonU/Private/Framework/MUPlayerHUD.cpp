@@ -29,3 +29,8 @@ bool AMUPlayerHUD::IsWidgetByGameplayTagInViewport(const FGameplayTag& InGamepla
 {
 	return GameplayTagWidgetContainer->IsWidgetByGameplayTagInViewport(InGameplayTag);
 }
+
+bool AMUPlayerHUD::IsGameplayWidgetInViewport()
+{
+	return GameplayTagWidgetContainer->IsGameplayWidgetInViewport();
+}

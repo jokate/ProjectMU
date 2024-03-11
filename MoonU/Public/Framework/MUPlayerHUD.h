@@ -15,7 +15,7 @@ class UMUHUDWidget;
 UCLASS()
 class MOONU_API AMUPlayerHUD : public AHUD, public IGameplayTagWidgetOwner
 {
-	GENERATED_BODY()
+ 	GENERATED_BODY()
 
 public :
 	AMUPlayerHUD();
@@ -28,6 +28,8 @@ public :
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
 
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
+
+	virtual bool IsGameplayWidgetInViewport() override;
 #pragma endregion
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

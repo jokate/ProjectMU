@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Data/DataTable/MUWidgetToCheck.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "UI/MUWidget.h"
 #include "GameplayTagWidgetContainer.generated.h"
@@ -26,14 +27,21 @@ public:
 	virtual void HideWidgetByGameplayTag(const FGameplayTag& InGameplayTag) override;
 	
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
+
+	virtual bool IsGameplayWidgetInViewport() override;
 #pragma endregion
 
 	const bool CheckContainsWidget(const FGameplayTag& InGameplayTag);
 public:
 protected :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GameplayTag For Gameplay Widget")
+	TObjectPtr<UMUWidgetToCheck> GameplayTagForGameplay;
+	
 	UPROPERTY(Transient, VisibleAnywhere, Category = "GameplayTag Widget | Instances")
 	TMap<FGameplayTag, UUserWidget*> WidgetContainer;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GameplayTag Widget | Classes")
 	TMap<FGameplayTag, TSubclassOf<UUserWidget>> WidgetClassMapping;
+
+	
 };

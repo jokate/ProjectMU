@@ -74,6 +74,9 @@ public :
 
 	UPROPERTY(Config)
 	FGameplayTag SprintInputTag;
+
+	UPROPERTY(Config)
+	FGameplayTag UICloseTag;
 #pragma endregion
 private:
 };

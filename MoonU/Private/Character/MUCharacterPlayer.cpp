@@ -122,6 +122,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Sprint);
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->SprintInputTag, ETriggerEvent::Completed, this, &AMUCharacterPlayer::UnSprint);
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->InventoryUITag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::UIInputAction);
+		EnhancedInputComponent->BindActionByTag(InputConfig, GS->UICloseTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::CloseUI);
 	}
 
 }
@@ -412,6 +413,18 @@ bool AMUCharacterPlayer::IsWidgetByGameplayTagInViewport(const FGameplayTag& InG
 	return GameplayTagWidgetOwner->IsWidgetByGameplayTagInViewport(InGameplayTag);
 }
 
+bool AMUCharacterPlayer::IsGameplayWidgetInViewport()
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return false;
+	}
+
+	return GameplayTagWidgetOwner->IsGameplayWidgetInViewport();
+}
+
 void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item)
 {
 	InventoryComponent->OwnInventory(Item);
@@ -517,6 +530,11 @@ void AMUCharacterPlayer::UIInputAction(const FInputActionInstance& ActionData)
 			ShowWidgetByGameplayTag(GameplayTag);
 		}
 	}
+}
+
+void AMUCharacterPlayer::CloseUI()
+{
+	
 }
 
 void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)

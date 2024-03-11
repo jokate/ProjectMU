@@ -66,6 +66,17 @@ bool UGameplayTagWidgetContainer::IsWidgetByGameplayTagInViewport(const FGamepla
 	return WidgetContainer[InGameplayTag]->IsInViewport();
 }
 
+bool UGameplayTagWidgetContainer::IsGameplayWidgetInViewport()
+{
+	bool bIsInViewport = false;
+	for (const auto& Gameplay : GameplayTagForGameplay->WidgetGameplayTag)
+	{
+		bIsInViewport |= IsWidgetByGameplayTagInViewport(Gameplay);
+	}
+
+	return bIsInViewport;
+}
+
 const bool UGameplayTagWidgetContainer::CheckContainsWidget(const FGameplayTag& InGameplayTag)
 {
 	AActor* OwnerActor = GetOwner();

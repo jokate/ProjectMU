@@ -84,6 +84,8 @@ public:
 	virtual IGameplayTagWidgetOwner* GetGameplayTagWidgetOwner();
 	
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
+
+	virtual bool IsGameplayWidgetInViewport() override;
 #pragma endregion
 
 #pragma region IInventoryOwner
@@ -123,6 +125,8 @@ protected :
 	void UnSprint(const FInputActionValue& Value);
 
 	void UIInputAction(const FInputActionInstance& ActionData);
+
+	void CloseUI();
 
 #pragma endregion
 	

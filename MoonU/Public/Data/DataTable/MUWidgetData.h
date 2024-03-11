@@ -20,3 +20,5 @@ struct FInteractionBoardData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText InteractionText;
 };
+
+
