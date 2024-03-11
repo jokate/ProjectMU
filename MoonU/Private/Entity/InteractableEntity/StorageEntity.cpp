@@ -31,9 +31,19 @@ void AStorageEntity::OwnInventory(const FInventoryData& Item)
 	InventoryComponent->OwnInventory(Item);
 }
 
+void AStorageEntity::OwnInventoryByIndex(const FInventoryData& Item, int32 Index)
+{
+	InventoryComponent->OwnInventoryByIndex(Item, Index);
+}
+
 void AStorageEntity::DisOwnInventory(const FInventoryData& Item)
 {
 	InventoryComponent->DisOwnInventory(Item);
+}
+
+void AStorageEntity::DisownInventoryByIndex(int32 Index)
+{
+	InventoryComponent->DisownInventoryByIndex(Index);
 }
 
 int32 AStorageEntity::GetMaxStorageAmount() const

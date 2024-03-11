@@ -68,6 +68,8 @@ struct FInventoryData
 	GENERATED_BODY()
 
 public :
+	FInventoryData() {};
+	
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
 	int32 ItemID = 0;
 
@@ -79,10 +81,14 @@ public :
 	
 	bool operator==(const FInventoryData& Data) const
 	{
-		return ItemID == Data.ItemID && UpgradeDatas == Data.UpgradeDatas;
+		return ItemID == Data.ItemID && UpgradeDatas == Data.UpgradeDatas && Amount == Data.Amount;
+	}
+
+	bool operator==(int32 InID) const
+	{
+		return ItemID == InID;
 	}
 };
-
 
 FORCEINLINE uint32 GetTypeHash(const FInventoryData& InUpgradeData)
 {

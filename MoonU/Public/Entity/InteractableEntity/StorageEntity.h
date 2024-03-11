@@ -28,8 +28,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void OwnInventory(const FInventoryData& Item) override;
 
+	virtual void OwnInventoryByIndex(const FInventoryData& Item, int32 Index) override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void DisOwnInventory(const FInventoryData& Item) override;
+
+	virtual void DisownInventoryByIndex(int32 Index) override;
 
 	virtual int32 GetMaxStorageAmount() const override;
 

@@ -20,7 +20,7 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 	FInventoryData InItem = Item;
 	const auto& ItemData = UMUInventoryFunctionLibrary::GetItemDataRowById(Item.ItemID);
 
-	if (InventoryData.Contains(InItem))
+	if (InventoryData.Contains(InItem.ItemID))
 	{
 		for (int32 i = 0; i < InventoryData.Num(); ++i)
 		{
@@ -84,10 +84,32 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 	OnInventoryUpdated();
 }
 
+void UInventoryComponent::OwnInventoryByIndex(const FInventoryData& Item, int32 Index)
+{
+	if (InventoryData.IsValidIndex(Index))
+	{
+		InventoryData[Index] = Item;
+	}
+
+	OnInventoryUpdated();
+}
+
 void UInventoryComponent::DisOwnInventory(const FInventoryData& Item)
 {
-	const auto& ItemData = UMUInventoryFunctionLibrary::GetItemDataRowById(Item.ItemID);
+	int32 Index;
+	if (InventoryData.Find(Item, Index))
+	{
+		InventoryData[Index] = FInventoryData();
+	}
+	OnInventoryUpdated();
+}
 
+void UInventoryComponent::DisownInventoryByIndex(int32 Index)
+{
+	if (InventoryData.IsValidIndex(Index))
+	{
+		InventoryData[Index] = FInventoryData();
+	}
 	OnInventoryUpdated();
 }
 
@@ -99,12 +121,6 @@ int32 UInventoryComponent::GetMaxStorageAmount() const
 const TArray<FInventoryData>& UInventoryComponent::GetTotalInventoryData()
 {
 	return InventoryData;
-}
-
-void UInventoryComponent::SwapSlot(int32 InSlot, int32 TargetSlot)
-{
-	InventoryData.Swap(InSlot, TargetSlot);
-	OnInventoryUpdated();
 }
 
 void UInventoryComponent::OnInventoryUpdated()

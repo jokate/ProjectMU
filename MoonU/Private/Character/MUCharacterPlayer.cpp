@@ -422,6 +422,16 @@ void AMUCharacterPlayer::DisOwnInventory(const FInventoryData& Item)
 	InventoryComponent->DisOwnInventory(Item);
 }
 
+void AMUCharacterPlayer::OwnInventoryByIndex(const FInventoryData& Item, int32 Index)
+{
+	InventoryComponent->OwnInventoryByIndex(Item, Index);
+}
+
+void AMUCharacterPlayer::DisownInventoryByIndex(int32 Index)
+{
+	InventoryComponent->DisownInventoryByIndex(Index);
+}
+
 int32 AMUCharacterPlayer::GetMaxStorageAmount() const
 {
 	return InventoryComponent->GetMaxStorageAmount();

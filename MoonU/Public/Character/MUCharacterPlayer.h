@@ -91,6 +91,10 @@ public:
 
 	virtual void DisOwnInventory(const FInventoryData& Item) override;
 
+	virtual void OwnInventoryByIndex(const FInventoryData& Item, int32 Index) override;
+
+	virtual void DisownInventoryByIndex(int32 Index) override;
+
 	virtual int32 GetMaxStorageAmount() const override;
 	
 	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;

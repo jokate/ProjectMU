@@ -18,19 +18,23 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 public :
+	UFUNCTION(BlueprintCallable)
 	virtual void OwnInventory(const FInventoryData& Item) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void OwnInventoryByIndex(const FInventoryData& Item, int32 Index) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void DisOwnInventory(const FInventoryData& Item) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void DisownInventoryByIndex(int32 Index) override;
+	
 	virtual int32 GetMaxStorageAmount() const override;
 	
 	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;
 
 protected:
-
-	UFUNCTION(BlueprintCallable)
-	void SwapSlot(int32 InSlot, int32 TargetSlot);
-	
 	void OnInventoryUpdated();
 	// Called when the game starts
 	virtual void BeginPlay() override;

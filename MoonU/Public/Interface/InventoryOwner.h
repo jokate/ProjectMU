@@ -25,7 +25,11 @@ class MOONU_API IInventoryOwner
 public:
 	virtual void OwnInventory(const FInventoryData& Item) = 0;
 
+	virtual void OwnInventoryByIndex(const FInventoryData& Item, int32 Index) = 0;
+
 	virtual void DisOwnInventory(const FInventoryData& Item) = 0;
+
+	virtual void DisownInventoryByIndex(int32 Index) = 0;
 
 	virtual int32 GetMaxStorageAmount() const = 0;
 
