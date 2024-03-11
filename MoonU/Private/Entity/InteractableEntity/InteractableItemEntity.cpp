@@ -43,8 +43,6 @@ void AInteractableItemEntity::MakeItemInfo()
 		{
 			for (const auto& DropPool : DropData.DropPools)
 			{
-				FInventoryPoolData InventoryPoolData;
-					
 				const FItemDataRow& ItemData = UMUInventoryFunctionLibrary::GetItemDataRow(DropPool.ItemName);
 				FInventoryData InvData;
 				InvData.ItemID = ItemData.ItemID;
@@ -55,11 +53,10 @@ void AInteractableItemEntity::MakeItemInfo()
 				}
 
 				const int32 Value = FMath::RandRange(DropPool.MinAmount, DropPool.MaxAmount);
+				
+				InvData.Amount = Value;
 
-				InventoryPoolData.Data = InvData;
-				InventoryPoolData.Amount = Value;
-
-				InventoryData.Emplace(InventoryPoolData);
+				InventoryData.Emplace(InvData);
 			}
 		}
 	}
@@ -78,7 +75,7 @@ void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
 
 	for(const auto& Inventory : InventoryData)
 	{
-		InventoryOwner->OwnInventory(Inventory.Data, Inventory.Amount);
+		InventoryOwner->OwnInventory(Inventory);
 	}
 	
 }

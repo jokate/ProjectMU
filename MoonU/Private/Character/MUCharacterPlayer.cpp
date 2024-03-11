@@ -412,14 +412,14 @@ bool AMUCharacterPlayer::IsWidgetByGameplayTagInViewport(const FGameplayTag& InG
 	return GameplayTagWidgetOwner->IsWidgetByGameplayTagInViewport(InGameplayTag);
 }
 
-void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item)
 {
-	InventoryComponent->OwnInventory(Item, ItemAmount);
+	InventoryComponent->OwnInventory(Item);
 }
 
-void AMUCharacterPlayer::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void AMUCharacterPlayer::DisOwnInventory(const FInventoryData& Item)
 {
-	InventoryComponent->DisOwnInventory(Item, ItemAmount);
+	InventoryComponent->DisOwnInventory(Item);
 }
 
 int32 AMUCharacterPlayer::GetMaxStorageAmount() const
@@ -427,7 +427,7 @@ int32 AMUCharacterPlayer::GetMaxStorageAmount() const
 	return InventoryComponent->GetMaxStorageAmount();
 }
 
-const TMap<FInventoryData, int32>& AMUCharacterPlayer::GetTotalInventoryData()
+const TArray<FInventoryData>& AMUCharacterPlayer::GetTotalInventoryData()
 {
 	return InventoryComponent->GetTotalInventoryData();
 }

@@ -28,6 +28,9 @@ public :
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bIsStackable : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemMaxAmount = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -70,6 +73,9 @@ public :
 
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
 	TArray<FInventoryUpgradeData> UpgradeDatas;
+
+	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
+	int32 Amount = 0;
 	
 	bool operator==(const FInventoryData& Data) const
 	{
@@ -77,19 +83,6 @@ public :
 	}
 };
 
-
-USTRUCT(BlueprintType)
-struct FInventoryPoolData
-{
-	GENERATED_BODY()
-
-public :
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FInventoryData Data;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 Amount;
-};
 
 FORCEINLINE uint32 GetTypeHash(const FInventoryData& InUpgradeData)
 {

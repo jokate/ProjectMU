@@ -33,5 +33,5 @@ protected:
 	uint8 bIsLootingItem : 1;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<FInventoryPoolData> InventoryData;
+	TArray<FInventoryData> InventoryData;
 };

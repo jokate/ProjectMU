@@ -6,6 +6,8 @@
 #include "Data/MUGameSettings.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "Blueprint/UserWidget.h"
+#include "Library/MUFunctionLibrary.h"
+#include "Library/MUInventoryFunctionLibrary.h"
 #include "UI/MUInventoryWidget.h"
 
 
@@ -14,29 +16,56 @@ UInventoryComponent::UInventoryComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UInventoryComponent::OwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 {
-	if (InventoryAmount.Contains(Item))
+	FInventoryData InItem = Item;
+	const auto& ItemData = UMUInventoryFunctionLibrary::GetItemDataRowById(Item.ItemID);
+
+	if (InventoryData.Contains(InItem))
 	{
-		InventoryAmount[Item] += ItemAmount;
-		return;
+		for (int32 i = InventoryData.Num() - 1; i >= 0; --i)
+		{
+			if (InItem.Amount <= 0)
+			{
+				break;
+			}
+			if (InItem == InventoryData[i])
+			{
+				if (InventoryData[i].Amount >= ItemData.ItemMaxAmount)
+				{
+					continue;
+				}
+				else
+				{
+					int32 ItemAmount = InventoryData[i].Amount + Item.Amount;
+
+					if (ItemAmount > ItemData.ItemMaxAmount)
+					{
+						int32 ItemRemain = ItemAmount - ItemData.ItemMaxAmount;
+						InItem.Amount = ItemRemain;
+						InventoryData[i].Amount = ItemData.ItemMaxAmount;
+					}
+					else
+					{
+						InventoryData[i].Amount = ItemAmount;
+						InItem.Amount = 0;
+					}
+				}
+			}
+		}
 	}
 
-	InventoryAmount.Add(Item, ItemAmount);
+	if (InItem.Amount > 0)
+	{
+		InventoryData.Add(InItem);
+	}
 	OnInventoryUpdated();
 }
 
-void UInventoryComponent::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void UInventoryComponent::DisOwnInventory(const FInventoryData& Item)
 {
-	if (InventoryAmount.Contains(Item))
-	{
-		InventoryAmount[Item] -= ItemAmount;
+	const auto& ItemData = UMUInventoryFunctionLibrary::GetItemDataRowById(Item.ItemID);
 
-		if (InventoryAmount[Item] <= 0)
-		{
-			InventoryAmount.Remove(Item);
-		}
-	}
 	OnInventoryUpdated();
 }
 
@@ -45,9 +74,9 @@ int32 UInventoryComponent::GetMaxStorageAmount() const
 	return MaxInventoryAmount;
 }
 
-const TMap<FInventoryData, int32>& UInventoryComponent::GetTotalInventoryData()
+const TArray<FInventoryData>& UInventoryComponent::GetTotalInventoryData()
 {
-	return InventoryAmount;
+	return InventoryData;
 }
 
 void UInventoryComponent::OnInventoryUpdated()

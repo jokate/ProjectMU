@@ -16,11 +16,5 @@ class MOONU_API UMUInventoryWidget : public UMUWidget
 	GENERATED_BODY()
 
 public :
-	void OnInventoryUpdated();
-	
 	virtual void OnWidgetShow() override;
-protected :
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnInventoryUpdated_BP();
-	
 };

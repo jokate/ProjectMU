@@ -26,14 +26,14 @@ void AStorageEntity::OnInteracted(AActor* InstigatorActor)
 	Super::OnInteracted(InstigatorActor);
 }
 
-void AStorageEntity::OwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void AStorageEntity::OwnInventory(const FInventoryData& Item)
 {
-	InventoryComponent->OwnInventory(Item, ItemAmount);
+	InventoryComponent->OwnInventory(Item);
 }
 
-void AStorageEntity::DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount)
+void AStorageEntity::DisOwnInventory(const FInventoryData& Item)
 {
-	InventoryComponent->DisOwnInventory(Item, ItemAmount);
+	InventoryComponent->DisOwnInventory(Item);
 }
 
 int32 AStorageEntity::GetMaxStorageAmount() const
@@ -41,7 +41,7 @@ int32 AStorageEntity::GetMaxStorageAmount() const
 	return InventoryComponent->GetMaxStorageAmount();
 }
 
-const TMap<FInventoryData, int32>& AStorageEntity::GetTotalInventoryData()
+const TArray<FInventoryData>& AStorageEntity::GetTotalInventoryData()
 {
 	return InventoryComponent->GetTotalInventoryData();
 }

@@ -87,13 +87,13 @@ public:
 #pragma endregion
 
 #pragma region IInventoryOwner
-	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
+	virtual void OwnInventory(const FInventoryData& Item) override;
 
-	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
+	virtual void DisOwnInventory(const FInventoryData& Item) override;
 
 	virtual int32 GetMaxStorageAmount() const override;
 	
-	virtual const TMap<FInventoryData, int32>& GetTotalInventoryData() override;
+	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;
 #pragma endregion
 	
 protected :

@@ -18,13 +18,13 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 public :
-	virtual void OwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
+	virtual void OwnInventory(const FInventoryData& Item) override;
 
-	virtual void DisOwnInventory(const FInventoryData& Item, const int32 ItemAmount) override;
+	virtual void DisOwnInventory(const FInventoryData& Item) override;
 
 	virtual int32 GetMaxStorageAmount() const override;
 	
-	virtual const TMap<FInventoryData, int32>& GetTotalInventoryData() override;
+	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;
 
 protected:
 
@@ -36,7 +36,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<FInventoryData, int32> InventoryAmount;
+	TArray<FInventoryData> InventoryData;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory Max Amount")
 	int32 MaxInventoryAmount = 20;
