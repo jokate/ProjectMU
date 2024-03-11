@@ -29,6 +29,8 @@ public:
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
 
 	virtual bool IsGameplayWidgetInViewport() override;
+
+	virtual void HideAllWidgetForGameplay() override;
 #pragma endregion
 
 	const bool CheckContainsWidget(const FGameplayTag& InGameplayTag);

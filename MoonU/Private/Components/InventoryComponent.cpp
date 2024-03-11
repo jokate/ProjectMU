@@ -124,10 +124,6 @@ const TArray<FInventoryData>& UInventoryComponent::GetTotalInventoryData()
 	return InventoryData;
 }
 
-const FGameplayTag& UInventoryComponent::GetGameplayTag() const
-{
-	return UITag;
-}
 
 void UInventoryComponent::OnInventoryUpdated()
 {
@@ -146,16 +142,19 @@ void UInventoryComponent::OnInventoryUpdated()
 	
 	if (auto* TagWidgetOwner = Cast<IGameplayTagWidgetOwner>(Character))
 	{
-		UUserWidget* Widget = TagWidgetOwner->GetWidgetByGameplayTag(UITag);
-
-		if (Widget == nullptr)
+		for (const auto& UITag : UITags)
 		{
-			return;
-		}
+			UUserWidget* Widget = TagWidgetOwner->GetWidgetByGameplayTag(UITag);
 
-		if (auto* MUWidget = Cast<IMUWidgetInterface>(Widget))
-		{
-			MUWidget->OnWidgetUpdated();
+			if (Widget == nullptr)
+			{
+				return;
+			}
+
+			if (auto* MUWidget = Cast<IMUWidgetInterface>(Widget))
+			{
+				MUWidget->OnWidgetUpdated();
+			}
 		}
 	}
 }

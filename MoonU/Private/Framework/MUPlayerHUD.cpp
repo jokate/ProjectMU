@@ -34,3 +34,8 @@ bool AMUPlayerHUD::IsGameplayWidgetInViewport()
 {
 	return GameplayTagWidgetContainer->IsGameplayWidgetInViewport();
 }
+
+void AMUPlayerHUD::HideAllWidgetForGameplay()
+{
+	GameplayTagWidgetContainer->HideAllWidgetForGameplay();
+}

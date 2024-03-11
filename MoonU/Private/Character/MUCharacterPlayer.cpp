@@ -425,6 +425,18 @@ bool AMUCharacterPlayer::IsGameplayWidgetInViewport()
 	return GameplayTagWidgetOwner->IsGameplayWidgetInViewport();
 }
 
+void AMUCharacterPlayer::HideAllWidgetForGameplay()
+{
+	auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner();
+
+	if (GameplayTagWidgetOwner == nullptr)
+	{
+		return;
+	}
+
+	GameplayTagWidgetOwner->HideAllWidgetForGameplay();
+}
+
 void AMUCharacterPlayer::OwnInventory(const FInventoryData& Item)
 {
 	InventoryComponent->OwnInventory(Item);
@@ -534,7 +546,7 @@ void AMUCharacterPlayer::UIInputAction(const FInputActionInstance& ActionData)
 
 void AMUCharacterPlayer::CloseUI()
 {
-	
+	HideAllWidgetForGameplay();
 }
 
 void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)

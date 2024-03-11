@@ -35,6 +35,9 @@ public :
 
 	UPROPERTY(Config)
 	FGameplayTag InventoryGameplayTag;
+
+	UPROPERTY(Config)
+	FGameplayTag StorageGameplayTag;
 #pragma endregion
 
 #pragma region Equipment Upgrade Tag

@@ -32,4 +32,6 @@ public:
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) = 0;
 
 	virtual bool IsGameplayWidgetInViewport() = 0;
+
+	virtual void HideAllWidgetForGameplay() = 0;
 };

@@ -33,9 +33,6 @@ public :
 	virtual int32 GetMaxStorageAmount() const override;
 	
 	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;
-
-	virtual const FGameplayTag& GetGameplayTag() const;
-
 protected:
 	void OnInventoryUpdated();
 	// Called when the game starts
@@ -45,7 +42,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FGameplayTag UITag;
+	TArray<FGameplayTag> UITags;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FInventoryData> InventoryData;

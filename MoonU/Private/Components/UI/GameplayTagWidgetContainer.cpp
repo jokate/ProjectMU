@@ -8,7 +8,7 @@
 #include "GameFramework/HUD.h"
 
 
-// Sets default values for this component's properties
+// Sets default values for this component's propertiesa
 UGameplayTagWidgetContainer::UGameplayTagWidgetContainer()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -75,6 +75,14 @@ bool UGameplayTagWidgetContainer::IsGameplayWidgetInViewport()
 	}
 
 	return bIsInViewport;
+}
+
+void UGameplayTagWidgetContainer::HideAllWidgetForGameplay()
+{
+	for (const auto& Gameplay : GameplayTagForGameplay->WidgetGameplayTag)
+	{
+		HideWidgetByGameplayTag(Gameplay);
+	}
 }
 
 const bool UGameplayTagWidgetContainer::CheckContainsWidget(const FGameplayTag& InGameplayTag)

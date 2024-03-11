@@ -30,6 +30,8 @@ public :
 	virtual bool IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag) override;
 
 	virtual bool IsGameplayWidgetInViewport() override;
+
+	virtual void HideAllWidgetForGameplay() override;
 #pragma endregion
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

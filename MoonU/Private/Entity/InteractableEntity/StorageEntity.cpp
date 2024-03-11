@@ -4,6 +4,7 @@
 #include "Entity/InteractableEntity/StorageEntity.h"
 
 #include "Components/InventoryComponent.h"
+#include "Data/MUGameSettings.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "Interface/UI/Widget/MUWidgetInterface.h"
 
@@ -26,6 +27,7 @@ void AStorageEntity::BeginPlay()
 void AStorageEntity::OnInteracted(AActor* InstigatorActor)
 {
 	//Super::OnInteracted(InstigatorActor);
+	
 	auto* GameplayTagOwner = Cast<IGameplayTagWidgetOwner>(InstigatorActor);
 	
 	if (GameplayTagOwner == nullptr)
@@ -33,8 +35,14 @@ void AStorageEntity::OnInteracted(AActor* InstigatorActor)
 		return;	
 	}
 
-	GameplayTagOwner->ShowWidgetByGameplayTag(InventoryComponent->GetGameplayTag());
-	UUserWidget* Widget =GameplayTagOwner->GetWidgetByGameplayTag(InventoryComponent->GetGameplayTag());
+	const auto* GS = UMUGameSettings::Get();
+	if (GS == nullptr)
+	{
+		return;
+	}
+	
+	GameplayTagOwner->ShowWidgetByGameplayTag(GS->StorageGameplayTag);
+	UUserWidget* Widget = GameplayTagOwner->GetWidgetByGameplayTag(GS->StorageGameplayTag);
 
 	if (Widget == nullptr)
 	{
