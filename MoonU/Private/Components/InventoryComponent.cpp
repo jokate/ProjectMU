@@ -55,9 +55,25 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 		}
 	}
 
-	if (InItem.Amount > 0)
+	while(InItem.Amount > 0)
 	{
-		InventoryData.Add(InItem);
+		if (InItem.Amount > ItemData.ItemMaxAmount)
+		{
+			FInventoryData TempItem;
+			
+			TempItem.Amount = ItemData.ItemMaxAmount;
+			TempItem.ItemID = InItem.ItemID;
+			TempItem.UpgradeDatas = InItem.UpgradeDatas;
+			
+			InventoryData.Add(TempItem);
+
+			InItem.Amount -= ItemData.ItemMaxAmount;
+		}
+		else
+		{
+			InventoryData.Add(InItem);
+			InItem.Amount = 0;
+		}
 	}
 	OnInventoryUpdated();
 }
