@@ -3,6 +3,7 @@
 
 #include "Library/MUInventoryFunctionLibrary.h"
 
+#include "Interface/InventoryOwner.h"
 #include "Singleton/GameDataManager.h"
 
 const FItemDataRow UMUInventoryFunctionLibrary::GetItemDataRow(const FName& InItemId)
@@ -43,4 +44,31 @@ const FItemPoolStructRow UMUInventoryFunctionLibrary::GetItemPoolRow(const FName
 	}
 
 	return *DataManager->GetItemPoolRow(InPoolId);
+}
+
+void UMUInventoryFunctionLibrary::MoveItemToTargetIndex(AActor* OwnerActor, AActor* TargetActor, int32 StartIndex,
+	int32 TargetIndex)
+{
+	auto* ItemOwner = Cast<IInventoryOwner>(OwnerActor);
+
+	if (ItemOwner == nullptr)
+	{
+		return;
+	}
+
+	auto* TargetInventoryOwner = Cast<IInventoryOwner>(TargetActor);
+
+	if (TargetInventoryOwner == nullptr)
+	{
+		return;
+	}
+
+	const TArray<FInventoryData> OwnerInventoryData = ItemOwner->GetTotalInventoryData();
+	const TArray<FInventoryData> TargetInventoryData = TargetInventoryOwner->GetTotalInventoryData();
+
+	const FInventoryData& OwnerInvData = OwnerInventoryData[StartIndex];
+	const FInventoryData& TargetInvData = TargetInventoryData[TargetIndex];
+
+	TargetInventoryOwner->OwnInventoryByIndex(OwnerInvData, TargetIndex);
+	ItemOwner->OwnInventoryByIndex(TargetInvData, StartIndex);
 }

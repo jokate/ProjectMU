@@ -6,6 +6,7 @@
 #include "Data/MUGameSettings.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 #include "Blueprint/UserWidget.h"
+#include "Library/MUFunctionLibrary.h"
 #include "Library/MUInventoryFunctionLibrary.h"
 #include "UI/MUInventoryWidget.h"
 
@@ -28,7 +29,7 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 			{
 				break;
 			}
-			if (InItem == InventoryData[i])
+			if (InItem.ItemID == InventoryData[i].ItemID)
 			{
 				if (InventoryData[i].Amount >= ItemData.ItemMaxAmount)
 				{
@@ -123,17 +124,29 @@ const TArray<FInventoryData>& UInventoryComponent::GetTotalInventoryData()
 	return InventoryData;
 }
 
+const FGameplayTag& UInventoryComponent::GetGameplayTag() const
+{
+	return UITag;
+}
+
 void UInventoryComponent::OnInventoryUpdated()
 {
+	auto* Character = UMUFunctionLibrary::GetLocalPlayerCharacter(this);
+	
+	if (Character == nullptr)
+	{
+		return;
+	}
+	
 	const auto* GameSettings = UMUGameSettings::Get();
 	if (GameSettings == nullptr)
 	{
 		return;
 	}
 	
-	if (auto* TagWidgetOwner = GetOwner<IGameplayTagWidgetOwner>())
+	if (auto* TagWidgetOwner = Cast<IGameplayTagWidgetOwner>(Character))
 	{
-		UUserWidget* Widget =TagWidgetOwner->GetWidgetByGameplayTag(GameSettings->InventoryUITag);
+		UUserWidget* Widget = TagWidgetOwner->GetWidgetByGameplayTag(UITag);
 
 		if (Widget == nullptr)
 		{

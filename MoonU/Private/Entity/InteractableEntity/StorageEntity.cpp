@@ -4,6 +4,8 @@
 #include "Entity/InteractableEntity/StorageEntity.h"
 
 #include "Components/InventoryComponent.h"
+#include "Interface/UI/GameplayTagWidgetOwner.h"
+#include "Interface/UI/Widget/MUWidgetInterface.h"
 
 
 // Sets default values
@@ -23,7 +25,26 @@ void AStorageEntity::BeginPlay()
 
 void AStorageEntity::OnInteracted(AActor* InstigatorActor)
 {
-	Super::OnInteracted(InstigatorActor);
+	//Super::OnInteracted(InstigatorActor);
+	auto* GameplayTagOwner = Cast<IGameplayTagWidgetOwner>(InstigatorActor);
+	
+	if (GameplayTagOwner == nullptr)
+	{
+		return;	
+	}
+
+	GameplayTagOwner->ShowWidgetByGameplayTag(InventoryComponent->GetGameplayTag());
+	UUserWidget* Widget =GameplayTagOwner->GetWidgetByGameplayTag(InventoryComponent->GetGameplayTag());
+
+	if (Widget == nullptr)
+	{
+		return;
+	}
+
+	if (auto* MUWidget = Cast<IMUWidgetInterface>(Widget))
+	{
+		MUWidget->OnWidgetUpdatedByActor(this);
+	}
 }
 
 void AStorageEntity::OwnInventory(const FInventoryData& Item)

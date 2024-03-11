@@ -23,4 +23,7 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	static const FItemPoolStructRow GetItemPoolRow(const FName& InPoolId);
+
+	UFUNCTION(BlueprintCallable)
+	static void MoveItemToTargetIndex(AActor* OwnerActor, AActor* TargetActor, int32 StartIndex, int32 TargetIndex);
 };
