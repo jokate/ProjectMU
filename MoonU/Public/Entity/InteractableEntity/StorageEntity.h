@@ -4,27 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "InteractableEntity.h"
+#include "InteractableWidgetBoardEntity.h"
 #include "Interface/InventoryOwner.h"
 #include "StorageEntity.generated.h"
 
 UCLASS()
-class MOONU_API AStorageEntity : public AInteractableEntity, public IInventoryOwner
+class MOONU_API AStorageEntity : public AInteractableWidgetBoardEntity, public IInventoryOwner
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
 	AStorageEntity();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
+	
 public:
-
+	
 #pragma region IInventoryOwner
-	virtual void OnInteracted(AActor* InstigatorActor) override;
-
 	UFUNCTION(BlueprintCallable)
 	virtual void OwnInventory(const FInventoryData& Item) override;
 
@@ -44,5 +39,4 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
-	
 };

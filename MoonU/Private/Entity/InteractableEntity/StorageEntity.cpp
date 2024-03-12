@@ -17,44 +17,6 @@ AStorageEntity::AStorageEntity()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 }
 
-// Called when the game starts or when spawned
-void AStorageEntity::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void AStorageEntity::OnInteracted(AActor* InstigatorActor)
-{
-	//Super::OnInteracted(InstigatorActor);
-	
-	auto* GameplayTagOwner = Cast<IGameplayTagWidgetOwner>(InstigatorActor);
-	
-	if (GameplayTagOwner == nullptr)
-	{
-		return;	
-	}
-
-	const auto* GS = UMUGameSettings::Get();
-	if (GS == nullptr)
-	{
-		return;
-	}
-	
-	GameplayTagOwner->ShowWidgetByGameplayTag(GS->StorageGameplayTag);
-	UUserWidget* Widget = GameplayTagOwner->GetWidgetByGameplayTag(GS->StorageGameplayTag);
-
-	if (Widget == nullptr)
-	{
-		return;
-	}
-
-	if (auto* MUWidget = Cast<IMUWidgetInterface>(Widget))
-	{
-		MUWidget->OnWidgetUpdatedByActor(this);
-	}
-}
-
 void AStorageEntity::OwnInventory(const FInventoryData& Item)
 {
 	InventoryComponent->OwnInventory(Item);

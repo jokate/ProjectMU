@@ -261,7 +261,7 @@ void AMUCharacterPlayer::FilterInteraction(const TArray<FHitResult>& InHitResult
 		ObjectTypes,
 		false,
 		TArray<AActor*>(),
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		OutHitResult,
 		true
 	);
@@ -507,6 +507,11 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 void AMUCharacterPlayer::Interact(const FInputActionValue& Value)
 {
 	if (CachedInteractionActor == nullptr)
+	{
+		return;
+	}
+
+	if (IsGameplayWidgetInViewport())
 	{
 		return;
 	}

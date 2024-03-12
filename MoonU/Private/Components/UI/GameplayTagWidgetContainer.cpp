@@ -128,6 +128,3 @@ const bool UGameplayTagWidgetContainer::CheckContainsWidget(const FGameplayTag& 
 
 	return true;
 }
-
-
-
