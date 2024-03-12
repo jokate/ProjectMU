@@ -162,6 +162,9 @@ protected:
 	TObjectPtr<class UCharacterStatusComponent>	 StatusComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<class UCraftComponent> CraftComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 	
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")

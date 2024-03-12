@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/Item/MUCraftData.h"
 #include "Data/Item/MUItemData.h"
 #include "Engine/DataTable.h"
 #include "UObject/Object.h"
@@ -25,8 +26,13 @@ public :
 	const FItemDataRow* GetItemDataRow(const int32 ItemId) const;
 
 	const FItemPoolStructRow* GetItemPoolRow(const FName& PoolName) const;
+
+	const FCraftDataRow* GetCraftDataRow(const FName& CraftItemName) const;
 	
 public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UDataTable> CraftItemTable;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UDataTable> ItemTable;
 

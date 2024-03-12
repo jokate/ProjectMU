@@ -70,7 +70,6 @@ void UInventoryComponent::OwnInventory(const FInventoryData& Item)
 			
 			TempItem.Amount = ItemData.ItemMaxAmount;
 			TempItem.ItemID = InItem.ItemID;
-			TempItem.UpgradeDatas = InItem.UpgradeDatas;
 			
 			InventoryData[Index] = TempItem;
 
@@ -97,11 +96,51 @@ void UInventoryComponent::OwnInventoryByIndex(const FInventoryData& Item, int32 
 
 void UInventoryComponent::DisOwnInventory(const FInventoryData& Item)
 {
-	int32 Index;
-	if (InventoryData.Find(Item, Index))
+	FInventoryData InItem = Item;
+	const auto& ItemData = UMUInventoryFunctionLibrary::GetItemDataRowById(Item.ItemID);
+
+	if (InventoryData.Contains(InItem.ItemID))
 	{
-		InventoryData[Index] = FInventoryData();
+		for (int32 i = 0; i < InventoryData.Num(); ++i)
+		{
+			if (InItem.Amount <= 0)
+			{
+				break;
+			}
+			if (InItem.ItemID == InventoryData[i].ItemID)
+			{
+				if (InventoryData[i].Amount <= 0)
+				{
+					continue;
+				}
+				else
+				{
+					int32 ItemAmount = InventoryData[i].Amount - Item.Amount;
+
+					if (ItemAmount <= 0 )
+					{
+						int32 ItemRemain = -ItemAmount;
+						InItem.Amount = ItemRemain;
+						InventoryData[i].Amount = 0;
+					}
+					else
+					{
+						InventoryData[i].Amount = ItemAmount;
+						InItem.Amount = 0;
+					}
+				}
+			}
+		}
 	}
+
+	for (int32 i = InventoryData.Num() - 1; i >= 0; --i)
+	{
+		if (InventoryData[i].Amount <= 0)
+		{
+			InventoryData[i] = FInventoryData();
+		}
+	}
+	
 	OnInventoryUpdated();
 }
 

@@ -70,3 +70,15 @@ const FItemPoolStructRow* UGameDataManager::GetItemPoolRow(const FName& PoolName
 	return Row;
 }
 
+const FCraftDataRow* UGameDataManager::GetCraftDataRow(const FName& CraftItemName) const
+{
+	const FCraftDataRow* Row = CraftItemTable->FindRow<FCraftDataRow>(CraftItemName, "");
+
+	if (Row == nullptr)
+	{
+		return nullptr;
+	}
+
+	return Row;
+}
+

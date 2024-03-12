@@ -47,11 +47,6 @@ void AInteractableItemEntity::MakeItemInfo()
 				FInventoryData InvData;
 				InvData.ItemID = ItemData.ItemID;
 
-				if (ItemData.ItemGameplayTag == GS->EquippableItemTag)
-				{
-					InvData.UpgradeDatas = DropPool.UpgradeData;
-				}
-
 				const int32 Value = FMath::RandRange(DropPool.MinAmount, DropPool.MaxAmount);
 				
 				InvData.Amount = Value;
@@ -73,7 +68,7 @@ void AInteractableItemEntity::OnInteracted(AActor* InstigatorActor)
 		return;
 	}
 
-	for(const auto& Inventory : InventoryData)
+	for (const auto& Inventory : InventoryData)
 	{
 		InventoryOwner->OwnInventory(Inventory);
 	}

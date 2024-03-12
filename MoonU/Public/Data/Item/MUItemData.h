@@ -69,19 +69,18 @@ struct FInventoryData
 
 public :
 	FInventoryData() {};
+
+	FInventoryData(const int32 ItemID, const int32 Amount) : ItemID(ItemID), Amount(Amount) {}
 	
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
 	int32 ItemID = 0;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	TArray<FInventoryUpgradeData> UpgradeDatas;
 
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
 	int32 Amount = 0;
 	
 	bool operator==(const FInventoryData& Data) const
 	{
-		return ItemID == Data.ItemID && UpgradeDatas == Data.UpgradeDatas && Amount == Data.Amount;
+		return ItemID == Data.ItemID && Amount == Data.Amount;
 	}
 
 	bool operator==(int32 InID) const

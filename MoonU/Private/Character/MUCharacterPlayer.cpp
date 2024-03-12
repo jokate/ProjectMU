@@ -20,6 +20,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Components/CraftComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Interface/UI/Widget/MUWidgetInterface.h"
@@ -37,6 +38,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	SuitComponent = CreateDefaultSubobject<UMUSuitComponent>("Suit Component");
 	StatusComponent = CreateDefaultSubobject<UCharacterStatusComponent>("StatusComponent");
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
+	CraftComponent = CreateDefaultSubobject<UCraftComponent>("CraftComponent");
 	
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

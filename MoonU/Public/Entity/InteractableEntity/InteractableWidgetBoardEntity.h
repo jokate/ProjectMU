@@ -22,6 +22,9 @@ protected:
 public:
 	virtual void OnInteracted(AActor* InstigatorActor) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interactable Entity Name")
+	FName EntityName;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Tag")
 	FGameplayTag UIGameplayTag;
 };
