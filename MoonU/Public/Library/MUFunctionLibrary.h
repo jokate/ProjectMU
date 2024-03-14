@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/InteractableTarget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MUFunctionLibrary.generated.h"
 
@@ -17,4 +18,7 @@ class MOONU_API UMUFunctionLibrary : public UBlueprintFunctionLibrary
 public :
 	UFUNCTION(BlueprintCallable)
 	static ACharacter* GetLocalPlayerCharacter(UObject* WorldObject);
+
+	UFUNCTION(BlueprintCallable)
+	static FGameplayTag GetInteractableGameplayTag(UObject* InteractableTarget);
 };

@@ -53,10 +53,7 @@ public:
 	virtual bool IsSprinting() const override;
 #pragma endregion
 
-#pragma region CacheSkeletalMeshes
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	TArray<USkeletalMeshComponent*> GetHeadMeshComponents_BP();
+#pragma region CacheSkeletalMesh
 
 	UFUNCTION(BlueprintImplementableEvent)
 	TArray<USkeletalMeshComponent*> GetSuitBodyMeshComponents_BP();
@@ -131,9 +128,6 @@ protected :
 #pragma region SuitEventBind
 	UFUNCTION()
 	void SuitChanged(bool bInSuitEquipped);
-
-	UFUNCTION()
-	void HeadChanged(bool bInHeadEquipped);
 #pragma endregion
 
 	void CacheAllSkeletalMeshes();
@@ -162,9 +156,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
-	
-	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
-	TArray<USkeletalMeshComponent*> HeadMeshComponents;
 
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
 	TArray<USkeletalMeshComponent*> SuitBodyMeshComponents;
@@ -180,5 +171,4 @@ protected:
 	
 private : 
 	FSuitDelegate SuitEquipDelegate;
-	FSuitDelegate HeadEquipDelegate;
 };

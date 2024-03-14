@@ -59,7 +59,6 @@ void AMUCharacterPlayer::BeginPlay()
 
 	const auto* GS = UMUGameSettings::Get();
 	SuitEquipDelegate.BindUObject(this, &AMUCharacterPlayer::SuitChanged);
-	HeadEquipDelegate.BindUObject(this, &AMUCharacterPlayer::HeadChanged);
 	
 	CacheAllSkeletalMeshes();
 	
@@ -82,7 +81,6 @@ void AMUCharacterPlayer::BeginPlay()
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	SuitEquipDelegate.Unbind();
-	HeadEquipDelegate.Unbind();
 	
 	Super::EndPlay(EndPlayReason);
 }
@@ -560,19 +558,10 @@ void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)
 	}
 }
 
-void AMUCharacterPlayer::HeadChanged(bool bInHeadEquipped)
-{
-	for (auto* HeadMeshComponent : HeadMeshComponents)
-	{
-		HeadMeshComponent->SetHiddenInGame(!bInHeadEquipped);
-		HeadMeshComponent->SetCastShadow(bInHeadEquipped);
-	}
-}
 
 void AMUCharacterPlayer::CacheAllSkeletalMeshes()
 {
 	SuitBodyMeshComponents = GetSuitBodyMeshComponents_BP();
-	HeadMeshComponents = GetHeadMeshComponents_BP();
 	NormalBodyMeshComponents = GetNormalBodyMeshComponents_BP();
 }
 
