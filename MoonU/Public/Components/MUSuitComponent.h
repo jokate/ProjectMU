@@ -10,7 +10,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MOONU_API UMUSuitComponent : public UActorComponent, public ISpaceTraveler, public IOxygenManager
+class MOONU_API UMUSuitComponent : public UActorComponent, public ISpaceTraveler
 {
 	GENERATED_BODY()
 
@@ -36,14 +36,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-#pragma region IOxygenManager
-	UFUNCTION()
-	virtual void UseOxygen();
-
-	UFUNCTION()
-	virtual void RecoverOxygen();
-#pragma endregion
 	
 	virtual void OnUpdateOxygen();
 
@@ -54,22 +46,7 @@ protected:
 	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Head Activated")
 	uint8 bHeadEquipped : 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Oxygen | Max")
-	float MaxOxygenAmount = 100.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Oxygen | Current")
-	float CurrentOxygenAmount;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Timer Interval")
-	float TimerInterval = 0.1f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Oxygen | Use Amount")
-	float OxygenUseAmount = 0.1f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Oxygen | Recover  Amount")
-	float OxygenRecoverAmount = 0.5f;
-
-	FTimerHandle OxygenTimerHandle;
-
-	FTimerHandle RecoverTimerHandle;
+	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Suit Entity")
+	TObjectPtr<AActor> EquippedSuitEntity;
+	
 };

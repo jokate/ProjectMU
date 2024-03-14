@@ -25,4 +25,6 @@ public:
 	virtual void UseOxygen() = 0;
 
 	virtual void RecoverOxygen() = 0;
+
+	virtual void RecoverOxygen(const float InOxygen) = 0;
 };

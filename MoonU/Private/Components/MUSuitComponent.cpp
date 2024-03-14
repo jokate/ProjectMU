@@ -74,37 +74,11 @@ bool UMUSuitComponent::GetHeadEquipped() const
 void UMUSuitComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentOxygenAmount = MaxOxygenAmount;
 }
 
 void UMUSuitComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	GetWorld()->GetTimerManager().ClearTimer(RecoverTimerHandle);
-	GetWorld()->GetTimerManager().ClearTimer(OxygenTimerHandle);
-	
 	Super::EndPlay(EndPlayReason);
-}
-
-void UMUSuitComponent::UseOxygen()
-{
-	if (CurrentOxygenAmount <= 0.f)
-	{
-		return;
-	}
-
-	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount - OxygenUseAmount, 0.0f, MaxOxygenAmount);
-	OnUpdateOxygen();
-}
-
-void UMUSuitComponent::RecoverOxygen()
-{
-	if (CurrentOxygenAmount >= MaxOxygenAmount)
-	{
-		return;
-	}
-
-	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount + OxygenRecoverAmount, 0.0f, MaxOxygenAmount);
-	OnUpdateOxygen();
 }
 
 void UMUSuitComponent::OnUpdateOxygen()
@@ -148,22 +122,12 @@ void UMUSuitComponent::OnUpdateOxygen()
 
 void UMUSuitComponent::OnCharacterInBasement()
 {
-	GetWorld()->GetTimerManager().ClearTimer(OxygenTimerHandle);
-	
-	if (!RecoverTimerHandle.IsValid())
-	{
-		GetWorld()->GetTimerManager().SetTimer(RecoverTimerHandle, this, &UMUSuitComponent::RecoverOxygen, TimerInterval, true);
-	}
+
 }
 
 void UMUSuitComponent::OnCharacterOutBasement()
 {
-	GetWorld()->GetTimerManager().ClearTimer(RecoverTimerHandle);
-	
-	if (!OxygenTimerHandle.IsValid())
-	{
-		GetWorld()->GetTimerManager().SetTimer(OxygenTimerHandle, this, &UMUSuitComponent::UseOxygen, TimerInterval, true);
-	}
+
 }
 
 
