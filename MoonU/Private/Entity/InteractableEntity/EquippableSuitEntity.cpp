@@ -83,6 +83,14 @@ bool AEquippableSuitEntity::GetSuitEquipped() const
 
 void AEquippableSuitEntity::EquipSuit(AActor* SuitEntity)
 {
+	auto* SuitOxygenManager = Cast<IOxygenManager>(SuitEntity);
+	if (SuitOxygenManager == nullptr)
+	{
+		return;
+	}
+
+	SuitOxygenManager->RecoverOxygen();
+	
 	SuitComponent->EquipSuit(SuitEntity);
 }
 

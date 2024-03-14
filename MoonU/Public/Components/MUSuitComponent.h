@@ -25,6 +25,8 @@ public:
 
 	virtual AActor* UnEquipSuit();
 
+	virtual AActor* GetSuitEntity();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

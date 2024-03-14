@@ -77,6 +77,11 @@ AActor* UMUSuitComponent::UnEquipSuit()
 	return ReturnActor;
 }
 
+AActor* UMUSuitComponent::GetSuitEntity()
+{
+	return EquippedSuitEntity;
+}
+
 // Called when the game starts
 void UMUSuitComponent::BeginPlay()
 {

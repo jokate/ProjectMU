@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "SpaceTraveler.generated.h"
-
 // This class does not need to be modified.
 UINTERFACE()
 class USpaceTraveler : public UInterface
@@ -22,7 +21,6 @@ class MOONU_API ISpaceTraveler
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	
 	virtual void OnCharacterOutBasement() = 0;
 	virtual void OnCharacterInBasement() = 0;
 	

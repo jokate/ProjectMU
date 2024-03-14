@@ -346,12 +346,14 @@ void AMUCharacterPlayer::InteractionWidgetBoard()
 
 void AMUCharacterPlayer::OnCharacterOutBasement()
 {
-	//SuitComponent->OnCharacterOutBasement();
+	UseSuitOxygen();
+	UpdateHUD();
 }
 
 void AMUCharacterPlayer::OnCharacterInBasement()
 {
-	//SuitComponent->OnCharacterInBasement();
+	RecoverSuitOxygen();
+	UpdateHUD();
 }
 
 UUserWidget* AMUCharacterPlayer::GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag)
@@ -589,10 +591,74 @@ void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)
 	}
 }
 
+void AMUCharacterPlayer::UseSuitOxygen()
+{
+	AActor* SuitEntity = SuitComponent->GetSuitEntity();
+
+	if (SuitEntity == nullptr)
+	{
+		return;
+	}
+
+	auto* SuitOxygen = Cast<IOxygenManager>(SuitEntity);
+
+	if (SuitOxygen == nullptr)
+	{
+		return;
+	}
+
+	SuitOxygen->UseOxygen();
+}
+
+void AMUCharacterPlayer::RecoverSuitOxygen()
+{
+	AActor* SuitEntity = SuitComponent->GetSuitEntity();
+
+	if (SuitEntity == nullptr)
+	{
+		return;
+	}
+
+	auto* SuitOxygen = Cast<IOxygenManager>(SuitEntity);
+
+	if (SuitOxygen == nullptr)
+	{
+		return;
+	}
+
+	SuitOxygen->RecoverOxygen();
+}
+
 
 void AMUCharacterPlayer::CacheAllSkeletalMeshes()
 {
 	SuitBodyMeshComponents = GetSuitBodyMeshComponents_BP();
 	NormalBodyMeshComponents = GetNormalBodyMeshComponents_BP();
+}
+
+void AMUCharacterPlayer::UpdateHUD()
+{
+	const auto* GS = UMUGameSettings::Get();
+
+	if (GS == nullptr)
+	{
+		return;
+	}
+	
+	auto* Widget = GetWidgetByGameplayTag(GS->HUDGameplayTag);
+
+	if (Widget == nullptr)
+	{
+		return;
+	}
+
+	auto* HUD = Cast<IMUWidgetInterface>(Widget);
+
+	if (HUD == nullptr)
+	{
+		return;
+	}
+
+	HUD->OnWidgetUpdated();
 }
 

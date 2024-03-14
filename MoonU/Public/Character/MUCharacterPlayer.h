@@ -129,8 +129,14 @@ protected :
 	UFUNCTION()
 	void SuitChanged(bool bInSuitEquipped);
 #pragma endregion
+	
+	void UseSuitOxygen();
 
+	void RecoverSuitOxygen();
+	
 	void CacheAllSkeletalMeshes();
+
+	void UpdateHUD();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
