@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Entity/SuitEntity.h"
+#include "Entity/EquipmentEntity/SuitEntity.h"
 
 #include "Components/OxygenManageComponent.h"
 
@@ -43,6 +43,20 @@ FOxygenUpdateDelegate& ASuitEntity::GetOxygenUpdateDelegate()
 USkeletalMeshComponent* ASuitEntity::GetSkeletalMeshComponent()
 {
 	return SuitSkeletalComponent;
+}
+
+void ASuitEntity::Upgrade(const FInventoryData& InUpgradeData)
+{
+	OnUpgraded();
+}
+
+const TArray<FEquipmentUpgradeData>& ASuitEntity::GetUpgradeDatas()
+{
+	return UpgradeDatas;
+}
+
+void ASuitEntity::OnUpgraded()
+{
 }
 
 

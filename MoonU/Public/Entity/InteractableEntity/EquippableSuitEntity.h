@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "InteractableEntity.h"
-#include "Entity/SuitEntity.h"
 #include "Interface/SuitEquipper.h"
 #include "EquippableSuitEntity.generated.h"
 
@@ -33,6 +32,7 @@ public:
 	virtual AActor* UnEquipSuit() override;
 #pragma endregion
 
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Suit Actor | Class")
 	TSubclassOf<AActor> SuitActorClass;
@@ -41,4 +41,6 @@ protected:
 	TObjectPtr<class UMUSuitComponent> SuitComponent;
 
 	FSuitDelegate SuitDelegate;
+
+	
 };

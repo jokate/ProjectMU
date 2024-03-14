@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EquipmentEntity.h"
 #include "GameFramework/Actor.h"
 #include "Interface/OxygenManager.h"
 #include "Interface/Suit.h"
 #include "SuitEntity.generated.h"
 
 UCLASS()
-class MOONU_API ASuitEntity : public AActor, public IOxygenManager, public ISuit
+class MOONU_API ASuitEntity : public AActor, public IOxygenManager, public ISuit, public IUpgradable
 {
 	GENERATED_BODY()
 
@@ -17,7 +18,6 @@ public:
 	// Sets default values for this actor's properties
 	ASuitEntity();
 
-	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,6 +33,14 @@ protected:
 #pragma endregion
 
 	virtual USkeletalMeshComponent* GetSkeletalMeshComponent() override;
+
+#pragma region Upgradable
+	virtual void Upgrade(const FInventoryData& InUpgradeData) override;
+
+	virtual const TArray<FEquipmentUpgradeData>& GetUpgradeDatas() override;
+#pragma endregion
+
+	void OnUpgraded();
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -40,4 +48,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class USkeletalMeshComponent> SuitSkeletalComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Upgraded Option")
+	TArray<FEquipmentUpgradeData> UpgradeDatas;
 };

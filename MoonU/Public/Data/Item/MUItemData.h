@@ -34,7 +34,7 @@ public :
 };
 
 USTRUCT(BlueprintType)
-struct FInventoryUpgradeData
+struct FEquipmentUpgradeData
 {
 	GENERATED_BODY()
 
@@ -45,7 +45,7 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 UpgradeAmount = 0;
 
-	bool operator==(const FInventoryUpgradeData& UpgradeData) const
+	bool operator==(const FEquipmentUpgradeData& UpgradeData) const
 	{
 		return UpgradeTag.MatchesTag(UpgradeData.UpgradeTag) && UpgradeAmount == UpgradeData.UpgradeAmount;
 	}
@@ -57,9 +57,9 @@ public :
 	
 };
 
-FORCEINLINE uint32 GetTypeHash(const FInventoryUpgradeData& InUpgradeData)
+FORCEINLINE uint32 GetTypeHash(const FEquipmentUpgradeData& InUpgradeData)
 {
-	return FCrc::MemCrc32(&InUpgradeData, sizeof(FInventoryUpgradeData));
+	return FCrc::MemCrc32(&InUpgradeData, sizeof(FEquipmentUpgradeData));
 }
 //
 USTRUCT(BlueprintType)
@@ -107,9 +107,6 @@ struct FItemDropPool
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxAmount = 0;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FInventoryUpgradeData> UpgradeData;
 };
 
 USTRUCT(BlueprintType)
