@@ -84,3 +84,8 @@ FOxygenUpdateDelegate& UOxygenManageComponent::GetOxygenUpdateDelegate()
 	return OxygenUpdateDelegate;
 }
 
+void UOxygenManageComponent::SetMaxOxygenAmount(float InNewMaxOxygenAmount)
+{
+	MaxOxygenAmount = InNewMaxOxygenAmount;
+}
+

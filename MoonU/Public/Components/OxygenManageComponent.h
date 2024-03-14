@@ -26,6 +26,8 @@ public:
 
 	virtual FOxygenUpdateDelegate& GetOxygenUpdateDelegate() override;
 #pragma endregion
+
+	void SetMaxOxygenAmount(float InNewMaxOxygenAmount);
 	
 protected:
 	virtual void BeginPlay() override;
