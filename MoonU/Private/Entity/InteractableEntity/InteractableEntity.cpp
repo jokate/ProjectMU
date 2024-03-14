@@ -29,6 +29,8 @@ const FGameplayTag& AInteractableEntity::GetEntityTag()
 
 void AInteractableEntity::OnInteracted(AActor* InstigatorActor)
 {
+	OnInteracted_BP(InstigatorActor);
+	
 	if (bRemainAfterInteraction == false)
 	{
 		Destroy();	

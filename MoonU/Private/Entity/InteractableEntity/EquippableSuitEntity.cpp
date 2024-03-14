@@ -17,7 +17,7 @@ AEquippableSuitEntity::AEquippableSuitEntity()
 
 const bool AEquippableSuitEntity::IsInteractable(AActor* InstigatorActor)
 {
-	return true;
+	return GetAttachParentActor() == nullptr;
 }
 
 const FGameplayTag& AEquippableSuitEntity::GetEntityTag()
