@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Data/Item/MUItemData.h"
 #include "GameFramework/Actor.h"
+#include "HAL/FMemory.inl"
 #include "Interface/Upgradable.h"
 #include "EquipmentEntity.generated.h"
 
@@ -33,4 +34,7 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipement Upgrade")
 	TArray<FEquipmentUpgradeData> UpgradeData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equipment Tag")
+	FGameplayTag EquipmentTag;
 };
