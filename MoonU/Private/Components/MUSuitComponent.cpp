@@ -33,7 +33,16 @@ void UMUSuitComponent::EquipSuit(AActor* SuitEntity)
 	{
 		return;
 	}
+	
+	auto* OxygenSuit = Cast<IOxygenManager>(SuitEntity);
 
+	if (OxygenSuit == nullptr)
+	{
+		return; 
+	}
+
+	OxygenSuit->GetOxygenUpdateDelegate().BindUObject(this, &UMUSuitComponent::OnUpdateOxygen);
+	
 	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
 	{
 		bSuitEquipped = true;
@@ -41,7 +50,7 @@ void UMUSuitComponent::EquipSuit(AActor* SuitEntity)
 		const FAttachmentTransformRules TransformRule(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, false);
 		SuitEntity->AttachToActor(GetOwner(), TransformRule);
 		EquippedSuitEntity = SuitEntity;
-
+		
 		const FSuitDelegate& SuitEvent = SuitEquipper->GetSuitEquipEvent();
 
 		if (SuitEvent.IsBound())
@@ -59,11 +68,17 @@ void UMUSuitComponent::UnEquipSuit()
 	{
 		return;
 	}
-
+	
+	if (auto* OxygenSuit = Cast<IOxygenManager>(EquippedSuitEntity))
+	{
+		OxygenSuit->GetOxygenUpdateDelegate().Unbind();	
+	}
+	
 	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
 	{
 		bSuitEquipped = false;
-
+		const FDetachmentTransformRules DetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld,EDetachmentRule::KeepWorld, false);
+		EquippedSuitEntity->DetachFromActor(DetachmentTransformRules);
 		EquippedSuitEntity = nullptr;
 		
 		const FSuitDelegate& SuitEvent = SuitEquipper->GetSuitEquipEvent();

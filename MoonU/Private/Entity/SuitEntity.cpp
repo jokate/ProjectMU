@@ -35,5 +35,10 @@ void ASuitEntity::RecoverOxygen(const float InOxygen)
 	OxygenManageComponent->RecoverOxygen(InOxygen);
 }
 
+FOxygenUpdateDelegate& ASuitEntity::GetOxygenUpdateDelegate()
+{
+	return OxygenManageComponent->GetOxygenUpdateDelegate();
+}
+
 
 

@@ -36,8 +36,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	
-	virtual void OnUpdateOxygen();
+
+	UFUNCTION()
+	void OnUpdateOxygen();
 
 protected:	
 	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Suit Activated")

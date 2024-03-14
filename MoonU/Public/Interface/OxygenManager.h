@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "OxygenManager.generated.h"
 
+DECLARE_DELEGATE(FOxygenUpdateDelegate)
+
 // This class does not need to be modified.
 UINTERFACE()
 class UOxygenManager : public UInterface
@@ -27,4 +29,6 @@ public:
 	virtual void RecoverOxygen() = 0;
 
 	virtual void RecoverOxygen(const float InOxygen) = 0;
+
+	virtual FOxygenUpdateDelegate& GetOxygenUpdateDelegate() = 0;
 };

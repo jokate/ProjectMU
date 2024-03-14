@@ -69,8 +69,8 @@ void AMUCharacterPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	
-	UnEquipSuit();
+
+	SuitChanged(false);
 
 	if (auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner())
 	{

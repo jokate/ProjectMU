@@ -27,6 +27,8 @@ protected:
 	virtual void RecoverOxygen() override;
 
 	virtual void RecoverOxygen(const float InOxygen) override;
+
+	virtual FOxygenUpdateDelegate& GetOxygenUpdateDelegate() override;
 #pragma endregion
 	
 protected:

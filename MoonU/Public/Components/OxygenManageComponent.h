@@ -18,13 +18,13 @@ public:
 	UOxygenManageComponent();
 
 #pragma region IOxygenManager
-	UFUNCTION()
 	virtual void UseOxygen() override;
-
-	UFUNCTION()
+	
 	virtual void RecoverOxygen() override;
 
 	virtual void RecoverOxygen(const float InOxygen) override;
+
+	virtual FOxygenUpdateDelegate& GetOxygenUpdateDelegate() override;
 #pragma endregion
 	
 protected:
@@ -32,8 +32,10 @@ protected:
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	UFUNCTION()
 	void OnUseOxygen();
-
+	
+	UFUNCTION()
 	void OnRecoverOxygen();
 
 protected:
@@ -55,5 +57,6 @@ protected:
 	FTimerHandle OxygenTimerHandle;
 
 	FTimerHandle RecoverTimerHandle;
+	FOxygenUpdateDelegate OxygenUpdateDelegate;
 
 };

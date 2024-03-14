@@ -14,6 +14,7 @@ UOxygenManageComponent::UOxygenManageComponent()
 void UOxygenManageComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentOxygenAmount = MaxOxygenAmount;
 }
 
 void UOxygenManageComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -32,6 +33,11 @@ void UOxygenManageComponent::OnUseOxygen()
 	}
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount - OxygenUseAmount, 0.0f, MaxOxygenAmount);
+
+	if (OxygenUpdateDelegate.IsBound())
+    {
+    	OxygenUpdateDelegate.Execute();
+    }
 }
 
 void UOxygenManageComponent::OnRecoverOxygen()
@@ -43,22 +49,38 @@ void UOxygenManageComponent::OnRecoverOxygen()
 	}
 
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount + OxygenRecoverAmount, 0.0f, MaxOxygenAmount);
+
+	if (OxygenUpdateDelegate.IsBound())
+	{
+		OxygenUpdateDelegate.Execute();
+	}
 }
 
 void UOxygenManageComponent::UseOxygen()
 {
 	GetWorld()->GetTimerManager().ClearTimer(RecoverTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(OxygenTimerHandle, this, &UOxygenManageComponent::UseOxygen, TimerInterval, true);
+	if (OxygenTimerHandle.IsValid() == false)
+	{
+		GetWorld()->GetTimerManager().SetTimer(OxygenTimerHandle, this, &UOxygenManageComponent::OnUseOxygen, TimerInterval, true);
+	}
 }
 
 void UOxygenManageComponent::RecoverOxygen()
 {
 	GetWorld()->GetTimerManager().ClearTimer(OxygenTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(RecoverTimerHandle, this, &UOxygenManageComponent::RecoverOxygen, TimerInterval, true);
+	if (RecoverTimerHandle.IsValid() == false)
+	{
+		GetWorld()->GetTimerManager().SetTimer(RecoverTimerHandle, this, &UOxygenManageComponent::OnRecoverOxygen, TimerInterval, true);
+	}
 }
 
 void UOxygenManageComponent::RecoverOxygen(const float InOxygen)
 {
 	CurrentOxygenAmount = FMath::Clamp(CurrentOxygenAmount + InOxygen, 0.0f, MaxOxygenAmount);
+}
+
+FOxygenUpdateDelegate& UOxygenManageComponent::GetOxygenUpdateDelegate()
+{
+	return OxygenUpdateDelegate;
 }
 
