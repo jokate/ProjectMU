@@ -27,4 +27,9 @@ void AEquipmentEntity::OnUpgrade()
 {
 }
 
+const FGameplayTag& AEquipmentEntity::GetEquipEntityTag()
+{
+	return EquipmentTag;
+}
+
 

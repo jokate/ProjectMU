@@ -19,7 +19,7 @@ public :
 
 	virtual void EquipItem(AActor* InActor) override;
 
-	virtual const FGameplayTag& GetEquippingItemTag() override;
+	virtual const FGameplayTag GetEquippingItemTag() override;
 
 	UPROPERTY(Transient, BlueprintReadWrite, Category = "Current Equipment Actor")
 	TObjectPtr<AActor> EquipmentActor;

@@ -492,6 +492,10 @@ const TArray<FInventoryData>& AMUCharacterPlayer::GetTotalInventoryData()
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {
+	if (IsGameplayWidgetInViewport())
+	{
+		return;
+	}
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -515,6 +519,11 @@ void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 
 void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 {
+	if (IsGameplayWidgetInViewport())
+	{
+		return;
+	}
+	
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 

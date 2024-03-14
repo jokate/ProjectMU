@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "UObject/Interface.h"
-#include "EquipmentOwner.generated.h"
+#include "Equippable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UEquipmentOwner : public UInterface
+class UEquippable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,13 +17,11 @@ class UEquipmentOwner : public UInterface
 /**
  * 
  */
-class MOONU_API IEquipmentOwner
+class MOONU_API IEquippable
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void EquipItem(AActor* InActor) = 0;
-
-	virtual const FGameplayTag GetEquippingItemTag() = 0;
+	virtual const FGameplayTag& GetEquipEntityTag() = 0;
 };

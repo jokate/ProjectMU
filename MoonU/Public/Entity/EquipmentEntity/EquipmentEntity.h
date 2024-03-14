@@ -5,12 +5,12 @@
 #include "CoreMinimal.h"
 #include "Data/Item/MUItemData.h"
 #include "GameFramework/Actor.h"
-#include "HAL/FMemory.inl"
+#include "Interface/Equippable.h"
 #include "Interface/Upgradable.h"
 #include "EquipmentEntity.generated.h"
 
 UCLASS()
-class MOONU_API AEquipmentEntity : public AActor, public IUpgradable
+class MOONU_API AEquipmentEntity : public AActor, public IUpgradable, public IEquippable
 {
 	GENERATED_BODY()
 
@@ -28,6 +28,10 @@ protected:
 
 	virtual void OnUpgrade();
 
+#pragma region IEquippable
+	virtual const FGameplayTag& GetEquipEntityTag() override;
+#pragma endregion
+	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equipment Mesh")
 	TObjectPtr<UStaticMeshComponent> EquipmentStaticMeshComponent;
