@@ -24,14 +24,10 @@ class MOONU_API ISuitEquipper
 	
 public:
 	virtual FSuitDelegate& GetSuitEquipEvent() = 0;
-	
-	virtual FSuitDelegate& GetHeadEquipEvent() = 0;
 
 	virtual bool GetSuitEquipped() const = 0;
 
-	virtual bool GetHeadEquipped() const = 0;
+	virtual void EquipSuit(AActor* SuitEntity) = 0;
 
-	virtual void SetSuitEquipped(bool InSuitEquip) = 0;
-	
-	virtual void SetHeadEquipped(bool InSuitEquip) = 0;
+	virtual void UnEquipSuit() = 0;
 };

@@ -15,6 +15,16 @@ AEquippableSuitEntity::AEquippableSuitEntity()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+const bool AEquippableSuitEntity::IsInteractable(AActor* InstigatorActor)
+{
+	return true;
+}
+
+const FGameplayTag& AEquippableSuitEntity::GetEntityTag()
+{
+	return Tag;
+}
+
 void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 {
 	auto* SuitEquipper = Cast<ISuitEquipper>(InstigatorActor);
@@ -23,7 +33,9 @@ void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 	{
 		return;
 	}
+	
+	SuitEquipper->EquipSuit(this);
 
-	SuitEquipper->SetSuitEquipped(true);
+	SuitSkeletalComponent->SetHiddenInGame(true);
 }
 

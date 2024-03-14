@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Interface/OxygenManager.h"
 #include "Interface/SpaceTraveler.h"
+#include "Interface/SuitEquipper.h"
 #include "MUSuitComponent.generated.h"
 
 
@@ -16,14 +17,13 @@ class MOONU_API UMUSuitComponent : public UActorComponent, public ISpaceTraveler
 
 public:	
 	// Sets default values for this component's properties
-	UMUSuitComponent();
-
-	void SetSuitEquipped(bool InEquipped);
-
-	void SetHeadEquipped(bool InEquipped);
-
+	UMUSuitComponent(); 
+	
 	virtual bool GetSuitEquipped() const;
-	virtual bool GetHeadEquipped() const;
+
+	virtual void EquipSuit(AActor* SuitEntity);
+
+	virtual void UnEquipSuit();
 	
 #pragma region ISpaceTraveler
 	virtual void OnCharacterInBasement() override;
@@ -46,7 +46,7 @@ protected:
 	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Head Activated")
 	uint8 bHeadEquipped : 1;
 
-	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Suit Entity")
+	UPROPERTY(SaveGame, VisibleAnywhere, BlueprintReadOnly, Category = "Suit Entity")
 	TObjectPtr<AActor> EquippedSuitEntity;
 	
 };

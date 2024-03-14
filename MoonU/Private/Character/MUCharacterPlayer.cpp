@@ -71,8 +71,7 @@ void AMUCharacterPlayer::BeginPlay()
 		}
 	}
 	
-	SuitComponent->SetSuitEquipped(false);
-	SuitComponent->SetHeadEquipped(false);
+	UnEquipSuit();
 
 	if (auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner())
 	{
@@ -134,29 +133,19 @@ FSuitDelegate& AMUCharacterPlayer::GetSuitEquipEvent()
 	return SuitEquipDelegate;
 }
 
-FSuitDelegate& AMUCharacterPlayer::GetHeadEquipEvent()
-{
-	return HeadEquipDelegate;
-}
-
-bool AMUCharacterPlayer::GetHeadEquipped() const
-{
-	return SuitComponent->GetHeadEquipped();
-}
-
 bool AMUCharacterPlayer::GetSuitEquipped() const
 {
 	return SuitComponent->GetSuitEquipped();
 }
 
-void AMUCharacterPlayer::SetSuitEquipped(bool InSuitEquip)
+void AMUCharacterPlayer::EquipSuit(AActor* SuitEntity)
 {
-	SuitComponent->SetSuitEquipped(InSuitEquip);
+	SuitComponent->EquipSuit(SuitEntity);
 }
 
-void AMUCharacterPlayer::SetHeadEquipped(bool InSuitEquip)
+void AMUCharacterPlayer::UnEquipSuit()
 {
-	SuitComponent->SetHeadEquipped(InSuitEquip);
+	SuitComponent->UnEquipSuit();
 }
 
 void AMUCharacterPlayer::OnSprint()

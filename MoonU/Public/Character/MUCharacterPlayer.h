@@ -37,16 +37,12 @@ public:
 
 #pragma region ISuitEquipper
 	virtual FSuitDelegate& GetSuitEquipEvent() override;
-	
-	virtual FSuitDelegate& GetHeadEquipEvent() override;
-
-	virtual bool GetHeadEquipped() const override;
 
 	virtual bool GetSuitEquipped() const override;
 	
-	virtual void SetSuitEquipped(bool InSuitEquip) override;
-	
-	virtual void SetHeadEquipped(bool InSuitEquip) override;
+	virtual void EquipSuit(AActor* SuitEntity) override;
+
+	virtual void UnEquipSuit() override;
 #pragma endregion
 
 #pragma region ISprinter

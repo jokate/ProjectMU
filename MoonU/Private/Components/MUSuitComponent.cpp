@@ -15,60 +15,65 @@ UMUSuitComponent::UMUSuitComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UMUSuitComponent::SetSuitEquipped(bool InEquipped)
-{
-	AActor* OwnerActor = GetOwner();
-
-	if (!IsValid(OwnerActor))
-	{
-		return;
-	}
-
-	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
-	{
-		bSuitEquipped = InEquipped;
-
-		const FSuitDelegate& HeadEvent = SuitEquipper->GetSuitEquipEvent();
-
-		if (HeadEvent.IsBound())
-		{
-			HeadEvent.Execute(bSuitEquipped);
-		}
-	}
-}
-
-void UMUSuitComponent::SetHeadEquipped(bool InEquipped)
-{
-	AActor* OwnerActor = GetOwner();
-
-	if (!IsValid(OwnerActor))
-	{
-		return;
-	}
-
-	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
-	{
-		bHeadEquipped = InEquipped;
-
-		const FSuitDelegate& HeadEvent = SuitEquipper->GetHeadEquipEvent();
-
-		if (HeadEvent.IsBound())
-		{
-			HeadEvent.Execute(bHeadEquipped);
-		}
-	}
-}
-
 bool UMUSuitComponent::GetSuitEquipped() const
 {
 	return bSuitEquipped;
 }
 
-bool UMUSuitComponent::GetHeadEquipped() const
+void UMUSuitComponent::EquipSuit(AActor* SuitEntity)
 {
-	return bHeadEquipped;
+	AActor* OwnerActor = GetOwner();
+
+	if (!IsValid(SuitEntity))
+	{
+		return;
+	}
+	
+	if (!IsValid(OwnerActor))
+	{
+		return;
+	}
+
+	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
+	{
+		bSuitEquipped = true;
+
+		const FAttachmentTransformRules TransformRule(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, false);
+		SuitEntity->AttachToActor(GetOwner(), TransformRule);
+		EquippedSuitEntity = SuitEntity;
+
+		const FSuitDelegate& SuitEvent = SuitEquipper->GetSuitEquipEvent();
+
+		if (SuitEvent.IsBound())
+		{
+			SuitEvent.Execute(bSuitEquipped);
+		}
+	}
 }
 
+void UMUSuitComponent::UnEquipSuit()
+{
+	AActor* OwnerActor = GetOwner();
+	
+	if (!IsValid(OwnerActor))
+	{
+		return;
+	}
+
+	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
+	{
+		bSuitEquipped = false;
+
+		EquippedSuitEntity = nullptr;
+		
+		const FSuitDelegate& SuitEvent = SuitEquipper->GetSuitEquipEvent();
+
+		if (SuitEvent.IsBound())
+		{
+			SuitEvent.Execute(bSuitEquipped);
+		}
+	}
+}
 
 // Called when the game starts
 void UMUSuitComponent::BeginPlay()
@@ -122,12 +127,26 @@ void UMUSuitComponent::OnUpdateOxygen()
 
 void UMUSuitComponent::OnCharacterInBasement()
 {
+	auto* SuitOxygenManager = Cast<IOxygenManager>(EquippedSuitEntity);
 
+	if (SuitOxygenManager == nullptr)
+	{
+		return;
+	}
+
+	SuitOxygenManager->RecoverOxygen();
 }
 
 void UMUSuitComponent::OnCharacterOutBasement()
 {
+	auto* SuitOxygenManager = Cast<IOxygenManager>(EquippedSuitEntity);
 
+	if (SuitOxygenManager == nullptr)
+	{
+		return;
+	}
+
+	SuitOxygenManager->UseOxygen();
 }
 
 

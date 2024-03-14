@@ -18,8 +18,10 @@ public:
 	UOxygenManageComponent();
 
 #pragma region IOxygenManager
+	UFUNCTION()
 	virtual void UseOxygen() override;
 
+	UFUNCTION()
 	virtual void RecoverOxygen() override;
 
 	virtual void RecoverOxygen(const float InOxygen) override;
@@ -29,6 +31,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	void OnUseOxygen();
+
+	void OnRecoverOxygen();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Oxygen | Max")

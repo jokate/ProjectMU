@@ -10,6 +10,8 @@
 ASuitEntity::ASuitEntity()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	SetRootComponent(SuitSkeletalComponent);
+	SuitSkeletalComponent = CreateDefaultSubobject<USkeletalMeshComponent>("StaticMesh");
 	OxygenManageComponent = CreateDefaultSubobject<UOxygenManageComponent>("OxygenManager");
 }
 

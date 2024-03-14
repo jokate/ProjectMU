@@ -16,6 +16,15 @@ public:
 	// Sets default values for this actor's properties
 	AEquippableSuitEntity();
 
+	virtual const bool IsInteractable(AActor* InstigatorActor) override;
+	
+	virtual const FGameplayTag& GetEntityTag() override;
 public:
 	virtual void OnInteracted(AActor* InstigatorActor) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInteracted_BP(AActor* InstigatorActor);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Tag")
+	FGameplayTag Tag;
 };

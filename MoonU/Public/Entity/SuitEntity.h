@@ -16,6 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	ASuitEntity();
 
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,5 +32,7 @@ protected:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UOxygenManageComponent> OxygenManageComponent;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USkeletalMeshComponent> SuitSkeletalComponent;
 };
