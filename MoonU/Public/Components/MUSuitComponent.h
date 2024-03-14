@@ -11,7 +11,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MOONU_API UMUSuitComponent : public UActorComponent, public ISpaceTraveler
+class MOONU_API UMUSuitComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -23,31 +23,18 @@ public:
 
 	virtual void EquipSuit(AActor* SuitEntity);
 
-	virtual void UnEquipSuit();
-	
-#pragma region ISpaceTraveler
-	virtual void OnCharacterInBasement() override;
+	virtual AActor* UnEquipSuit();
 
-	virtual void OnCharacterOutBasement() override;
-#pragma endregion 
-	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	UFUNCTION()
-	void OnUpdateOxygen();
-
 protected:	
-	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Suit Activated")
-	uint8 bSuitEquipped : 1;
-
-	UPROPERTY(SaveGame, VisibleAnywhere, Category = "Head Activated")
-	uint8 bHeadEquipped : 1;
-
 	UPROPERTY(SaveGame, VisibleAnywhere, BlueprintReadOnly, Category = "Suit Entity")
 	TObjectPtr<AActor> EquippedSuitEntity;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Suit Socket Name")
+	FName SuitSocket = NAME_None;
 };

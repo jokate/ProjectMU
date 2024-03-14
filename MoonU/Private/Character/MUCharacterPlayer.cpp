@@ -23,6 +23,7 @@
 #include "Components/CraftComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
+#include "Interface/Suit.h"
 #include "Interface/UI/Widget/MUWidgetInterface.h"
 
 // Sets default values
@@ -138,12 +139,42 @@ bool AMUCharacterPlayer::GetSuitEquipped() const
 
 void AMUCharacterPlayer::EquipSuit(AActor* SuitEntity)
 {
+	auto* Suit = Cast<ISuit>(SuitEntity);
+
+	if (Suit == nullptr)
+	{
+		return;
+	}
+
+	USkeletalMeshComponent* SuitSkeletal = Suit->GetSkeletalMeshComponent();
+	if (SuitSkeletal == nullptr)
+	{
+		return;
+	}
+	SuitSkeletal->SetHiddenInGame(true);
 	SuitComponent->EquipSuit(SuitEntity);
 }
 
-void AMUCharacterPlayer::UnEquipSuit()
+AActor* AMUCharacterPlayer::UnEquipSuit()
 {
-	SuitComponent->UnEquipSuit();
+	AActor* SuitActor = SuitComponent->UnEquipSuit();
+	
+	auto* Suit = Cast<ISuit>(SuitActor);
+
+	if (Suit == nullptr)
+	{
+		return nullptr;
+	}
+
+	USkeletalMeshComponent* SuitSkeletal = Suit->GetSkeletalMeshComponent();
+	if (SuitSkeletal == nullptr)
+	{
+		return nullptr;
+	}
+
+	SuitSkeletal->SetHiddenInGame(false);
+	
+	return SuitActor;
 }
 
 void AMUCharacterPlayer::OnSprint()
@@ -234,7 +265,7 @@ void AMUCharacterPlayer::FilterInteraction(const TArray<FHitResult>& InHitResult
 	FRotator Direction;
 	GetActorEyesViewPoint(StartLocation, Direction);
 	FVector DirectionVector = UKismetMathLibrary::GetForwardVector(Direction);
-	FVector EndLocation = StartLocation + DirectionVector * InteractionRadius * 2;
+	FVector EndLocation = StartLocation + DirectionVector * LinecastLength;
 	
 	FHitResult OutHitResult;
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes
@@ -315,12 +346,12 @@ void AMUCharacterPlayer::InteractionWidgetBoard()
 
 void AMUCharacterPlayer::OnCharacterOutBasement()
 {
-	SuitComponent->OnCharacterOutBasement();
+	//SuitComponent->OnCharacterOutBasement();
 }
 
 void AMUCharacterPlayer::OnCharacterInBasement()
 {
-	SuitComponent->OnCharacterInBasement();
+	//SuitComponent->OnCharacterInBasement();
 }
 
 UUserWidget* AMUCharacterPlayer::GetWidgetByGameplayTag(const FGameplayTag& InGameplayTag)

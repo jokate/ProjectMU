@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interface/OxygenManager.h"
+#include "Interface/Suit.h"
 #include "SuitEntity.generated.h"
 
 UCLASS()
-class MOONU_API ASuitEntity : public AActor, public IOxygenManager
+class MOONU_API ASuitEntity : public AActor, public IOxygenManager, public ISuit
 {
 	GENERATED_BODY()
 
@@ -30,6 +31,8 @@ protected:
 
 	virtual FOxygenUpdateDelegate& GetOxygenUpdateDelegate() override;
 #pragma endregion
+
+	virtual USkeletalMeshComponent* GetSkeletalMeshComponent() override;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

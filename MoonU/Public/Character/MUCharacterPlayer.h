@@ -42,7 +42,7 @@ public:
 	
 	virtual void EquipSuit(AActor* SuitEntity) override;
 
-	virtual void UnEquipSuit() override;
+	virtual AActor* UnEquipSuit() override;
 #pragma endregion
 
 #pragma region ISprinter
@@ -165,6 +165,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction | Radius")
 	float InteractionRadius = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction | Line cast")
+	float LinecastLength = 1000.0f;
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Interaction | Actor")
 	TObjectPtr<AActor> CachedInteractionActor;

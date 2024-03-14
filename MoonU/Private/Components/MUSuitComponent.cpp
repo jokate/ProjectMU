@@ -17,7 +17,7 @@ UMUSuitComponent::UMUSuitComponent()
 
 bool UMUSuitComponent::GetSuitEquipped() const
 {
-	return bSuitEquipped;
+	return EquippedSuitEntity != nullptr;
 }
 
 void UMUSuitComponent::EquipSuit(AActor* SuitEntity)
@@ -34,50 +34,35 @@ void UMUSuitComponent::EquipSuit(AActor* SuitEntity)
 		return;
 	}
 	
-	auto* OxygenSuit = Cast<IOxygenManager>(SuitEntity);
-
-	if (OxygenSuit == nullptr)
-	{
-		return; 
-	}
-
-	OxygenSuit->GetOxygenUpdateDelegate().BindUObject(this, &UMUSuitComponent::OnUpdateOxygen);
-	
 	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
 	{
-		bSuitEquipped = true;
-
 		const FAttachmentTransformRules TransformRule(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, false);
-		SuitEntity->AttachToActor(GetOwner(), TransformRule);
+		SuitEntity->AttachToActor(GetOwner(), TransformRule, SuitSocket);
 		EquippedSuitEntity = SuitEntity;
 		
 		const FSuitDelegate& SuitEvent = SuitEquipper->GetSuitEquipEvent();
 
 		if (SuitEvent.IsBound())
 		{
-			SuitEvent.Execute(bSuitEquipped);
+			SuitEvent.Execute(true);
 		}
 	}
 }
 
-void UMUSuitComponent::UnEquipSuit()
+AActor* UMUSuitComponent::UnEquipSuit()
 {
 	AActor* OwnerActor = GetOwner();
 	
 	if (!IsValid(OwnerActor))
 	{
-		return;
+		return nullptr;
 	}
-	
-	if (auto* OxygenSuit = Cast<IOxygenManager>(EquippedSuitEntity))
-	{
-		OxygenSuit->GetOxygenUpdateDelegate().Unbind();	
-	}
-	
+
+	AActor* ReturnActor = nullptr;
 	if (auto* SuitEquipper = Cast<ISuitEquipper>(OwnerActor))
 	{
-		bSuitEquipped = false;
-		const FDetachmentTransformRules DetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld,EDetachmentRule::KeepWorld, false);
+		ReturnActor = EquippedSuitEntity;
+		const FDetachmentTransformRules DetachmentTransformRules(EDetachmentRule::KeepRelative, EDetachmentRule::KeepRelative,EDetachmentRule::KeepRelative, false);
 		EquippedSuitEntity->DetachFromActor(DetachmentTransformRules);
 		EquippedSuitEntity = nullptr;
 		
@@ -85,9 +70,11 @@ void UMUSuitComponent::UnEquipSuit()
 
 		if (SuitEvent.IsBound())
 		{
-			SuitEvent.Execute(bSuitEquipped);
+			SuitEvent.Execute(false);
 		}
 	}
+
+	return ReturnActor;
 }
 
 // Called when the game starts
@@ -100,68 +87,3 @@ void UMUSuitComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 }
-
-void UMUSuitComponent::OnUpdateOxygen()
-{
-	AActor* OwnerActor = GetOwner();
-
-	if (OwnerActor == nullptr)
-	{
-		return;
-	}
-
-	auto* GameplayTagWidgetOwner = Cast<IGameplayTagWidgetOwner>(OwnerActor);
-
-	if (GameplayTagWidgetOwner == nullptr)
-	{
-		return;
-	}
-	const auto* GS = UMUGameSettings::Get();
-
-	if (GS == nullptr)
-	{
-		return;
-	}
-	
-	UUserWidget* Widget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(GS->HUDGameplayTag);
-
-	if (Widget == nullptr)
-	{
-		return;
-	}
-
-	auto* HUDWidgetInterface = Cast<IMUWidgetInterface>(Widget);
-
-	if (HUDWidgetInterface == nullptr)
-	{
-		return;
-	}
-
-	HUDWidgetInterface->OnWidgetUpdated();
-}
-
-void UMUSuitComponent::OnCharacterInBasement()
-{
-	auto* SuitOxygenManager = Cast<IOxygenManager>(EquippedSuitEntity);
-
-	if (SuitOxygenManager == nullptr)
-	{
-		return;
-	}
-
-	SuitOxygenManager->RecoverOxygen();
-}
-
-void UMUSuitComponent::OnCharacterOutBasement()
-{
-	auto* SuitOxygenManager = Cast<IOxygenManager>(EquippedSuitEntity);
-
-	if (SuitOxygenManager == nullptr)
-	{
-		return;
-	}
-
-	SuitOxygenManager->UseOxygen();
-}
-
-

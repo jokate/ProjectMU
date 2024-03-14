@@ -29,5 +29,5 @@ public:
 
 	virtual void EquipSuit(AActor* SuitEntity) = 0;
 
-	virtual void UnEquipSuit() = 0;
+	virtual AActor* UnEquipSuit() = 0;
 };

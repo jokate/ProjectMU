@@ -3,6 +3,7 @@
 
 #include "Entity/InteractableEntity/EquippableSuitEntity.h"
 
+#include "Components/MUSuitComponent.h"
 #include "Data/MUGameSettings.h"
 #include "Interface/SuitEquipper.h"
 #include "Library/MUFunctionLibrary.h"
@@ -13,17 +14,27 @@ AEquippableSuitEntity::AEquippableSuitEntity()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	SuitComponent = CreateDefaultSubobject<UMUSuitComponent>("SuitComponent");
+}
+
+void AEquippableSuitEntity::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AActor* SuitActor = GetWorld()->SpawnActor(SuitActorClass);
+	if (SuitActor == nullptr)
+	{
+		return;
+	}
+	
+	SuitComponent->EquipSuit(SuitActor);
 }
 
 const bool AEquippableSuitEntity::IsInteractable(AActor* InstigatorActor)
 {
-	return GetAttachParentActor() == nullptr;
+	return true;
 }
 
-const FGameplayTag& AEquippableSuitEntity::GetEntityTag()
-{
-	return Tag;
-}
 
 void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 {
@@ -33,9 +44,50 @@ void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 	{
 		return;
 	}
-	
-	SuitEquipper->EquipSuit(this);
 
-	SuitSkeletalComponent->SetHiddenInGame(true);
+	const bool bIsSuitEquipped = SuitEquipper->GetSuitEquipped();
+
+	if (bIsSuitEquipped)
+	{
+		AActor* SuitActor = SuitEquipper->UnEquipSuit();
+
+		if (SuitActor == nullptr)
+		{
+			return;
+		}
+
+		EquipSuit(SuitActor);
+	}
+	else
+	{
+		AActor* SuitActor = UnEquipSuit();
+
+		if (SuitActor == nullptr)
+		{
+			return;
+		}
+
+		SuitEquipper->EquipSuit(SuitActor);
+	}
+}
+
+FSuitDelegate& AEquippableSuitEntity::GetSuitEquipEvent()
+{
+	return SuitDelegate;
+}
+
+bool AEquippableSuitEntity::GetSuitEquipped() const
+{
+	return SuitComponent->GetSuitEquipped();
+}
+
+void AEquippableSuitEntity::EquipSuit(AActor* SuitEntity)
+{
+	SuitComponent->EquipSuit(SuitEntity);
+}
+
+AActor* AEquippableSuitEntity::UnEquipSuit()
+{
+	return SuitComponent->UnEquipSuit();
 }
 

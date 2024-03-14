@@ -40,5 +40,10 @@ FOxygenUpdateDelegate& ASuitEntity::GetOxygenUpdateDelegate()
 	return OxygenManageComponent->GetOxygenUpdateDelegate();
 }
 
+USkeletalMeshComponent* ASuitEntity::GetSkeletalMeshComponent()
+{
+	return SuitSkeletalComponent;
+}
+
 
 
