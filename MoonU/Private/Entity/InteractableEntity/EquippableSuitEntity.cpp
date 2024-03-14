@@ -13,13 +13,10 @@ AEquippableSuitEntity::AEquippableSuitEntity()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	bRemainAfterInteraction = false;
 }
 
 void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 {
-	Super::OnInteracted(InstigatorActor);
-	
 	auto* SuitEquipper = Cast<ISuitEquipper>(InstigatorActor);
 
 	if (SuitEquipper == nullptr)
@@ -27,22 +24,6 @@ void AEquippableSuitEntity::OnInteracted(AActor* InstigatorActor)
 		return;
 	}
 
-	const auto* GS = UMUGameSettings::Get();
-
-	if (GS == nullptr)
-	{
-		return;
-	}
-
-	if (EntityTag.MatchesTag(GS->SuitInteractionTag))
-	{
-		SuitEquipper->SetSuitEquipped(true);
-	}
-
-	if (EntityTag.MatchesTag(GS->HelmetInteractionTag))
-	{
-		SuitEquipper->SetHeadEquipped(true);
-	}
-	
+	SuitEquipper->SetSuitEquipped(true);
 }
 

@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "InteractableEntity.h"
+#include "Entity/SuitEntity.h"
 #include "EquippableSuitEntity.generated.h"
 
 UCLASS()
-class MOONU_API AEquippableSuitEntity : public AInteractableEntity
+class MOONU_API AEquippableSuitEntity : public ASuitEntity, public IInteractableTarget
 {
 	GENERATED_BODY()
 
