@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputAction.h"
 #include "GameFramework/Character.h"
+#include "Interface/EquipmentOwner.h"
 #include "Interface/InventoryOwner.h"
 #include "Interface/SpaceTraveler.h"
 #include "Interface/Sprinter.h"
@@ -15,8 +16,8 @@
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public ACharacter, public ISuitEquipper, public ISprinter, public ISpaceTraveler, public IGameplayTagWidgetOwner
-									,public IInventoryOwner
+class MOONU_API AMUCharacterPlayer : public ACharacter, public ISprinter, public ISpaceTraveler, public IGameplayTagWidgetOwner
+									,public IInventoryOwner, public IEquipmentOwner
 {
 	GENERATED_BODY()
 
@@ -34,16 +35,6 @@ protected:
 public:	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-#pragma region ISuitEquipper
-	virtual FSuitDelegate& GetSuitEquipEvent() override;
-
-	virtual bool GetSuitEquipped() const override;
-	
-	virtual void EquipSuit(AActor* SuitEntity) override;
-
-	virtual AActor* UnEquipSuit() override;
-#pragma endregion
 
 #pragma region ISprinter
 	virtual void OnSprint() override;
@@ -96,6 +87,12 @@ public:
 	
 	virtual const TArray<FInventoryData>& GetTotalInventoryData() override;
 #pragma endregion
+
+#pragma region IEquipmentOwner
+	virtual void EquipItem(AActor* InActor) override;
+
+	virtual const FGameplayTag GetEquippingItemTag() override;
+#pragma endregion 
 	
 protected :
 	
@@ -125,16 +122,6 @@ protected :
 
 #pragma endregion
 	
-#pragma region SuitEventBind
-	UFUNCTION()
-	void SuitChanged(bool bInSuitEquipped);
-#pragma endregion
-	
-	void UseSuitOxygen();
-
-	void RecoverSuitOxygen();
-	
-	void CacheAllSkeletalMeshes();
 
 	void UpdateHUD();
 
@@ -150,9 +137,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
 	TObjectPtr<class UInputConfig> InputConfig;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<class UMUSuitComponent> SuitComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UCharacterStatusComponent>	 StatusComponent;
@@ -163,11 +147,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 
-	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
-	TArray<USkeletalMeshComponent*> SuitBodyMeshComponents;
-	
-	UPROPERTY(Transient, VisibleAnywhere, Category = "Runtime Head Mesh")
-	TArray<USkeletalMeshComponent*> NormalBodyMeshComponents;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<class UEquipmentComponent> EquipmentComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction | Radius")
 	float InteractionRadius = 100.0f;
@@ -177,7 +158,4 @@ protected:
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Interaction | Actor")
 	TObjectPtr<AActor> CachedInteractionActor;
-	
-private : 
-	FSuitDelegate SuitEquipDelegate;
 };

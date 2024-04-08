@@ -9,7 +9,6 @@
 #include "MUDefines.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CharacterStatusComponent.h"
-#include "Components/MUSuitComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Data/MUGameSettings.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -21,6 +20,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Components/CraftComponent.h"
+#include "Components/EquipmentComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Interface/Suit.h"
@@ -35,12 +35,11 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-	
-	SuitComponent = CreateDefaultSubobject<UMUSuitComponent>("Suit Component");
+
 	StatusComponent = CreateDefaultSubobject<UCharacterStatusComponent>("StatusComponent");
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	CraftComponent = CreateDefaultSubobject<UCraftComponent>("CraftComponent");
-	
+	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>("EquipmentComponent");
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -59,9 +58,6 @@ void AMUCharacterPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	const auto* GS = UMUGameSettings::Get();
-	SuitEquipDelegate.BindUObject(this, &AMUCharacterPlayer::SuitChanged);
-	
-	CacheAllSkeletalMeshes();
 	
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -71,8 +67,6 @@ void AMUCharacterPlayer::BeginPlay()
 		}
 	}
 
-	SuitChanged(false);
-
 	if (auto* GameplayTagWidgetOwner = GetGameplayTagWidgetOwner())
 	{
 		GameplayTagWidgetOwner->ShowWidgetByGameplayTag(GS->HUDGameplayTag);
@@ -81,8 +75,6 @@ void AMUCharacterPlayer::BeginPlay()
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	SuitEquipDelegate.Unbind();
-	
 	Super::EndPlay(EndPlayReason);
 }
 
@@ -125,56 +117,6 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindActionByTag(InputConfig, GS->UICloseTag, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::CloseUI);
 	}
 
-}
-
-FSuitDelegate& AMUCharacterPlayer::GetSuitEquipEvent()
-{
-	return SuitEquipDelegate;
-}
-
-bool AMUCharacterPlayer::GetSuitEquipped() const
-{
-	return SuitComponent->GetSuitEquipped();
-}
-
-void AMUCharacterPlayer::EquipSuit(AActor* SuitEntity)
-{
-	auto* Suit = Cast<ISuit>(SuitEntity);
-
-	if (Suit == nullptr)
-	{
-		return;
-	}
-
-	USkeletalMeshComponent* SuitSkeletal = Suit->GetSkeletalMeshComponent();
-	if (SuitSkeletal == nullptr)
-	{
-		return;
-	}
-	SuitSkeletal->SetHiddenInGame(true);
-	SuitComponent->EquipSuit(SuitEntity);
-}
-
-AActor* AMUCharacterPlayer::UnEquipSuit()
-{
-	AActor* SuitActor = SuitComponent->UnEquipSuit();
-	
-	auto* Suit = Cast<ISuit>(SuitActor);
-
-	if (Suit == nullptr)
-	{
-		return nullptr;
-	}
-
-	USkeletalMeshComponent* SuitSkeletal = Suit->GetSkeletalMeshComponent();
-	if (SuitSkeletal == nullptr)
-	{
-		return nullptr;
-	}
-
-	SuitSkeletal->SetHiddenInGame(false);
-	
-	return SuitActor;
 }
 
 void AMUCharacterPlayer::OnSprint()
@@ -346,13 +288,11 @@ void AMUCharacterPlayer::InteractionWidgetBoard()
 
 void AMUCharacterPlayer::OnCharacterOutBasement()
 {
-	UseSuitOxygen();
 	UpdateHUD();
 }
 
 void AMUCharacterPlayer::OnCharacterInBasement()
 {
-	RecoverSuitOxygen();
 	UpdateHUD();
 }
 
@@ -489,6 +429,15 @@ const TArray<FInventoryData>& AMUCharacterPlayer::GetTotalInventoryData()
 	return InventoryComponent->GetTotalInventoryData();
 }
 
+void AMUCharacterPlayer::EquipItem(AActor* InActor)
+{
+	EquipmentComponent->EquipItem(InActor);
+}
+
+const FGameplayTag AMUCharacterPlayer::GetEquippingItemTag()
+{
+	return EquipmentComponent->GetEquippingItemTag();
+}
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {
@@ -583,66 +532,6 @@ void AMUCharacterPlayer::UIInputAction(const FInputActionInstance& ActionData)
 void AMUCharacterPlayer::CloseUI()
 {
 	HideAllWidgetForGameplay();
-}
-
-void AMUCharacterPlayer::SuitChanged(bool bInSuitEquipped)
-{
-	for (auto* SuitBodyMeshComponent : SuitBodyMeshComponents)
-	{
-		SuitBodyMeshComponent->SetHiddenInGame(!bInSuitEquipped);
-		SuitBodyMeshComponent->SetCastShadow(bInSuitEquipped);
-	}
-
-	for (auto* NormalBodyMeshComponent : NormalBodyMeshComponents)
-	{
-		NormalBodyMeshComponent->SetHiddenInGame(bInSuitEquipped);
-		NormalBodyMeshComponent->SetCastShadow(!bInSuitEquipped);
-	}
-}
-
-void AMUCharacterPlayer::UseSuitOxygen()
-{
-	AActor* SuitEntity = SuitComponent->GetSuitEntity();
-
-	if (SuitEntity == nullptr)
-	{
-		return;
-	}
-
-	auto* SuitOxygen = Cast<IOxygenManager>(SuitEntity);
-
-	if (SuitOxygen == nullptr)
-	{
-		return;
-	}
-
-	SuitOxygen->UseOxygen();
-}
-
-void AMUCharacterPlayer::RecoverSuitOxygen()
-{
-	AActor* SuitEntity = SuitComponent->GetSuitEntity();
-
-	if (SuitEntity == nullptr)
-	{
-		return;
-	}
-
-	auto* SuitOxygen = Cast<IOxygenManager>(SuitEntity);
-
-	if (SuitOxygen == nullptr)
-	{
-		return;
-	}
-
-	SuitOxygen->RecoverOxygen();
-}
-
-
-void AMUCharacterPlayer::CacheAllSkeletalMeshes()
-{
-	SuitBodyMeshComponents = GetSuitBodyMeshComponents_BP();
-	NormalBodyMeshComponents = GetNormalBodyMeshComponents_BP();
 }
 
 void AMUCharacterPlayer::UpdateHUD()
