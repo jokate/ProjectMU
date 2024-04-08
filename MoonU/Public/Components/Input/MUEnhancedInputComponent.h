@@ -34,6 +34,8 @@ class MOONU_API UMUEnhancedInputComponent : public UEnhancedInputComponent
 	GENERATED_BODY()
 
 public:
+	template<class UserClass, typename FuncType, typename VarType>
+	void BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func, VarType Var);
 	template<class UserClass, typename FuncType>
 	void BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func);
 
@@ -45,6 +47,23 @@ protected:
 
 protected:
 };
+
+template <class UserClass, typename FuncType, typename VarType>
+void UMUEnhancedInputComponent::BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag,
+	ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func, VarType Var)
+{
+	if (InputConfig == nullptr)
+	{
+		return;
+	}
+	if (const UInputAction* IA = InputConfig->FindInputActionForTag(InputTag))
+	{
+		BindAction(IA, TriggerEvent, Object, Func, Var);
+		FInputActionWrapper Wrapper(IA);
+
+		InputGameplayTagMap.Emplace(Wrapper,InputTag);
+	}
+}
 
 template <class UserClass, typename FuncType>
 void UMUEnhancedInputComponent::BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag,

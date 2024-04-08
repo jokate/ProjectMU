@@ -8,8 +8,15 @@ public class MoonU : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "GameplayTags", "UMG" });
-        
-        PublicIncludePaths.AddRange(new string[] {"MoonU"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "UMG", "GameplayAbilities" });
+		
+		PrivateDependencyModuleNames.AddRange(new string[] {
+			"GameFeatures",
+			"GameplayAbilities",
+			"GameplayTasks",
+			"GameplayTags"
+		});
+		
+		PublicIncludePaths.AddRange(new string[] {"MoonU"});
 	}
 }
