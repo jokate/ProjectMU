@@ -9,9 +9,11 @@
 #define HEAD_BONE_NAME TEXT("head")
 
 #define SUIT_TAG TEXT("Gameplay.Interactable.Suit")
+#define COMBO_MOTION_WARP TEXT("Combo")
 
 #define MU_INPUT_SPRINT FGameplayTag::RequestGameplayTag(FName("InputTag.Sprint"))
 #define MU_INPUT_JUMP FGameplayTag::RequestGameplayTag(FName("InputTag.Jump"))
 #define MU_INPUT_MOVE FGameplayTag::RequestGameplayTag(FName("InputTag.Move"))
 #define MU_INPUT_LOOK FGameplayTag::RequestGameplayTag(FName("InputTag.Look"))
 #define MU_INPUT_INTERACT FGameplayTag::RequestGameplayTag(FName("InputTag.Interact"))
+#define MU_INPUT_LMATTACK FGameplayTag::RequestGameplayTag(FName("InputTag.LeftAttack"))

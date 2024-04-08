@@ -2,3 +2,7 @@
 
 
 #include "Data/Animation/MUComboActionData.h"
+
+UMUComboActionData::UMUComboActionData()
+{
+}

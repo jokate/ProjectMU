@@ -13,13 +13,14 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "Components/Input/MUEnhancedInputComponent.h"
+#include "MotionWarpingComponent.h"
 #include "Framework/MUPlayerState.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
 {
-	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
@@ -34,6 +35,8 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
+
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarping");
 }
 
 // Called when the game starts or when spawned
@@ -104,6 +107,14 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	SetupGASInputComponent();
 }
 
+void AMUCharacterPlayer::SetMotionWarp()
+{
+	const FVector PlayerLoc = GetActorLocation();
+	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * 5.0f;
+
+	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocation(COMBO_MOTION_WARP,  TargetLoc);
+}
+
 void AMUCharacterPlayer::SetupGASInputComponent()
 {
 	if (IsValid(ASC) && IsValid(InputComponent))
@@ -112,6 +123,7 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_SPRINT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 0);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_SPRINT, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 0);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LMATTACK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 1);
 	}
 }
 
@@ -152,6 +164,10 @@ UAbilitySystemComponent* AMUCharacterPlayer::GetAbilitySystemComponent() const
 	return ASC;
 }
 
+UMUComboActionData* AMUCharacterPlayer::GetComboActionData() const
+{
+	return ComboActionData;
+}
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {

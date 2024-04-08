@@ -31,6 +31,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	virtual class UMUComboActionData* GetComboActionData() const;
+
+	FORCEINLINE virtual class UMotionWarpingComponent* GetMotionWarpingComponent() const { return MotionWarpingComponent; }
+	
+	void SetMotionWarp();
+	
 	
 protected :
 	void SetupGASInputComponent();
@@ -58,12 +65,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
 	TObjectPtr<class UInputConfig> InputConfig;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GAS")
+	TObjectPtr<class UAbilitySystemComponent> ASC;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
+	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
+	TObjectPtr<class UMUComboActionData> ComboActionData;
+protected:
 	UPROPERTY(EditAnywhere, Category = "GAS")
 	TArray<TSubclassOf<class UGameplayAbility>> StartAbilities;
 
 	UPROPERTY(EditAnywhere, Category = "GAS")
 	TMap<int32, TSubclassOf<class UGameplayAbility>> StartInputAbilities;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GAS")
-	TObjectPtr<class UAbilitySystemComponent> ASC;
 };
