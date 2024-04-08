@@ -23,4 +23,7 @@ public :
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = GAS)
 	TObjectPtr<UAbilitySystemComponent> ASC;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
+	TObjectPtr<class UMUCharacterAttributeSet> CharacterAttribute;
 };

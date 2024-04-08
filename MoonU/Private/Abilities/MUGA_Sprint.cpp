@@ -4,6 +4,8 @@
 #include "Abilities/MUGA_Sprint.h"
 
 #include "MUDefines.h"
+#include "Attribute/MUCharacterAttributeSet.h"
+#include "Character/MUCharacterPlayer.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -34,11 +36,6 @@ void UMUGA_Sprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	MovementComponent->MaxWalkSpeed = SPRINT_SPEED;
 }
 
-void UMUGA_Sprint::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo)
-{
-	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
-}
 
 void UMUGA_Sprint::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo)
