@@ -13,4 +13,8 @@ enum EVelocityDirection
 	Backward,
 	Left,
 	Right,
+	FrontwardLeft,
+	BackwardLeft,
+	FrontwardRight,
+	BackwardRight
 };

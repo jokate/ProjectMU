@@ -35,6 +35,8 @@ public:
 	virtual class UMUComboActionData* GetComboActionData() const;
 
 	FORCEINLINE virtual class UMotionWarpingComponent* GetMotionWarpingComponent() const { return MotionWarpingComponent; }
+
+	const FVector GetRecentedMovedVector();
 	
 	void SetMotionWarp();
 	

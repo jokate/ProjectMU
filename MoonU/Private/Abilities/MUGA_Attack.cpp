@@ -13,6 +13,8 @@
 
 UMUGA_Attack::UMUGA_Attack()
 {
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	
 }
 
 void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -26,7 +28,6 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	PlayAttackTask->OnCompleted.AddDynamic(this, &ThisClass::OnCompleteCallback);
 	PlayAttackTask->OnInterrupted.AddDynamic(this, &ThisClass::OnInterruptedCallback);
 	PlayAttackTask->ReadyForActivation();
-//haracterPlayer->SetMotionWarp();
 	StartComboTimer();
 }
 

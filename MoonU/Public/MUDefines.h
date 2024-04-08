@@ -17,3 +17,4 @@
 #define MU_INPUT_LOOK FGameplayTag::RequestGameplayTag(FName("InputTag.Look"))
 #define MU_INPUT_INTERACT FGameplayTag::RequestGameplayTag(FName("InputTag.Interact"))
 #define MU_INPUT_LMATTACK FGameplayTag::RequestGameplayTag(FName("InputTag.LeftAttack"))
+#define MU_INPUT_DODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.Avoidance"))
