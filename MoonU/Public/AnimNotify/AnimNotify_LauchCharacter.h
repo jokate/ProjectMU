@@ -16,4 +16,7 @@ class MOONU_API UAnimNotify_LauchCharacter : public UAnimNotify
 public :
 	
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Velocity")
+	float LaunchVelocity;
 };

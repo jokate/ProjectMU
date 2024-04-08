@@ -18,6 +18,6 @@ void UAnimNotify_LauchCharacter::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 		return;
 	}
 
-	Character->LaunchCharacter(Character->GetActorForwardVector() * 5.0f, true, false);
+	Character->LaunchCharacter(Character->GetActorForwardVector() * LaunchVelocity, true, false);
 	
 }
