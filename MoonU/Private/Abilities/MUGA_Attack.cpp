@@ -3,11 +3,13 @@
 
 #include "Abilities/MUGA_Attack.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "MotionWarpingComponent.h"
 #include "MUDefines.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Attribute/MUCharacterAttributeSet.h"
 #include "Data/Animation/MUComboActionData.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Widgets/Text/ISlateEditableTextWidget.h"
@@ -15,6 +17,7 @@
 UMUGA_Attack::UMUGA_Attack()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	MinStaminaToAttack = 3.0f; 
 	
 }
 
@@ -73,6 +76,27 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo)
 {
+	AMUCharacterPlayer* CharacterPlayer = CastChecked<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
+	
+	UAbilitySystemComponent* ASC = CharacterPlayer->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+	const UMUCharacterAttributeSet* Attributes = ASC->GetSet<UMUCharacterAttributeSet>();
+
+	if (!Attributes)
+	{
+		return;
+	}
+
+	if (Attributes->GetCurrentStamina() <= MinStaminaToAttack)
+	{
+		HasNextComboInput = false;
+		return;
+	}
+
 	if (!ComboTimerHandle.IsValid()) 
 	{
 		HasNextComboInput = false;
@@ -132,7 +156,6 @@ void UMUGA_Attack::CheckComboInput()
 	//만약 이전에 입력이 들어온 경우에는 다음으로 넘어가준다.=
 	if (HasNextComboInput)
 	{
-		//근데 이 함수는 좀 생소하긴 한데 몽타쥬를 점프시키는 함수
 		MontageJumpToSection(GetNextSection());
 		StartComboTimer();
 		HasNextComboInput = false;
