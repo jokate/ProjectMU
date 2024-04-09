@@ -24,9 +24,6 @@ class MOONU_API UMUCharacterAttributeSet : public UAttributeSet
 public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentStamina);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxStamina);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentCharge);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxCharge);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, ChargeInterval);
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
@@ -40,16 +37,4 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxStamina;
-
-	UPROPERTY(BlueprintReadOnly, Category = "ChargeAttack", meta=( AllowPrivateAccess = true))
-	FGameplayAttributeData CurrentCharge;
-
-	UPROPERTY(BlueprintReadOnly, Category = "ChargeAttack", meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData MaxCharge;
-
-	UPROPERTY(BlueprintReadOnly, Category = "ChargeAttack", meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData ChargeInterval;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Distance", meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData CurrentDash;
 };

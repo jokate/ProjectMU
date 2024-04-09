@@ -33,4 +33,6 @@ public :
 		
 	UPROPERTY(EditAnywhere)
 	TMap<TEnumAsByte<EVelocityDirection>, FName> MontageSectionMap;
+
+	float MinStaminaToUse = 3.0f;
 };

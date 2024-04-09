@@ -8,6 +8,7 @@
 #include "Character/MUCharacterPlayer.h"
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
+#include "Attribute/MUCharacterAttributeSet.h"
 
 UMUGA_Rollout::UMUGA_Rollout()
 {
@@ -32,14 +33,14 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
-
+	const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
 	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	
 	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
 
 	int32 Sign = RecentlyMoved.X > 0.0f ? 1 : -1;
  	
-	if (RecentlyMoved.IsNearlyZero())
+	if (RecentlyMoved.IsNearlyZero() || CurrentStamina < MinStaminaToUse)
 	{
 		//명시적으로 Ability가 끝났음을 알림
 		bool bReplicatedEndAbility = true;
@@ -47,6 +48,7 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 		return;
 	}
+
 	
 	float Angle = FMath::RadiansToDegrees(acosf(FVector2D::DotProduct(RecentlyMoved, FVector2D(0, 1)))) * Sign;
 	FName SectionName = GetCurrentMontageSection(Angle);

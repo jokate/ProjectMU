@@ -6,11 +6,8 @@
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	: CurrentStamina(100.0f),
-      MaxStamina(100.0f),
-	  MaxCharge(100.0f),
-	  ChargeInterval(20.0f)
+      MaxStamina(100.0f)
 {
-	InitCurrentCharge(0.0f);
 }
 
 void UMUCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -32,15 +29,10 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	float MinCharge = 0.0f;
-
-	if (Data.EvaluatedData.Attribute == GetCurrentChargeAttribute())
-	{
-		CurrentCharge = FMath::Clamp(GetCurrentCharge(), MinCharge, GetMaxCharge());
-	}
+	float MinStamina = 0.0f;
 
 	if (Data.EvaluatedData.Attribute == GetCurrentStaminaAttribute())
 	{
-		CurrentStamina = FMath::Clamp(GetCurrentStamina(), 0.0f, GetMaxStamina());
+		CurrentStamina = FMath::Clamp(GetCurrentStamina(), MinStamina, GetMaxStamina());
 	}
 }
