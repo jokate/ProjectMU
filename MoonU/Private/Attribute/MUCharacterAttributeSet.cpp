@@ -38,4 +38,9 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 	{
 		CurrentCharge = FMath::Clamp(GetCurrentCharge(), MinCharge, GetMaxCharge());
 	}
+
+	if (Data.EvaluatedData.Attribute == GetCurrentStaminaAttribute())
+	{
+		CurrentStamina = FMath::Clamp(GetCurrentStamina(), 0.0f, GetMaxStamina());
+	}
 }

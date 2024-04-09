@@ -14,6 +14,7 @@
 
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
+#include "Components/AbilityInitComponent.h"
 #include "Framework/MUPlayerState.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -37,6 +38,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarping");
+	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>("AbilityInitComponent");
 }
 
 // Called when the game starts or when spawned
@@ -74,28 +76,15 @@ void AMUCharacterPlayer::PossessedBy(AController* NewController)
 	ASC = PS->GetAbilitySystemComponent();
 	ASC->InitAbilityActorInfo(PS, this);
 
-	for (const auto& StartAbility : StartAbilities)
-	{
-		FGameplayAbilitySpec StartSpec(StartAbility);
-		ASC->GiveAbility(StartSpec);
-	}
-	for (const auto& StartInputAbility : StartInputAbilities)
-	{
-		FGameplayAbilitySpec StartSpec(StartInputAbility.Value);
-		StartSpec.InputID = StartInputAbility.Key;
-		ASC->GiveAbility(StartSpec);
-	}
+	AbilityInitComponent->InitAbilities();
 }
 
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
+	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent))
+		{
 		//Moving
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::OnStopMove);
@@ -113,10 +102,10 @@ const FVector2D AMUCharacterPlayer::GetRecentlyMovedVector()
 	return RecentlyMovedVector;
 }
 
-void AMUCharacterPlayer::SetMotionWarp()
+void AMUCharacterPlayer::SetDashMotionWarp(const float MotionWarpValue)
 {
 	const FVector PlayerLoc = GetActorLocation();
-	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * 500.0f;
+	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * MotionWarpValue;
 
 	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(COMBO_MOTION_WARP,  TargetLoc, GetActorRotation());
 }
@@ -133,8 +122,7 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DODGE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 2);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Ongoing, this, &AMUCharacterPlayer::GASInputPressed, 4);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 4);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputPressed, 4);
 	}
 }
 

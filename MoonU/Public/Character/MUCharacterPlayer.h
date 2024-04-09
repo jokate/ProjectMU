@@ -38,8 +38,7 @@ public:
 
 	const FVector2D GetRecentlyMovedVector();
 	
-	void SetMotionWarp();
-	
+	void SetDashMotionWarp(const float MotionWarpValue);
 protected :
 	void SetupGASInputComponent();
 
@@ -71,18 +70,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GAS")
 	TObjectPtr<class UAbilitySystemComponent> ASC;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GAS")
+	TObjectPtr<class UAbilityInitComponent> AbilityInitComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
 	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
 	TObjectPtr<class UMUComboActionData> ComboActionData;
 protected:
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TArray<TSubclassOf<class UGameplayAbility>> StartAbilities;
-
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TMap<int32, TSubclassOf<class UGameplayAbility>> StartInputAbilities;
-
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
+
 };

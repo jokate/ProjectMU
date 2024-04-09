@@ -3,6 +3,7 @@
 
 #include "Abilities/MUGA_ChargeAttack.h"
 
+#include "MUDefines.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "Character/MUCharacterPlayer.h"
@@ -17,11 +18,7 @@ void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-}
-
-void UMUGA_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
-{
+	
 	AMUCharacterPlayer* MUCharacter = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 	
 	if (!MUCharacter)
@@ -36,14 +33,7 @@ void UMUGA_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle,
 		return;
 	}
 
-	const UMUCharacterAttributeSet* AttributeSet = ASC->GetSet<UMUCharacterAttributeSet>();
-
-	if (!AttributeSet)
-	{
-		return;
-	}
-
-	float CurrentCharge = AttributeSet->GetCurrentCharge();
+	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 
 	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("Charge"), MontageToPlay, 1.0f);
 	NewTask->OnCompleted.AddDynamic(this, &UMUGA_ChargeAttack::OnCompleteCallback);
@@ -51,11 +41,33 @@ void UMUGA_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle,
 	NewTask->OnCancelled.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	
-	MUCharacter->SetMotionWarp();
+	MUCharacter->SetDashMotionWarp(500.0f);
 	
 	NewTask->ReadyForActivation();
-	
 }
+
+void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	
+	AMUCharacterPlayer* MUCharacter = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
+	
+	if (!MUCharacter)
+	{
+		return;
+	}
+
+	UAbilitySystemComponent* ASC = MUCharacter->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+}
+
 
 void UMUGA_ChargeAttack::OnCompleteCallback()
 {

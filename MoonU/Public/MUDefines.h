@@ -19,3 +19,5 @@
 #define MU_INPUT_LMATTACK FGameplayTag::RequestGameplayTag(FName("InputTag.LeftAttack"))
 #define MU_INPUT_DODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.Avoidance"))
 #define MU_INPUT_CHARGE  FGameplayTag::RequestGameplayTag(FName("InputTag.ChargeTag"))
+#define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
+#define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))

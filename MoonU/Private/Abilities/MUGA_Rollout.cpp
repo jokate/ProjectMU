@@ -3,12 +3,12 @@
 
 #include "Abilities/MUGA_Rollout.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "KismetAnimationLibrary.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Character/MUCharacterPlayer.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/Character.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 
 UMUGA_Rollout::UMUGA_Rollout()
 {
@@ -26,6 +26,16 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
+
+	UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
 	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
 
 	int32 Sign = RecentlyMoved.X > 0.0f ? 1 : -1;
@@ -61,6 +71,15 @@ void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 }
 
 void UMUGA_Rollout::OnCompleteCallback()

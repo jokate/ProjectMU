@@ -3,7 +3,9 @@
 
 #include "Framework/MUPlayerHUD.h"
 
+#include "MUDefines.h"
 #include "Components/UI/GameplayTagWidgetContainer.h"
+#include "UI/MUHUDWidget.h"
 
 AMUPlayerHUD::AMUPlayerHUD()
 {
@@ -38,4 +40,13 @@ bool AMUPlayerHUD::IsGameplayWidgetInViewport()
 void AMUPlayerHUD::HideAllWidgetForGameplay()
 {
 	GameplayTagWidgetContainer->HideAllWidgetForGameplay();
+}
+
+void AMUPlayerHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UMUHUDWidget* HUDWidget = Cast<UMUHUDWidget>(GameplayTagWidgetContainer->GetWidgetByGameplayTag(MU_UI_HUD));
+	HUDWidget->SetAbilitySystemComponent(PlayerOwner->GetPawn());
+	ShowWidgetByGameplayTag(MU_UI_HUD);
 }

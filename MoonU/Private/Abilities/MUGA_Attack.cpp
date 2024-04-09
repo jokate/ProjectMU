@@ -3,6 +3,7 @@
 
 #include "Abilities/MUGA_Attack.h"
 
+#include "AbilitySystemComponent.h"
 #include "MotionWarpingComponent.h"
 #include "MUDefines.h"
 #include "Character/MUCharacterPlayer.h"
@@ -23,7 +24,18 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	AMUCharacterPlayer* CharacterPlayer = CastChecked<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
+	
+	UAbilitySystemComponent* ASC = CharacterPlayer->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+	
+	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
 	CurrentComboData = CharacterPlayer->GetComboActionData();
+	
 	UAbilityTask_PlayMontageAndWait* PlayAttackTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayCombo"), CurrentComboData->AnimMontage, 1.0f, GetNextSection());
 	PlayAttackTask->OnCompleted.AddDynamic(this, &ThisClass::OnCompleteCallback);
 	PlayAttackTask->OnInterrupted.AddDynamic(this, &ThisClass::OnInterruptedCallback);
@@ -47,6 +59,15 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	CurrentCombo = 0;
 	CurrentComboData = nullptr;
 	HasNextComboInput = false;
+
+	UAbilitySystemComponent* ASC = CharacterPlayer->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+	
+	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 }
 
 void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

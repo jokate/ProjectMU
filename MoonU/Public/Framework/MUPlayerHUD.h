@@ -34,6 +34,8 @@ public :
 	virtual void HideAllWidgetForGameplay() override;
 #pragma endregion
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UGameplayTagWidgetContainer> GameplayTagWidgetContainer;
 };

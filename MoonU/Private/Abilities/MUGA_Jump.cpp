@@ -3,6 +3,9 @@
 
 #include "Abilities/MUGA_Jump.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "GameFramework/Character.h"
 
 UMUGA_Jump::UMUGA_Jump()
@@ -14,6 +17,15 @@ void UMUGA_Jump::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+
+	if (!ASC)
+	{
+		return;
+	}
+	
+	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 }
 
 void UMUGA_Jump::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -23,9 +35,24 @@ void UMUGA_Jump::InputReleased(const FGameplayAbilitySpecHandle Handle, const FG
 	Character->StopJumping();
 }
 
+void UMUGA_Jump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+
+	if (!ASC)
+	{
+		return;
+	}
+	
+	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+}
+
 bool UMUGA_Jump::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
-	FGameplayTagContainer* OptionalRelevantTags) const
+                                    const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
+                                    FGameplayTagContainer* OptionalRelevantTags) const
 {
 	bool bResult = Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	if (!bResult)
