@@ -6,6 +6,7 @@
 #include "Abilities/Tasks/AbilityTask.h"
 #include "MUAT_JumpAndWaitForLanding.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FJumpAndWaitForLandingDelegate);
 /**
  * 
  */
@@ -13,4 +14,24 @@ UCLASS()
 class MOONU_API UMUAT_JumpAndWaitForLanding : public UAbilityTask
 {
 	GENERATED_BODY()
+
+public :
+	UMUAT_JumpAndWaitForLanding();
+
+	//지금은 변수 설정이 따로 있는 것이 아니기 떄문에 인자가 없기는 하지만 사실, 여기서 인자를 설정하는 단계를 거치면 된다.
+	UFUNCTION(BlueprintCallable, Category= "Ability | Tasks", meta = (DisplayName = "JumpAndWaitForLanding",
+		HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
+	static UMUAT_JumpAndWaitForLanding* CreateTask(UGameplayAbility* OwningAbility);
+
+	//발동 될 때 호출이 될 함수
+	virtual void Activate() override;
+
+	virtual void OnDestroy(bool bInOwnerFinished) override;
+
+	UPROPERTY(BlueprintAssignable)
+	FJumpAndWaitForLandingDelegate OnComplete;
+
+	protected :
+	UFUNCTION()
+	void OnLandedCallback(const FHitResult& Hit);
 };
