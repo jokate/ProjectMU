@@ -99,6 +99,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Moving
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::OnStopMove);
 
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
@@ -107,9 +108,10 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	SetupGASInputComponent();
 }
 
-const FVector AMUCharacterPlayer::GetRecentedMovedVector()
+
+const FVector2D AMUCharacterPlayer::GetRecentlyMovedVector()
 {
-	return GetLastMovementInputVector();
+	return RecentlyMovedVector;
 }
 
 void AMUCharacterPlayer::SetMotionWarp()
@@ -195,7 +197,13 @@ void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+		RecentlyMovedVector = MovementVector;
 	}
+}
+
+void AMUCharacterPlayer::OnStopMove(const FInputActionValue& Value)
+{
+	RecentlyMovedVector = FVector2D::Zero();
 }
 
 void AMUCharacterPlayer::Look(const FInputActionValue& Value)

@@ -5,6 +5,7 @@
 
 #include "KismetAnimationLibrary.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Character/MUCharacterPlayer.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -19,19 +20,33 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	ACharacter* Character = Cast<ACharacter>(ActorInfo->AvatarActor.Get());
+	AMUCharacterPlayer* Character = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 
 	if (Character == nullptr)
 	{
 		return;
 	}
-	FVector NormalizedVector = Character->GetLastMovementInputVector().GetSafeNormal();
-	float Angle = FMath::Acos(NormalizedVector.Dot(FVector(0, 1, 0))) * (180 / PI);
+	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
+
+	int32 Sign = RecentlyMoved.X > 0.0f ? 1 : -1;
+ 	
+	if (RecentlyMoved.IsNearlyZero())
+	{
+		//명시적으로 Ability가 끝났음을 알림
+		bool bReplicatedEndAbility = true;
+		bool bWasCancelled = false;
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+		return;
+	}
+	
+	float Angle = FMath::RadiansToDegrees(acosf(FVector2D::DotProduct(RecentlyMoved, FVector2D(0, 1)))) * Sign;
 	FName SectionName = GetCurrentMontageSection(Angle);
 	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DODGE"), AnimMontageForRollOut, 1.0f, SectionName);
 
 	NewTask->OnCompleted.AddDynamic(this, &UMUGA_Rollout::OnCompleteCallback);
 	NewTask->OnInterrupted.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
+	NewTask->OnCancelled.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
+	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
 
 	NewTask->ReadyForActivation();
 }

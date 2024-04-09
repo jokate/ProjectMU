@@ -36,7 +36,7 @@ public:
 
 	FORCEINLINE virtual class UMotionWarpingComponent* GetMotionWarpingComponent() const { return MotionWarpingComponent; }
 
-	const FVector GetRecentedMovedVector();
+	const FVector2D GetRecentlyMovedVector();
 	
 	void SetMotionWarp();
 	
@@ -50,6 +50,8 @@ protected :
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);
 
+	void OnStopMove(const FInputActionValue& Value);
+	
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 #pragma endregion
@@ -81,4 +83,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "GAS")
 	TMap<int32, TSubclassOf<class UGameplayAbility>> StartInputAbilities;
+
+	UPROPERTY()
+	FVector2D RecentlyMovedVector;
 };

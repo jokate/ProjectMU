@@ -43,7 +43,6 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
 	AMUCharacterPlayer* CharacterPlayer = CastChecked<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
-	CharacterPlayer->GetMotionWarpingComponent()->RemoveWarpTarget(COMBO_MOTION_WARP);
 	CurrentCombo = 0;
 	CurrentComboData = nullptr;
 	HasNextComboInput = false;
