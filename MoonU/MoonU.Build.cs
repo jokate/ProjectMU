@@ -14,7 +14,7 @@ public class MoonU : ModuleRules
 			"GameFeatures",
 			"GameplayAbilities",
 			"GameplayTasks",
-			"GameplayTags", "AnimGraphRuntime"
+			"GameplayTags"
 		});
 		
 		PublicIncludePaths.AddRange(new string[] {"MoonU"});
