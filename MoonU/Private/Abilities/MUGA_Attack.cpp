@@ -27,6 +27,7 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	UAbilityTask_PlayMontageAndWait* PlayAttackTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayCombo"), CurrentComboData->AnimMontage, 1.0f, GetNextSection());
 	PlayAttackTask->OnCompleted.AddDynamic(this, &ThisClass::OnCompleteCallback);
 	PlayAttackTask->OnInterrupted.AddDynamic(this, &ThisClass::OnInterruptedCallback);
+	PlayAttackTask->OnBlendOut.AddDynamic(this, &ThisClass::OnInterruptedCallback);
 	PlayAttackTask->ReadyForActivation();
 	StartComboTimer();
 }

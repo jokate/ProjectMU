@@ -116,9 +116,9 @@ const FVector2D AMUCharacterPlayer::GetRecentlyMovedVector()
 void AMUCharacterPlayer::SetMotionWarp()
 {
 	const FVector PlayerLoc = GetActorLocation();
-	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * 5.0f;
+	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * 500.0f;
 
-	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocation(COMBO_MOTION_WARP,  TargetLoc);
+	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(COMBO_MOTION_WARP,  TargetLoc, GetActorRotation());
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()
@@ -133,6 +133,8 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DODGE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 2);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Ongoing, this, &AMUCharacterPlayer::GASInputPressed, 4);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 4);
 	}
 }
 

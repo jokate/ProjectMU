@@ -40,7 +40,6 @@ public:
 	
 	void SetMotionWarp();
 	
-	
 protected :
 	void SetupGASInputComponent();
 
