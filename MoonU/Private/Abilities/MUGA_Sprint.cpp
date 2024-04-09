@@ -5,7 +5,6 @@
 
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
-#include "Character/MUCharacterPlayer.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
