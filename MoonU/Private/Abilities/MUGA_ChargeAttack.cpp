@@ -49,8 +49,6 @@ void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-	
 	AMUCharacterPlayer* MUCharacter = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 	
 	if (!MUCharacter)
@@ -66,6 +64,8 @@ void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 	}
 
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 

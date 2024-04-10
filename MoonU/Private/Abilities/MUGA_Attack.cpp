@@ -53,8 +53,6 @@ void UMUGA_Attack::CancelAbility(const FGameplayAbilitySpecHandle Handle, const 
 void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-
 	AMUCharacterPlayer* CharacterPlayer = CastChecked<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 	CurrentCombo = 0;
 	CurrentComboData = nullptr;
@@ -68,6 +66,8 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

@@ -38,8 +38,6 @@ void UMUGA_Jump::InputReleased(const FGameplayAbilitySpecHandle Handle, const FG
 void UMUGA_Jump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
 	if (!ASC)
@@ -48,6 +46,8 @@ void UMUGA_Jump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGame
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 bool UMUGA_Jump::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

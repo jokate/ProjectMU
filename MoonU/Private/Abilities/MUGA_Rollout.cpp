@@ -71,8 +71,6 @@ void UMUGA_Rollout::CancelAbility(const FGameplayAbilitySpecHandle Handle, const
 void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
 	if (!ASC)
@@ -81,6 +79,8 @@ void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	}
 
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UMUGA_Rollout::OnCompleteCallback()

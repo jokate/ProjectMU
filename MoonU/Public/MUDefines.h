@@ -21,3 +21,4 @@
 #define MU_INPUT_CHARGE  FGameplayTag::RequestGameplayTag(FName("InputTag.ChargeTag"))
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
+#define MU_EVENT_TRACEEND  FGameplayTag::RequestGameplayTag(FName("Event.TraceEnd"))
