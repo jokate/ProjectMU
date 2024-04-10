@@ -14,8 +14,7 @@ class MOONU_API UAnimNotify_UseStamina : public UAnimNotify
 {
 	GENERATED_BODY()
 public : 
-	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
-
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& Ref) override;
 	UPROPERTY(EditAnywhere)
 	float StaminaToUse;
 };

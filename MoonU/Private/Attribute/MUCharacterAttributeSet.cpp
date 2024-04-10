@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MUCharacterAttributeSet.h"
+#include "Attribute/MUCharacterAttributeSet.h"
 #include "GameplayEffectExtension.h"
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()

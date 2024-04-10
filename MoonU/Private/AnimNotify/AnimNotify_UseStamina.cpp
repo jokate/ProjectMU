@@ -7,9 +7,9 @@
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 
-void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,  const FAnimNotifyEventReference& Ref)
 {
-	Super::Notify(MeshComp, Animation);
+	Super::Notify(MeshComp, Animation, Ref);
 
 	AActor* OwningActor = MeshComp->GetOwner();
 
