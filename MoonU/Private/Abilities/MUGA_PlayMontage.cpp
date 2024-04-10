@@ -34,19 +34,3 @@ void UMUGA_PlayMontage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	bool bWasCancelled = true;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
-
-void UMUGA_PlayMontage::OnCompleteCallback()
-{
-	//명시적으로 Ability가 끝났음을 알림
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = true;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
-}
-
-void UMUGA_PlayMontage::OnInterruptedCallback()
-{
-	//명시적으로 Ability가 끝났음을 알림
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = true;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
-}
