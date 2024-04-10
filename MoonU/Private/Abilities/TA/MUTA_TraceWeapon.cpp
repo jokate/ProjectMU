@@ -10,7 +10,7 @@
 AMUTA_TraceWeapon::AMUTA_TraceWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	WeaponSocketName = TEXT("Weapon");
+	WeaponSocketName = TEXT("Weapon_R_Trail_A");
 }
 
 void AMUTA_TraceWeapon::Tick(float DeltaSeconds)
@@ -39,7 +39,7 @@ void AMUTA_TraceWeapon::TraceStart()
 	TArray<FHitResult> HitResults;
 	ActorsToIgnore.Add(Character);
 	UKismetSystemLibrary::SphereTraceMultiByProfile(this, WeaponSocketLocation,
-		End, 50.0f, TEXT("WEAPON"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
+		End, 50.0f, TEXT("Weapon"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
 		FLinearColor::Red, FLinearColor::Green, 1.0f);
 
 	for (const auto& HitResult : HitResults)

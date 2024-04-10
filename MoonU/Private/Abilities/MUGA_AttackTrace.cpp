@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
+#include "ParticleHelper.h"
 #include "Abilities/AT/MUAT_Trace.h"
 
 UMUGA_AttackTrace::UMUGA_AttackTrace()
@@ -36,6 +37,19 @@ void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHa
 	if (UAbilitySystemBlueprintLibrary::TargetDataHasActor(TargetDataHandle, 0))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Target Is Avaliable"));
+		const TArray<TWeakObjectPtr<AActor>> TriggerActors = TargetDataHandle.Data[0].Get()->GetActors();
+
+		for (const auto& TriggerActor : TriggerActors)
+		{
+			AActor* TriggeredActor = TriggerActor.Get();
+
+			if (!TriggeredActor)
+			{
+				continue;
+			}
+
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(TriggeredActor, MU_EVENT_ONHIT, FGameplayEventData());
+		}
 	} 
 	
 	bool bReplicatedEndAbility = true;

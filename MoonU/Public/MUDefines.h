@@ -22,3 +22,6 @@
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
 #define MU_EVENT_TRACEEND  FGameplayTag::RequestGameplayTag(FName("Event.TraceEnd"))
+#define MU_EVENT_ONHIT FGameplayTag::RequestGameplayTag(FName("Event.Character.OnHit"))
+#define MU_COLLISION_ROLL TEXT("RollCollision")
+#define MU_COLLISION_PAWN TEXT("Pawn")

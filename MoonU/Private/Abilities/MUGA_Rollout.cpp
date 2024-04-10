@@ -9,6 +9,7 @@
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Components/CapsuleComponent.h"
 
 UMUGA_Rollout::UMUGA_Rollout()
 {
@@ -53,13 +54,14 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	float Angle = FMath::RadiansToDegrees(acosf(FVector2D::DotProduct(RecentlyMoved, FVector2D(0, 1)))) * Sign;
 	FName SectionName = GetCurrentMontageSection(Angle);
 	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DODGE"), AnimMontageForRollOut, 1.0f, SectionName);
-
+	
 	NewTask->OnCompleted.AddDynamic(this, &UMUGA_Rollout::OnCompleteCallback);
 	NewTask->OnInterrupted.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
 	NewTask->OnCancelled.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
 	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_Rollout::OnInterruptedCallback);
 
 	NewTask->ReadyForActivation();
+	
 }
 
 void UMUGA_Rollout::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -71,6 +73,7 @@ void UMUGA_Rollout::CancelAbility(const FGameplayAbilitySpecHandle Handle, const
 void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	AMUCharacterPlayer* Character = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
 	if (!ASC)
@@ -79,7 +82,6 @@ void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	}
 
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
