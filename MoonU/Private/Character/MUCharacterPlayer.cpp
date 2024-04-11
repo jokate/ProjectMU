@@ -57,12 +57,15 @@ void AMUCharacterPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	TimeWindComponent->OnIntialize();
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 }
+
 
 void AMUCharacterPlayer::PossessedBy(AController* NewController)
 {
@@ -249,10 +252,10 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (TimeWindComponent->GetTimeWind())
+	/*if (TimeWindComponent->GetTimeWind())
 	{
 		return;
-	}
+	}*/
 	
 	if (Controller != nullptr)
 	{

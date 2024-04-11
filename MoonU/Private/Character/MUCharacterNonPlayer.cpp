@@ -12,7 +12,7 @@
 AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("InitComponent"));
@@ -23,8 +23,9 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 void AMUCharacterNonPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TimeWindComponent->OnIntialize();
 }
+
 
 UAbilitySystemComponent* AMUCharacterNonPlayer::GetAbilitySystemComponent() const
 {
