@@ -46,5 +46,6 @@ protected :
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimInstance> CachedAnimInstance;
+	
 };
 

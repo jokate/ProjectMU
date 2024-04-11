@@ -133,36 +133,33 @@ void UTimeWindComponent::TimeRewind()
 
 void UTimeWindComponent::Record()
 {
-	const int32 MaxRecord =  FMath::RoundToInt32(RecordTime / GetWorld()->DeltaTimeSeconds);
-	
+	const int32 MaxRecord = FMath::RoundToInt32(RecordTime / GetWorld()->DeltaTimeSeconds);
 	if (RecordDatas.Num() > MaxRecord)
 	{
 		RecordDatas.RemoveAt(MaxRecord);
 	}
-	else
+	
+	FTimeWindRecordData RecordData;
+	RecordData.Position = GetOwner()->GetActorLocation();
+	RecordData.Rotation = GetOwner()->GetActorRotation();
+
+	//몽타주에 대해서 레코딩을 진행한다.
+	if (CachedAnimInstance)
 	{
-		FTimeWindRecordData RecordData;
-		RecordData.Position = GetOwner()->GetActorLocation();
-		RecordData.Rotation = GetOwner()->GetActorRotation();
-
-		//몽타주에 대해서 레코딩을 진행한다.
-		if (CachedAnimInstance)
+		if (UAnimMontage* CurrentMontage = CachedAnimInstance->GetCurrentActiveMontage())
 		{
-			if (UAnimMontage* CurrentMontage = CachedAnimInstance->GetCurrentActiveMontage())
-			{
-				const float CurrentPosition = CachedAnimInstance->Montage_GetPosition(CurrentMontage);
+			const float CurrentPosition = CachedAnimInstance->Montage_GetPosition(CurrentMontage);
 
-				FTimeWindMontageRecordData MontageRecordData;
-				MontageRecordData.Montage = CurrentMontage;
-				MontageRecordData.MontagePosition = CurrentPosition;
+			FTimeWindMontageRecordData MontageRecordData;
+			MontageRecordData.Montage = CurrentMontage;
+			MontageRecordData.MontagePosition = CurrentPosition;
 
-				RecordData.MontageRecordData = MontageRecordData;	
-			}
+			RecordData.MontageRecordData = MontageRecordData;	
 		}
-
-		RecordData.RewindVelocity = FVector(CachedCharacter->GetVelocity().X, CachedCharacter->GetVelocity().Y, 0); 
-		
-		RecordDatas.Insert(RecordData, 0);
 	}
+
+	RecordData.RewindVelocity = FVector(CachedCharacter->GetVelocity().X, CachedCharacter->GetVelocity().Y, 0); 
+		
+	RecordDatas.Insert(RecordData, 0);
 }
 
