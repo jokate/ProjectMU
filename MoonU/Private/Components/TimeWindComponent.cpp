@@ -3,6 +3,8 @@
 
 #include "Components/TimeWindComponent.h"
 
+#include "Interface/TimeWinder.h"
+
 
 // Sets default values for this component's properties
 UTimeWindComponent::UTimeWindComponent()
@@ -11,8 +13,54 @@ UTimeWindComponent::UTimeWindComponent()
 	bIsWinding = false;
 }
 
+void UTimeWindComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto* GM = GetWorld()->GetAuthGameMode();
+
+	if (GM == nullptr)
+	{
+		return;
+	}
+
+	const auto* Owner = GetOwner<ITimeWindTarget>();
+
+	if (Owner == nullptr)
+	{
+		return;
+	}
+
+	auto* TGM = Cast<ITimeWinder>(GM);
+
+	if (TGM)
+	{
+		TGM->RegisterTimeWindTarget(GetOwner());
+	}
+}
+
+void UTimeWindComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	auto* GM = GetWorld()->GetAuthGameMode();
+
+	if (GM)
+	{
+		const auto* Owner = GetOwner<ITimeWindTarget>();
+
+		if (Owner)
+		{
+			if (auto* TGM = Cast<ITimeWinder>(GM))
+			{
+				TGM->UnregisterTimeWindTarget(GetOwner());
+			}
+		}
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
+
 void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                       FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 

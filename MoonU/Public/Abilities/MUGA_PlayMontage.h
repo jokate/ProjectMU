@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MU_AbilityBase.h"
+#include "Abilities/GameplayAbility.h"
 #include "MUGA_PlayMontage.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_PlayMontage : public UMU_AbilityBase
+class MOONU_API UMUGA_PlayMontage : public UGameplayAbility
 {
 	GENERATED_BODY()
 

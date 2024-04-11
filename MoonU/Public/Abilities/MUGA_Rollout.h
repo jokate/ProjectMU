@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MU_AbilityBase.h"
+#include "Abilities/GameplayAbility.h"
 #include "Data/MUEnum.h"
 #include "MUGA_Rollout.generated.h"
 
@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_Rollout : public UMU_AbilityBase
+class MOONU_API UMUGA_Rollout : public UGameplayAbility
 {
 	GENERATED_BODY()
 

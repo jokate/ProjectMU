@@ -9,3 +9,23 @@ AMUGameMode::AMUGameMode()
 {
 	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>("TimeWindManager");
 }
+
+void AMUGameMode::TimeWindActivate()
+{
+	TimeWindManager->TimeWindActivate();
+}
+
+void AMUGameMode::TimeWindDeactivate()
+{
+	TimeWindManager->TimeWindDeactivate();
+}
+
+void AMUGameMode::RegisterTimeWindTarget(AActor* InActor)
+{
+	TimeWindManager->RegisterTimeWindTarget(InActor);
+}
+
+void AMUGameMode::UnregisterTimeWindTarget(AActor* InActor)
+{
+	TimeWindManager->UnregisterTimeWindTarget(InActor);
+}

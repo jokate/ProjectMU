@@ -22,4 +22,11 @@ class MOONU_API ITimeWinder
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	virtual void TimeWindActivate() = 0;
+
+	virtual void TimeWindDeactivate() = 0;
+	
+	virtual void RegisterTimeWindTarget(AActor* InActor) = 0;
+
+	virtual void UnregisterTimeWindTarget(AActor* InActor) = 0;
 };

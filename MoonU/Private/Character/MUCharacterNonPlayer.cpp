@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/TimeWindComponent.h"
 
 
 // Sets default values
@@ -15,6 +16,7 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("InitComponent"));
+	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWindComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -36,5 +38,15 @@ void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
 	AbilityInitComponent->InitAbilities();
+}
+
+void AMUCharacterNonPlayer::SetTimeWind(bool InTimeWind)
+{
+	return TimeWindComponent->SetTimeWind(InTimeWind);
+}
+
+const bool AMUCharacterNonPlayer::GetTimeWind()
+{
+	return TimeWindComponent->GetTimeWind();
 }
 

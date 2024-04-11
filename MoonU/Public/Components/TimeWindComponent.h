@@ -19,6 +19,10 @@ public:
 	UTimeWindComponent();
 
 protected:
+	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 public:
 	virtual void SetTimeWind(bool InTimeWind) override;

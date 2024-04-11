@@ -17,6 +17,15 @@ class MOONU_API AMUGameMode : public AGameMode, public ITimeWinder
 
 public :
 	AMUGameMode();
+
+protected : 
+	virtual void TimeWindActivate() override;
+
+	virtual void TimeWindDeactivate() override;
+	
+	virtual void RegisterTimeWindTarget(AActor* InActor) override;
+
+	virtual void UnregisterTimeWindTarget(AActor* InActor) override;
 protected :
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UTimeWindManager> TimeWindManager;

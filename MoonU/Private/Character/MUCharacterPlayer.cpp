@@ -98,8 +98,6 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::SetTimeWind, true);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::SetTimeWind, false);
 	}
 
 	SetupGASInputComponent();
@@ -165,6 +163,8 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputPressed, 4);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 5);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 5);
 	}
 }
 
