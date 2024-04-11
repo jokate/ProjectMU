@@ -6,6 +6,17 @@
 #include "GameplayTagContainer.h"
 #include "MUTimeWindData.generated.h"
 
+USTRUCT(BlueprintType)
+struct FTimeWindMontageRecordData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(VisibleAnywhere)
+	TWeakObjectPtr<UAnimMontage> Montage;
+
+	UPROPERTY(VisibleAnywhere)
+	float MontagePosition;
+};
 
 USTRUCT(BlueprintType)
 struct FTimeWindRecordData
@@ -17,4 +28,7 @@ struct FTimeWindRecordData
 
 	UPROPERTY(VisibleAnywhere)
 	FRotator Rotation;
+
+	UPROPERTY(VisibleAnywhere)
+	FTimeWindMontageRecordData MontageRecordData;
 };

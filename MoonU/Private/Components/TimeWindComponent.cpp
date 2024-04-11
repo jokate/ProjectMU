@@ -2,7 +2,7 @@
 
 
 #include "Components/TimeWindComponent.h"
-
+#include "GameFramework/Character.h"	
 #include "Interface/TimeWinder.h"
 
 
@@ -36,6 +36,23 @@ void UTimeWindComponent::BeginPlay()
 	if (TGM)
 	{
 		TGM->RegisterTimeWindTarget(GetOwner());
+	}
+
+	if (auto* Character = GetOwner<ACharacter>())
+	{
+		CachedCharacter = Character;
+
+		auto* MeshComp = CachedCharacter->GetMesh();
+
+		if (MeshComp)
+		{
+			auto* AnimInstance = MeshComp->GetAnimInstance();
+
+			if (AnimInstance)
+			{
+				CachedAnimInstance = AnimInstance;
+			}
+		}
 	}
 }
 
@@ -88,8 +105,28 @@ void UTimeWindComponent::TimeRewind()
 {
 	if (RecordDatas.Num() > 0)
 	{
-		GetOwner()->SetActorLocation(RecordDatas[0].Position);
-		GetOwner()->SetActorRotation(RecordDatas[0].Rotation);
+		const FTimeWindRecordData RecordData = RecordDatas[0];
+		GetOwner()->SetActorLocation(RecordData.Position);
+		GetOwner()->SetActorRotation(RecordData.Rotation);
+
+		if (RecordData.MontageRecordData.Montage.Get() && CachedAnimInstance)
+		{
+			const FTimeWindMontageRecordData RecordMontageData = RecordData.MontageRecordData;
+			if (!CachedAnimInstance->Montage_IsPlaying(RecordMontageData.Montage.Get()))
+			{
+				CachedAnimInstance->Montage_Play(RecordMontageData.Montage.Get(), 1.0f, EMontagePlayReturnType::MontageLength, RecordMontageData.MontagePosition);
+			}
+			CachedAnimInstance->Montage_SetPosition(RecordMontageData.Montage.Get(), RecordMontageData.MontagePosition);
+		}
+		else
+		{
+			if (CachedAnimInstance->GetCurrentActiveMontage())
+			{
+				CachedAnimInstance->Montage_Stop(0.25f);
+			}
+		}
+		
+		
 		RecordDatas.RemoveAt(0);
 	}
 }
@@ -97,6 +134,7 @@ void UTimeWindComponent::TimeRewind()
 void UTimeWindComponent::Record()
 {
 	const int32 MaxRecord =  FMath::RoundToInt32(RecordTime / GetWorld()->DeltaTimeSeconds);
+	
 	if (RecordDatas.Num() > MaxRecord)
 	{
 		RecordDatas.RemoveAt(MaxRecord);
@@ -106,6 +144,22 @@ void UTimeWindComponent::Record()
 		FTimeWindRecordData RecordData;
 		RecordData.Position = GetOwner()->GetActorLocation();
 		RecordData.Rotation = GetOwner()->GetActorRotation();
+
+		//몽타주에 대해서 레코딩을 진행한다.
+		if (CachedAnimInstance)
+		{
+			if (UAnimMontage* CurrentMontage = CachedAnimInstance->GetCurrentActiveMontage())
+			{
+				const float CurrentPosition = CachedAnimInstance->Montage_GetPosition(CurrentMontage);
+
+				FTimeWindMontageRecordData MontageRecordData;
+				MontageRecordData.Montage = CurrentMontage;
+				MontageRecordData.MontagePosition = CurrentPosition;
+
+				RecordData.MontageRecordData = MontageRecordData;	
+			}
+		}
+		
 		RecordDatas.Insert(RecordData, 0);
 	}
 }

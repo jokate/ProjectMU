@@ -40,5 +40,11 @@ protected :
 
 	UPROPERTY(VisibleAnywhere)
 	uint8 bIsWinding : 1;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class ACharacter> CachedCharacter;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimInstance> CachedAnimInstance;
 };
 
