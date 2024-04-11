@@ -11,6 +11,7 @@ UTimeWindComponent::UTimeWindComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bIsWinding = false;
+	bIsMaxRecordInit = false;
 }
 
 void UTimeWindComponent::BeginPlay()
@@ -125,7 +126,7 @@ void UTimeWindComponent::TimeRewind()
 		{
 			if (CachedAnimInstance->GetCurrentActiveMontage())
 			{
-				CachedAnimInstance->Montage_Stop(0.25f);
+				CachedAnimInstance->Montage_Stop(0.0f);
 			}
 		}
 		
@@ -136,7 +137,12 @@ void UTimeWindComponent::TimeRewind()
 
 void UTimeWindComponent::Record()
 {
-	const int32 MaxRecord = FMath::RoundToInt32(RecordTime / GetWorld()->DeltaTimeSeconds);
+	if (!bIsMaxRecordInit)
+	{
+		bIsMaxRecordInit = true;
+		MaxRecord = FMath::RoundToInt32(RecordTime/ GetWorld()->GetDeltaSeconds());
+	}
+	
 	if (RecordDatas.Num() > MaxRecord)
 	{
 		RecordDatas.RemoveAt(MaxRecord);

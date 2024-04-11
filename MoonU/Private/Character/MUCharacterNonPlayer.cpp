@@ -23,6 +23,7 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 void AMUCharacterNonPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 	TimeWindComponent->OnIntialize();
 }
 
@@ -30,6 +31,11 @@ void AMUCharacterNonPlayer::BeginPlay()
 UAbilitySystemComponent* AMUCharacterNonPlayer::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AMUCharacterNonPlayer::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 void AMUCharacterNonPlayer::PossessedBy(AController* NewController)

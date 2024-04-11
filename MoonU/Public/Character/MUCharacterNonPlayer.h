@@ -23,6 +23,8 @@ protected:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	virtual void PostInitializeComponents() override;
+
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void SetTimeWind(bool InTimeWind) override;

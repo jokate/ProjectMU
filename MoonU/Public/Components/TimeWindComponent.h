@@ -22,7 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	
+
 public:
 	virtual void SetTimeWind(bool InTimeWind) override;
 	virtual const bool GetTimeWind() override;
@@ -47,6 +47,11 @@ protected :
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimInstance> CachedAnimInstance;
-	
+
+	UPROPERTY(VisibleAnywhere)
+	int32 MaxRecord;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	uint8 bIsMaxRecordInit : 1;
 };
 
