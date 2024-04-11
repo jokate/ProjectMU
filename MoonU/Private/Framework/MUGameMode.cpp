@@ -2,3 +2,10 @@
 
 
 #include "Framework/MUGameMode.h"
+
+#include "Components/TimeWindManager.h"
+
+AMUGameMode::AMUGameMode()
+{
+	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>("TimeWindManager");
+}

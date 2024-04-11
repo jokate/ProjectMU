@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility.h"
+#include "MU_AbilityBase.h"
 #include "MUGA_AttackTrace.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_AttackTrace : public UGameplayAbility
+class MOONU_API UMUGA_AttackTrace : public UMU_AbilityBase
 {
 	GENERATED_BODY()
 	UMUGA_AttackTrace();

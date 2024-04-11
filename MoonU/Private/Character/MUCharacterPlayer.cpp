@@ -15,6 +15,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/TimeWindComponent.h"
 #include "Framework/MUPlayerState.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -39,6 +40,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarping");
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>("AbilityInitComponent");
+	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>("TimeWinder");
 }
 
 // Called when the game starts or when spawned
@@ -79,6 +81,11 @@ void AMUCharacterPlayer::PossessedBy(AController* NewController)
 	AbilityInitComponent->InitAbilities();
 }
 
+void AMUCharacterPlayer::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+}
+
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -91,6 +98,8 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::SetTimeWind, true);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::SetTimeWind, false);
 	}
 
 	SetupGASInputComponent();
@@ -131,6 +140,16 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 void AMUCharacterPlayer::ReleaseMotionWarp(const FName InName)
 {
 	MotionWarpingComponent->RemoveWarpTarget(InName);
+}
+
+void AMUCharacterPlayer::SetTimeWind(bool InTimeRewind)
+{
+	TimeWindComponent->SetTimeWind(InTimeRewind);
+}
+
+const bool AMUCharacterPlayer::GetTimeWind()
+{
+	return TimeWindComponent->GetTimeWind();
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()
@@ -196,6 +215,11 @@ void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
+	if (TimeWindComponent->GetTimeWind())
+	{
+		return;
+	}
+
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -225,6 +249,11 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
+	if (TimeWindComponent->GetTimeWind())
+	{
+		return;
+	}
+	
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller

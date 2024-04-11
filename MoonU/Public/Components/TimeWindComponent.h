@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Data/TimeWinder/MUTimeWindData.h"
+#include "Interface/TimerWindTarget.h"
 #include "TimeWindComponent.generated.h"
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UTimeWindComponent : public UActorComponent
+class MOONU_API UTimeWindComponent : public UActorComponent, public ITimeWindTarget
 {
 	GENERATED_BODY()
 
@@ -17,11 +19,22 @@ public:
 	UTimeWindComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void SetTimeWind(bool InTimeWind) override;
+	virtual const bool GetTimeWind() override;
+protected :
+	void TimeRewind();
+	
+	void Record();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<FTimeWindRecordData> RecordDatas;
+
+	UPROPERTY(EditDefaultsOnly)
+	float RecordTime = 3.0f;
+
+	UPROPERTY(VisibleAnywhere)
+	uint8 bIsWinding : 1;
 };
+

@@ -7,30 +7,58 @@
 // Sets default values for this component's properties
 UTimeWindComponent::UTimeWindComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	bIsWinding = false;
 }
 
-
-// Called when the game starts
-void UTimeWindComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
 void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                       FActorComponentTickFunction* ThisTickFunction)
+	FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (bIsWinding)
+	{
+		TimeRewind();
+	}
+	else
+	{
+		Record();		
+	}
+}
+
+void UTimeWindComponent::SetTimeWind(bool InTimeRewind)
+{
+	bIsWinding = InTimeRewind;
+}
+
+const bool UTimeWindComponent::GetTimeWind()
+{
+	return bIsWinding;
+}
+
+void UTimeWindComponent::TimeRewind()
+{
+	if (RecordDatas.Num() > 0)
+	{
+		GetOwner()->SetActorLocation(RecordDatas[0].Position);
+		GetOwner()->SetActorRotation(RecordDatas[0].Rotation);
+		RecordDatas.RemoveAt(0);
+	}
+}
+
+void UTimeWindComponent::Record()
+{
+	const int32 MaxRecord =  FMath::RoundToInt32(RecordTime / GetWorld()->DeltaTimeSeconds);
+	if (RecordDatas.Num() > MaxRecord)
+	{
+		RecordDatas.RemoveAt(MaxRecord);
+	}
+	else
+	{
+		FTimeWindRecordData RecordData;
+		RecordData.Position = GetOwner()->GetActorLocation();
+		RecordData.Rotation = GetOwner()->GetActorRotation();
+		RecordDatas.Insert(RecordData, 0);
+	}
 }
 

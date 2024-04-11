@@ -7,12 +7,13 @@
 #include "InputAction.h"
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
+#include "Interface/TimerWindTarget.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public ACharacter, public IAbilitySystemInterface
+class MOONU_API AMUCharacterPlayer : public ACharacter, public IAbilitySystemInterface, public ITimeWindTarget
 {
 	GENERATED_BODY()
 
@@ -26,6 +27,8 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void PostInitializeComponents() override;
 
 public:	
 	// Called to bind functionality to input
@@ -42,6 +45,11 @@ public:
 	void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
 
 	void ReleaseMotionWarp(const FName InName);
+
+#pragma region ITimeWindTarget
+	virtual void SetTimeWind(bool InTimeRewind) override;
+	virtual const bool GetTimeWind() override;
+#pragma endregion 
 protected :
 	void SetupGASInputComponent();
 
@@ -64,12 +72,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
-	TObjectPtr<class UInputConfig> InputConfig;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GAS")
 	TObjectPtr<class UAbilitySystemComponent> ASC;
 
@@ -79,10 +81,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
 	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
-	TObjectPtr<class UMUComboActionData> ComboActionData;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Time Winder")
+	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
+	TObjectPtr<class UMUComboActionData> ComboActionData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
+	TObjectPtr<class UInputConfig> InputConfig;
 };
