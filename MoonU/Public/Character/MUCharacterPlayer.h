@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "InputAction.h"
+#include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
 #include "MUCharacterPlayer.generated.h"
 
@@ -38,7 +39,9 @@ public:
 
 	const FVector2D GetRecentlyMovedVector();
 	
-	void SetDashMotionWarp(const float MotionWarpValue);
+	void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
+
+	void ReleaseMotionWarp(const FName InName);
 protected :
 	void SetupGASInputComponent();
 

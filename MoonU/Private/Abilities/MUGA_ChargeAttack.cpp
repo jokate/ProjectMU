@@ -41,7 +41,7 @@ void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	NewTask->OnCancelled.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	
-	MUCharacter->SetDashMotionWarp(500.0f);
+	MUCharacter->SetMotionWarp(DASH_MOTION_WARP, EMotionWarpType::TranslationAndRotation, 500.0f);
 	
 	NewTask->ReadyForActivation();
 }
@@ -62,7 +62,7 @@ void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
-
+	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);

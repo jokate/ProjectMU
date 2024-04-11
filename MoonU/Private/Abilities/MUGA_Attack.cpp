@@ -41,6 +41,9 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	PlayAttackTask->OnInterrupted.AddDynamic(this, &ThisClass::OnInterruptedCallback);
 	PlayAttackTask->OnBlendOut.AddDynamic(this, &ThisClass::OnInterruptedCallback);
 	PlayAttackTask->ReadyForActivation();
+
+	CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
+	
 	StartComboTimer();
 }
 
@@ -100,6 +103,7 @@ void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const F
 	}
 	else
 	{
+		CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
 		HasNextComboInput = true;
 	}
 }
@@ -153,6 +157,7 @@ void UMUGA_Attack::CheckComboInput()
 	//만약 이전에 입력이 들어온 경우에는 다음으로 넘어가준다.=
 	if (HasNextComboInput)
 	{
+		
 		MontageJumpToSection(GetNextSection());
 		StartComboTimer();
 		HasNextComboInput = false;

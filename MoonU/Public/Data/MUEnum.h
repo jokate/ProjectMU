@@ -18,3 +18,11 @@ enum EVelocityDirection
 	FrontwardRight,
 	BackwardRight
 };
+
+UENUM(BlueprintType)
+enum EMotionWarpType
+{
+	TranslationAndRotation,
+	TranslationOnly,
+	RotationOnly
+};

@@ -9,6 +9,7 @@
 #define HEAD_BONE_NAME TEXT("head")
 
 #define SUIT_TAG TEXT("Gameplay.Interactable.Suit")
+#define DASH_MOTION_WARP TEXT("Dash")
 #define COMBO_MOTION_WARP TEXT("Combo")
 
 #define MU_INPUT_SPRINT FGameplayTag::RequestGameplayTag(FName("InputTag.Sprint"))

@@ -102,12 +102,35 @@ const FVector2D AMUCharacterPlayer::GetRecentlyMovedVector()
 	return RecentlyMovedVector;
 }
 
-void AMUCharacterPlayer::SetDashMotionWarp(const float MotionWarpValue)
+void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue)
 {
+	ReleaseMotionWarp(InName);
+	
 	const FVector PlayerLoc = GetActorLocation();
-	const FVector TargetLoc =  PlayerLoc + GetActorForwardVector() * MotionWarpValue;
+	const FVector DirVector = FVector(FollowCamera->GetForwardVector().X, FollowCamera->GetForwardVector().Y, 0).GetSafeNormal();
+	const FVector TargetLoc =  PlayerLoc + DirVector * MotionWarpValue;
 
-	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(COMBO_MOTION_WARP,  TargetLoc, GetActorRotation());
+	
+	const FRotator ComponentRot = FollowCamera->GetComponentRotation();
+	const FRotator ComponentRotChanged = FRotator(0, ComponentRot.Yaw, 0);
+
+	switch (InMotionWarpType)
+	{
+	case EMotionWarpType::TranslationAndRotation:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName,  TargetLoc, ComponentRotChanged);
+		break;
+	case EMotionWarpType::RotationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, FVector::ZeroVector, ComponentRotChanged);
+		break;
+	case EMotionWarpType::TranslationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, TargetLoc, FRotator::ZeroRotator);
+		break;
+	}
+}
+
+void AMUCharacterPlayer::ReleaseMotionWarp(const FName InName)
+{
+	MotionWarpingComponent->RemoveWarpTarget(InName);
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()
