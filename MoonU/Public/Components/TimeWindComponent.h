@@ -38,7 +38,7 @@ protected :
 	UPROPERTY(EditDefaultsOnly)
 	float RecordTime = 3.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	uint8 bIsWinding : 1;
 
 	UPROPERTY(VisibleAnywhere)

@@ -23,12 +23,15 @@ struct FTimeWindRecordData
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FVector Position;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FRotator Rotation;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FTimeWindMontageRecordData MontageRecordData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVector RewindVelocity;
 };

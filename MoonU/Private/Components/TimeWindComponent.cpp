@@ -159,6 +159,8 @@ void UTimeWindComponent::Record()
 				RecordData.MontageRecordData = MontageRecordData;	
 			}
 		}
+
+		RecordData.RewindVelocity = FVector(CachedCharacter->GetVelocity().X, CachedCharacter->GetVelocity().Y, 0); 
 		
 		RecordDatas.Insert(RecordData, 0);
 	}
