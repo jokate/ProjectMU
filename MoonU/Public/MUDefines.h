@@ -30,3 +30,4 @@
 #define MU_COLLISION_PAWN TEXT("Pawn")
 
 #define MU_CHARACTERSTATE_DODGE FGameplayTag::RequestGameplayTag(FName("Character.State.Dodge"))
+#define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))

@@ -17,6 +17,7 @@ public:
 	// Sets default values for this character's properties
 	AMUCharacterNonPlayer();
 
+	virtual void OnDead(const FGameplayEventData* Data);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,7 +31,6 @@ protected:
 	virtual void SetTimeWind(bool InTimeWind) override;
 
 	virtual const bool GetTimeWind() override;
-
 public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

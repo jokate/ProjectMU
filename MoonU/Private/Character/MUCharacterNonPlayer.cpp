@@ -4,6 +4,7 @@
 #include "Character/MUCharacterNonPlayer.h"
 
 #include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
@@ -19,6 +20,10 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("InitComponent"));
 	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWindComponent"));
 	AttributeSet = CreateDefaultSubobject<UMUCharacterAttributeSetBase>(TEXT("CharacterAttribute"));
+}
+
+void AMUCharacterNonPlayer::OnDead(const FGameplayEventData* Data)
+{
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +50,7 @@ void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	AbilitySystemComponent->GenericGameplayEventCallbacks.FindOrAdd(MU_CHARACTERSTATE_DEAD).AddUObject(this, &AMUCharacterNonPlayer::OnDead);
 
 	AbilityInitComponent->InitAbilities();
 }

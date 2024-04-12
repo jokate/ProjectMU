@@ -3,8 +3,10 @@
 
 #include "Attribute/MUCharacterAttributeSetBase.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "MUDefines.h"
+#include "Elements/Framework/TypedElementOwnerStore.h"
 
 UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	: Damage(0.0f),
@@ -58,5 +60,10 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	{
 		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
 		SetDamage(0);
+	}
+
+	if (GetCurrentHp() <= 0.0f)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, FGameplayEventData());
 	}
 }
