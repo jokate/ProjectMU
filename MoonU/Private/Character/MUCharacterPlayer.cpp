@@ -8,7 +8,6 @@
 #include "InputActionValue.h"
 #include "MUDefines.h"
 #include "Camera/CameraComponent.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Data/MUGameSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -17,8 +16,6 @@
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Framework/MUPlayerState.h"
-#include "Kismet/KismetMathLibrary.h"
-
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -251,11 +248,6 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	/*if (TimeWindComponent->GetTimeWind())
-	{
-		return;
-	}*/
 	
 	if (Controller != nullptr)
 	{
