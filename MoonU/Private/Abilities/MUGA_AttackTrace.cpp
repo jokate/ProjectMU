@@ -20,6 +20,8 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	CurrentCombo = TriggerEventData->EventMagnitude;
+	
 	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
@@ -39,6 +41,8 @@ void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHa
 		UE_LOG(LogTemp, Log, TEXT("Target Is Avaliable"));
 		const TArray<TWeakObjectPtr<AActor>> TriggerActors = TargetDataHandle.Data[0].Get()->GetActors();
 
+
+		// Hit에 대한 인포 제공 + 데미지 적용 필요.
 		for (const auto& TriggerActor : TriggerActors)
 		{
 			AActor* TriggeredActor = TriggerActor.Get();
@@ -49,6 +53,15 @@ void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHa
 			}
 
 			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(TriggeredActor, MU_EVENT_ONHIT, FGameplayEventData());
+		}
+
+		UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo_Checked();
+
+		FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass, CurrentCombo);
+
+		if (EffectSpecHandle.IsValid())
+		{
+			ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
 		}
 	} 
 	

@@ -40,4 +40,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
+
+	UPROPERTY()
+	TObjectPtr<class UMUCharacterAttributeSetBase> AttributeSet;
 };

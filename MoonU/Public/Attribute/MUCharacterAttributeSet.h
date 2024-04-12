@@ -3,20 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
+#include "MUCharacterAttributeSetBase.h"
 #include "MUCharacterAttributeSet.generated.h"
 
 /**
  * 
  */
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 UCLASS()
-class MOONU_API UMUCharacterAttributeSet : public UAttributeSet
+class MOONU_API UMUCharacterAttributeSet : public UMUCharacterAttributeSetBase
 {
 	GENERATED_BODY()
 

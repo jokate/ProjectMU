@@ -21,7 +21,13 @@ protected :
 	UFUNCTION()
 	void OnTraceResultCallback(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
 
+public :
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UGameplayEffect> DamageEffectClass;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AMUTA_Trace> TraceClass;
+
+	UPROPERTY()
+	int32 CurrentCombo;
 };

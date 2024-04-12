@@ -4,6 +4,7 @@
 #include "Character/MUCharacterNonPlayer.h"
 
 #include "AbilitySystemComponent.h"
+#include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
 
@@ -17,6 +18,7 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("InitComponent"));
 	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWindComponent"));
+	AttributeSet = CreateDefaultSubobject<UMUCharacterAttributeSetBase>(TEXT("CharacterAttribute"));
 }
 
 // Called when the game starts or when spawned

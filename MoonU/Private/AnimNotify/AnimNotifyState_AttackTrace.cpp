@@ -40,5 +40,8 @@ void UAnimNotifyState_AttackTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, U
 		return;
 	}
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshOwner, EndTriggerGameplayTag, FGameplayEventData());
+	FGameplayEventData Payload;
+	Payload.EventMagnitude = ComboAttackStat;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshOwner, EndTriggerGameplayTag, Payload);
 }

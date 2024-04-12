@@ -28,3 +28,5 @@
 #define MU_EVENT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewind"))
 #define MU_COLLISION_ROLL TEXT("RollCollision")
 #define MU_COLLISION_PAWN TEXT("Pawn")
+
+#define MU_CHARACTERSTATE_DODGE FGameplayTag::RequestGameplayTag(FName("Character.State.Dodge"))
