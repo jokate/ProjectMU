@@ -2,6 +2,8 @@
 
 
 #include "Components/TimeWindComponent.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/Character.h"	
 #include "Interface/TimeWinder.h"
 
@@ -33,6 +35,16 @@ void UTimeWindComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 			{
 				TGM->UnregisterTimeWindTarget(GetOwner());
 			}
+		}
+	}
+
+	UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
+
+	if (AbilitySystemComponent)
+	{
+		for (const auto& RecordAttribute : RecordGameplayAttributes)
+		{
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(RecordAttribute).RemoveAll(this);
 		}
 	}
 	
@@ -110,13 +122,23 @@ void UTimeWindComponent::OnIntialize()
 			}
 		}
 	}
+
+	CachedASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
+
+	if (CachedASC)
+	{
+		for (const auto& RecordAttribute : RecordGameplayAttributes)
+		{
+			CachedASC->GetGameplayAttributeValueChangeDelegate(RecordAttribute).AddUObject(this, &UTimeWindComponent::OnChangedAttribute);
+		}
+	}
 }
 
 void UTimeWindComponent::TimeRewind()
 {
 	if (RecordDatas.Num() > 0)
 	{
-		const FTimeWindRecordData RecordData = RecordDatas[0];
+		const FTimeWindRecordData& RecordData = RecordDatas[0];
 		GetOwner()->SetActorLocation(RecordData.Position);
 		GetOwner()->SetActorRotation(RecordData.Rotation);
 
@@ -136,7 +158,14 @@ void UTimeWindComponent::TimeRewind()
 				CachedAnimInstance->Montage_Stop(0.0f);
 			}
 		}
-		
+		const TArray<FAttributeChangedRecord>& CurrentAttributeRecords = RecordData.AttributeChangedRecords;
+		if (CurrentAttributeRecords.Num() > 0)
+		{
+			for (const auto& AttributeRecord : CurrentAttributeRecords)
+			{
+				CachedASC->SetNumericAttributeBase(AttributeRecord.Attribute, AttributeRecord.OldValue);
+			}
+		}
 		
 		RecordDatas.RemoveAt(0);
 	}
@@ -174,8 +203,28 @@ void UTimeWindComponent::Record()
 		}
 	}
 
+	if (AttributeRecords.Num() > 0)
+	{
+		RecordData.AttributeChangedRecords = AttributeRecords;
+		AttributeRecords.Empty();
+	}
+	
 	RecordData.RewindVelocity = FVector(CachedCharacter->GetVelocity().X, CachedCharacter->GetVelocity().Y, 0); 
 		
 	RecordDatas.Insert(RecordData, 0);
+}
+
+void UTimeWindComponent::OnChangedAttribute(const FOnAttributeChangeData& Payload)
+{
+	if (bIsWinding)
+	{
+		return;
+	}
+	
+	FAttributeChangedRecord Record;
+	Record.Attribute = Payload.Attribute;
+	Record.OldValue = Payload.OldValue;
+
+	AttributeRecords.Emplace(Record);
 }
 

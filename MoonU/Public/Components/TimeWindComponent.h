@@ -32,9 +32,17 @@ protected :
 	void TimeRewind();
 	
 	void Record();
+
+	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FTimeWindRecordData> RecordDatas;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<FAttributeChangedRecord> AttributeRecords;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FGameplayAttribute> RecordGameplayAttributes;
 
 	UPROPERTY(EditDefaultsOnly)
 	float RecordTime = 3.0f;
@@ -47,6 +55,9 @@ protected :
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimInstance> CachedAnimInstance;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAbilitySystemComponent> CachedASC;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 MaxRecord;
