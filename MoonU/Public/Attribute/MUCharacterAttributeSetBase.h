@@ -24,6 +24,8 @@ class MOONU_API UMUCharacterAttributeSetBase : public UAttributeSet
 {
 	GENERATED_BODY()
 
+public :
+	
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, Damage);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, CurrentHp);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, MaxHp);

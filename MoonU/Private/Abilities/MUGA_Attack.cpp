@@ -157,7 +157,6 @@ void UMUGA_Attack::CheckComboInput()
 	//만약 이전에 입력이 들어온 경우에는 다음으로 넘어가준다.=
 	if (HasNextComboInput)
 	{
-		
 		MontageJumpToSection(GetNextSection());
 		StartComboTimer();
 		HasNextComboInput = false;
