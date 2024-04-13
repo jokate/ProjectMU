@@ -5,15 +5,14 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "InputAction.h"
+#include "MUCharacterBase.h"
 #include "Data/MUEnum.h"
-#include "GameFramework/Character.h"
-#include "Interface/TimerWindTarget.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public ACharacter, public IAbilitySystemInterface, public ITimeWindTarget
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase
 {
 	GENERATED_BODY()
 
@@ -34,26 +33,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
 	virtual class UMUComboActionData* GetComboActionData() const;
 
-	FORCEINLINE virtual class UMotionWarpingComponent* GetMotionWarpingComponent() const { return MotionWarpingComponent; }
-
 	const FVector2D GetRecentlyMovedVector();
-	
-	void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
 
-	void ReleaseMotionWarp(const FName InName);
-
-	
-protected:
-	
-#pragma region ITimeWindTarget
-	virtual void SetTimeWind(bool InTimeRewind) override;
-	virtual const bool GetTimeWind() override;
-#pragma endregion
-	
+	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
 protected :
 	
 	void SetupGASInputComponent();
@@ -81,17 +65,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GAS")
-	TObjectPtr<class UAbilitySystemComponent> ASC;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GAS")
-	TObjectPtr<class UAbilityInitComponent> AbilityInitComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
-	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Time Winder")
-	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;

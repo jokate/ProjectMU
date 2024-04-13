@@ -66,7 +66,14 @@ const bool UTimeWindComponent::GetTimeWind()
 
 void UTimeWindComponent::OnIntialize()
 {
-	auto* GM = GetWorld()->GetAuthGameMode();
+	UWorld* World = GetWorld();
+
+	if (World == nullptr)
+	{
+		return;
+	}
+	
+	auto* GM = World->GetAuthGameMode();
 
 	if (GM == nullptr)
 	{

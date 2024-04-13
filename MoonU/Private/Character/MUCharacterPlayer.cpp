@@ -35,10 +35,6 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
-
-	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarping");
-	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>("AbilityInitComponent");
-	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>("TimeWinder");
 }
 
 // Called when the game starts or when spawned
@@ -55,15 +51,12 @@ void AMUCharacterPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
-	TimeWindComponent->OnIntialize();
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 }
-
 
 void AMUCharacterPlayer::PossessedBy(AController* NewController)
 {
@@ -139,21 +132,6 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 	}
 }
 
-void AMUCharacterPlayer::ReleaseMotionWarp(const FName InName)
-{
-	MotionWarpingComponent->RemoveWarpTarget(InName);
-}
-
-void AMUCharacterPlayer::SetTimeWind(bool InTimeRewind)
-{
-	TimeWindComponent->SetTimeWind(InTimeRewind);
-}
-
-const bool AMUCharacterPlayer::GetTimeWind()
-{
-	return TimeWindComponent->GetTimeWind();
-}
-
 void AMUCharacterPlayer::SetupGASInputComponent()
 {
 	if (IsValid(ASC) && IsValid(InputComponent))
@@ -200,11 +178,6 @@ void AMUCharacterPlayer::GASInputReleased(int32 InputId)
 			ASC->AbilitySpecInputReleased(*Spec);	
 		}
 	}
-}
-
-UAbilitySystemComponent* AMUCharacterPlayer::GetAbilitySystemComponent() const
-{
-	return ASC;
 }
 
 UMUComboActionData* AMUCharacterPlayer::GetComboActionData() const

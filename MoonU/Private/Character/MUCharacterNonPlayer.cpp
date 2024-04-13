@@ -16,9 +16,7 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
-	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("InitComponent"));
-	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWindComponent"));
+	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 	AttributeSet = CreateDefaultSubobject<UMUCharacterAttributeSetBase>(TEXT("CharacterAttribute"));
 }
 
@@ -26,18 +24,10 @@ void AMUCharacterNonPlayer::OnDead(const FGameplayEventData* Data)
 {
 }
 
-// Called when the game starts or when spawned
-void AMUCharacterNonPlayer::BeginPlay()
-{
-	Super::BeginPlay();
-
-	TimeWindComponent->OnIntialize();
-}
-
 
 UAbilitySystemComponent* AMUCharacterNonPlayer::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return ASC;
 }
 
 void AMUCharacterNonPlayer::PostInitializeComponents()
@@ -49,19 +39,8 @@ void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	AbilitySystemComponent->GenericGameplayEventCallbacks.FindOrAdd(MU_CHARACTERSTATE_DEAD).AddUObject(this, &AMUCharacterNonPlayer::OnDead);
+	ASC->InitAbilityActorInfo(this, this);
+	ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_CHARACTERSTATE_DEAD).AddUObject(this, &AMUCharacterNonPlayer::OnDead);
 
 	AbilityInitComponent->InitAbilities();
 }
-
-void AMUCharacterNonPlayer::SetTimeWind(bool InTimeWind)
-{
-	return TimeWindComponent->SetTimeWind(InTimeWind);
-}
-
-const bool AMUCharacterNonPlayer::GetTimeWind()
-{
-	return TimeWindComponent->GetTimeWind();
-}
-
