@@ -6,6 +6,7 @@
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values

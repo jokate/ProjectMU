@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
 #include "Interface/TimerWindTarget.h"
 #include "MUCharacterBase.generated.h"

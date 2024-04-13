@@ -62,8 +62,10 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 		SetDamage(0);
 	}
 
-	if (GetCurrentHp() <= 0.0f)
+	if (GetCurrentHp() <= 0.0f && !bOutOfHealth)
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, FGameplayEventData());
 	}
+
+	bOutOfHealth = (GetCurrentHp() <= 0.0f);
 }

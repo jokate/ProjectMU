@@ -17,6 +17,8 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOutOfHealthDelegate);
+
 UCLASS()
 class MOONU_API UMUCharacterAttributeSetBase : public UAttributeSet
 {
@@ -35,6 +37,9 @@ public :
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
+	//const에서 열외를 시키도록 만든다.
+	mutable FOutOfHealthDelegate OnOutOfHealth;
+	
 protected :
 	UPROPERTY(BlueprintReadOnly, Category = "Damage", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Damage;
@@ -44,4 +49,6 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "HP", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxHp;
+
+	bool bOutOfHealth = false;
 };
