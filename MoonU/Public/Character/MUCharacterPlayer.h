@@ -46,16 +46,22 @@ public:
 
 	void ReleaseMotionWarp(const FName InName);
 
+	
+protected:
+	
 #pragma region ITimeWindTarget
 	virtual void SetTimeWind(bool InTimeRewind) override;
 	virtual const bool GetTimeWind() override;
-#pragma endregion 
+#pragma endregion
+	
 protected :
+	
 	void SetupGASInputComponent();
 
 	void GASInputPressed(int32 InputId);
 
 	void GASInputReleased(int32 InputId);
+	
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);
 
@@ -63,6 +69,9 @@ protected :
 	
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void TimeWindActivate(bool InActivationMode);
+	
 #pragma endregion
 
 protected:

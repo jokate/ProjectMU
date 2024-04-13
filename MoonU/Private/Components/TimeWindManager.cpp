@@ -3,6 +3,9 @@
 
 #include "Components/TimeWindManager.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Interface/TimerWindTarget.h"
 
 
@@ -29,11 +32,8 @@ void UTimeWindManager::TimeWindActivate()
 		{
 			continue;
 		}
-
-		if (ITimeWindTarget* TimeWindTarget = Cast<ITimeWindTarget>(RegActor))
-		{
-			TimeWindTarget->SetTimeWind(true);
-		}
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(RegActor, MU_EVENT_TIMEREWIND, FGameplayEventData());
 	}
 }
 
@@ -47,11 +47,8 @@ void UTimeWindManager::TimeWindDeactivate()
 		{
 			continue;
 		}
-
-		if (ITimeWindTarget* TimeWindTarget = Cast<ITimeWindTarget>(RegActor))
-		{
-			TimeWindTarget->SetTimeWind(false);
-		}
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(RegActor, MU_EVENT_TIMEREWINDEND,FGameplayEventData());
 	}
 }
 

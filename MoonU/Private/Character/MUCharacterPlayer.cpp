@@ -16,6 +16,7 @@
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Framework/MUPlayerState.h"
+#include "Interface/TimeWinder.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -98,6 +99,9 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
+
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TimeWindActivate, true);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::TimeWindActivate, false);
 	}
 
 	SetupGASInputComponent();
@@ -163,8 +167,6 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputPressed, 4);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 5);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 5);
 	}
 }
 
@@ -254,6 +256,23 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AMUCharacterPlayer::TimeWindActivate(bool InActivationMode)
+{
+	ITimeWinder* TimeWinder = GetWorld()->GetAuthGameMode<ITimeWinder>();
+
+	if (TimeWinder)
+	{
+		if (InActivationMode)
+		{
+			TimeWinder->TimeWindActivate();
+		}
+		else
+		{
+			TimeWinder->TimeWindDeactivate();			
+		}
 	}
 }
 

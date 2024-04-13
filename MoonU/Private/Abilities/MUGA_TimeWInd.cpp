@@ -3,7 +3,16 @@
 
 #include "Abilities/MUGA_TimeWInd.h"
 
-#include "Interface/TimeWinder.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "MUDefines.h"
+#include "Interface/TimerWindTarget.h"
+
+
+UMUGA_TimeWInd::UMUGA_TimeWInd()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
 
 void UMUGA_TimeWInd::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                      const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -11,34 +20,66 @@ void UMUGA_TimeWInd::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	
-	ITimeWinder* TimeWinder = GetWorld()->GetAuthGameMode<ITimeWinder>();
+	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
 
-	if (TimeWinder)
+	if (!AvatarActor)
 	{
-		TimeWinder->TimeWindActivate();
+		return;
 	}
-}
 
-void UMUGA_TimeWInd::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-                                   const FGameplayAbilityActivationInfo ActivationInfo)
-{
-	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
-		
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = false;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(AvatarActor);
+
+	if (ASC)
+	{
+		ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_EVENT_TIMEREWINDEND).AddUObject(this, &ThisClass::OnTimeWindEndEvent);
+	}
+
+	if (ITimeWindTarget* Target = Cast<ITimeWindTarget>(AvatarActor))
+	{
+		Target->SetTimeWind(true);
+	}
+	
 }
 
 void UMUGA_TimeWInd::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	ITimeWinder* TimeWinder = GetWorld()->GetAuthGameMode<ITimeWinder>();
+	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
 
-	if (TimeWinder)
+	if (AvatarActor)
 	{
-		TimeWinder->TimeWindDeactivate();
+		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(AvatarActor);
+
+		if (ASC)
+		{
+			ASC->GenericGameplayEventCallbacks.Remove(MU_EVENT_TIMEREWINDEND);
+		}
+
+		
+		if (ITimeWindTarget* Target = Cast<ITimeWindTarget>(AvatarActor))
+		{
+			Target->SetTimeWind(false);
+		}
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UMUGA_TimeWInd::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility)
+{
+	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
+	
+	//명시적으로 Ability가 끝났음을 알림
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = true;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+}
+
+void UMUGA_TimeWInd::OnTimeWindEndEvent(const FGameplayEventData* PayloadData)
+{
+	//명시적으로 Ability가 끝났음을 알림
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = false;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
