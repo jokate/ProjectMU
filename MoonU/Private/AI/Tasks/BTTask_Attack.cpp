@@ -27,7 +27,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;	
 	}
 
-	TaskFinished.AddLambda(
+	TaskFinishedGAS.AddLambda(
 		[&] (const FGameplayEventData* EventData)
 		{
 			OnAttackFinished(OwnerComp, EventData);
@@ -42,7 +42,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 void UBTTask_Attack::AttackFinished(const FGameplayEventData* EventData)
 {
-	TaskFinished.Broadcast(EventData);
+	TaskFinishedGAS.Broadcast(EventData);
 }
 
 void UBTTask_Attack::OnAttackFinished(UBehaviorTreeComponent& OwnerComp, const FGameplayEventData* EventData)

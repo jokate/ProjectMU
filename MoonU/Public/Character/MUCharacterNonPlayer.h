@@ -26,8 +26,8 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	virtual void PossessedBy(AController* NewController) override;
-	
-public:
+ 	
+protected :
 	UPROPERTY()
 	TObjectPtr<class UMUCharacterAttributeSetBase> AttributeSet;
 };

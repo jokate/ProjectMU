@@ -3,3 +3,6 @@
 #pragma once
 
 #define MU_AI_TARGET TEXT("MoveToTarget")
+
+#define MU_PATROL_FRONT 1
+#define MU_PATROL_BACK -1

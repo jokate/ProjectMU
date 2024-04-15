@@ -10,7 +10,8 @@
 /**
  * 
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnTaskFinished, const FGameplayEventData* EventData);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTaskFinishedGAS, const FGameplayEventData* EventData);
+DECLARE_MULTICAST_DELEGATE(FOnTaskFinished);
 
 UCLASS()
 class MOONU_API UMUBTTaskNode : public UBTTaskNode
@@ -18,5 +19,7 @@ class MOONU_API UMUBTTaskNode : public UBTTaskNode
 	GENERATED_BODY()
 	
 protected :
+	FOnTaskFinishedGAS TaskFinishedGAS;
+
 	FOnTaskFinished TaskFinished;
 };
