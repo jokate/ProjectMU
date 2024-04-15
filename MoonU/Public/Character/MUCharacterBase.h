@@ -6,11 +6,12 @@
 #include "AbilitySystemInterface.h"
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
+#include "Interface/MotionWarpTarget.h"
 #include "Interface/TimerWindTarget.h"
 #include "MUCharacterBase.generated.h"
 
 UCLASS()
-class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface
+class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget
 {
 	GENERATED_BODY()
 
@@ -20,6 +21,16 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	virtual class UMUComboActionData* GetComboActionData() const;
+
+#pragma region IMotionWarpTarget
+	virtual class UMotionWarpingComponent* GetMotionWarpComponent(); 
+	
+	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
+
+	virtual void ReleaseMotionWarp(const FName InName);
+#pragma endregion
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,18 +41,14 @@ protected:
 	virtual void SetTimeWind(bool InTimeRewind) override;
 	virtual const bool GetTimeWind() override;
 #pragma endregion
-
-#pragma region IMotionWarpTarget
-	virtual class UMotionWarpingComponent* GetMotionWarpComponent(); 
 	
-	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
-
-	virtual void ReleaseMotionWarp(const FName InName);
-#pragma endregion
 	
 protected :
 	UPROPERTY()
 	TObjectPtr<class UAbilitySystemComponent> ASC;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
+	TObjectPtr<class UMUComboActionData> ComboActionData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
 	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;

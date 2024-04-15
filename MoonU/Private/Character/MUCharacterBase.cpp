@@ -32,6 +32,11 @@ void AMUCharacterBase::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
+UMUComboActionData* AMUCharacterBase::GetComboActionData() const
+{
+	return ComboActionData;
+}
+
 UAbilitySystemComponent* AMUCharacterBase::GetAbilitySystemComponent() const
 {
 	return ASC;

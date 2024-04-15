@@ -180,11 +180,6 @@ void AMUCharacterPlayer::GASInputReleased(int32 InputId)
 	}
 }
 
-UMUComboActionData* AMUCharacterPlayer::GetComboActionData() const
-{
-	return ComboActionData;
-}
-
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D

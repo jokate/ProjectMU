@@ -33,8 +33,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual class UMUComboActionData* GetComboActionData() const;
-
 	const FVector2D GetRecentlyMovedVector();
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
@@ -68,9 +66,6 @@ protected:
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
-	TObjectPtr<class UMUComboActionData> ComboActionData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;

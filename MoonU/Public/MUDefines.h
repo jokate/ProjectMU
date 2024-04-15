@@ -27,6 +27,10 @@
 #define MU_EVENT_ONHIT FGameplayTag::RequestGameplayTag(FName("Event.Character.OnHit"))
 #define MU_EVENT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewind"))
 #define MU_EVENT_TIMEREWINDEND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewindEnd"))
+
+#define MU_EVENT_ATTACKFINISHED FGameplayTag::RequestGameplayTag(FName("Event.AttackFinished"))
+#define MU_EVENT_ATTACKSTARTED FGameplayTag::RequestGameplayTag(FName("Event.AttackStarted"))
+
 #define MU_COLLISION_ROLL TEXT("RollCollision")
 #define MU_COLLISION_PAWN TEXT("Pawn")
 

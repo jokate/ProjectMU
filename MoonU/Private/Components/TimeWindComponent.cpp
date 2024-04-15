@@ -159,6 +159,7 @@ void UTimeWindComponent::TimeRewind()
 			}
 		}
 		const TArray<FAttributeChangedRecord>& CurrentAttributeRecords = RecordData.AttributeChangedRecords;
+		
 		if (CurrentAttributeRecords.Num() > 0)
 		{
 			for (const auto& AttributeRecord : CurrentAttributeRecords)
