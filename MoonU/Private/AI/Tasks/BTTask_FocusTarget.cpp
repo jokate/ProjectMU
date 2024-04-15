@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/BTTask_FocusTarget.h"
+#include "AI/Tasks/BTTask_FocusTarget.h"
 
 #include "AIController.h"
 #include "AI/MUAIDefines.h"

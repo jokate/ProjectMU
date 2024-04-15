@@ -7,8 +7,6 @@
 #include "AIController.h"
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
-#include "AI/MUAIDefines.h"
-#include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BTFunctionLibrary.h"
 
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
