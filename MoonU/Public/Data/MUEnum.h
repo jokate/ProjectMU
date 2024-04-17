@@ -26,3 +26,11 @@ enum EMotionWarpType
 	TranslationOnly,
 	RotationOnly
 };
+
+UENUM(BlueprintType)
+enum EMovementSpeedEnum
+{
+	Idle,
+	Walking,
+	Sprinting
+};
