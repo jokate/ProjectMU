@@ -24,15 +24,7 @@ public:
 	void StopAI();
 	
 	virtual void OnPossess(APawn* InPawn) override;
-
-	virtual void InitTestCode();
-
-	virtual void ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActors) override;
-
-	virtual void HandleEventByPerceptionType(EPerceptionType Type, bool bIsActive);
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPerceptionTypeHandle_BP(EPerceptionType InType, const FAIStimulus& Stimulus);
+	
 protected :
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
@@ -42,12 +34,4 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBehaviorTree> BTAsset;
-
-	UPROPERTY(EditDefaultsOnly)
-	TMap<TSubclassOf<class UAISense>,TEnumAsByte<EPerceptionType>> PerceptionType;
-
-	UPROPERTY(EditDefaultsOnly)
-	TMap<TEnumAsByte<EPerceptionType>, FGameplayTag> ValByPerceptions; 
-	
-	FTimerHandle TimerHandle;
 };

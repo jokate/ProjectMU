@@ -20,6 +20,13 @@ void UAbilityInitComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+void UAbilityInitComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	OnEndPlay();
+	
+	Super::EndPlay(EndPlayReason);
+}
+
 void UAbilityInitComponent::InitAbilities()
 {
 	const auto* AbilityUser = GetOwner<IAbilitySystemInterface>();
@@ -43,6 +50,12 @@ void UAbilityInitComponent::InitAbilities()
 		ASC->GiveAbility(StartSpec);
 	}
 
+	for (const auto& StartAbility : NeedToStartAbilities)
+	{
+		FGameplayAbilitySpec StartSpec(StartAbility);
+		ASC->GiveAbilityAndActivateOnce(StartSpec);
+	}
+	
 	for (const auto& InfiniteGameplayEffect : InfiniteGameplayEffects)
 	{
 		FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
@@ -54,6 +67,30 @@ void UAbilityInitComponent::InitAbilities()
 		{
 			ASC->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), ASC);
 		}
+	}
+}
+
+void UAbilityInitComponent::OnEndPlay()
+{
+	const auto* AbilityUser = GetOwner<IAbilitySystemInterface>();
+
+	if (!AbilityUser)
+	{
+		return; 
+	}
+
+	UAbilitySystemComponent* ASC = AbilityUser->GetAbilitySystemComponent();
+	
+	for (const auto& NeedToStopAbility : NeedToStartAbilities)
+	{
+		FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(NeedToStopAbility);
+
+		if (AbilitySpec == nullptr)
+		{
+			continue;
+		}
+		
+		ASC->CancelAbility(AbilitySpec->Ability);
 	}
 }
 

@@ -17,9 +17,13 @@ public:
 	UAbilityInitComponent();
 	
 	virtual void InitAbilities();
+
+	virtual void OnEndPlay();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 protected:
 	UPROPERTY(EditAnywhere, Category = "GAS")
 	TArray<TSubclassOf<class UGameplayAbility>> StartAbilities;
@@ -29,4 +33,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "GAS")
 	TArray<TSubclassOf<class UGameplayEffect>> InfiniteGameplayEffects;
+
+	UPROPERTY(EditAnywhere, Category = "GAS")
+	TArray<TSubclassOf<class UGameplayAbility>> NeedToStartAbilities;
 };
