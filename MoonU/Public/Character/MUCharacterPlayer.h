@@ -4,15 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GenericTeamAgentInterface.h"
 #include "InputAction.h"
 #include "MUCharacterBase.h"
 #include "Data/MUEnum.h"
+#include "Interface/MUPlayer.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IGenericTeamAgentInterface, public IMUPlayer
 {
 	GENERATED_BODY()
 
@@ -28,6 +30,8 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void PostInitializeComponents() override;
+
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
 public:	
 	// Called to bind functionality to input

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Data/MUEnum.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "MUAIController.generated.h"
 
 UCLASS()
@@ -23,12 +25,21 @@ public:
 
 	virtual void InitTestCode();
 
+	virtual void ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActors) override;
+
+	virtual void HandleEventByPerceptionType(EPerceptionType Type);
 protected :
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
+	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBlackboardData> BBAsset;
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBehaviorTree> BTAsset;
 
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TSubclassOf<class UAISense>,TEnumAsByte<EPerceptionType>> PerceptionType;
+	
 	FTimerHandle TimerHandle;
 };

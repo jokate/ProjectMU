@@ -7,6 +7,7 @@
 #include "GameplayEffectExtension.h"
 #include "MUDefines.h"
 #include "Elements/Framework/TypedElementOwnerStore.h"
+#include "Perception/AISense_Damage.h"
 
 UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	: Damage(0.0f),

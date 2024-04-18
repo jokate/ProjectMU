@@ -3,15 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MUBTTaskNode.h"
+#include "BehaviorTree/BTTaskNode.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "BTTask_Patrol.generated.h"
 
 /**
  * 
  */
+DECLARE_MULTICAST_DELEGATE(FOnPatrolFinished);
+
 UCLASS()
-class MOONU_API UBTTask_Patrol : public UMUBTTaskNode
+class MOONU_API UBTTask_Patrol : public UBTTaskNode
 {
 	GENERATED_BODY()
 
@@ -19,4 +21,7 @@ class MOONU_API UBTTask_Patrol : public UMUBTTaskNode
 
 	UFUNCTION()
 	void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result);
+
+protected :
+	FOnPatrolFinished OnPatrolFinished;
 };

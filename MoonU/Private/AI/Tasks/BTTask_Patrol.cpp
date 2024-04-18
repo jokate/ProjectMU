@@ -33,7 +33,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		OwnerController->MoveToLocation(PatrolRoute, 10, false);
 		Patroller->IncrementPatrolRoute();
 		
-		TaskFinished.AddLambda([&]()
+		OnPatrolFinished.AddLambda([&]()
 		{	
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		} );
@@ -46,5 +46,5 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 void UBTTask_Patrol::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
-	TaskFinished.Broadcast();
+	OnPatrolFinished.Broadcast();
 }

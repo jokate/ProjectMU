@@ -34,3 +34,12 @@ enum EMovementSpeedEnum
 	Walking,
 	Sprinting
 };
+
+UENUM(BlueprintType)
+enum EPerceptionType
+{
+	None,
+	Sight,
+	Damage,
+	Hearing
+};

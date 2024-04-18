@@ -8,6 +8,7 @@
 #include "MUDefines.h"
 #include "ParticleHelper.h"
 #include "Abilities/AT/MUAT_Trace.h"
+#include "Perception/AISense_Damage.h"
 
 UMUGA_AttackTrace::UMUGA_AttackTrace()
 {
@@ -41,6 +42,7 @@ void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHa
 		UE_LOG(LogTemp, Log, TEXT("Target Is Avaliable"));
 		const TArray<TWeakObjectPtr<AActor>> TriggerActors = TargetDataHandle.Data[0].Get()->GetActors();
 
+		AActor* CurrentActor = CurrentActorInfo->AvatarActor.Get();
 
 		// Hit에 대한 인포 제공 + 데미지 적용 필요.
 		for (const auto& TriggerActor : TriggerActors)
@@ -52,6 +54,8 @@ void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHa
 				continue;
 			}
 
+			UAISense_Damage::ReportDamageEvent(CurrentActor, TriggeredActor, CurrentActor, 0.0f, TriggerActor->GetActorLocation(), TriggerActor->GetActorLocation());
+			
 			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(TriggeredActor, MU_EVENT_ONHIT, FGameplayEventData());
 		}
 

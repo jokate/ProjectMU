@@ -80,6 +80,11 @@ void AMUCharacterPlayer::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
+ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	return ETeamAttitude::Hostile;
+}
+
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

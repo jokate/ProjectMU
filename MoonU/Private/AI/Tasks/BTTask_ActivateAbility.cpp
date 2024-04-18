@@ -1,15 +1,12 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/Tasks/BTTask_Attack.h"
-
+#include "AI/Tasks/BTTask_ActivateAbility.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "AIController.h"
 #include "AbilitySystemComponent.h"
-#include "MUDefines.h"
-#include "BehaviorTree/BTFunctionLibrary.h"
+#include "AIController.h"
 
-EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
@@ -30,27 +27,27 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	TaskFinishedGAS.AddLambda(
 		[&] (const FGameplayEventData* EventData)
 		{
-			OnAttackFinished(OwnerComp, EventData);
+			OnGASAbilityFinished(OwnerComp, EventData);
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		});
 	
-	AbilitySystemComponent->GenericGameplayEventCallbacks.FindOrAdd(MU_EVENT_ATTACKFINISHED).AddUObject(this, &UBTTask_Attack::AttackFinished);
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, MU_EVENT_ATTACKSTARTED, FGameplayEventData());
+	AbilitySystemComponent->GenericGameplayEventCallbacks.FindOrAdd(EndAbilityTag).AddUObject(this, &UBTTask_ActivateAbility::GASAbilityFinished);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, StartAbilityTag, FGameplayEventData());
 	
 	return EBTNodeResult::InProgress;
 }
 
-void UBTTask_Attack::AttackFinished(const FGameplayEventData* EventData)
+void UBTTask_ActivateAbility::GASAbilityFinished(const FGameplayEventData* EventData)
 {
 	TaskFinishedGAS.Broadcast(EventData);
 }
 
-void UBTTask_Attack::OnAttackFinished(UBehaviorTreeComponent& OwnerComp, const FGameplayEventData* EventData)
+void UBTTask_ActivateAbility::OnGASAbilityFinished(UBehaviorTreeComponent& OwnerComp, const FGameplayEventData* EventData)
 {
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerComp.GetAIOwner()->GetPawn());
 
 	if (ASC)
 	{
-		ASC->GenericGameplayEventCallbacks.Remove(MU_EVENT_ATTACKFINISHED);
+		ASC->GenericGameplayEventCallbacks.Remove(EndAbilityTag);
 	}
 }

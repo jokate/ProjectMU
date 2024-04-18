@@ -8,6 +8,7 @@
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
+#include "Interface/MUPlayer.h"
 
 
 // Sets default values

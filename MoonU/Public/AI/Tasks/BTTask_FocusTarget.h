@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MUBTTaskNode.h"
+#include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_FocusTarget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UBTTask_FocusTarget : public UMUBTTaskNode
+class MOONU_API UBTTask_FocusTarget : public UBTTaskNode
 {
 	GENERATED_BODY()
 
