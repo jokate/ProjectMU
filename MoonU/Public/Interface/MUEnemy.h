@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AI/AIEnum.h"
 #include "UObject/Interface.h"
 #include "MUEnemy.generated.h"
 

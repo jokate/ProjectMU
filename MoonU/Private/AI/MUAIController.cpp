@@ -3,6 +3,8 @@
 
 #include "AI/MUAIController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "AI/MUAIDefines.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -73,20 +75,43 @@ void AMUAIController::ActorsPerceptionUpdated(const TArray<AActor*>& UpdatedActo
 		for (const auto& CurrentStimulus : CurrentStimuluses)
 		{
 			TSubclassOf<UAISense> AISense = UAIPerceptionSystem::GetSenseClassForStimulus(this, CurrentStimulus);
-
+			
 			if (PerceptionType.Contains(AISense))
 			{
 				const EPerceptionType Perception = PerceptionType[AISense];
-
-				HandleEventByPerceptionType(Perception);
+				
+				HandleEventByPerceptionType(Perception, CurrentStimulus.IsActive());
+				OnPerceptionTypeHandle_BP(Perception, CurrentStimulus);
 			}
 		}
 	}
 }
 
-void AMUAIController::HandleEventByPerceptionType(EPerceptionType Type)
+void AMUAIController::HandleEventByPerceptionType(EPerceptionType Type, bool bIsActive)
 {
+	if (ValByPerceptions.Contains(Type) == false)
+	{
+		return;
+	}
 	
+	const FGameplayTag& CharacterTag = ValByPerceptions[Type];
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+
+	if (bIsActive)
+	{
+		if (ASC->HasMatchingGameplayTag(CharacterTag) == false)
+		{
+			ASC->AddLooseGameplayTag(CharacterTag);
+		}
+	}
+	else
+	{
+		if (ASC->HasMatchingGameplayTag(CharacterTag))
+		{
+			ASC->RemoveLooseGameplayTag(CharacterTag);
+		}
+	}
 }
 
 

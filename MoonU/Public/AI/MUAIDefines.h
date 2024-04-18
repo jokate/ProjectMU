@@ -6,3 +6,5 @@
 
 #define MU_PATROL_FRONT 1
 #define MU_PATROL_BACK -1
+
+#define MU_AI_CHARACTER_STATE TEXT("CharacterState")

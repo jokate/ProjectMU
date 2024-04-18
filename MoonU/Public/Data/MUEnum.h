@@ -30,7 +30,7 @@ enum EMotionWarpType
 UENUM(BlueprintType)
 enum EMovementSpeedEnum
 {
-	Idle,
+	NoMove,
 	Walking,
 	Sprinting
 };
@@ -38,7 +38,7 @@ enum EMovementSpeedEnum
 UENUM(BlueprintType)
 enum EPerceptionType
 {
-	None,
+	InValid,
 	Sight,
 	Damage,
 	Hearing

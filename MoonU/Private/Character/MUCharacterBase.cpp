@@ -37,6 +37,26 @@ UMUComboActionData* AMUCharacterBase::GetComboActionData() const
 	return ComboActionData;
 }
 
+bool AMUCharacterBase::HasMatchingGameplayTag(FGameplayTag TagToCheck) const
+{
+	return ASC->HasMatchingGameplayTag(TagToCheck);
+}
+
+bool AMUCharacterBase::HasAllMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const
+{
+	return ASC->HasAllMatchingGameplayTags(TagContainer);
+}
+
+bool AMUCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const
+{
+	return ASC->HasAnyMatchingGameplayTags(TagContainer);
+}
+
+void AMUCharacterBase::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	ASC->GetOwnedGameplayTags(TagContainer);
+}
+
 UAbilitySystemComponent* AMUCharacterBase::GetAbilitySystemComponent() const
 {
 	return ASC;

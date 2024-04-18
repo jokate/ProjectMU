@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagAssetInterface.h"
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
 #include "Interface/MotionWarpTarget.h"
@@ -11,7 +12,7 @@
 #include "MUCharacterBase.generated.h"
 
 UCLASS()
-class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget
+class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -22,6 +23,17 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	virtual class UMUComboActionData* GetComboActionData() const;
+
+#pragma region IGameplayTaagAssetInterface
+	
+	virtual bool HasMatchingGameplayTag(FGameplayTag TagToCheck) const override;
+
+	virtual bool HasAllMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const override;
+	
+	virtual bool HasAnyMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const override;
+	
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+#pragma endregion
 
 #pragma region IMotionWarpTarget
 	virtual class UMotionWarpingComponent* GetMotionWarpComponent(); 
