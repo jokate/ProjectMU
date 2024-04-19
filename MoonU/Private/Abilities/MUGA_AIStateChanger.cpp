@@ -35,7 +35,7 @@ void UMUGA_AIStateChanger::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	{
 		return;
 	}
-	AMUAIController* AIController = Cast<AMUAIController>(UAIBlueprintHelperLibrary::GetAIController(AICharacter));
+	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(AICharacter);
 
 	if (AIController == nullptr)
 	{
