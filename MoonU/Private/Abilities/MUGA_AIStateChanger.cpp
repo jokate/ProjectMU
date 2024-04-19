@@ -122,7 +122,7 @@ void UMUGA_AIStateChanger::HandleEventByPerceptionType(EPerceptionType Type, boo
 	}
 	else
 	{
-d		if (ASC->HasMatchingGameplayTag(CharacterTag))
+		if (ASC->HasMatchingGameplayTag(CharacterTag))
 		{
 			ASC->RemoveLooseGameplayTag(CharacterTag);
 		}
