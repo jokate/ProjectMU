@@ -95,11 +95,7 @@ void UMUGA_AIStateChanger::OnUpdatePerceptions(const TArray<AActor*>& UpdatedAct
 			if (PerceptionType.Contains(AISense))
 			{
 				const EPerceptionType Perception = PerceptionType[AISense];
-
-				//GameplayEvent를 전달하는 목적으로 생성.
 				HandleEventByPerceptionType(Perception, CurrentStimulus.IsActive());
-
-				//Blackboard 상에서 값 자체를 부여하는 용도로 사용하면 좋을 것으로 판단.
 				OnPerceptionTypeHandle_BP(Perception, UpdatedActor, CurrentStimulus);
 			}
 		}
@@ -108,31 +104,27 @@ void UMUGA_AIStateChanger::OnUpdatePerceptions(const TArray<AActor*>& UpdatedAct
 
 void UMUGA_AIStateChanger::HandleEventByPerceptionType(EPerceptionType Type, bool bPerceptionIsActive)
 {
-	AActor* CurrentActor = CurrentActorInfo->AvatarActor.Get();
-	if (CurrentActor == nullptr)
+	if (ValByPerceptions.Contains(Type) == false)
 	{
 		return;
 	}
 	
-	//Ability Tag를 부여하는 방법으로 진행 -> Trigger Event
+	const FGameplayTag& CharacterTag = ValByPerceptions[Type];
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(CurrentActorInfo->AvatarActor.Get());
+
 	if (bPerceptionIsActive)
 	{
-		if (ActivateTagByPerceptions.Contains(Type) == false)
+		if (ASC->HasMatchingGameplayTag(CharacterTag) == false)
 		{
-			return;
+			ASC->AddLooseGameplayTag(CharacterTag);
 		}
-
-		const FGameplayTag& ActivationTag = ActivateTagByPerceptions[Type];	
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActor, ActivationTag, FGameplayEventData());
 	}
 	else
 	{
-		if (DeactivateTagByPerceptions.Contains(Type) == false)
+		if (ASC->HasMatchingGameplayTag(CharacterTag))
 		{
-			return;
+			ASC->RemoveLooseGameplayTag(CharacterTag);
 		}
-
-		const FGameplayTag& DeactivationTag = DeactivateTagByPerceptions[Type];	
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActor, DeactivationTag, FGameplayEventData());
 	}
 }
