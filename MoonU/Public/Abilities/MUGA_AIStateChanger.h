@@ -39,5 +39,8 @@ protected:
 	TMap<TSubclassOf<class UAISense>,TEnumAsByte<EPerceptionType>> PerceptionType;
 
 	UPROPERTY(EditDefaultsOnly)
-	TMap<TEnumAsByte<EPerceptionType>, FGameplayTag> ValByPerceptions; 
+	TMap<TEnumAsByte<EPerceptionType>, FGameplayTag> ActivateTagByPerceptions;
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TEnumAsByte<EPerceptionType>, FGameplayTag> DeactivateTagByPerceptions;
 };
