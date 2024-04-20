@@ -8,6 +8,3 @@
 #define MU_PATROL_BACK -1
 
 #define MU_AI_CHARACTER_STATE TEXT("CharacterState")
-
-#define MU_AI_ATTACK_RADIUS TEXT("AttackRadius")
-#define MU_AI_DEFEND_RADIUS TEXT("DefendRadius")
