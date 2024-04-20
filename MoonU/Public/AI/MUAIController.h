@@ -24,8 +24,6 @@ public:
 	void StopAI();
 	
 	virtual void OnPossess(APawn* InPawn) override;
-
-	virtual void OnInitialize();
 	
 protected :
 	UPROPERTY(EditAnywhere)
@@ -36,10 +34,4 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBehaviorTree> BTAsset;
-
-	UPROPERTY(EditDefaultsOnly)
-	float AttackRadius;
-
-	UPROPERTY(EditDefaultsOnly)
-	float DefendRadius;
 };
