@@ -7,6 +7,7 @@
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 
 // Sets default values
@@ -18,6 +19,7 @@ AMUCharacterBase::AMUCharacterBase()
 	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWinder"));
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("AbilityInitComponent"));
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpComponent"));
+	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliComponent"));
 }
 
 // Called when the game starts or when spawned

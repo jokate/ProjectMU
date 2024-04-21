@@ -24,10 +24,23 @@ public:
 	void StopAI();
 	
 	virtual void OnPossess(APawn* InPawn) override;
+
+	UFUNCTION()
+	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
+
+	
+	
+	void SetBlackboardValue(AActor* InActor, const FAIStimulus& Stimulus);
 	
 protected :
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TSubclassOf<class UAISense>, FGameplayTag> StartTagByPerceptions;
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TSubclassOf<class UAISense>, FGameplayTag> EndTagByPerceptions;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBlackboardData> BBAsset;

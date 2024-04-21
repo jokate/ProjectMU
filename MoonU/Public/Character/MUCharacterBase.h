@@ -59,6 +59,9 @@ protected :
 	UPROPERTY()
 	TObjectPtr<class UAbilitySystemComponent> ASC;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Perception Stimuli Component")
+	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSourceComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
 	TObjectPtr<class UMUComboActionData> ComboActionData;
 

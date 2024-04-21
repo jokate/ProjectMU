@@ -15,7 +15,7 @@ UCLASS()
 class MOONU_API UBTD_GASTagMatch : public UBTDecorator
 {
 	GENERATED_BODY()
-
+	
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 	
 	UPROPERTY(EditAnywhere, Category=GameplayTagCheck)

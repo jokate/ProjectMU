@@ -8,6 +8,7 @@
 
 bool UBTD_IsWithInIdleRange::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
+	bool bResult = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
 	AAIController* AIController = OwnerComp.GetAIOwner();
 
 	if (AIController == nullptr)
@@ -31,7 +32,7 @@ bool UBTD_IsWithInIdleRange::CalculateRawConditionValue(UBehaviorTreeComponent& 
 
 	const AActor* InActor = Cast<AActor>(Object);
 
-	if (InActor)
+	if (InActor == nullptr)
 	{
 		return false;
 	}

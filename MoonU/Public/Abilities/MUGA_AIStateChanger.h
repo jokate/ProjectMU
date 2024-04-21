@@ -21,23 +21,9 @@ class MOONU_API UMUGA_AIStateChanger : public UGameplayAbility
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-
-	UFUNCTION()
-	virtual void OnUpdatePerceptions(const TArray<AActor*>& UpdatedActors);
-
-	virtual void HandleEventByPerceptionType(EPerceptionType Type, bool bPerceptionIsActive);
-
+	
+	void OnPerceptionChanged(const FGameplayEventData* EventData);
 public :
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPerceptionTypeHandle_BP(EPerceptionType InType, const AActor* UpdatedActor, const FAIStimulus& Stimulus);
-
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class AAIController> CachedAIController;
-
 	UPROPERTY(EditDefaultsOnly)
-	TMap<TSubclassOf<class UAISense>,TEnumAsByte<EPerceptionType>> PerceptionType;
-
-	UPROPERTY(EditDefaultsOnly)
-	TMap<TEnumAsByte<EPerceptionType>, FGameplayTag> ValByPerceptions; 
+	FGameplayTag EndTriggerTag;
 };

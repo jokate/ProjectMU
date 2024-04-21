@@ -20,111 +20,47 @@ void UMUGA_AIStateChanger::ActivateAbility(const FGameplayAbilitySpecHandle Hand
                                            const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                            const FGameplayEventData* TriggerEventData)
 {
+	//해당 어빌리티에 대한 목적은, BT 상에서 State를 열어주는 데에 Focus를 둔다.
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
+	AActor* TargetActor = ActorInfo->AvatarActor.Get();
 
-	if (AvatarActor == nullptr)
+	if (TargetActor == nullptr)
 	{
-		return;
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 	}
 
-	ACharacter* AICharacter = Cast<ACharacter>(AvatarActor);
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 
-	if (AICharacter == nullptr)
+	if (ASC == nullptr)
 	{
-		return;
-	}
-	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(AICharacter);
-
-	if (AIController == nullptr)
-	{
-		return;
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 	}
 
-	CachedAIController = AIController;
-
-	if (auto* PerceptionComp = CachedAIController->GetPerceptionComponent())
-	{
-		PerceptionComp->OnPerceptionUpdated.AddDynamic(this, &UMUGA_AIStateChanger::OnUpdatePerceptions);	
-	}
+	//끝날 경우 Callback에 대한 수행작업.
+	ASC->GenericGameplayEventCallbacks.FindOrAdd(EndTriggerTag).AddUObject(this, &UMUGA_AIStateChanger::OnPerceptionChanged);
 }
 
 void UMUGA_AIStateChanger::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
-	if (CachedAIController == nullptr)
+	AActor* TargetActor = ActorInfo->AvatarActor.Get();
+
+	if (TargetActor)
 	{
-		return;
+		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+
+		if (ASC)
+		{
+			ASC->GenericGameplayEventCallbacks.Remove(EndTriggerTag);
+		}	
 	}
-	
-	if (auto* PerceptionComp = CachedAIController->GetPerceptionComponent())
-	{
-		PerceptionComp->OnPerceptionUpdated.RemoveDynamic(this, &UMUGA_AIStateChanger::OnUpdatePerceptions);	
-	}
-	
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-
-void UMUGA_AIStateChanger::OnUpdatePerceptions(const TArray<AActor*>& UpdatedActors)
+void UMUGA_AIStateChanger::OnPerceptionChanged(const FGameplayEventData* EventData)
 {
-	if (CachedAIController == nullptr)
-	{
-		return;
-	}
-	
-	const auto& PerceptionComp = CachedAIController->PerceptionComponent;
-
-	if (PerceptionComp == nullptr)
-	{
-		return;
-	}
-	
-	for (const auto* UpdatedActor : UpdatedActors)
-	{
-		const FActorPerceptionInfo* ActorPerceptionInfo = PerceptionComp->GetActorInfo(*UpdatedActor);		
-		const TArray<FAIStimulus>& CurrentStimuluses = ActorPerceptionInfo->LastSensedStimuli;
-
-
-		for (const auto& CurrentStimulus : CurrentStimuluses)
-		{
-			TSubclassOf<UAISense> AISense = UAIPerceptionSystem::GetSenseClassForStimulus(CachedAIController, CurrentStimulus);
-			
-			if (PerceptionType.Contains(AISense))
-			{
-				const EPerceptionType Perception = PerceptionType[AISense];
-				HandleEventByPerceptionType(Perception, CurrentStimulus.IsActive());
-				OnPerceptionTypeHandle_BP(Perception, UpdatedActor, CurrentStimulus);
-			}
-		}
-	}
-}
-
-void UMUGA_AIStateChanger::HandleEventByPerceptionType(EPerceptionType Type, bool bPerceptionIsActive)
-{
-	if (ValByPerceptions.Contains(Type) == false)
-	{
-		return;
-	}
-	
-	const FGameplayTag& CharacterTag = ValByPerceptions[Type];
-	
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(CurrentActorInfo->AvatarActor.Get());
-
-	if (bPerceptionIsActive)
-	{
-		if (ASC->HasMatchingGameplayTag(CharacterTag) == false)
-		{
-			ASC->AddLooseGameplayTag(CharacterTag);
-		}
-	}
-	else
-	{
-		if (ASC->HasMatchingGameplayTag(CharacterTag))
-		{
-			ASC->RemoveLooseGameplayTag(CharacterTag);
-		}
-	}
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }
