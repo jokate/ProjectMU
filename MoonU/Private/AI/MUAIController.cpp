@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "AI/MUAIDefines.h"
+#include "Attribute/MUCharacterAttributeSet.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/MUCharacterBase.h"
@@ -34,6 +35,8 @@ void AMUAIController::RunAI()
 	}
 
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AMUAIController::OnTargetPerceptionUpdated);
+
+	OnInitialize();
 }
 
 void AMUAIController::StopAI()
@@ -44,6 +47,30 @@ void AMUAIController::StopAI()
 	{
 		BTComponent->StopTree();
 	}
+}
+
+void AMUAIController::OnInitialize()
+{
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+
+	if (ASC == nullptr)
+	{
+		return;
+
+	}
+
+	const UMUCharacterAttributeSetBase* AttributeSet = ASC->GetSet<UMUCharacterAttributeSetBase>();
+
+	if (AttributeSet == nullptr)
+	{
+		return;
+	}
+
+	if (Blackboard)
+	{
+		Blackboard->SetValueAsFloat(MU_AI_ATTACK_RADIUS, AttributeSet->GetAttackRange());
+		Blackboard->SetValueAsFloat(MU_AI_DEFEND_RADIUS, AttributeSet->GetDefendRange());
+	}	
 }
 
 void AMUAIController::OnPossess(APawn* InPawn)

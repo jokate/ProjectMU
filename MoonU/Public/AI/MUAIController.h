@@ -22,13 +22,13 @@ public:
 	void RunAI();
 
 	void StopAI();
+
+	virtual void OnInitialize();
 	
 	virtual void OnPossess(APawn* InPawn) override;
 
 	UFUNCTION()
 	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
-
-	
 	
 	void SetBlackboardValue(AActor* InActor, const FAIStimulus& Stimulus);
 	
@@ -47,4 +47,5 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBehaviorTree> BTAsset;
+
 };
