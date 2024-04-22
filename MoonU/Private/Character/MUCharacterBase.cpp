@@ -74,6 +74,11 @@ const bool AMUCharacterBase::GetTimeWind()
 	return TimeWindComponent->GetTimeWind();
 }
 
+FOnTimeWindStateChanged& AMUCharacterBase::GetTimeWindStateChangeEvent()
+{
+	return TimeWindComponent->GetTimeWindStateChangeEvent();
+}
+
 UMotionWarpingComponent* AMUCharacterBase::GetMotionWarpComponent()
 {
 	return MotionWarpingComponent;

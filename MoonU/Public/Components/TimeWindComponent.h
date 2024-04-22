@@ -27,6 +27,8 @@ public:
 	virtual void SetTimeWind(bool InTimeWind) override;
 	virtual const bool GetTimeWind() override;
 
+	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
+
 	void OnIntialize();
 protected :
 	void TimeRewind();
@@ -34,6 +36,8 @@ protected :
 	void Record();
 
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
+
+	void BroadcastTimeWindStateChangeEvent(bool InTimeWind);
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FTimeWindRecordData> RecordDatas;
@@ -64,5 +68,7 @@ protected :
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	uint8 bIsMaxRecordInit : 1;
+
+	FOnTimeWindStateChanged TimeWindStateChanged;
 };
 

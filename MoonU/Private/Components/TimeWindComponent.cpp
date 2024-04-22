@@ -69,11 +69,18 @@ void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 void UTimeWindComponent::SetTimeWind(bool InTimeRewind)
 {
 	bIsWinding = InTimeRewind;
+
+	BroadcastTimeWindStateChangeEvent(InTimeRewind);
 }
 
 const bool UTimeWindComponent::GetTimeWind()
 {
 	return bIsWinding;
+}
+
+FOnTimeWindStateChanged& UTimeWindComponent::GetTimeWindStateChangeEvent()
+{
+	return TimeWindStateChanged;
 }
 
 void UTimeWindComponent::OnIntialize()
@@ -227,5 +234,13 @@ void UTimeWindComponent::OnChangedAttribute(const FOnAttributeChangeData& Payloa
 	Record.OldValue = Payload.OldValue;
 
 	AttributeRecords.Emplace(Record);
+}
+
+void UTimeWindComponent::BroadcastTimeWindStateChangeEvent(bool InTimeWind)
+{
+	if (TimeWindStateChanged.IsBound())
+	{
+		TimeWindStateChanged.Broadcast(InTimeWind);
+	}
 }
 

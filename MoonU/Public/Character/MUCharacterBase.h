@@ -52,6 +52,7 @@ protected:
 #pragma region ITimeWindTarget
 	virtual void SetTimeWind(bool InTimeRewind) override;
 	virtual const bool GetTimeWind() override;
+	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
 #pragma endregion
 	
 	

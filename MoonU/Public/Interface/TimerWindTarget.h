@@ -10,6 +10,9 @@
  * 
  */
 // This class does not need to be modified.
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTimeWindStateChanged, bool bActive);
+
 UINTERFACE()
 class UTimeWindTarget : public UInterface
 {
@@ -25,4 +28,6 @@ class MOONU_API ITimeWindTarget
 public:
 	virtual void SetTimeWind(bool InTimeWind) = 0;
 	virtual const bool GetTimeWind() = 0;
+
+	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() = 0;
 };
