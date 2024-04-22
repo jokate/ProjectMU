@@ -31,6 +31,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, MaxHp);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackRange);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRange);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackDamage);
 	
 	
 public :
@@ -55,6 +56,9 @@ protected :
 	UPROPERTY(BlueprintReadOnly, Category = "HP", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxHp;
 
+	UPROPERTY(BlueprintReadOnly, Category = "AttackDamage", meta= (AllowPrivateAccess = true))
+	FGameplayAttributeData AttackDamage;
+	
 	UPROPERTY(BlueprintReadOnly, Category = "AttackRange", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData AttackRange;
 

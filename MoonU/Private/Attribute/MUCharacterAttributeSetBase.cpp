@@ -13,7 +13,8 @@ UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	: Damage(0.0f),
       MaxHp(100.0f),
 	  DefendRange(300.0f),
-	  AttackRange(150.0f)
+	  AttackRange(150.0f),
+	  AttackDamage(10.0f)
 {
 	InitCurrentHp(GetMaxHp());
 }
