@@ -3,6 +3,8 @@
 
 #include "Abilities/MUGA_Defend.h"
 
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+
 UMUGA_Defend::UMUGA_Defend()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
@@ -12,6 +14,10 @@ void UMUGA_Defend::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
                                    const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	UAbilityTask_PlayMontageAndWait* PlayMontageAndWait = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DEFENSEMONTAGE"), DefenseMontage);
+	
+	PlayMontageAndWait->ReadyForActivation();
 }
 
 void UMUGA_Defend::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
