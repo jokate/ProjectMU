@@ -16,6 +16,7 @@
 #define MU_INPUT_JUMP FGameplayTag::RequestGameplayTag(FName("InputTag.Jump"))
 #define MU_INPUT_MOVE FGameplayTag::RequestGameplayTag(FName("InputTag.Move"))
 #define MU_INPUT_LOOK FGameplayTag::RequestGameplayTag(FName("InputTag.Look"))
+#define MU_INPUT_DEFENSE FGameplayTag::RequestGameplayTag(FName("InputTag.Defense"))
 #define MU_INPUT_INTERACT FGameplayTag::RequestGameplayTag(FName("InputTag.Interact"))
 #define MU_INPUT_LMATTACK FGameplayTag::RequestGameplayTag(FName("InputTag.LeftAttack"))
 #define MU_INPUT_DODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.Avoidance"))
@@ -36,3 +37,6 @@
 
 #define MU_CHARACTERSTATE_DODGE FGameplayTag::RequestGameplayTag(FName("Character.State.Dodge"))
 #define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))
+
+#define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))
+#define MU_CHARACTERSTATE_PARRY FGameplayTag::RequestGameplayTag(FName("Character.State.Parry"))

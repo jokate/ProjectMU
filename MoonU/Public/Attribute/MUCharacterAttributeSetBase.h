@@ -32,6 +32,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackRange);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRange);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackDamage);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRate);
 	
 	
 public :
@@ -58,6 +59,9 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "AttackDamage", meta= (AllowPrivateAccess = true))
 	FGameplayAttributeData AttackDamage;
+
+	UPROPERTY(BlueprintReadOnly, Category = "DefendRate", meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData DefendRate;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "AttackRange", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData AttackRange;

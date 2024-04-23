@@ -150,6 +150,8 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputPressed, 4);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DEFENSE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 5);
+		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DEFENSE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 5);
 	}
 }
 

@@ -14,7 +14,8 @@ UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
       MaxHp(100.0f),
 	  DefendRange(300.0f),
 	  AttackRange(150.0f),
-	  AttackDamage(10.0f)
+	  AttackDamage(10.0f),
+	  DefendRate(0.5f)
 {
 	InitCurrentHp(GetMaxHp());
 }
@@ -40,11 +41,18 @@ bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCa
 	{
 		if (Data.EvaluatedData.Magnitude > 0.0f)
 		{
-			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE))
+			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY))
 			{
 				Data.EvaluatedData.Magnitude = 0.0f;
 				return false;
 			}
+
+			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DEFENDING))
+			{
+				Data.EvaluatedData.Magnitude *= GetDefendRate();
+				return true;
+			}
+			
 		}
 	}
 
