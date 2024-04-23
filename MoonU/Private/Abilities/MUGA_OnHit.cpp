@@ -5,7 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Interface/Defender.h"
 
 UMUGA_OnHit::UMUGA_OnHit()
 {
@@ -74,8 +76,59 @@ void UMUGA_OnHit::OnHitCheckedCallback(const FGameplayEventData* EventData)
 	}
 	
 	// Hit에 관한 부분을 수행한다.
-	for (const FGameplayTag& HitTag : GameplayTagContainer)
+	AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
+
+	if (AvatarActor == nullptr)
 	{
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActorInfo->AvatarActor.Get(), HitTag, *EventData);
+		return;
 	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(AvatarActor);
+
+	if (ASC == nullptr)
+	{
+		return;
+	}
+
+	IDefender* Defender = Cast<IDefender>(AvatarActor);
+
+	const FVector DefendRange = Defender->GetDefendRange();
+	const FTransform DefendTransform = Defender->GetDefendTransform();
+
+	bool bCanDefend = ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY) || ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_DEFENDING);
+	bCanDefend &= CheckHitLocationIsInDefendBound(DefendTransform, HitResult->ImpactPoint, DefendRange);
+
+	if (bCanDefend)
+	{
+		for (const FGameplayTag& DefendRelatedTag : DefendStateTag)
+		{
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AvatarActor, DefendRelatedTag, *EventData);
+		}
+	}
+	else
+	{
+		for (const FGameplayTag& UndefendRelatedTag : UnDefendStateTag)
+		{
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AvatarActor, UndefendRelatedTag, *EventData);
+		}
+	}
+}
+
+bool UMUGA_OnHit::CheckHitLocationIsInDefendBound(const FTransform& InTransform, const FVector& HitLocation, const FVector& Extent)
+{
+	const FVector LocalSpaceLocation = InTransform.InverseTransformPosition(HitLocation);
+
+	const float MaxZ = Extent.Z;
+	const float MinZ = -Extent.Z;
+	const float MaxX = Extent.X;
+	const float MinX = -Extent.X;
+	const float MaxY = Extent.Y;
+	const float MinY = -Extent.Y;
+
+
+	const bool bContainZ = LocalSpaceLocation.Z > MinZ && LocalSpaceLocation.Z <= MaxZ;
+	const bool bContainY = LocalSpaceLocation.Y > MinY && LocalSpaceLocation.Y <= MaxY;
+	const bool bContainX = LocalSpaceLocation.X > MinX && LocalSpaceLocation.X <= MaxX;
+
+	return bContainX && bContainY && bContainZ;
 }

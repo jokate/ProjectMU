@@ -79,6 +79,17 @@ FOnTimeWindStateChanged& AMUCharacterBase::GetTimeWindStateChangeEvent()
 	return TimeWindComponent->GetTimeWindStateChangeEvent();
 }
 
+const FVector AMUCharacterBase::GetDefendRange()
+{
+	return DefendExtent;
+}
+
+const FTransform AMUCharacterBase::GetDefendTransform()
+{
+	return GetDefendTransform_BP();
+}
+
+
 UMotionWarpingComponent* AMUCharacterBase::GetMotionWarpComponent()
 {
 	return MotionWarpingComponent;

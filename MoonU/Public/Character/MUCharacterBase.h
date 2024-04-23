@@ -7,12 +7,13 @@
 #include "GameplayTagAssetInterface.h"
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
+#include "Interface/Defender.h"
 #include "Interface/MotionWarpTarget.h"
 #include "Interface/TimerWindTarget.h"
 #include "MUCharacterBase.generated.h"
 
 UCLASS()
-class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface
+class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface, public IDefender
 {
 	GENERATED_BODY()
 
@@ -54,7 +55,15 @@ protected:
 	virtual const bool GetTimeWind() override;
 	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
 #pragma endregion
-	
+
+#pragma region IDefender
+	virtual const FVector GetDefendRange() override;
+
+	virtual const FTransform GetDefendTransform() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	const FTransform GetDefendTransform_BP();
+#pragma endregion
 	
 protected :
 	UPROPERTY()
@@ -74,4 +83,7 @@ protected :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Time Wind Component")
 	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Defend Extent")
+	FVector DefendExtent;
 };

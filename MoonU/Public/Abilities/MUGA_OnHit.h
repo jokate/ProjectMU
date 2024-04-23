@@ -22,10 +22,14 @@ class MOONU_API UMUGA_OnHit : public UGameplayAbility
 
 	void OnHitCheckedCallback(const FGameplayEventData* EventData);
 
+	bool CheckHitLocationIsInDefendBound(const FTransform& InTransform, const FVector& HitLocation, const FVector& Extent);
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag TriggerGameplayTag;
 
 	UPROPERTY(EditDefaultsOnly)
-	FGameplayTagContainer GameplayTagContainer;
+	FGameplayTagContainer DefendStateTag;
+	
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer UnDefendStateTag;
 };
