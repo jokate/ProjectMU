@@ -18,7 +18,7 @@ class MOONU_API UMUAT_Trace : public UAbilityTask
 	UMUAT_Trace();
 	
 public :
-	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<class AMUTA_Trace> TargetActorClass, int32 CurrentCombo);
+	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<class AMUTA_Trace> TargetActorClass, int32 CurrentCombo, TSubclassOf<class UGameplayEffect> DamageEffect);
 
 	virtual void Activate() override;
 
@@ -44,4 +44,7 @@ public :
 	
 	UPROPERTY()
 	TSubclassOf<class AMUTA_Trace> TargetActorClass;
+
+	UPROPERTY()
+	TSubclassOf<class UGameplayEffect> DamageEffectClass;
 };

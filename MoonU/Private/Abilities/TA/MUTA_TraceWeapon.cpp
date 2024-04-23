@@ -4,7 +4,9 @@
 #include "Abilities/TA/MUTA_TraceWeapon.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "MUDefines.h"
+#include "Data/MUEnum.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -60,6 +62,18 @@ void AMUTA_TraceWeapon::TraceStart()
 				FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = new FGameplayAbilityTargetData_SingleTargetHit(HitResult);
 				
 				GameplayEventData.TargetData.Add(SingleTargetHit);
+
+				UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
+				if (ASC)
+				{
+					FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+					FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
+
+					if (EffectSpecHandle.IsValid())
+					{
+						ASC->BP_ApplyGameplayEffectSpecToSelf(EffectSpecHandle);
+					}
+				}
 				
 				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
 			}

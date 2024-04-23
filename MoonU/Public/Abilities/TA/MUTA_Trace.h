@@ -30,7 +30,7 @@ public:
 
 	virtual void TraceStart();
 
-	virtual void SetComboData(int32 Combo);
+	virtual void InitializeData(int32 Combo, TSubclassOf<class UGameplayEffect> DamageEffect);
 
 protected:
 	UPROPERTY()
@@ -38,7 +38,7 @@ protected:
 
 	UPROPERTY()
 	int32 CurrentCombo;
-
+	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UGameplayEffect> DamageEffectClass;
 };

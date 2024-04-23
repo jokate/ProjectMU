@@ -68,7 +68,8 @@ void AMUTA_Trace::TraceStart()
 {
 }
 
-void AMUTA_Trace::SetComboData(int32 Combo)
+void AMUTA_Trace::InitializeData(int32 Combo, TSubclassOf<UGameplayEffect> DamageEffect)
 {
 	CurrentCombo = Combo;
+	DamageEffectClass = DamageEffect;
 }

@@ -23,7 +23,7 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	int32 CurrentCombo = TriggerEventData->EventMagnitude;
 	
-	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass, CurrentCombo);
+	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass, CurrentCombo, DamageEffectClass);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
 	AttackTraceTask->ReadyForActivation();

@@ -62,6 +62,7 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	}
 	else if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
+		
 		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
 		SetDamage(0);
 	}
