@@ -19,8 +19,7 @@ class MOONU_API AMUTA_TraceWeapon : public AMUTA_Trace
 	virtual void Tick(float DeltaSeconds) override;
 	
 	virtual void TraceStart() override;
-
-	virtual FGameplayAbilityTargetDataHandle MakeTargetData() override;
+	
 	UPROPERTY()
 	FName WeaponSocketName;
 };

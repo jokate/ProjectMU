@@ -19,7 +19,6 @@ public:
 protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	
 public:
 	virtual void StartTargeting(UGameplayAbility* Ability) override;
 
@@ -31,7 +30,15 @@ public:
 
 	virtual void TraceStart();
 
+	virtual void SetComboData(int32 Combo);
+
 protected:
 	UPROPERTY()
 	TArray<TWeakObjectPtr<AActor>> QueryActors;
+
+	UPROPERTY()
+	int32 CurrentCombo;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UGameplayEffect> DamageEffectClass;
 };

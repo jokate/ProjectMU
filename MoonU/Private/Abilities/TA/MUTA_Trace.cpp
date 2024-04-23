@@ -51,7 +51,11 @@ void AMUTA_Trace::ConfirmTargetingAndContinue()
 	if (SourceActor)
 	{
 		FGameplayAbilityTargetDataHandle DataHandle = MakeTargetData();
-		TargetDataReadyDelegate.Broadcast(DataHandle);
+		
+		if (TargetDataReadyDelegate.IsBound())
+		{
+			TargetDataReadyDelegate.Broadcast(DataHandle);
+		}
 	}
 }
 
@@ -62,4 +66,9 @@ void AMUTA_Trace::OnAnimNotifyStateEnd(const FGameplayEventData* EventData)
 
 void AMUTA_Trace::TraceStart()
 {
+}
+
+void AMUTA_Trace::SetComboData(int32 Combo)
+{
+	CurrentCombo = Combo;
 }

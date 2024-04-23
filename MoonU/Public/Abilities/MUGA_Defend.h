@@ -13,4 +13,8 @@ UCLASS()
 class MOONU_API UMUGA_Defend : public UGameplayAbility
 {
 	GENERATED_BODY()
+
+	UMUGA_Defend();
+	
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 };

@@ -4,27 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "MUGA_AttackTrace.generated.h"
+#include "MUGA_OnHit.generated.h"
 
 /**
  * 
  */
 UCLASS()
-	class MOONU_API UMUGA_AttackTrace : public UGameplayAbility
+class MOONU_API UMUGA_OnHit : public UGameplayAbility
 {
 	GENERATED_BODY()
-	UMUGA_AttackTrace();
+
+	UMUGA_OnHit();
+	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
-protected :
-	UFUNCTION()
-	void OnTraceResultCallback(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
+	void OnHitCheckedCallback(const FGameplayEventData* EventData);
 
 public :
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UGameplayEffect> DamageEffectClass;
-	
+	FGameplayTag TriggerGameplayTag;
+
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AMUTA_Trace> TraceClass;
+	FGameplayTagContainer GameplayTagContainer;
 };

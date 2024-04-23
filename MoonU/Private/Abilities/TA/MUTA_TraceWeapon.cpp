@@ -3,6 +3,8 @@
 
 #include "Abilities/TA/MUTA_TraceWeapon.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "MUDefines.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -49,15 +51,18 @@ void AMUTA_TraceWeapon::TraceStart()
 			if (!QueryActors.Contains(HitActor))
 			{
 				QueryActors.Add(HitActor);
+
+				// 쿼리 액터에 없는 경우 (판단이 아직 안된 객체의 경우 최초 감지 시, HitResult와 함께 넘겨준다.
+				
+				FGameplayEventData GameplayEventData;
+
+				GameplayEventData.EventMagnitude = CurrentCombo;
+				FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = new FGameplayAbilityTargetData_SingleTargetHit(HitResult);
+				
+				GameplayEventData.TargetData.Add(SingleTargetHit);
+				
+				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
 			}
 		}
 	} 
-}
-
-FGameplayAbilityTargetDataHandle AMUTA_TraceWeapon::MakeTargetData()
-{
-	FGameplayAbilityTargetData_ActorArray* ActorsData = new FGameplayAbilityTargetData_ActorArray();
-	ActorsData->SetActors(QueryActors);
-
-	return FGameplayAbilityTargetDataHandle(ActorsData);
 }

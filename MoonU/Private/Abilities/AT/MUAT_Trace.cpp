@@ -11,10 +11,11 @@ UMUAT_Trace::UMUAT_Trace()
 	
 }
 
-UMUAT_Trace* UMUAT_Trace::CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<AMUTA_Trace> TargetActorClass)
+UMUAT_Trace* UMUAT_Trace::CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<AMUTA_Trace> TargetActorClass, int32 CurrentCombo)
 {
 	UMUAT_Trace* NewTask = NewAbilityTask<UMUAT_Trace>(OwningAbility);
 	NewTask->TargetActorClass = TargetActorClass;
+	NewTask->CurrentCombo = CurrentCombo;
 	return NewTask;
 }
 
@@ -40,6 +41,7 @@ void UMUAT_Trace::SpawnAndInitializeTargetActor()
 	if (SpawnedTargetActor)
 	{
 		SpawnedTargetActor->TargetDataReadyDelegate.AddUObject(this, &UMUAT_Trace::OnTargetDataReadyCallback);
+		SpawnedTargetActor->SetComboData(CurrentCombo);
 	}
 }
 

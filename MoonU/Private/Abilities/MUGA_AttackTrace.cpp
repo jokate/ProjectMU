@@ -21,9 +21,9 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	CurrentCombo = TriggerEventData->EventMagnitude;
+	int32 CurrentCombo = TriggerEventData->EventMagnitude;
 	
-	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass);
+	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass, CurrentCombo);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
 	AttackTraceTask->ReadyForActivation();
@@ -37,38 +37,6 @@ void UMUGA_AttackTrace::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 void UMUGA_AttackTrace::OnTraceResultCallback(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
 {
-	if (UAbilitySystemBlueprintLibrary::TargetDataHasActor(TargetDataHandle, 0))
-	{
-		UE_LOG(LogTemp, Log, TEXT("Target Is Avaliable"));
-		const TArray<TWeakObjectPtr<AActor>> TriggerActors = TargetDataHandle.Data[0].Get()->GetActors();
-
-		AActor* CurrentActor = CurrentActorInfo->AvatarActor.Get();
-
-		// Hit에 대한 인포 제공 + 데미지 적용 필요.
-		for (const auto& TriggerActor : TriggerActors)
-		{
-			AActor* TriggeredActor = TriggerActor.Get();
-
-			if (!TriggeredActor)
-			{
-				continue;
-			}
-
-			UAISense_Damage::ReportDamageEvent(CurrentActor, TriggeredActor, CurrentActor, 0.0f, TriggerActor->GetActorLocation(), TriggerActor->GetActorLocation());
-			
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(TriggeredActor, MU_EVENT_ONHIT, FGameplayEventData());
-		}
-
-		UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo_Checked();
-
-		FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass, CurrentCombo);
-
-		if (EffectSpecHandle.IsValid())
-		{
-			ApplyGameplayEffectSpecToTarget(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, TargetDataHandle);
-		}
-	} 
-	
 	bool bReplicatedEndAbility = true;
 	bool bWasCancelled = false;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);

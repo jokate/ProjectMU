@@ -18,7 +18,7 @@ class MOONU_API UMUAT_Trace : public UAbilityTask
 	UMUAT_Trace();
 	
 public :
-	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<class AMUTA_Trace> TargetActorClass);
+	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<class AMUTA_Trace> TargetActorClass, int32 CurrentCombo);
 
 	virtual void Activate() override;
 
@@ -35,6 +35,9 @@ protected:
 public :
 	UPROPERTY(BlueprintAssignable)
 	FTraceResultDelegate OnComplete;
+
+	UPROPERTY()
+	int32 CurrentCombo;
 	
 	UPROPERTY()
 	TObjectPtr<class AMUTA_Trace> SpawnedTargetActor; 
