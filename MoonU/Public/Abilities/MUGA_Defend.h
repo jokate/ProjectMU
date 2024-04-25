@@ -24,9 +24,6 @@ class MOONU_API UMUGA_Defend : public UGameplayAbility
 
 	void RemoveParryTag();
 public :
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UAnimMontage> DefenseMontage;
-
 	FTimerHandle TimerHandle;
 
 	UPROPERTY(EditDefaultsOnly)

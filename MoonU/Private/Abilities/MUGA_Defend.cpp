@@ -33,10 +33,18 @@ void UMUGA_Defend::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		}
 	}
 	
-	UAbilityTask_PlayMontageAndWait* PlayMontageAndWait = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DEFENSEMONTAGE"), DefenseMontage);
-	
-	PlayMontageAndWait->ReadyForActivation();
+	ACharacter* CurrentCharacter = Cast<ACharacter>(CurrentActor);
 
+	if (CurrentCharacter)
+	{
+		UCharacterMovementComponent* CharacterMovementComp = CurrentCharacter->GetCharacterMovement();
+
+		if (CharacterMovementComp)
+		{
+			CharacterMovementComp->SetMovementMode(MOVE_None);
+		}
+	}
+	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMUGA_Defend::RemoveParryTag, Interval);
 }
 
@@ -44,6 +52,20 @@ void UMUGA_Defend::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	RemoveParryTag();
+
+	AActor* CurActor = CurrentActorInfo->AvatarActor.Get();
+
+	if (CurActor)
+	{
+		ACharacter* CurrentCharacter = Cast<ACharacter>(CurActor);
+
+		UCharacterMovementComponent* MovementComponent = CurrentCharacter->GetCharacterMovement();
+
+		if (MovementComponent)
+		{
+			MovementComponent->SetMovementMode(MOVE_Walking);
+		}
+	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
