@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbilityTargetActor.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "MUTA_Trace.generated.h"
 
 //Notify State가 진행됨에 따라서 Trace를 계속해서 수행할 Actor.

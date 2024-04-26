@@ -25,6 +25,9 @@ class MOONU_API UBTD_GASTagMatch : public UBTDecorator
 	virtual void OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 	void OnGameplayTagChanged(const FGameplayTag InTag, int32 NewCount, TWeakObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent, uint8* NodeMemory);
+
+	UPROPERTY(EditAnywhere, Category = GameplayTagCheck)
+	FBlackboardKeySelector TagCheckTarget;
 	
 	UPROPERTY(EditAnywhere, Category=GameplayTagCheck)
 	EGameplayContainerMatchType TagsToMatch;

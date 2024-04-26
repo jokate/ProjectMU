@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTD_GASTagMatch::UBTD_GASTagMatch()
 {
@@ -15,14 +16,21 @@ UBTD_GASTagMatch::UBTD_GASTagMatch()
 
 bool UBTD_GASTagMatch::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
-	APawn* GameplayTagActor = OwnerComp.GetAIOwner()->GetPawn();
+	UBlackboardComponent* BBComponent = OwnerComp.GetAIOwner()->GetBlackboardComponent();
 
-	if (GameplayTagActor == nullptr)
+	if (BBComponent == nullptr)
 	{
 		return false;
 	}
 
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GameplayTagActor);
+	AActor* TargetActor = Cast<AActor>(BBComponent->GetValueAsObject(TagCheckTarget.SelectedKeyName));
+
+	if (TargetActor == nullptr)
+	{
+		return false;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 
 	if (ASC == nullptr)
 	{
