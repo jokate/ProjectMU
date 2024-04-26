@@ -127,7 +127,7 @@ const FName UMUGA_Rollout::GetCurrentMontageSection(float RecentedInput)
 		return MontageSectionMap[Backward];
 	}
 
-	if (-157.5 < RecentedInput &&  RecentedInput <= -112.5f)
+	if (-157.5f < RecentedInput &&  RecentedInput <= -112.5f)
 	{
 		return MontageSectionMap[BackwardLeft];
 	}
