@@ -16,38 +16,14 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 	{
 		return EBTNodeResult::Failed;
 	}
-
-	UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ControllingPawn);
-
-	if (AbilitySystemComponent == nullptr) 
-	{
-		return EBTNodeResult::Failed;	
-	}
-
-	TaskFinishedGAS.AddLambda(
-		[&] (const FGameplayEventData* EventData)
-		{
-			OnGASAbilityFinished(OwnerComp, EventData);
-			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		});
 	
-	AbilitySystemComponent->GenericGameplayEventCallbacks.FindOrAdd(EndAbilityTag).AddUObject(this, &UBTTask_ActivateAbility::GASAbilityFinished);
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, StartAbilityTag, FGameplayEventData());
 	
-	return EBTNodeResult::InProgress;
+	return EBTNodeResult::Succeeded;
 }
 
-void UBTTask_ActivateAbility::GASAbilityFinished(const FGameplayEventData* EventData)
+EBTNodeResult::Type UBTTask_ActivateAbility::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	TaskFinishedGAS.Broadcast(EventData);
+	return Super::AbortTask(OwnerComp, NodeMemory);
 }
 
-void UBTTask_ActivateAbility::OnGASAbilityFinished(UBehaviorTreeComponent& OwnerComp, const FGameplayEventData* EventData)
-{
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerComp.GetAIOwner()->GetPawn());
-
-	if (ASC)
-	{
-		ASC->GenericGameplayEventCallbacks.Remove(EndAbilityTag);
-	}
-}

@@ -18,17 +18,10 @@ class MOONU_API UBTTask_ActivateAbility : public UBTTaskNode
 	GENERATED_BODY()
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	
-	virtual void GASAbilityFinished(const FGameplayEventData* EventData);
-	
-	virtual void OnGASAbilityFinished(UBehaviorTreeComponent& OwnerComp, const FGameplayEventData* EventData);
+
+	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 protected :
 	
-	UPROPERTY(EditAnywhere, Meta = (Categories = Event))
+	UPROPERTY(EditAnywhere)
 	FGameplayTag StartAbilityTag;
-
-	UPROPERTY(EditAnywhere, Meta = (Categories = Event))
-	FGameplayTag EndAbilityTag;
-	
-	FOnTaskFinishedGAS TaskFinishedGAS;
 };

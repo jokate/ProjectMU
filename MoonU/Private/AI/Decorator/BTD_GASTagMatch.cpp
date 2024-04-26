@@ -55,14 +55,21 @@ bool UBTD_GASTagMatch::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerC
 
 void UBTD_GASTagMatch::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	APawn* GameplayTagActor = OwnerComp.GetAIOwner()->GetPawn();
+	UBlackboardComponent* BBComponent = OwnerComp.GetAIOwner()->GetBlackboardComponent();
 
-	if (GameplayTagActor == nullptr)
+	if (BBComponent == nullptr)
 	{
 		return;
 	}
 
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GameplayTagActor);
+	AActor* TargetActor = Cast<AActor>(BBComponent->GetValueAsObject(TagCheckTarget.SelectedKeyName));
+
+	if (TargetActor == nullptr)
+	{
+		return;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 
 	if (ASC == nullptr)
 	{
@@ -77,14 +84,21 @@ void UBTD_GASTagMatch::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8
 
 void UBTD_GASTagMatch::OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	APawn* GameplayTagActor = OwnerComp.GetAIOwner()->GetPawn();
+	UBlackboardComponent* BBComponent = OwnerComp.GetAIOwner()->GetBlackboardComponent();
 
-	if (GameplayTagActor == nullptr)
+	if (BBComponent == nullptr)
 	{
 		return;
 	}
 
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GameplayTagActor);
+	AActor* TargetActor = Cast<AActor>(BBComponent->GetValueAsObject(TagCheckTarget.SelectedKeyName));
+
+	if (TargetActor == nullptr)
+	{
+		return;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 
 	if (ASC == nullptr)
 	{
