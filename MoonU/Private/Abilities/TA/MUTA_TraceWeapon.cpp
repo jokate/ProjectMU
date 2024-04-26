@@ -57,7 +57,7 @@ void AMUTA_TraceWeapon::TraceStart()
 				// 쿼리 액터에 없는 경우 (판단이 아직 안된 객체의 경우 최초 감지 시, HitResult와 함께 넘겨준다.
 				
 				FGameplayEventData GameplayEventData;
-
+				GameplayEventData.Instigator = OwningAbility->GetAvatarActorFromActorInfo();
 				GameplayEventData.EventMagnitude = CurrentCombo;
 				FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = new FGameplayAbilityTargetData_SingleTargetHit(HitResult);
 				

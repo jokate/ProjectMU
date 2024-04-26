@@ -12,6 +12,7 @@
 UMUGA_OnHit::UMUGA_OnHit()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	AngleMargin = 60.0f;
 }
 
 void UMUGA_OnHit::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -97,6 +98,7 @@ void UMUGA_OnHit::OnHitCheckedCallback(const FGameplayEventData* EventData)
 
 	bool bCanDefend = ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY) || ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_DEFENDING);
 	bCanDefend &= CheckHitLocationIsInDefendBound(DefendTransform, HitResult->ImpactPoint, DefendRange);
+	bCanDefend &= CheckHitInstigatorActorInProperAngle(AvatarActor, EventData->Instigator);
 
 	if (bCanDefend)
 	{
@@ -131,4 +133,22 @@ bool UMUGA_OnHit::CheckHitLocationIsInDefendBound(const FTransform& InTransform,
 	const bool bContainX = LocalSpaceLocation.X > MinX && LocalSpaceLocation.X <= MaxX;
 
 	return bContainX && bContainY && bContainZ;
+}
+
+bool UMUGA_OnHit::CheckHitInstigatorActorInProperAngle(const AActor* CurrentActor, const AActor* InstigatorActor)
+{
+	const FVector& CurrentActorFrontward = CurrentActor->GetActorForwardVector().GetSafeNormal2D();
+	const FVector& CurrentActorLocation = CurrentActor->GetActorLocation();
+
+	const FVector& InstigatorLocation = InstigatorActor->GetActorLocation();
+
+
+	const FVector DirectionToInstigator = (InstigatorLocation - CurrentActorLocation).GetSafeNormal2D();
+
+
+	const float DotProduct = CurrentActorFrontward.Dot(DirectionToInstigator);
+
+	const float Angle = FMath::Acos(DotProduct) * (180 / PI);
+
+	return Angle <= AngleMargin;
 }

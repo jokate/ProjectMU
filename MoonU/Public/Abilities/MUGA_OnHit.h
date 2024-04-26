@@ -23,6 +23,8 @@ class MOONU_API UMUGA_OnHit : public UGameplayAbility
 	void OnHitCheckedCallback(const FGameplayEventData* EventData);
 
 	bool CheckHitLocationIsInDefendBound(const FTransform& InTransform, const FVector& HitLocation, const FVector& Extent);
+
+	bool CheckHitInstigatorActorInProperAngle(const AActor* CurrentActor, const AActor* InstigatorActor);
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag TriggerGameplayTag;
@@ -32,4 +34,7 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer UnDefendStateTag;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AngleMargin;
 };
