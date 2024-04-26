@@ -31,8 +31,18 @@ public:
 	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
 	
 	void SetBlackboardValue(AActor* InActor, const FAIStimulus& Stimulus);
-	
+
+	bool CheckIfForgottenSeenActors();
+
+	UFUNCTION()
+	void OnSeenCharacter(APawn* Pawn);
+
+	UFUNCTION()
+	void OnHearCharacter(APawn* Pawn, const FVector& Location, float Volume);
 protected :
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<class UPawnSensingComponent> PawnSensingComponent;
+	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
 

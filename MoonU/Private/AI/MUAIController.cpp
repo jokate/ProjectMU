@@ -12,6 +12,8 @@
 #include "Character/MUCharacterBase.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/PawnSensingComponent.h"
+
 
 // Sets default values
 AMUAIController::AMUAIController()
@@ -20,7 +22,7 @@ AMUAIController::AMUAIController()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerception");
-	
+	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensor");
 }
 
 void AMUAIController::RunAI()
@@ -47,6 +49,9 @@ void AMUAIController::StopAI()
 	{
 		BTComponent->StopTree();
 	}
+
+	PawnSensingComponent->OnSeePawn.RemoveAll(this);
+	PawnSensingComponent->OnHearNoise.RemoveAll(this);
 }
 
 void AMUAIController::OnInitialize()
@@ -71,6 +76,9 @@ void AMUAIController::OnInitialize()
 		Blackboard->SetValueAsFloat(MU_AI_ATTACK_RADIUS, AttributeSet->GetAttackRange());
 		Blackboard->SetValueAsFloat(MU_AI_DEFEND_RADIUS, AttributeSet->GetDefendRange());
 	}	
+
+	PawnSensingComponent->OnSeePawn.AddDynamic(this, &AMUAIController::OnSeenCharacter);
+	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AMUAIController::OnHearCharacter);
 }
 
 void AMUAIController::OnPossess(APawn* InPawn)
@@ -137,6 +145,20 @@ void AMUAIController::SetBlackboardValue(AActor* InActor, const FAIStimulus& Sti
 	BlackboardComponent->SetValueAsObject(MU_AI_TARGET, InActor);
 	BlackboardComponent->SetValueAsVector( MU_AI_INTEREST_POINT, Stimulus.StimulusLocation);
 	
+}
+
+bool AMUAIController::CheckIfForgottenSeenActors()
+{
+	TArray<AActor> OutActors;
+	return false;
+}
+
+void AMUAIController::OnSeenCharacter(APawn* Pawn)
+{
+}
+
+void AMUAIController::OnHearCharacter(APawn* Pawn, const FVector& Location, float Volume)
+{
 }
 
 
