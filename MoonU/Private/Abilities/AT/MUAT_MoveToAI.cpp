@@ -21,6 +21,38 @@ void UMUAT_MoveToAI::Activate()
 {
 	Super::Activate();
 
+	AIMove();
+	
+	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
+	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
+	
+	AIController->ReceiveMoveCompleted.AddDynamic(this, &UMUAT_MoveToAI::OnMoveCompleted);
+}
+
+void UMUAT_MoveToAI::OnDestroy(bool bInOwnerFinished)
+{
+	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
+	AAIController* AIController = Cast<AAIController>(OwnerPawn->GetController());
+
+	if (AIController)
+	{
+		AIController->StopMovement();
+		AIController->ReceiveMoveCompleted.RemoveAll(this);
+	}
+	
+	Super::OnDestroy(bInOwnerFinished);
+}
+
+void UMUAT_MoveToAI::OnMoveCompleted(FAIRequestID RequestID, const EPathFollowingResult::Type Result)
+{
+	if (ShouldBroadcastAbilityTaskDelegates())
+	{
+		MoveCompleted.Broadcast(RequestID, Result);
+	}
+}
+
+void UMUAT_MoveToAI::AIMove()
+{
 	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
 	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
 	UBlackboardComponent* BBComponent = AIController->GetBlackboardComponent();
@@ -41,29 +73,5 @@ void UMUAT_MoveToAI::Activate()
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Wrong Type init"));
 		break;
-	}
-	
-	AIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &UMUAT_MoveToAI::OnMoveCompleted);
-}
-
-void UMUAT_MoveToAI::OnDestroy(bool bInOwnerFinished)
-{
-	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
-	AAIController* AIController = Cast<AAIController>(OwnerPawn->GetController());
-
-	if (AIController)
-	{
-		AIController->StopMovement();
-		AIController->ReceiveMoveCompleted.RemoveAll(this);
-	}
-	
-	Super::OnDestroy(bInOwnerFinished);
-}
-
-void UMUAT_MoveToAI::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
-{
-	if (ShouldBroadcastAbilityTaskDelegates())
-	{
-		MoveCompleted.Broadcast();
 	}
 }

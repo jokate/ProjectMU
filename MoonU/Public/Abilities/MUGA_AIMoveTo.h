@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "AI/AIEnum.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "MUGA_AIMoveTo.generated.h"
 
 /**
@@ -20,8 +21,12 @@ public :
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+	
 	UFUNCTION()
-	void OnCompleteMove();
+	void OnCompleteMove(const FAIRequestID RequestID, EPathFollowingResult::Type InType);
+
+	void OnRetriggered(const FGameplayEventData* EventData);
 
 	UPROPERTY(EditDefaultsOnly)
 	FName TargetKeyName;
@@ -32,4 +37,9 @@ public :
 	UPROPERTY(EditDefaultsOnly)
 	float AcceptanceRadius;
 	
+	UPROPERTY()
+	TObjectPtr<class UMUAT_MoveToAI> MoveToAITask;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTag RetriggerTag;
 };
