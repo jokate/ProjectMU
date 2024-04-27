@@ -11,15 +11,6 @@
  */
 DECLARE_DELEGATE(FOnTimerEnd)
 
-UENUM(BlueprintType)
-enum EDataToChange
-{
-	BOOLTYPE,
-	INTTYPE,
-	FLOATTYPE,
-	VECTORTYPE
-};
-
 UCLASS()
 class MOONU_API UBTS_SetTimerForChangeValue : public UBTService
 {

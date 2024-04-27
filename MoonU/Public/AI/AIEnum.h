@@ -11,4 +11,11 @@ enum ECharacterState
 	Patrol,
 };
 
-
+UENUM(BlueprintType)
+enum EDataToChange
+{
+	BOOLTYPE,
+	INTTYPE,
+	FLOATTYPE,
+	VECTORTYPE
+};
