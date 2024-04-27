@@ -12,10 +12,12 @@ enum ECharacterState
 };
 
 UENUM(BlueprintType)
-enum EDataToChange
+enum EBlackboardKeyData
 {
-	BOOLTYPE,
-	INTTYPE,
-	FLOATTYPE,
-	VECTORTYPE
+	BoolType,
+	IntType,
+	FloatType,
+	VectorType,
+	ActorType,
+	ObjectType
 };

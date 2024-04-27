@@ -3,6 +3,7 @@
 
 #include "AI/Tasks/BTTask_ActivateAbility.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "AIController.h"
 
 EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -23,6 +24,18 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 
 EBTNodeResult::Type UBTTask_ActivateAbility::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	APawn* ControllingPawn = Cast<APawn>(OwnerComp.GetAIOwner()->GetPawn());
+
+	if (ControllingPawn == nullptr)
+	{
+		return EBTNodeResult::Failed;
+	}
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ControllingPawn);
+
+	const FGameplayTagContainer TagContainer(StartAbilityTag);
+	ASC->CancelAbilities(&TagContainer);
+	
 	return Super::AbortTask(OwnerComp, NodeMemory);
 }
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AI/AIEnum.h"
 #include "BehaviorTree/BTService.h"
 #include "BTS_SetTimerForChangeValue.generated.h"
 
@@ -33,7 +34,7 @@ class MOONU_API UBTS_SetTimerForChangeValue : public UBTService
 	float TimerInterval;
 
 	UPROPERTY(EditAnywhere, Category = TimerSetter)
-	TEnumAsByte<EDataToChange> DataTypeToChange;
+	TEnumAsByte<EBlackboardKeyData> DataTypeToChange;
 
 	UPROPERTY(EditAnywhere, Category = TimerSetter)
 	float ChangeValFloat;

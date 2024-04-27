@@ -4,6 +4,7 @@
 #include "AI/Service/BTS_SetTimerForChangeValue.h"
 
 #include "AIController.h"
+#include "AI/AIEnum.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTS_SetTimerForChangeValue::UBTS_SetTimerForChangeValue()
@@ -52,16 +53,16 @@ void UBTS_SetTimerForChangeValue::SetTimerForChangeValue(TWeakObjectPtr<UBehavio
 	
 	switch (DataTypeToChange)
 	{
-	case BOOLTYPE :
+	case BoolType :
 		BBComponent->SetValueAsBool(SelectedKey.SelectedKeyName, ChangeValBool);
 		break;
-	case FLOATTYPE:
+	case FloatType:
 		BBComponent->SetValueAsFloat(SelectedKey.SelectedKeyName, ChangeValFloat);
 		break;
-	case INTTYPE:
+	case IntType:
 		BBComponent->SetValueAsInt(SelectedKey.SelectedKeyName, ChangeValInt);
 		break;
-	case VECTORTYPE:
+	case VectorType:
 		BBComponent->SetValueAsVector(SelectedKey.SelectedKeyName, ChangeValVector);
 		break;
 	default :
