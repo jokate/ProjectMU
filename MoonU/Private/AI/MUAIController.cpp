@@ -4,15 +4,11 @@
 #include "AI/MUAIController.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
-#include "Abilities/GameplayAbilityTypes.h"
 #include "AI/MUAIDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Character/MUCharacterBase.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "Perception/PawnSensingComponent.h"
 
 
 // Sets default values
@@ -22,7 +18,6 @@ AMUAIController::AMUAIController()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerception");
-	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensor");
 }
 
 void AMUAIController::RunAI()
@@ -36,8 +31,6 @@ void AMUAIController::RunAI()
 		RunBehaviorTree(BTAsset);
 	}
 
-	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AMUAIController::OnTargetPerceptionUpdated);
-
 	OnInitialize();
 }
 
@@ -50,8 +43,7 @@ void AMUAIController::StopAI()
 		BTComponent->StopTree();
 	}
 
-	PawnSensingComponent->OnSeePawn.RemoveAll(this);
-	PawnSensingComponent->OnHearNoise.RemoveAll(this);
+	PerceptionComponent->OnTargetPerceptionUpdated.RemoveAll(this);
 }
 
 void AMUAIController::OnInitialize()
@@ -75,10 +67,9 @@ void AMUAIController::OnInitialize()
 	{
 		Blackboard->SetValueAsFloat(MU_AI_ATTACK_RADIUS, AttributeSet->GetAttackRange());
 		Blackboard->SetValueAsFloat(MU_AI_DEFEND_RADIUS, AttributeSet->GetDefendRange());
-	}	
+	}
 
-	PawnSensingComponent->OnSeePawn.AddDynamic(this, &AMUAIController::OnSeenCharacter);
-	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AMUAIController::OnHearCharacter);
+	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AMUAIController::OnTargetPerceptionUpdated);
 }
 
 void AMUAIController::OnPossess(APawn* InPawn)
@@ -90,14 +81,7 @@ void AMUAIController::OnPossess(APawn* InPawn)
 
 void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus)
 {
-	if (InActor == GetPawn())
-	{
-		return;
-	}
-	
-	const bool bIsCharacter = InActor->IsA(AMUCharacterBase::StaticClass());
-
-	if (!bIsCharacter)
+	if (InActor == nullptr)
 	{
 		return;
 	}
@@ -106,59 +90,18 @@ void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Sti
 
 	if (CurrentSense == nullptr)
 	{
-		return; 
+		return;
 	}
-	
-	//Blackboard에 데이터에 관한 주입을 진행한다.
-	SetBlackboardValue(InActor, Stimulus);
 
-	//태그를 전송한다.
-	if (Stimulus.WasSuccessfullySensed())
-	{
-		if (StartTagByPerceptions.Contains(CurrentSense))
-		{
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetPawn(), StartTagByPerceptions[CurrentSense], FGameplayEventData());	
-		}
-	}
-	else
-	{
-		if (EndTagByPerceptions.Contains(CurrentSense))
-		{
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetPawn(), EndTagByPerceptions[CurrentSense], FGameplayEventData());
-		}
-	}
-	
-}
-
-void AMUAIController::SetBlackboardValue(AActor* InActor, const FAIStimulus& Stimulus)
-{
-	if (Stimulus.WasSuccessfullySensed() == false)
+	if (KeyForBlackboard.Contains(CurrentSense) == false)
 	{
 		return;
 	}
-	UBlackboardComponent* BlackboardComponent = Blackboard.Get();
-	if (BlackboardComponent == nullptr)
-	{
-		return;
-	}
+
+	const bool CurrentValue = Stimulus.WasSuccessfullySensed();
+	const FName KeyName = KeyForBlackboard[CurrentSense];
 	
-	BlackboardComponent->SetValueAsObject(MU_AI_TARGET, InActor);
-	BlackboardComponent->SetValueAsVector( MU_AI_INTEREST_POINT, Stimulus.StimulusLocation);
-	
-}
-
-bool AMUAIController::CheckIfForgottenSeenActors()
-{
-	TArray<AActor> OutActors;
-	return false;
-}
-
-void AMUAIController::OnSeenCharacter(APawn* Pawn)
-{
-}
-
-void AMUAIController::OnHearCharacter(APawn* Pawn, const FVector& Location, float Volume)
-{
+	Blackboard->SetValueAsBool(KeyName, CurrentValue);	
 }
 
 
