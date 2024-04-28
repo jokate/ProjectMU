@@ -19,5 +19,6 @@ enum EBlackboardKeyData
 	FloatType,
 	VectorType,
 	ActorType,
-	ObjectType
+	ObjectType,
+	EnumType
 };
