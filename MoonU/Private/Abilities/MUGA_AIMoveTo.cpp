@@ -44,19 +44,11 @@ void UMUGA_AIMoveTo::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 		ASC->GenericGameplayEventCallbacks.Remove(RetriggerTag);
 	}
 	
-	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UMUGA_AIMoveTo::OnCompleteMove(const FAIRequestID RequestID, EPathFollowingResult::Type InType)
 {
-	AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
-
-	if (AvatarActor == nullptr)
-	{
-		return;
-	}
-	
 	bool bEndAbility = true;
 	bool bCancelled = false;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bEndAbility, bCancelled);
