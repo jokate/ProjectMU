@@ -30,6 +30,20 @@ void UMUCharacterAttributeSetBase::PreAttributeChange(const FGameplayAttribute& 
 	}
 }
 
+void UMUCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue,
+	float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+
+	if (Attribute == GetCurrentHpAttribute()) 
+	{
+		if (bOutOfHealth && NewValue > 0.0f)
+		{
+			// Regenerated -> Ability 수행 필요.
+		}
+	}
+}
+
 bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
 {
 	if (!Super::PreGameplayEffectExecute(Data))
