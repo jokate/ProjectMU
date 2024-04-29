@@ -6,19 +6,19 @@
 #include "BTS_AbilityAction.h"
 #include "AI/AIEnum.h"
 #include "BehaviorTree/BTService.h"
-#include "BTS_ActivateAbility.generated.h"
+#include "BTS_CancelAbility.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UBTS_ActivateAbility : public UBTS_AbilityAction
+class MOONU_API UBTS_CancelAbility : public UBTS_AbilityAction
 {
 	GENERATED_BODY()
 
-protected :
+public :
 	virtual void OnActivateNode(UBehaviorTreeComponent& OwnerComp) override;
-
+	
 	UPROPERTY(EditAnywhere, Category = ActivationTag)
-	FGameplayTag ActivationAbilityTag;
+	FGameplayTagContainer DeactivationAbilityTags;
 };

@@ -1,12 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/Service/BTS_ActivateAbility.h"
+#include "AI/Service/BTS_CancelAbility.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "AIController.h"
 
-void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
+void UBTS_CancelAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
 {
 	AAIController* AIController = OwnerComp.GetAIOwner();
 
@@ -22,7 +23,12 @@ void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
 		return;
 	}
 
-	FGameplayEventData EventData;
-	
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn, ActivationAbilityTag, EventData);
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerPawn);
+
+	if (ASC == nullptr)
+	{
+		return;
+	}
+
+	ASC->CancelAbilities(&DeactivationAbilityTags);
 }
