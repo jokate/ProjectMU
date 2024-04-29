@@ -3,27 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTService.h"
-#include "BTS_SetChangeValue.generated.h"
+#include "Abilities/GameplayAbility.h"
+#include "AI/AIEnum.h"
+#include "MUGA_SetValueForBlackboard.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UBTS_SetChangeValue : public UBTService
+class MOONU_API UMUGA_SetValueForBlackboard : public UGameplayAbility
 {
 	GENERATED_BODY()
 
-	UBTS_SetChangeValue();
+	UMUGA_SetValueForBlackboard();
 
-	virtual void OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
-	virtual void OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	
-	void ChangeValue(UBehaviorTreeComponent& OwnerComp);
-	
+	void TryChangeBlackboardValue();
+
 	UPROPERTY(EditAnywhere, Category = ValueSetter)
-	FBlackboardKeySelector SelectedKey;
+	FName SelectedKey;
 	
 	UPROPERTY(EditAnywhere, Category = ValueSetter)
 	TEnumAsByte<EBlackboardKeyData> DataTypeToChange;
@@ -45,7 +44,4 @@ class MOONU_API UBTS_SetChangeValue : public UBTService
 
 	UPROPERTY(EditAnywhere, Category = ValueSetter)
 	FName EnumValue;
-
-	UPROPERTY(EditAnywhere, Category = ActivationMode)
-	bool bBecomeOrCeased;
 };

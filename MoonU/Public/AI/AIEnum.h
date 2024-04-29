@@ -22,3 +22,11 @@ enum EBlackboardKeyData
 	ObjectType,
 	EnumType
 };
+
+UENUM(BlueprintType)
+enum EBTServiceActivationMode
+{
+	TickNode,
+	BecomeRelevant,
+	CeaseRelevant
+};
