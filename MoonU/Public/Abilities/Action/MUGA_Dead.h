@@ -21,6 +21,8 @@ public :
 protected :
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	virtual void OnCharacterDead();
+	
 	UFUNCTION()
 	void OnDeadAnimationEnded();
 	

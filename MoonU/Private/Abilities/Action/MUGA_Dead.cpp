@@ -17,29 +17,49 @@ void UMUGA_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	ACharacter* TargetCharacter = Cast<ACharacter>(ActorInfo->AvatarActor.Get());
-
-	if (TargetCharacter == nullptr)
-	{
-		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
-	}
-
-	auto* CharacterMovement = TargetCharacter->GetCharacterMovement();
-
-	if (CharacterMovement == nullptr)
-	{
-		return;
-	}
-
-	CharacterMovement->SetMovementMode(EMovementMode::MOVE_None);
-	TargetCharacter->SetActorEnableCollision(false);
-
+	OnCharacterDead();
+	
 	UAbilityTask_PlayMontageAndWait* MontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DEADMONTAAGE"), DeadAnimMontage);
 	MontageTask->OnCompleted.AddDynamic(this, &UMUGA_Dead::OnDeadAnimationEnded);
 
 	MontageTask->ReadyForActivation();
+}
+
+void UMUGA_Dead::OnCharacterDead()
+{
+	ACharacter* TargetCharacter = Cast<ACharacter>(CurrentActorInfo->AvatarActor.Get());
+
+	if (TargetCharacter == nullptr)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
 	
+	TargetCharacter->SetActorEnableCollision(false);
 	
+	auto* CharacterMovement = TargetCharacter->GetCharacterMovement();
+
+	if (CharacterMovement == nullptr)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
+
+	CharacterMovement->SetMovementMode(EMovementMode::MOVE_None);
+
+	auto* MeshComp = TargetCharacter->GetMesh();
+
+	if (MeshComp == nullptr)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
+
+	UAnimInstance* AnimInstance = MeshComp->GetAnimInstance();
+
+	if (AnimInstance == nullptr)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
+
+	AnimInstance->StopAllMontages(0.0f);
 }
 
 void UMUGA_Dead::OnDeadAnimationEnded()
