@@ -41,7 +41,6 @@ void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	ASC->InitAbilityActorInfo(this, this);
-	ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_CHARACTERSTATE_DEAD).AddUObject(this, &AMUCharacterNonPlayer::OnDead);
 
 	AbilityInitComponent->InitAbilities();
 }

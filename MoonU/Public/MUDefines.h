@@ -37,6 +37,7 @@
 
 #define MU_CHARACTERSTATE_DODGE FGameplayTag::RequestGameplayTag(FName("Character.State.Dodge"))
 #define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))
+#define MU_EVENT_REGENERATED FGameplayTag::RequestGameplayTag(FName("Event.Regenerated"))
 
 #define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))
 #define MU_CHARACTERSTATE_PARRY FGameplayTag::RequestGameplayTag(FName("Character.State.Parry"))

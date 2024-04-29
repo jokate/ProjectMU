@@ -40,6 +40,9 @@ void UMUCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute&
 		if (bOutOfHealth && NewValue > 0.0f)
 		{
 			// Regenerated -> Ability 수행 필요.
+			// 단 AI의 한정으로 하여 제한을 걸어줘야 한다.
+			bOutOfHealth = false;
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_EVENT_REGENERATED, FGameplayEventData());
 		}
 	}
 }
