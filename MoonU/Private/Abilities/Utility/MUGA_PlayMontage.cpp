@@ -5,12 +5,13 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "GameFramework/Character.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 
 
 UMUGA_PlayMontage::UMUGA_PlayMontage()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	bRetriggerInstancedAbility = true;
 }
 
 void UMUGA_PlayMontage::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -18,17 +19,27 @@ void UMUGA_PlayMontage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
-	ACharacter* Character = Cast<ACharacter>(ActorInfo->AvatarActor.Get());
+	UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayMontage"), MontageToPlay);
 
-	if (!Character)
-	{
-		return;
-	}
+	PlayMontageTask->OnCompleted.AddDynamic(this, &UMUGA_PlayMontage::OnMontagePlayed);
+	PlayMontageTask->OnInterrupted.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);
+	PlayMontageTask->OnBlendOut.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);
+	PlayMontageTask->OnCancelled.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);
 
-	Character->PlayAnimMontage(MontageToPlay);
-	
-	//명시적으로 Ability가 끝났음을 알림
+	PlayMontageTask->ReadyForActivation();
+}
+
+void UMUGA_PlayMontage::OnMontagePlayed()
+{
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = false;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+}
+
+void UMUGA_PlayMontage::OnMontageInterrupted()
+{
 	bool bReplicatedEndAbility = true;
 	bool bWasCancelled = true;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
+

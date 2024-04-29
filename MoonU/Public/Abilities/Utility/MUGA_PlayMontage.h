@@ -19,6 +19,12 @@ public :
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	UFUNCTION()
+	void OnMontagePlayed();
+
+	UFUNCTION()
+	void OnMontageInterrupted();
+	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UAnimMontage> MontageToPlay;
 };
