@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MUGA_Dead.h"
+#include "Abilities/Action/MUGA_Dead.h"
 #include "MUGA_AIDead.generated.h"
 
 /**

@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_AIDead.h"
+#include "Abilities/AI/MUGA_AIDead.h"
 
 #include "AI/MUAIController.h"
 #include "GameFramework/Character.h"

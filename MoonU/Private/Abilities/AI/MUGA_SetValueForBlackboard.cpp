@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_SetValueForBlackboard.h"
+#include "Abilities/AI/MUGA_SetValueForBlackboard.h"
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"

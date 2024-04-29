@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_Sprint.h"
+#include "Abilities/Action/MUGA_Sprint.h"
 
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"

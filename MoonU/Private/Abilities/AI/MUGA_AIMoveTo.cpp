@@ -1,13 +1,12 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_AIMoveTo.h"
+#include "Abilities/AI/MUGA_AIMoveTo.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AIController.h"
 #include "Abilities/AT/MUAT_MoveToAI.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 UMUGA_AIMoveTo::UMUGA_AIMoveTo()
 {

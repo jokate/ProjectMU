@@ -1,14 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_AttackTrace.h"
+#include "Abilities/Utility/MUGA_AttackTrace.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "MUDefines.h"
-#include "ParticleHelper.h"
 #include "Abilities/AT/MUAT_Trace.h"
-#include "Perception/AISense_Damage.h"
 
 UMUGA_AttackTrace::UMUGA_AttackTrace()
 {

@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_HitReaction.h"
+#include "Abilities/Utility/MUGA_HitReaction.h"
 
 UMUGA_HitReaction::UMUGA_HitReaction()
 {

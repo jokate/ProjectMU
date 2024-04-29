@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Abilities/MUGA_ChargeAttack.h"
+#include "Abilities/Action/MUGA_ChargeAttack.h"
 
 #include "MUDefines.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
