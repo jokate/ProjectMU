@@ -43,3 +43,12 @@ enum EPerceptionType
 	Damage,
 	Hearing
 };
+
+UENUM(BlueprintType)
+enum ECharacterType
+{
+	Neutral = 0,
+	Player,
+	AI,
+	BossAI,
+};

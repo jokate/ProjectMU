@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "MUDefines.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -27,6 +28,7 @@ void AMUTA_TraceWeapon::TraceStart()
 	Super::TraceStart();
 
 	ACharacter* Character = CastChecked<ACharacter>(SourceActor);
+	const IGenericTeamAgentInterface* SourceActorTeam = CastChecked<IGenericTeamAgentInterface>(SourceActor);
 
 	const auto* MeshComp = Character->GetMesh();
 
@@ -34,7 +36,7 @@ void AMUTA_TraceWeapon::TraceStart()
 	{
 		return;
 	}
-
+	
 	const FVector& WeaponSocketLocation = MeshComp->GetSocketLocation(WeaponSocketName);
 	const FVector End = WeaponSocketLocation + FVector::UpVector;
 	TArray<AActor*> ActorsToIgnore;
@@ -46,8 +48,14 @@ void AMUTA_TraceWeapon::TraceStart()
 
 	for (const auto& HitResult : HitResults)
 	{
+		
 		if (AActor* HitActor = HitResult.GetActor())
 		{
+			if (SourceActorTeam->GetTeamAttitudeTowards(*HitActor) != ETeamAttitude::Hostile)
+			{
+				continue;
+			}
+			
 			if (!QueryActors.Contains(HitActor))
 			{
 				QueryActors.Add(HitActor);

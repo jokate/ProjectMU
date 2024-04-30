@@ -14,7 +14,7 @@
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IGenericTeamAgentInterface, public IMUPlayer
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer
 {
 	GENERATED_BODY()
 

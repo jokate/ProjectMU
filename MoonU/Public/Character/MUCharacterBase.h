@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagAssetInterface.h"
+#include "GenericTeamAgentInterface.h"
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
 #include "Interface/Defender.h"
@@ -13,7 +14,7 @@
 #include "MUCharacterBase.generated.h"
 
 UCLASS()
-class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface, public IDefender
+class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface, public IDefender, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -64,6 +65,16 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	const FTransform GetDefendTransform_BP();
 #pragma endregion
+
+#pragma region IGenericTeamAgentInterface
+	
+	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override;
+
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
+	virtual FGenericTeamId GetGenericTeamId() const override;
+	
+#pragma endregion 
 	
 protected :
 	UPROPERTY()

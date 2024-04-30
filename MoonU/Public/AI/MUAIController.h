@@ -29,6 +29,10 @@ public:
 
 	UFUNCTION()
 	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
+
+#pragma region IGenericTeamAgentInteface
+	ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+#pragma endregion 
 	
 protected :
 	UPROPERTY(EditAnywhere)
@@ -43,4 +47,7 @@ protected :
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UBehaviorTree> BTAsset;
 
+
+	UPROPERTY(EditDefaultsOnly)
+	TEnumAsByte<ECharacterType> CharacterType;
 };

@@ -89,6 +89,34 @@ const FTransform AMUCharacterBase::GetDefendTransform()
 	return GetDefendTransform_BP();
 }
 
+void AMUCharacterBase::SetGenericTeamId(const FGenericTeamId& TeamID)
+{
+	if (IGenericTeamAgentInterface* GenericTeamAgentInterface = Cast<IGenericTeamAgentInterface>(GetController()))
+	{
+		GenericTeamAgentInterface->SetGenericTeamId(TeamID);
+	}
+}
+
+ETeamAttitude::Type AMUCharacterBase::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	if (const IGenericTeamAgentInterface* GenericTeamAgentInterface = Cast<IGenericTeamAgentInterface>(GetController()))
+	{
+		return GenericTeamAgentInterface->GetTeamAttitudeTowards(Other);
+	}
+
+	return ETeamAttitude::Neutral;
+}
+
+FGenericTeamId AMUCharacterBase::GetGenericTeamId() const
+{
+	if (const IGenericTeamAgentInterface* GenericTeamAgentInterface = Cast<IGenericTeamAgentInterface>(GetController()))
+	{
+		return GenericTeamAgentInterface->GetGenericTeamId();
+	}
+
+	return FGenericTeamId::NoTeam;
+}
+
 
 UMotionWarpingComponent* AMUCharacterBase::GetMotionWarpComponent()
 {

@@ -77,6 +77,8 @@ void AMUAIController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 	
 	RunAI();
+	
+	SetGenericTeamId(FGenericTeamId(CharacterType));
 }
 
 void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus)
@@ -108,5 +110,31 @@ void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Sti
 	
 	Blackboard->SetValueAsBool(KeyName, CurrentValue);	
 }
+
+ETeamAttitude::Type AMUAIController::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	if (const APawn* OtherPawn = Cast<APawn>(&Other))
+	{
+		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController()))
+		{
+			const FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();
+
+			if (OtherTeamID.GetId() == ECharacterType::Neutral)
+			{
+				return ETeamAttitude::Neutral;
+			}
+			
+			if (OtherTeamID.GetId() != GetGenericTeamId())
+			{
+				return ETeamAttitude::Hostile;
+			}
+
+			return ETeamAttitude::Friendly;
+		}
+	}
+
+	return ETeamAttitude::Neutral;
+}
+
 
 
