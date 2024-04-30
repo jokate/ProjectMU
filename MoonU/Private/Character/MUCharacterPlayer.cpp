@@ -14,6 +14,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/TimelineComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Framework/MUPlayerState.h"
 #include "Interface/TimeWinder.h"
@@ -35,6 +36,8 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
+
+	TimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("TimelineComp"));
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +53,13 @@ void AMUCharacterPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+
+	if (CameraMovementCurve)
+	{
+		FOnTimelineFloat TimelineProgress;
+		TimelineProgress.BindDynamic(this, &AMUCharacterPlayer::OnTimelineProgressed);
+		TimelineComponent->AddInterpFloat(CameraMovementCurve, TimelineProgress);
 	}
 }
 
@@ -83,6 +93,11 @@ void AMUCharacterPlayer::PostInitializeComponents()
 ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	return ETeamAttitude::Hostile;
+}
+
+void AMUCharacterPlayer::OnTimelineProgressed(float Value)
+{
+	CameraBoom->TargetArmLength = Value;
 }
 
 // Called to bind functionality to input
@@ -243,10 +258,12 @@ void AMUCharacterPlayer::TimeWindActivate(bool InActivationMode)
 		if (InActivationMode)
 		{
 			TimeWinder->TimeWindActivate();
+			TimelineComponent->Play();
 		}
 		else
 		{
-			TimeWinder->TimeWindDeactivate();			
+			TimeWinder->TimeWindDeactivate();
+			TimelineComponent->Reverse();
 		}
 	}
 }
