@@ -34,9 +34,17 @@ protected:
 	void StartComboTimer();
 
 	void CheckComboInput();
+
+	void UpdateComboTimer();
+
+	void OnRetriggered(const FGameplayEventData* EventData);
+	
 protected:
 	UPROPERTY()
 	TObjectPtr<class UMUComboActionData> CurrentComboData;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTag RetriggerTag;
 
 	uint8 CurrentCombo = 0;
 

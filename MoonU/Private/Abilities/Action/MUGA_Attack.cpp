@@ -43,6 +43,11 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	PlayAttackTask->ReadyForActivation();
 
 	CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
+
+	if (RetriggerTag.IsValid())
+	{
+		ASC->GenericGameplayEventCallbacks.FindOrAdd(RetriggerTag).AddUObject(this, &UMUGA_Attack::OnRetriggered);	
+	}
 	
 	StartComboTimer();
 }
@@ -69,7 +74,11 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-
+	if (RetriggerTag.IsValid())
+	{
+		ASC->GenericGameplayEventCallbacks.Remove(RetriggerTag);
+	}
+	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CharacterPlayer, MU_EVENT_ATTACKFINISHED, FGameplayEventData());
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
@@ -98,16 +107,9 @@ void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const F
 		HasNextComboInput = false;
 		return;
 	}
+	
 
-	if (!ComboTimerHandle.IsValid()) 
-	{
-		HasNextComboInput = false;
-	}
-	else
-	{
-		CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
-		HasNextComboInput = true;
-	}
+	UpdateComboTimer();
 }
 
 void UMUGA_Attack::OnCompleteCallback()
@@ -163,4 +165,24 @@ void UMUGA_Attack::CheckComboInput()
 		StartComboTimer();
 		HasNextComboInput = false;
 	}
+}
+
+void UMUGA_Attack::UpdateComboTimer()
+{
+	AMUCharacterBase* CharacterPlayer = CastChecked<AMUCharacterBase>(CurrentActorInfo->AvatarActor.Get());
+	
+	if (!ComboTimerHandle.IsValid()) 
+	{
+		HasNextComboInput = false;
+	}
+	else
+	{
+		CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
+		HasNextComboInput = true;
+	}
+}
+
+void UMUGA_Attack::OnRetriggered(const FGameplayEventData* EventData)
+{
+	UpdateComboTimer();
 }

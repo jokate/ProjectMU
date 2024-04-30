@@ -29,7 +29,10 @@ void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 		return;
 	}
 
-	const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
+	if (ASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()))
+	{
+		const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
 
-	ASC->SetNumericAttributeBase(UMUCharacterAttributeSet::GetCurrentStaminaAttribute(), CurrentStamina - StaminaToUse);
+		ASC->SetNumericAttributeBase(UMUCharacterAttributeSet::GetCurrentStaminaAttribute(), CurrentStamina - StaminaToUse);	
+	}
 }
