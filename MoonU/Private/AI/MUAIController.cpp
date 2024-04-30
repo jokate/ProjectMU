@@ -115,7 +115,7 @@ ETeamAttitude::Type AMUAIController::GetTeamAttitudeTowards(const AActor& Other)
 {
 	if (const APawn* OtherPawn = Cast<APawn>(&Other))
 	{
-		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController()))
+		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn))
 		{
 			const FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();
 

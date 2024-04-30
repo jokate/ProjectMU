@@ -29,7 +29,7 @@ ETeamAttitude::Type AMUPlayerController::GetTeamAttitudeTowards(const AActor& Ot
 {
 	if (const APawn* OtherPawn = Cast<APawn>(&Other))
 	{
-		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController()))
+		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn))
 		{
 			const FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();
 
