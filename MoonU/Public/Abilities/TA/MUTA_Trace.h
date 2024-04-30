@@ -18,6 +18,7 @@ public:
 	AMUTA_Trace();
 
 protected:
+	
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:
@@ -32,6 +33,8 @@ public:
 	virtual void TraceStart();
 
 	virtual void InitializeData(int32 Combo, TSubclassOf<class UGameplayEffect> DamageEffect);
+
+	virtual void ProcessHitResult(const TArray<FHitResult>& HitResults);
 
 protected:
 	UPROPERTY()

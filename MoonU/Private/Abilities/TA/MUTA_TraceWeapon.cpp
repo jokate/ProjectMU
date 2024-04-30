@@ -25,8 +25,6 @@ void AMUTA_TraceWeapon::Tick(float DeltaSeconds)
 
 void AMUTA_TraceWeapon::TraceStart()
 {
-	Super::TraceStart();
-
 	ACharacter* Character = CastChecked<ACharacter>(SourceActor);
 	const IGenericTeamAgentInterface* SourceActorTeam = CastChecked<IGenericTeamAgentInterface>(SourceActor);
 
@@ -45,44 +43,6 @@ void AMUTA_TraceWeapon::TraceStart()
 	UKismetSystemLibrary::SphereTraceMultiByProfile(this, WeaponSocketLocation,
 		End, 50.0f, TEXT("Weapon"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
 		FLinearColor::Red, FLinearColor::Green, 1.0f);
-
-	for (const auto& HitResult : HitResults)
-	{
-		
-		if (AActor* HitActor = HitResult.GetActor())
-		{
-			if (SourceActorTeam->GetTeamAttitudeTowards(*HitActor) != ETeamAttitude::Hostile)
-			{
-				continue;
-			}
-			
-			if (!QueryActors.Contains(HitActor))
-			{
-				QueryActors.Add(HitActor);
-
-				// 쿼리 액터에 없는 경우 (판단이 아직 안된 객체의 경우 최초 감지 시, HitResult와 함께 넘겨준다.
-				
-				FGameplayEventData GameplayEventData;
-				GameplayEventData.Instigator = OwningAbility->GetAvatarActorFromActorInfo();
-				GameplayEventData.EventMagnitude = CurrentCombo;
-				FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = new FGameplayAbilityTargetData_SingleTargetHit(HitResult);
-				
-				GameplayEventData.TargetData.Add(SingleTargetHit);
-
-				UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
-				if (ASC)
-				{
-					FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
-					FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
-
-					if (EffectSpecHandle.IsValid())
-					{
-						ASC->BP_ApplyGameplayEffectSpecToSelf(EffectSpecHandle);
-					}
-				}
-				
-				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
-			}
-		}
-	} 
+	
+	ProcessHitResult(HitResults);
 }
