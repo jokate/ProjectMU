@@ -14,7 +14,12 @@ void UMUHpWidget::SetAbilitySystemComponent(AActor* InOwner)
 	{
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSetBase::GetCurrentHpAttribute()).AddUObject(this, &UMUHpWidget::OnHpChanged);
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSetBase::GetMaxHpAttribute()).AddUObject(this, &UMUHpWidget::OnMaxHpChanged);
+
+		CurrentHealth = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetCurrentHpAttribute());
+		CurrentMaxHealth = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetMaxHpAttribute());
 	}
+
+	UpdateHPBar_BP();
 }
 
 void UMUHpWidget::OnHpChanged(const FOnAttributeChangeData& ChangeData)

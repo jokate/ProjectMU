@@ -24,4 +24,7 @@ protected :
 protected :
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnStaminaChanged_BP(float CurrentStamina);
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UMUHpWidget> HPWidget;
 };

@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "UI/MUHpWidget.h"
 
 void UMUHUDWidget::SetAbilitySystemComponent(AActor* InOwner)
 {
@@ -25,6 +26,8 @@ void UMUHUDWidget::SetAbilitySystemComponent(AActor* InOwner)
 				OnStaminaChanged_BP(CurrentStamina);
 			}
 		}
+
+		HPWidget->SetAbilitySystemComponent(InOwner);
 	}
 }
 
