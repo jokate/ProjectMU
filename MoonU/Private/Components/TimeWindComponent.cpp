@@ -181,13 +181,9 @@ void UTimeWindComponent::TimeRewind()
 
 void UTimeWindComponent::Record()
 {
-	if (!bIsMaxRecordInit)
-	{
-		bIsMaxRecordInit = true;
-		MaxRecord = FMath::RoundToInt32(RecordTime/ GetWorld()->GetDeltaSeconds());
-	}
+	MaxRecord = FMath::RoundToInt32(RecordTime/ GetWorld()->GetDeltaSeconds());
 	
-	if (RecordDatas.Num() > MaxRecord)
+	while (RecordDatas.Num() > MaxRecord)
 	{
 		RecordDatas.RemoveAt(MaxRecord);
 	}
