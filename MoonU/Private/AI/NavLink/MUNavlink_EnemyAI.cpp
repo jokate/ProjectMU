@@ -3,9 +3,9 @@
 
 #include "AI/NavLink/MUNavlink_EnemyAI.h"
 
-#include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Data/MUStruct.h"
+#include "Utility/VectorWrapper.h"
 
 
 // Sets default values
@@ -25,16 +25,12 @@ void AMUNavlink_EnemyAI::BeginPlay()
 
 void AMUNavlink_EnemyAI::OnAIReachedToPoint(AActor* MovingActor, const FVector& DestinationPoint)
 {
-	ACharacter* Character = Cast<ACharacter>(MovingActor);
+	FGameplayEventData EventData;
 
-	if (Character == nullptr)
-	{
-		return;
-	}
-	
-	FVector OutVector;
-	UGameplayStatics::SuggestProjectileVelocity_CustomArc(this, OutVector, Character->GetActorLocation(), DestinationPoint);
+	UVectorWrapper* VectorWrapper = NewObject<UVectorWrapper>();
+	VectorWrapper->SetVector(DestinationPoint);
+	EventData.OptionalObject = VectorWrapper;
 
-	Character->LaunchCharacter(OutVector, true, true);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MovingActor, EventSendTag, EventData);
 }
 

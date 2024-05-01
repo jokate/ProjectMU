@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Navigation/NavLinkProxy.h"
 #include "MUNavlink_EnemyAI.generated.h"
 
@@ -23,4 +24,7 @@ public:
 
 	UFUNCTION()
 	virtual void OnAIReachedToPoint(AActor* MovingActor, const FVector& DestinationPoint);
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTag EventSendTag;
 };
