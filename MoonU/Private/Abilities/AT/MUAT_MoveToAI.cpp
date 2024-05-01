@@ -27,6 +27,8 @@ void UMUAT_MoveToAI::Activate()
 	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
 	
 	AIController->ReceiveMoveCompleted.AddDynamic(this, &UMUAT_MoveToAI::OnMoveCompleted);
+
+	SetWaitingOnAvatar();
 }
 
 void UMUAT_MoveToAI::OnDestroy(bool bInOwnerFinished)
