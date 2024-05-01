@@ -5,7 +5,7 @@
 
 UBTS_AbilityAction::UBTS_AbilityAction()
 {
-	bTickIntervals = true;
+	bNotifyTick = true;
 	bNotifyBecomeRelevant = true;
 	bNotifyCeaseRelevant = true;
 }

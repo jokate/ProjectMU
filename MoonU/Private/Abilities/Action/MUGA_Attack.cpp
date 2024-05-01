@@ -43,11 +43,6 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	PlayAttackTask->ReadyForActivation();
 
 	CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
-
-	if (RetriggerTag.IsValid())
-	{
-		ASC->GenericGameplayEventCallbacks.FindOrAdd(RetriggerTag).AddUObject(this, &UMUGA_Attack::OnRetriggered);	
-	}
 	
 	StartComboTimer();
 }
@@ -74,10 +69,6 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-	if (RetriggerTag.IsValid())
-	{
-		ASC->GenericGameplayEventCallbacks.Remove(RetriggerTag);
-	}
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CharacterPlayer, MU_EVENT_ATTACKFINISHED, FGameplayEventData());
 	
@@ -87,27 +78,29 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	AMUCharacterPlayer* CharacterPlayer = CastChecked<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
-	
-	UAbilitySystemComponent* ASC = CharacterPlayer->GetAbilitySystemComponent();
+	AMUCharacterPlayer* CharacterPlayer = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 
-	if (!ASC)
+	if (CharacterPlayer)
 	{
-		return;
-	}
-	const UMUCharacterAttributeSet* Attributes = ASC->GetSet<UMUCharacterAttributeSet>();
+		UAbilitySystemComponent* ASC = CharacterPlayer->GetAbilitySystemComponent();
 
-	if (!Attributes)
-	{
-		return;
-	}
+		if (!ASC)
+		{
+			return;
+		}
+		const UMUCharacterAttributeSet* Attributes = ASC->GetSet<UMUCharacterAttributeSet>();
 
-	if (Attributes->GetCurrentStamina() <= MinStaminaToAttack)
-	{
-		HasNextComboInput = false;
-		return;
+		if (!Attributes)
+		{
+			return;
+		}
+
+		if (Attributes->GetCurrentStamina() <= MinStaminaToAttack)
+		{
+			HasNextComboInput = false;
+			return;
+		}
 	}
-	
 
 	UpdateComboTimer();
 }
@@ -180,9 +173,4 @@ void UMUGA_Attack::UpdateComboTimer()
 		CharacterPlayer->SetMotionWarp(COMBO_MOTION_WARP, RotationOnly);
 		HasNextComboInput = true;
 	}
-}
-
-void UMUGA_Attack::OnRetriggered(const FGameplayEventData* EventData)
-{
-	UpdateComboTimer();
 }

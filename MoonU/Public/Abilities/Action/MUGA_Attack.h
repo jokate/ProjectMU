@@ -21,7 +21,6 @@ public :
 	virtual void CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility) override;
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	virtual void InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
-
 protected:
 	UFUNCTION()
 	void OnCompleteCallback();
@@ -36,15 +35,10 @@ protected:
 	void CheckComboInput();
 
 	void UpdateComboTimer();
-
-	void OnRetriggered(const FGameplayEventData* EventData);
 	
 protected:
 	UPROPERTY()
 	TObjectPtr<class UMUComboActionData> CurrentComboData;
-
-	UPROPERTY(EditDefaultsOnly)
-	FGameplayTag RetriggerTag;
 
 	uint8 CurrentCombo = 0;
 

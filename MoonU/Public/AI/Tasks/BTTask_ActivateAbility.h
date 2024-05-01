@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbilityTypes.h"
+#include "AI/AIEnum.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_ActivateAbility.generated.h"
 
@@ -21,7 +22,13 @@ class MOONU_API UBTTask_ActivateAbility : public UBTTaskNode
 
 	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 protected :
+
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<EAbilityActivationMode> ActivationMode;
 	
 	UPROPERTY(EditAnywhere)
 	FGameplayTag StartAbilityTag;
+
+	UPROPERTY(EditAnywhere)
+	int32 InputID;
 };

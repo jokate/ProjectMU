@@ -30,3 +30,10 @@ enum EBTServiceActivationMode
 	BecomeRelevant,
 	CeaseRelevant
 };
+
+UENUM(BlueprintType)
+enum EAbilityActivationMode
+{
+	ByEvent,
+	ByInputID,
+};

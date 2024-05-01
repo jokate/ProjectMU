@@ -16,8 +16,33 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 	{
 		return EBTNodeResult::Failed;
 	}
-	
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, StartAbilityTag, FGameplayEventData());
+
+	switch (ActivationMode)
+	{
+	case ByEvent :
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, StartAbilityTag, FGameplayEventData());
+		break;
+
+	case ByInputID :
+		{
+			UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ControllingPawn);
+			if (ASC == nullptr)
+			{
+				break;
+			}
+			
+			FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputID);
+
+			if (Spec->IsActive())
+			{
+				ASC->AbilitySpecInputPressed(*Spec);	
+			}
+			else
+			{
+				ASC->TryActivateAbility(Spec->Handle);
+			}
+		}
+	}
 	
 	return EBTNodeResult::Succeeded;
 }
