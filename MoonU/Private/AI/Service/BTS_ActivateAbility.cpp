@@ -4,6 +4,7 @@
 #include "AI/Service/BTS_ActivateAbility.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "AIController.h"
 
 void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
@@ -24,5 +25,34 @@ void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
 
 	FGameplayEventData EventData;
 	
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn, ActivationAbilityTag, EventData);
+	switch (ActivationMode)
+	{
+	case ByEvent :
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn, ActivationAbilityTag, FGameplayEventData());
+		break;
+
+	case ByInputID :
+		{
+			UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerPawn);
+			if (ASC == nullptr)
+			{
+				break;
+			}
+			
+			FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputID);
+
+			if (Spec->IsActive())
+			{
+				ASC->AbilitySpecInputPressed(*Spec);	
+			}
+			else
+			{
+				ASC->TryActivateAbility(Spec->Handle);
+			}
+		}
+	default :
+		UE_LOG(LogTemp, Warning, TEXT("INVALID!"));
+		break;
+	}
+	
 }

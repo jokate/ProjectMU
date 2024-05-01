@@ -42,6 +42,9 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 				ASC->TryActivateAbility(Spec->Handle);
 			}
 		}
+	default :
+		UE_LOG(LogTemp, Warning, TEXT("INVALID!"));
+		break;
 	}
 	
 	return EBTNodeResult::Succeeded;
