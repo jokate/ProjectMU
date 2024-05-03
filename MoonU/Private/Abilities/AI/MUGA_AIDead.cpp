@@ -20,6 +20,8 @@ void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		if (AIController)
 		{
 			AIController->StopAI();
+
+			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 		}
 	}
 }
