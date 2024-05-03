@@ -35,7 +35,6 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 		return;
 	}
 	const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
-	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	
 	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
 
@@ -81,7 +80,6 @@ void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 		return;
 	}
 
-	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 

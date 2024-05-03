@@ -33,8 +33,6 @@ void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return;
 	}
 
-	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-
 	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("Charge"), MontageToPlay, 1.0f);
 	NewTask->OnCompleted.AddDynamic(this, &UMUGA_ChargeAttack::OnCompleteCallback);
 	NewTask->OnInterrupted.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
@@ -62,8 +60,6 @@ void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
-	
-	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

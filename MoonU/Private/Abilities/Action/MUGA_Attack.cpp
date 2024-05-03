@@ -32,8 +32,6 @@ void UMUGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		return;
 	}
 	
-	ASC->AddLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-	
 	CurrentComboData = CharacterPlayer->GetComboActionData();
 	
 	UAbilityTask_PlayMontageAndWait* PlayAttackTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayCombo"), CurrentComboData->AnimMontage, 1.0f, GetNextSection());
@@ -67,8 +65,6 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	{
 		return;
 	}
-	
-	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CharacterPlayer, MU_EVENT_ATTACKFINISHED, FGameplayEventData());
 	
