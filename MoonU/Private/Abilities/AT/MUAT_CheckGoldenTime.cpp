@@ -15,7 +15,7 @@ UMUAT_CheckGoldenTime* UMUAT_CheckGoldenTime::CreateNewTask(UGameplayAbility* In
 {
 	UMUAT_CheckGoldenTime* GoldenTimeTask = NewAbilityTask<UMUAT_CheckGoldenTime>(InAbility);
 	GoldenTimeTask->GoldenTimeRate = InGoldenTimeRate;
-
+	GoldenTimeTask->bGoldenTimeTicking = true;
 	return GoldenTimeTask;
 }
 
@@ -70,7 +70,7 @@ void UMUAT_CheckGoldenTime::TickTask(float DeltaTime)
 
 		if (CurrentGoldenTime >= GoldenTimeRate)
 		{
-			GoldenTimeSatisFied.Broadcast();
+			GoldenTimeSatisfied.Broadcast();
 		}
 		
 	}

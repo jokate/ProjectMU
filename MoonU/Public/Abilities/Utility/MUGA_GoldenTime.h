@@ -14,6 +14,8 @@ class MOONU_API UMUGA_GoldenTime : public UGameplayAbility
 {
 	GENERATED_BODY()
 
+	UMUGA_GoldenTime();
+
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 	UFUNCTION()

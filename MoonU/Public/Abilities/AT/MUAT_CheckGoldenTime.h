@@ -26,7 +26,7 @@ public :
 	
 	virtual void OnDestroy(bool bInOwnerFinished) override;
 	
-	FGoldenTimeSatisFied GoldenTimeSatisFied;
+	FGoldenTimeSatisFied GoldenTimeSatisfied;
 protected :
 	virtual void TickTask(float DeltaTime) override;
 

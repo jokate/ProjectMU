@@ -5,6 +5,11 @@
 
 #include "Abilities/AT/MUAT_CheckGoldenTime.h"
 
+UMUGA_GoldenTime::UMUGA_GoldenTime()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
 void UMUGA_GoldenTime::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                        const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                        const FGameplayEventData* TriggerEventData)
@@ -13,7 +18,7 @@ void UMUGA_GoldenTime::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	UMUAT_CheckGoldenTime* GoldenTimeTask = UMUAT_CheckGoldenTime::CreateNewTask(this, GoldenTime);
 
-	GoldenTimeTask->GoldenTimeSatisFied.AddDynamic(this, &UMUGA_GoldenTime::UMUGA_GoldenTime::OnGoldenTimeFinished);
+	GoldenTimeTask->GoldenTimeSatisfied.AddDynamic(this, &UMUGA_GoldenTime::UMUGA_GoldenTime::OnGoldenTimeFinished);
 
 	GoldenTimeTask->ReadyForActivation();
 }
@@ -21,7 +26,15 @@ void UMUGA_GoldenTime::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UMUGA_GoldenTime::OnGoldenTimeFinished()
 {
 	UE_LOG(LogTemp, Log, TEXT("GOLDEN TIME"));
+
+	AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
+	if (AvatarActor)
+	{
+		AvatarActor->Destroy();	
+	}
+	
 	bool bReplicatedEndAbility = true;
 	bool bWasCancelled = false;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
+
