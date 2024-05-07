@@ -26,6 +26,7 @@
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
 #define MU_EVENT_TRACEEND  FGameplayTag::RequestGameplayTag(FName("Event.TraceEnd"))
 #define MU_EVENT_ONHIT FGameplayTag::RequestGameplayTag(FName("Event.Character.OnHit"))
+#define MU_EVENT_HITCOMPLETE FGameplayTag::RequestGameplayTag(FName("Event.HitComplete"))
 #define MU_EVENT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewind"))
 #define MU_EVENT_TIMEREWINDEND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewindEnd"))
 

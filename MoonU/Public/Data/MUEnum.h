@@ -52,3 +52,10 @@ enum ECharacterType
 	AI,
 	BossAI,
 };
+
+UENUM(BlueprintType)
+enum EEffectApplicationMode
+{
+	Self,
+	Target,
+};

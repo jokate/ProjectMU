@@ -69,7 +69,6 @@ bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCa
 				Data.EvaluatedData.Magnitude *= GetDefendRate();
 				return true;
 			}
-			
 		}
 	}
 
@@ -87,8 +86,19 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	}
 	else if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
-		
 		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
+
+		const FGameplayEffectContextHandle& EffectContext = Data.EffectSpec.GetEffectContext();
+		AActor* InstigatorActor = EffectContext.GetInstigator();
+
+		if (InstigatorActor)
+		{
+			//여기서 관련 데이터를 업데이팅을 해줘야 한다.
+			FGameplayEventData EventData;
+			EventData.Instigator = GetOwningAbilitySystemComponent()->GetAvatarActor();
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_HITCOMPLETE, EventData);
+		}
+		
 		SetDamage(0);
 	}
 

@@ -22,6 +22,11 @@ void UMUCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& Attr
 	}
 }
 
+void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+}
+
 bool UMUCharacterAttributeSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
 {
 	return Super::PreGameplayEffectExecute(Data);
@@ -36,10 +41,5 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetCurrentStaminaAttribute())
 	{
 		CurrentStamina = FMath::Clamp(GetCurrentStamina(), MinValue, GetMaxStamina());
-	}
-
-	if (Data.EvaluatedData.Attribute == GetCurrentTimeGaugeAttribute())
-	{
-		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());
 	}
 }

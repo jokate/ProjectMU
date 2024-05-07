@@ -9,6 +9,7 @@
 #include "MUDefines.h"
 #include "Abilities/GameplayAbility.h"
 #include "GameFramework/Character.h"
+#include "Interface/MUPlayer.h"
 
 
 class IGenericTeamAgentInterface;
@@ -81,7 +82,10 @@ void AMUTA_Trace::InitializeData(int32 Combo, TSubclassOf<UGameplayEffect> Damag
 void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 {
 	ACharacter* Character = CastChecked<ACharacter>(SourceActor);
+	
 	const IGenericTeamAgentInterface* SourceActorTeam = CastChecked<IGenericTeamAgentInterface>(SourceActor);
+
+	UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Character);
 	
 	for (const auto& HitResult : HitResults)
 	{
@@ -105,15 +109,16 @@ void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 				
 				GameplayEventData.TargetData.Add(SingleTargetHit);
 
-				UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
-				if (ASC)
+				//Hit가 된 캐릭터에게 즉각적으로 데미지를 가하는 로직.
+				UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
+				if (SourceASC)
 				{
-					FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
-					FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
+					FGameplayEffectContextHandle EffectContext = SourceASC->MakeEffectContext();
+					FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
 
 					if (EffectSpecHandle.IsValid())
 					{
-						ASC->BP_ApplyGameplayEffectSpecToSelf(EffectSpecHandle);
+						SourceASC->BP_ApplyGameplayEffectSpecToTarget(EffectSpecHandle, TargetASC);
 					}
 				}
 				
