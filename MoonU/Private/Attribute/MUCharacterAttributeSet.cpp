@@ -9,7 +9,7 @@ UMUCharacterAttributeSet::UMUCharacterAttributeSet()
       MaxStamina(100.0f),
 	  CurrentTimeGauge(0.0f),
 	  MaxTimeGauge(100.0f),
-	  TimewindConsumption(0.25f)
+	  TimewindConsumption(0.1f)
 {
 }
 
@@ -42,5 +42,10 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetCurrentStaminaAttribute())
 	{
 		CurrentStamina = FMath::Clamp(GetCurrentStamina(), MinValue, GetMaxStamina());
+	}
+
+	if (Data.EvaluatedData.Attribute == GetCurrentTimeGaugeAttribute())
+	{
+		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());
 	}
 }
