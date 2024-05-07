@@ -79,6 +79,11 @@ FOnTimeWindStateChanged& AMUCharacterBase::GetTimeWindStateChangeEvent()
 	return TimeWindComponent->GetTimeWindStateChangeEvent();
 }
 
+FOnTimewindEnd& AMUCharacterBase::GetTimeWindEndEvent()
+{
+	return TimeWindComponent->GetTimeWindEndEvent();
+}
+
 const FVector AMUCharacterBase::GetDefendRange()
 {
 	return DefendExtent;

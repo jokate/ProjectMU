@@ -12,6 +12,7 @@
 // This class does not need to be modified.
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTimeWindStateChanged, bool bActive);
+DECLARE_MULTICAST_DELEGATE(FOnTimewindEnd);
 
 UINTERFACE()
 class UTimeWindTarget : public UInterface
@@ -30,4 +31,6 @@ public:
 	virtual const bool GetTimeWind() = 0;
 
 	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() = 0;
+
+	virtual FOnTimewindEnd& GetTimeWindEndEvent() = 0;
 };

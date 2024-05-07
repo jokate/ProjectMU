@@ -8,7 +8,8 @@ UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	: CurrentStamina(100.0f),
       MaxStamina(100.0f),
 	  CurrentTimeGauge(0.0f),
-	  MaxTimeGauge(100.0f)
+	  MaxTimeGauge(100.0f),
+	  TimewindConsumption(0.25f)
 {
 }
 

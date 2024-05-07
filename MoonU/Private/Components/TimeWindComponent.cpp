@@ -4,6 +4,7 @@
 #include "Components/TimeWindComponent.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "MUDefines.h"
 #include "GameFramework/Character.h"	
 #include "Interface/TimeWinder.h"
 
@@ -81,6 +82,11 @@ const bool UTimeWindComponent::GetTimeWind()
 FOnTimeWindStateChanged& UTimeWindComponent::GetTimeWindStateChangeEvent()
 {
 	return TimeWindStateChanged;
+}
+
+FOnTimewindEnd& UTimeWindComponent::GetTimeWindEndEvent()
+{
+	return TimeWindEndEvent;
 }
 
 void UTimeWindComponent::OnIntialize()
@@ -176,6 +182,13 @@ void UTimeWindComponent::TimeRewind()
 		}
 		
 		RecordDatas.RemoveAt(0);
+	}
+	else
+	{
+		if (TimeWindEndEvent.IsBound())
+		{
+			TimeWindEndEvent.Broadcast();	
+		}
 	}
 }
 

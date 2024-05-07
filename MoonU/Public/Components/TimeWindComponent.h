@@ -29,6 +29,8 @@ public:
 
 	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
 
+	virtual FOnTimewindEnd& GetTimeWindEndEvent() override;
+	
 	void OnIntialize();
 protected :
 	void TimeRewind();
@@ -70,5 +72,7 @@ protected :
 	uint8 bIsMaxRecordInit : 1;
 
 	FOnTimeWindStateChanged TimeWindStateChanged;
+
+	FOnTimewindEnd TimeWindEndEvent;
 };
 

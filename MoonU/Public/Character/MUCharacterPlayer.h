@@ -58,9 +58,6 @@ protected :
 	
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-
-	void TimeWindActivate(bool InActivationMode);
-	
 #pragma endregion
 
 protected:
