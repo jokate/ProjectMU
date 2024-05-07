@@ -19,6 +19,8 @@ class MOONU_API UMUCharacterAttributeSet : public UMUCharacterAttributeSetBase
 public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentStamina);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxStamina);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentTimeGauge);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxTimeGauge);
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
@@ -32,4 +34,10 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxStamina;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData CurrentTimeGauge;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData MaxTimeGauge;
 };

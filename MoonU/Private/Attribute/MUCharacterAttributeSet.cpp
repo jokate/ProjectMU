@@ -6,7 +6,9 @@
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	: CurrentStamina(100.0f),
-      MaxStamina(100.0f)
+      MaxStamina(100.0f),
+	  CurrentTimeGauge(0.0f),
+	  MaxTimeGauge(100.0f)
 {
 }
 
@@ -14,7 +16,7 @@ void UMUCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& Attr
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	if (Attribute == GetCurrentStaminaAttribute())
+	if (Attribute == GetCurrentStaminaAttribute() || Attribute == GetCurrentTimeGaugeAttribute())
 	{
 		NewValue = NewValue < 0.0f ? 0.0f : NewValue;
 	}
@@ -29,10 +31,15 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	float MinStamina = 0.0f;
+	constexpr float MinValue = 0.0f;
 
 	if (Data.EvaluatedData.Attribute == GetCurrentStaminaAttribute())
 	{
-		CurrentStamina = FMath::Clamp(GetCurrentStamina(), MinStamina, GetMaxStamina());
+		CurrentStamina = FMath::Clamp(GetCurrentStamina(), MinValue, GetMaxStamina());
+	}
+
+	if (Data.EvaluatedData.Attribute == GetCurrentTimeGaugeAttribute())
+	{
+		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());
 	}
 }

@@ -27,4 +27,7 @@ protected :
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UMUHpWidget> HPWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UMUTimeGaugeWidget> TimeGaugeWidget;
 };

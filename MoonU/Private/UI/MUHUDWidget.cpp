@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "UI/MUHpWidget.h"
+#include "UI/MUTimeGaugeWidget.h"
 
 void UMUHUDWidget::SetAbilitySystemComponent(AActor* InOwner)
 {
@@ -28,6 +29,7 @@ void UMUHUDWidget::SetAbilitySystemComponent(AActor* InOwner)
 		}
 
 		HPWidget->SetAbilitySystemComponent(InOwner);
+		TimeGaugeWidget->SetAbilitySystemComponent(InOwner);
 	}
 }
 
