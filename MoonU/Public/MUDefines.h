@@ -21,6 +21,7 @@
 #define MU_INPUT_LMATTACK FGameplayTag::RequestGameplayTag(FName("InputTag.LeftAttack"))
 #define MU_INPUT_DODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.Avoidance"))
 #define MU_INPUT_CHARGE  FGameplayTag::RequestGameplayTag(FName("InputTag.ChargeTag"))
+#define MU_INPUT_PERFECTDODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.PerfectDodgeAttack"))
 #define MU_INPUT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("InputTag.TimeRewind"))
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
@@ -37,7 +38,10 @@
 #define MU_COLLISION_PAWN TEXT("Pawn")
 
 #define MU_CHARACTERSTATE_DODGE FGameplayTag::RequestGameplayTag(FName("Character.State.Dodge"))
+#define MU_CHARACTERSTATE_PERFECTDODGE FGameplayTag::RequestGameplayTag(FName("Character.State.PerfectDodge"))
+#define MU_CHARACTERSTATE_PERFECTDODGE_COMPLETE FGameplayTag::RequestGameplayTag(FName("Character.State.PerfectDodge.Complete"))
 #define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))
+#define MU_CHARACTERSTATE_SUPERARMOR FGameplayTag::RequestGameplayTag(FName("Character.State.SuperArmor"))
 #define MU_EVENT_REGENERATED FGameplayTag::RequestGameplayTag(FName("Event.Regenerated"))
 
 #define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))

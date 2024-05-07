@@ -100,6 +100,16 @@ void UMUGA_OnHit::OnHitCheckedCallback(const FGameplayEventData* EventData)
 	bCanDefend &= CheckHitLocationIsInDefendBound(DefendTransform, HitResult->ImpactPoint, DefendRange);
 	bCanDefend &= CheckHitInstigatorActorInProperAngle(AvatarActor, EventData->Instigator);
 
+	FGameplayTagContainer DodgeTagContainer;
+	DodgeTagContainer.AddTag(MU_CHARACTERSTATE_DODGE);
+	DodgeTagContainer.AddTag(MU_CHARACTERSTATE_PERFECTDODGE);
+ 	bool bPerfectDodge = ASC->HasAllMatchingGameplayTags(DodgeTagContainer);
+
+	if (bPerfectDodge)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AvatarActor, MU_CHARACTERSTATE_PERFECTDODGE_COMPLETE, *EventData);
+		return;
+	}
 	if (bCanDefend)
 	{
 		for (const FGameplayTag& DefendRelatedTag : DefendStateTag)

@@ -58,7 +58,7 @@ bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCa
 	{
 		if (Data.EvaluatedData.Magnitude > 0.0f)
 		{
-			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY))
+			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_SUPERARMOR))
 			{
 				Data.EvaluatedData.Magnitude = 0.0f;
 				return false;
