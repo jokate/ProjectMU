@@ -55,11 +55,11 @@ void AMUCharacterPlayer::BeginPlay()
 		}
 	}
 
-	if (CameraMovementCurve)
+	if (TimewindCurve)
 	{
 		FOnTimelineFloat TimelineProgress;
 		TimelineProgress.BindDynamic(this, &AMUCharacterPlayer::OnTimelineProgressed);
-		TimelineComponent->AddInterpFloat(CameraMovementCurve, TimelineProgress);
+		TimelineComponent->AddInterpFloat(TimewindCurve, TimelineProgress);
 	}
 }
 
@@ -97,7 +97,7 @@ ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Oth
 
 void AMUCharacterPlayer::OnTimelineProgressed(float Value)
 {
-	CameraBoom->TargetArmLength = Value;
+	OnTimelineProgressed_BP(Value);
 }
 
 // Called to bind functionality to input
@@ -147,6 +147,16 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, TargetLoc, FRotator::ZeroRotator);
 		break;
 	}
+}
+
+void AMUCharacterPlayer::PlayTimeline()
+{
+	TimelineComponent->Play();
+}
+
+void AMUCharacterPlayer::ReverseTimeline()
+{
+	TimelineComponent->Reverse();
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()

@@ -9,12 +9,13 @@
 #include "MUCharacterBase.h"
 #include "Data/MUEnum.h"
 #include "Interface/MUPlayer.h"
+#include "Interface/TimelinePlayer.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer, public ITimelinePlayer
 {
 	GENERATED_BODY()
 
@@ -44,6 +45,13 @@ public:
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
 protected :
+
+#pragma region ITimelinePlayer
+	virtual void PlayTimeline() override;
+
+	virtual void ReverseTimeline() override;
+#pragma endregion
+	
 	
 	void SetupGASInputComponent();
 
@@ -60,6 +68,9 @@ protected :
 	void Look(const FInputActionValue& Value);
 #pragma endregion
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnTimelineProgressed_BP(float Value);
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -81,5 +92,5 @@ protected:
 	TObjectPtr<class UTimelineComponent> TimelineComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Timeline Curve")
-	TObjectPtr<class UCurveFloat> CameraMovementCurve;
+	TObjectPtr<class UCurveFloat> TimewindCurve;
 };
