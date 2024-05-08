@@ -44,11 +44,11 @@ void UMUGA_OrderTimeWind::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUGA_OrderTimeWind::OnTimewindGaugeChanged);
 	}
 
-	EffectSpecHandle = MakeOutgoingGameplayEffectSpec(TimewindCost);
+	FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(TimewindCost);
 
 	if (EffectSpecHandle.IsValid())
 	{
-		ApplyGameplayEffectSpecToOwner(Handle, ActorInfo, ActivationInfo, EffectSpecHandle);
+		ActiveEffectSpecHandle = ApplyGameplayEffectSpecToOwner(Handle, ActorInfo, ActivationInfo, EffectSpecHandle);
 	}
 }
 
@@ -78,6 +78,11 @@ void UMUGA_OrderTimeWind::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	if (TimeWindTarget)
 	{
 		TimeWindTarget->GetTimeWindEndEvent().RemoveAll(this);
+	}
+
+	if (ActiveEffectSpecHandle.IsValid())
+	{
+		BP_RemoveGameplayEffectFromOwnerWithHandle(ActiveEffectSpecHandle);
 	}
 	
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());

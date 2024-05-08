@@ -30,5 +30,5 @@ protected :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<class UGameplayEffect> TimewindCost;
 
-	FGameplayEffectSpecHandle EffectSpecHandle;
+	FActiveGameplayEffectHandle ActiveEffectSpecHandle;
 };
