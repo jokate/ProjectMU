@@ -36,8 +36,6 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
-
-	TimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("TimelineComp"));
 }
 
 // Called when the game starts or when spawned
@@ -53,13 +51,6 @@ void AMUCharacterPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
-	}
-
-	if (TimewindCurve)
-	{
-		FOnTimelineFloat TimelineProgress;
-		TimelineProgress.BindDynamic(this, &AMUCharacterPlayer::OnTimelineProgressed);
-		TimelineComponent->AddInterpFloat(TimewindCurve, TimelineProgress);
 	}
 }
 
@@ -93,11 +84,6 @@ void AMUCharacterPlayer::PostInitializeComponents()
 ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	return ETeamAttitude::Hostile;
-}
-
-void AMUCharacterPlayer::OnTimelineProgressed(float Value)
-{
-	OnTimelineProgressed_BP(Value);
 }
 
 // Called to bind functionality to input
@@ -147,16 +133,6 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, TargetLoc, FRotator::ZeroRotator);
 		break;
 	}
-}
-
-void AMUCharacterPlayer::PlayTimeline()
-{
-	TimelineComponent->Play();
-}
-
-void AMUCharacterPlayer::ReverseTimeline()
-{
-	TimelineComponent->Reverse();
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()
