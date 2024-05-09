@@ -24,20 +24,23 @@ void AMUGC_PlayTimeline::BeginPlay()
 
 bool AMUGC_PlayTimeline::OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
 {
+	Super::OnExecute_Implementation(MyTarget, Parameters);
 	TimelineComponent->Play();
-
-	return false;
+	bHasHandledWhileActiveEvent = true;
+	return true;
 }
 
 bool AMUGC_PlayTimeline::OnRemove_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
 {
+
+	Super::OnRemove_Implementation(MyTarget, Parameters);
 	TimelineComponent->Reverse();
 
 	FOnTimelineEvent Event;
 	Event.BindDynamic(this, &AMUGC_PlayTimeline::OnFinishedTimeline);
 	TimelineComponent->SetTimelineFinishedFunc(Event);
 	
-	return false;
+	return true;
 }
 
 void AMUGC_PlayTimeline::OnFinishedTimeline()

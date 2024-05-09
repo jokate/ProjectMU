@@ -23,7 +23,7 @@ protected :
 	virtual bool OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;
 
 	virtual bool OnRemove_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;
-
+	
 	UFUNCTION()
 	void OnFinishedTimeline();
 	
