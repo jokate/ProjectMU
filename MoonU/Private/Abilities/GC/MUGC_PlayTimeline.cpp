@@ -22,6 +22,12 @@ void AMUGC_PlayTimeline::BeginPlay()
 	} 
 }
 
+void AMUGC_PlayTimeline::HandleGameplayCue(AActor* MyTarget, EGameplayCueEvent::Type EventType,
+	const FGameplayCueParameters& Parameters)
+{
+	Super::HandleGameplayCue(MyTarget, EventType, Parameters);
+}
+
 bool AMUGC_PlayTimeline::OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
 {
 	Super::OnExecute_Implementation(MyTarget, Parameters);
