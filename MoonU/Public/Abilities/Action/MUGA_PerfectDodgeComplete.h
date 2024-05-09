@@ -33,4 +33,7 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly, Meta = (Categories = GameplayCue))
 	FGameplayTagContainer GameplayCueTags;
+
+	UPROPERTY(EditDefaultsOnly)
+	float SlomoRate; 
 };

@@ -10,6 +10,7 @@
 UMUGA_PerfectDodgeComplete::UMUGA_PerfectDodgeComplete()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	SlomoRate = 0.75f;
 }
 
 void UMUGA_PerfectDodgeComplete::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -25,6 +26,13 @@ void UMUGA_PerfectDodgeComplete::ActivateAbility(const FGameplayAbilitySpecHandl
 		ASC->ExecuteGameplayCue(GameplayCueTag);	
 	}
 
+	AWorldSettings* WorldSettings = GetWorld()->GetWorldSettings();
+
+	if (WorldSettings)
+	{
+		WorldSettings->SetTimeDilation(SlomoRate);
+	}
+	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMUGA_PerfectDodgeComplete::TimerEnded, TimerInterval, false);
 }
 
@@ -34,13 +42,19 @@ void UMUGA_PerfectDodgeComplete::EndAbility(const FGameplayAbilitySpecHandle Han
 {
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
+	AWorldSettings* WorldSettings = GetWorld()->GetWorldSettings();
+
+	if (WorldSettings)
+	{
+		WorldSettings->SetTimeDilation(1.0f);
+	}
+	
 	if (ASC)
 	{
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
 			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);	
 		}
-
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
