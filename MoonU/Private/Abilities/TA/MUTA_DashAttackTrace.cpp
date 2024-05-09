@@ -43,7 +43,7 @@ void AMUTA_DashAttackTrace::TraceStart()
 
 	UKismetSystemLibrary::SphereTraceMultiByProfile(this, CharacterLocation,
 		End, 100.0f, TEXT("Weapon"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
-		FLinearColor::Red, FLinearColor::Green, 1.0f);
+		FLinearColor::Red, FLinearColor::Green, 0.0f);
 
 	ProcessHitResult(HitResults);
 }

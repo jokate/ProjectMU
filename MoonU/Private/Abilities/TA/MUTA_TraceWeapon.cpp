@@ -42,7 +42,7 @@ void AMUTA_TraceWeapon::TraceStart()
 	ActorsToIgnore.Add(Character);
 	UKismetSystemLibrary::SphereTraceMultiByProfile(this, WeaponSocketLocation,
 		End, 50.0f, TEXT("Weapon"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
-		FLinearColor::Red, FLinearColor::Green, 1.0f);
+		FLinearColor::Red, FLinearColor::Green, 0.0f);
 	
 	ProcessHitResult(HitResults);
 }
