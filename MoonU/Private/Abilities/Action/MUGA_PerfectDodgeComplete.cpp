@@ -10,7 +10,6 @@
 UMUGA_PerfectDodgeComplete::UMUGA_PerfectDodgeComplete()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	
 }
 
 void UMUGA_PerfectDodgeComplete::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

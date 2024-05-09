@@ -95,6 +95,33 @@ void UMUGA_OrderTimeWind::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+bool UMUGA_OrderTimeWind::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	bool bResult = Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+	
+	if (ASC == nullptr)
+	{
+		return false;
+	}
+
+	const auto* AttributeSet = ASC->GetSet<UMUCharacterAttributeSet>();
+
+	if (AttributeSet == nullptr)
+	{
+		return false;
+	}
+
+	float TimeGauge = AttributeSet->GetCurrentTimeGauge();
+
+	bResult &= TimeGauge > 0.0f;
+
+	return bResult;
+}
+
 void UMUGA_OrderTimeWind::OnTimewindGaugeChanged(const FOnAttributeChangeData& ChangedData)
 {
 	if (ChangedData.NewValue <= 0.0f)
