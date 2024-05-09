@@ -20,7 +20,10 @@ void UMUGA_PerfectDodgeComplete::ActivateAbility(const FGameplayAbilitySpecHandl
 
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
-	ASC->ExecuteGameplayCue(GameplayCueTag);
+	for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+	{
+		ASC->ExecuteGameplayCue(GameplayCueTag);	
+	}
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMUGA_PerfectDodgeComplete::TimerEnded, TimerInterval, false);
 }
@@ -33,7 +36,11 @@ void UMUGA_PerfectDodgeComplete::EndAbility(const FGameplayAbilitySpecHandle Han
 
 	if (ASC)
 	{
-		ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);	
+		}
+
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);

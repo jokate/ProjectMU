@@ -42,7 +42,10 @@ void UMUGA_OrderTimeWind::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	if (ASC)
 	{
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUGA_OrderTimeWind::OnTimewindGaugeChanged);
-		ASC->ExecuteGameplayCue(GameplayCueTag);
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->ExecuteGameplayCue(GameplayCueTag);	
+		}
 	}
 
 	FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(TimewindCost);
@@ -92,7 +95,11 @@ void UMUGA_OrderTimeWind::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	if (ASC)
 	{
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).RemoveAll(this);
-		ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
+
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);	
+		}
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);

@@ -32,5 +32,5 @@ protected :
 	TSubclassOf<class UGameplayEffect> EffectForDodge;
 
 	UPROPERTY(EditDefaultsOnly, Meta = (Categories = GameplayCue))
-	FGameplayTag GameplayCueTag;
+	FGameplayTagContainer GameplayCueTags;
 };
