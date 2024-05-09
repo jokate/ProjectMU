@@ -29,8 +29,13 @@ protected :
 
 	void OnTimewindEnded();
 
+
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<class UGameplayEffect> TimewindCost;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FGameplayTag GameplayCueTag;
 
 	FActiveGameplayEffectHandle ActiveEffectSpecHandle;
 };
