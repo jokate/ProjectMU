@@ -30,9 +30,6 @@ public :
 protected :
 	virtual void TickTask(float DeltaTime) override;
 
-	UFUNCTION()
-	void OnTimeWindChanged(bool InTimeChanged);
-
 	UPROPERTY()
 	uint8 bGoldenTimeTicking : 1;
 	
@@ -41,4 +38,7 @@ protected :
 
 	UPROPERTY()
 	float CurrentGoldenTime = 0.f;
+
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> CachedASC;
 };

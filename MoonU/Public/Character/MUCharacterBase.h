@@ -52,9 +52,6 @@ protected:
 	virtual void PostInitializeComponents() override;
 	
 #pragma region ITimeWindTarget
-	virtual void SetTimeWind(bool InTimeRewind) override;
-	virtual const bool GetTimeWind() override;
-	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
 	virtual FOnTimewindEnd& GetTimeWindEndEvent() override;
 #pragma endregion
 

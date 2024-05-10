@@ -13,7 +13,6 @@
 UTimeWindComponent::UTimeWindComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	bIsWinding = false;
 	bIsMaxRecordInit = false;
 }
 
@@ -56,8 +55,8 @@ void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                        FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (bIsWinding)
+	
+	if (CachedASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMEWINDING))
 	{
 		TimeRewind();
 	}
@@ -65,23 +64,6 @@ void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		Record();
 	}
-}
-
-void UTimeWindComponent::SetTimeWind(bool InTimeRewind)
-{
-	bIsWinding = InTimeRewind;
-
-	BroadcastTimeWindStateChangeEvent(InTimeRewind);
-}
-
-const bool UTimeWindComponent::GetTimeWind()
-{
-	return bIsWinding;
-}
-
-FOnTimeWindStateChanged& UTimeWindComponent::GetTimeWindStateChangeEvent()
-{
-	return TimeWindStateChanged;
 }
 
 FOnTimewindEnd& UTimeWindComponent::GetTimeWindEndEvent()
@@ -233,7 +215,7 @@ void UTimeWindComponent::Record()
 
 void UTimeWindComponent::OnChangedAttribute(const FOnAttributeChangeData& Payload)
 {
-	if (bIsWinding)
+	if (CachedASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMEWINDING))
 	{
 		return;
 	}
@@ -243,13 +225,5 @@ void UTimeWindComponent::OnChangedAttribute(const FOnAttributeChangeData& Payloa
 	Record.OldValue = Payload.OldValue;
 
 	AttributeRecords.Emplace(Record);
-}
-
-void UTimeWindComponent::BroadcastTimeWindStateChangeEvent(bool InTimeWind)
-{
-	if (TimeWindStateChanged.IsBound())
-	{
-		TimeWindStateChanged.Broadcast(InTimeWind);
-	}
 }
 

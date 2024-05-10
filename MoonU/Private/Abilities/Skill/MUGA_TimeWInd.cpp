@@ -33,12 +33,6 @@ void UMUGA_TimeWInd::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_EVENT_TIMEREWINDEND).AddUObject(this, &ThisClass::OnTimeWindEndEvent);
 	}
-
-	if (ITimeWindTarget* Target = Cast<ITimeWindTarget>(AvatarActor))
-	{
-		Target->SetTimeWind(true);
-	}
-	
 }
 
 void UMUGA_TimeWInd::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -53,12 +47,6 @@ void UMUGA_TimeWInd::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 		if (ASC)
 		{
 			ASC->GenericGameplayEventCallbacks.Remove(MU_EVENT_TIMEREWINDEND);
-		}
-
-		
-		if (ITimeWindTarget* Target = Cast<ITimeWindTarget>(AvatarActor))
-		{
-			Target->SetTimeWind(false);
 		}
 	}
 	

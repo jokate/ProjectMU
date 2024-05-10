@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "Interface/TimerWindTarget.h"
 
@@ -14,17 +15,14 @@ void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	
 	AActor* OwningActor = MeshComp->GetOwner();
 
-	if (ITimeWindTarget* TimeWindTarget = Cast<ITimeWindTarget>(OwningActor))
-	{
-		if (TimeWindTarget->GetTimeWind())
-		{
-			return;
-		}
-	}
-	
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwningActor);
 
 	if (!ASC)
+	{
+		return;
+	}
+
+	if (ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMEWINDING))
 	{
 		return;
 	}

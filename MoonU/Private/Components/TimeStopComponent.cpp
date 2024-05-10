@@ -65,4 +65,5 @@ void UTimeStopComponent::OnEndPlay()
 	TimeStopper->UnregisterTimeStopTarget(GetOwner());
 }
 
+
 	

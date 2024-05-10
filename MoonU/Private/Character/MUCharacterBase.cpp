@@ -64,21 +64,6 @@ UAbilitySystemComponent* AMUCharacterBase::GetAbilitySystemComponent() const
 	return ASC;
 }
 
-void AMUCharacterBase::SetTimeWind(bool InTimeRewind)
-{
-	TimeWindComponent->SetTimeWind(InTimeRewind);
-}
-
-const bool AMUCharacterBase::GetTimeWind()
-{
-	return TimeWindComponent->GetTimeWind();
-}
-
-FOnTimeWindStateChanged& AMUCharacterBase::GetTimeWindStateChangeEvent()
-{
-	return TimeWindComponent->GetTimeWindStateChangeEvent();
-}
-
 FOnTimewindEnd& AMUCharacterBase::GetTimeWindEndEvent()
 {
 	return TimeWindComponent->GetTimeWindEndEvent();

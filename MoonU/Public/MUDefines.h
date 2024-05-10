@@ -3,8 +3,10 @@
 #pragma once
 
 #define SPRINT_SPEED 800.0f
-
 #define WALK_SPEED 400.0f
+
+#define TIMESTOPDILATION 0.0f
+#define ORIGINALTIME 1.0f
 
 #define HEAD_BONE_NAME TEXT("head")
 
@@ -45,4 +47,6 @@
 #define MU_EVENT_REGENERATED FGameplayTag::RequestGameplayTag(FName("Event.Regenerated"))
 
 #define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))
+#define MU_CHARACTERSTATE_TIMEWINDING FGameplayTag::RequestGameplayTag(FName("Character.State.TimeWinding"))
+#define MU_CHARACTERSTATE_TIMESTOP FGameplayTag::RequestGameplayTag(FName("Character.State.TimeStop"))
 #define MU_CHARACTERSTATE_PARRY FGameplayTag::RequestGameplayTag(FName("Character.State.Parry"))

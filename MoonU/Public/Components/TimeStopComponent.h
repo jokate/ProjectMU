@@ -26,4 +26,6 @@ protected:
 
 	void OnEndPlay();
 public:
+
+protected :
 };

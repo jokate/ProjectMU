@@ -24,11 +24,6 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:
-	virtual void SetTimeWind(bool InTimeWind) override;
-	virtual const bool GetTimeWind() override;
-
-	virtual FOnTimeWindStateChanged& GetTimeWindStateChangeEvent() override;
-
 	virtual FOnTimewindEnd& GetTimeWindEndEvent() override;
 	
 	void OnIntialize();
@@ -38,8 +33,6 @@ protected :
 	void Record();
 
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
-
-	void BroadcastTimeWindStateChangeEvent(bool InTimeWind);
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FTimeWindRecordData> RecordDatas;
@@ -52,9 +45,6 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	float RecordTime = 3.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	uint8 bIsWinding : 1;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class ACharacter> CachedCharacter;
@@ -70,8 +60,6 @@ protected :
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	uint8 bIsMaxRecordInit : 1;
-
-	FOnTimeWindStateChanged TimeWindStateChanged;
 
 	FOnTimewindEnd TimeWindEndEvent;
 };
