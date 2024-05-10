@@ -24,5 +24,8 @@ public :
 	void OnTimeFinished();
 	
 	FTimerHandle TimeStopHandle;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer GameplayCueTags;
 };
 

@@ -35,6 +35,11 @@ void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		{
 			GetWorld()->GetTimerManager().SetTimer(TimeStopHandle, this, &UMUGA_TimeStop::OnTimeFinished, CharacterAttribute->GetTimeStopDuration(), false);
 		}
+
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->ExecuteGameplayCue(GameplayCueTag);
+		}
 	}
 }
 
@@ -47,6 +52,15 @@ void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 	if (TimeStopper)
 	{
 		TimeStopper->TimeStopDeactivate();
+	}
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+
+	if (ASC)
+	{
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
+		}
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
