@@ -3,6 +3,7 @@
 
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "GameplayEffectExtension.h"
+#include "MUDefines.h"
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	: CurrentStamina(100.0f),
@@ -26,7 +27,7 @@ void UMUCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& Attr
 }
 
 void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
-{
+{ 
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
 }
 
@@ -48,6 +49,6 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 
 	if (Data.EvaluatedData.Attribute == GetCurrentTimeGaugeAttribute())
 	{
-		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());
+		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());	
 	}
 }

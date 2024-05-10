@@ -94,7 +94,7 @@ void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Sti
 	}
 	
 	TSubclassOf<UAISense> CurrentSense = UAIPerceptionSystem::GetSenseClassForStimulus(this, Stimulus);
-
+	
 	if (CurrentSense == nullptr)
 	{
 		return;
