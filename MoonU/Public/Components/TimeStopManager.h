@@ -34,5 +34,5 @@ protected:
 	virtual void BeginPlay() override;
 protected: 
 	UPROPERTY(Transient)
-	TArray<AActor*> RegActors;
+	TArray<TWeakObjectPtr<AActor>> RegActors;
 };

@@ -3,6 +3,9 @@
 
 #include "Components/TimeStopManager.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "MUDefines.h"
+
 
 // Sets default values for this component's properties
 UTimeStopManager::UTimeStopManager()
@@ -39,10 +42,32 @@ void UTimeStopManager::UnregisterTimeStopTarget(AActor* InActor)
 
 void UTimeStopManager::TimeStopActivate()
 {
+	for (auto& RegisteredActor : RegActors)
+	{
+		AActor* RegActor = RegisteredActor.Get();
+
+		if (RegActor == nullptr)
+		{
+			continue;
+		}
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(RegActor, MU_EVENT_TIMESTOP, FGameplayEventData());
+	}
 }
 
 void UTimeStopManager::TimeStopDeactivate()
 {
+	for (auto& RegisteredActor : RegActors)
+	{
+		AActor* RegActor = RegisteredActor.Get();
+
+		if (RegActor == nullptr)
+		{
+			continue;
+		}
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(RegActor, MU_EVENT_TIMESTOPEND, FGameplayEventData());
+	}
 }
 
 

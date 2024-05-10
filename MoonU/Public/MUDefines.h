@@ -24,6 +24,7 @@
 #define MU_INPUT_DODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.Avoidance"))
 #define MU_INPUT_CHARGE  FGameplayTag::RequestGameplayTag(FName("InputTag.ChargeTag"))
 #define MU_INPUT_PERFECTDODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.PerfectDodgeAttack"))
+#define MU_INPUT_TIMESTOP  FGameplayTag::RequestGameplayTag(FName("InputTag.TimeStop"))
 #define MU_INPUT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("InputTag.TimeRewind"))
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
@@ -31,6 +32,8 @@
 #define MU_EVENT_ONHIT FGameplayTag::RequestGameplayTag(FName("Event.Character.OnHit"))
 #define MU_EVENT_HITCOMPLETE FGameplayTag::RequestGameplayTag(FName("Event.HitComplete"))
 #define MU_EVENT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewind"))
+#define MU_EVENT_TIMESTOP FGameplayTag::RequestGameplayTag(FName("Event.TimeStop"))
+#define MU_EVENT_TIMESTOPEND FGameplayTag::RequestGameplayTag(FName("Event.TimeStopEnd"))
 #define MU_EVENT_TIMEREWINDEND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewindEnd"))
 
 #define MU_EVENT_ATTACKFINISHED FGameplayTag::RequestGameplayTag(FName("Event.AttackFinished"))

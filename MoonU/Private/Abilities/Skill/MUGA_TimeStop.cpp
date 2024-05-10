@@ -39,7 +39,7 @@ void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 }
 
 void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+                                const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	
 	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());

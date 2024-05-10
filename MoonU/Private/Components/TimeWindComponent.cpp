@@ -56,6 +56,11 @@ void UTimeWindComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	if (CachedASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMESTOP))
+	{
+		return;
+	}
+	
 	if (CachedASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMEWINDING))
 	{
 		TimeRewind();
