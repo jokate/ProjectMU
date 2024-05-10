@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "MUDefines.h"
+#include "Abilities/AT/MUAT_CheckVelocity.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -48,6 +49,12 @@ void UMUGA_Sprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	{
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentStaminaAttribute()).AddUObject(this, &UMUGA_Sprint::OnChangedAttribute);
 	}
+
+	UMUAT_CheckVelocity* NewTask = UMUAT_CheckVelocity::CreateNewTask(this);
+
+	NewTask->MoveCompleted.AddDynamic(this, &UMUGA_Sprint::OnMoveCompleted);
+
+	NewTask->ReadyForActivation();
 }
 
 
@@ -130,4 +137,12 @@ void UMUGA_Sprint::OnChangedAttribute(const FOnAttributeChangeData& Payload)
 
 		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicated, bWasCancelled);
 	}
+}
+
+void UMUGA_Sprint::OnMoveCompleted()
+{
+	bool bReplicated = true;
+	bool bWasCancelled = false;
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicated, bWasCancelled);
 }

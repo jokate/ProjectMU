@@ -25,6 +25,9 @@ public :
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
 	
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
+
+	UFUNCTION()
+	void OnMoveCompleted();
 public :
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UGameplayEffect> GameplayEffectClass;
