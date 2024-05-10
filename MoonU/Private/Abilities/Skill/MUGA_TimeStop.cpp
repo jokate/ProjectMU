@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Interface/TimeStopper.h"
 
 UMUGA_TimeStop::UMUGA_TimeStop()
 {
@@ -17,8 +18,15 @@ void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
 
+	if (TimeStopper)
+	{
+		TimeStopper->TimeStopActivate();
+	}
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+	
 	if (ASC)
 	{
 		const UMUCharacterAttributeSet* CharacterAttribute = ASC->GetSet<UMUCharacterAttributeSet>();
@@ -33,6 +41,14 @@ void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	
+	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
+
+	if (TimeStopper)
+	{
+		TimeStopper->TimeStopDeactivate();
+	}
+	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 

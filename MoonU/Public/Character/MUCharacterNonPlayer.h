@@ -4,11 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "GenericTeamAgentInterface.h"
 #include "MUCharacterBase.h"
-#include "GameFramework/Character.h"
 #include "Interface/MUEnemy.h"
-#include "Interface/TimerWindTarget.h"
 #include "MUCharacterNonPlayer.generated.h"
 
 UCLASS()
@@ -34,4 +31,7 @@ protected:
 protected :
 	UPROPERTY()
 	TObjectPtr<class UMUCharacterAttributeSetBase> AttributeSet;
+
+	UPROPERTY()
+	TObjectPtr<class UTimeStopComponent> TimeStopComponent;
 };

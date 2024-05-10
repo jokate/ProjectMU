@@ -9,6 +9,7 @@
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/TimeStopComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Interface/MUPlayer.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -22,6 +23,7 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 
 	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 	AttributeSet = CreateDefaultSubobject<UMUCharacterAttributeSetBase>(TEXT("CharacterAttribute"));
+	TimeStopComponent = CreateDefaultSubobject<UTimeStopComponent>("TimeStopComponent");
 }
 
 void AMUCharacterNonPlayer::OnDead(const FGameplayEventData* Data)
