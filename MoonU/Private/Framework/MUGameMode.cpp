@@ -3,11 +3,13 @@
 
 #include "Framework/MUGameMode.h"
 
+#include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
 
 AMUGameMode::AMUGameMode()
 {
 	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>("TimeWindManager");
+	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>("TimeStopManager");
 }
 
 void AMUGameMode::TimeWindActivate()
@@ -28,4 +30,24 @@ void AMUGameMode::RegisterTimeWindTarget(AActor* InActor)
 void AMUGameMode::UnregisterTimeWindTarget(AActor* InActor)
 {
 	TimeWindManager->UnregisterTimeWindTarget(InActor);
+}
+
+void AMUGameMode::TimeStopActivate()
+{
+	TimeStopManager->TimeStopActivate();
+}
+
+void AMUGameMode::TimeStopDeactivate()
+{
+	TimeStopManager->TimeStopDeactivate();
+}
+
+void AMUGameMode::RegisterTimerStopTarget(AActor* InActor)
+{
+	TimeStopManager->RegisterTimerStopTarget(InActor);
+}
+
+void AMUGameMode::UnregisterTimeStopTarget(AActor* InActor)
+{
+	TimeStopManager->UnregisterTimeStopTarget(InActor);
 }
