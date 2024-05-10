@@ -22,6 +22,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentTimeGauge);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxTimeGauge);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimewindConsumption);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopConsumption);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopDuration);
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
@@ -47,6 +48,9 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "Time Wind Consumption")
 	FGameplayAttributeData TimewindConsumption;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Time Stop Consmuption")
+	FGameplayAttributeData TimeStopConsumption;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Time Stop Duration")
 	FGameplayAttributeData TimeStopDuration;
