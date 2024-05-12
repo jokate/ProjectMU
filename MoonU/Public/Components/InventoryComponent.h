@@ -4,28 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interface/InventoryOwner.h"
 #include "InventoryComponent.generated.h"
 
 
 struct FInventorySlotData;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UInventoryComponent : public UActorComponent
+class MOONU_API UInventoryComponent : public UActorComponent, public IInventoryOwner
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UInventoryComponent();
+	
+	virtual void UseItem(int32 SlotIndex) override;
+
+	virtual void AddItem(int32 ItemId, int32 ItemAmount) override;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	virtual void UseItem(int32 SlotIndex);
-
-	virtual void AddItem(int32 ItemId, int32 ItemAmount);
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Slot")
 	TArray<FInventorySlotData> InventorySlots;
 };

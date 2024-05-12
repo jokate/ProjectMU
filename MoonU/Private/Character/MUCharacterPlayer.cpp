@@ -14,10 +14,8 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
-#include "Components/TimelineComponent.h"
-#include "Components/TimeWindComponent.h"
+#include "Components/InventoryComponent.h"
 #include "Framework/MUPlayerState.h"
-#include "Interface/TimeWinder.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -36,6 +34,8 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 }
 
 // Called when the game starts or when spawned
@@ -235,6 +235,16 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AMUCharacterPlayer::AddItem(int32 ItemId, int32 ItemAmount)
+{
+	InventoryComponent->AddItem(ItemId, ItemAmount);
+}
+
+void AMUCharacterPlayer::UseItem(int32 SlotIndex)
+{
+	InventoryComponent->UseItem(SlotIndex);
 }
 
 

@@ -7,13 +7,14 @@
 #include "InputAction.h"
 #include "MUCharacterBase.h"
 #include "Data/MUEnum.h"
+#include "Interface/InventoryOwner.h"
 #include "Interface/MUPlayer.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer, public IInventoryOwner
 {
 	GENERATED_BODY()
 
@@ -40,7 +41,6 @@ public:
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
 protected :
-	
 	void SetupGASInputComponent();
 
 	void GASInputPressed(int32 InputId);
@@ -55,6 +55,12 @@ protected :
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 #pragma endregion
+
+#pragma region IInventoryOwner
+	virtual void AddItem(int32 ItemId, int32 ItemAmount) override;
+
+	virtual void UseItem(int32 SlotIndex) override;
+#pragma endregion IInventoryOwner
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -62,6 +68,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Inventory, meta = (AloowPrivateAccess = "true"))
+	TObjectPtr<class UInventoryComponent> InventoryComponent;
 
 protected:
 	UPROPERTY()
