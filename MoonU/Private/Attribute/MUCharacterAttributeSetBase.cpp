@@ -79,6 +79,9 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 {
 	Super::PostGameplayEffectExecute(Data);
 
+	const FGameplayEffectContextHandle& EffectContext = Data.EffectSpec.GetEffectContext();
+	AActor* InstigatorActor = EffectContext.GetInstigator();
+	
 	const float MinHealth = 0.f;
 	if (Data.EvaluatedData.Attribute == GetCurrentHpAttribute())
 	{
@@ -87,9 +90,6 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	else if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
 		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
-
-		const FGameplayEffectContextHandle& EffectContext = Data.EffectSpec.GetEffectContext();
-		AActor* InstigatorActor = EffectContext.GetInstigator();
 
 		if (InstigatorActor)
 		{
@@ -105,7 +105,12 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	if (GetCurrentHp() <= 0.0f && !bOutOfHealth)
 	{
 		//죽었을 시 추가적인 처리가 필요하다.
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, FGameplayEventData());
+		FGameplayEventData EventData;
+		
+		EventData.Instigator = GetOwningActor();
+		EventData.Target = InstigatorActor;
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, EventData);
 	}
 
 	bOutOfHealth = (GetCurrentHp() <= 0.0f);
