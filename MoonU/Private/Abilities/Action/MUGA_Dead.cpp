@@ -20,8 +20,6 @@ void UMUGA_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	OnCharacterDead();
 	
 	UAbilityTask_PlayMontageAndWait* MontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DEADMONTAAGE"), DeadAnimMontage);
-	MontageTask->OnCompleted.AddDynamic(this, &UMUGA_Dead::OnDeadAnimationEnded);
-
 	MontageTask->ReadyForActivation();
 }
 
@@ -44,22 +42,6 @@ void UMUGA_Dead::OnCharacterDead()
 	}
 
 	CharacterMovement->SetMovementMode(EMovementMode::MOVE_None);
-
-	auto* MeshComp = TargetCharacter->GetMesh();
-
-	if (MeshComp == nullptr)
-	{
-		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-	}
-
-	UAnimInstance* AnimInstance = MeshComp->GetAnimInstance();
-
-	if (AnimInstance == nullptr)
-	{
-		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-	}
-
-	AnimInstance->StopAllMontages(0.0f);
 }
 
 void UMUGA_Dead::OnDeadAnimationEnded()

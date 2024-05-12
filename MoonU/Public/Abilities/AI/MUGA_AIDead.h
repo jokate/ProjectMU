@@ -16,4 +16,10 @@ class MOONU_API UMUGA_AIDead : public UMUGA_Dead
 	
 protected :
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	UFUNCTION()
+	void OnGoldenTimeFinished();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float GoldenTimeInterval;
 };

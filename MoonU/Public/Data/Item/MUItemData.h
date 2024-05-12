@@ -51,12 +51,12 @@ struct FInventorySlotData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ItemAmount = 0;
 
-	bool operator==(const FInventorySlotData& InventorySlotData)
+	bool operator==(const FInventorySlotData& InventorySlotData) const
 	{
 		return ItemID == InventorySlotData.ItemID;
 	}
 	
-	bool operator==(int32 InID)
+	bool operator==(int32 InID) const
 	{
 		return ItemID == InID;
 	}

@@ -3,6 +3,7 @@
 
 #include "Abilities/AI/MUGA_AIDead.h"
 
+#include "Abilities/AT/MUAT_CheckGoldenTime.h"
 #include "AI/MUAIController.h"
 #include "GameFramework/Character.h"
 
@@ -24,4 +25,20 @@ void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 		}
 	}
+
+	UMUAT_CheckGoldenTime* NewTask = UMUAT_CheckGoldenTime::CreateNewTask(this, GoldenTimeInterval);
+	NewTask->GoldenTimeSatisfied.AddDynamic(this, &UMUGA_AIDead::OnGoldenTimeFinished);
+	NewTask->ReadyForActivation();
+}
+
+void UMUGA_AIDead::OnGoldenTimeFinished()
+{
+	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();
+
+	if (TargetActor)
+	{
+		TargetActor->Destroy();
+	}
+	
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);	
 }

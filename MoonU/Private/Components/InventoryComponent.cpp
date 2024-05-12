@@ -114,6 +114,3 @@ void UInventoryComponent::AddItem(int32 ItemId, int32 ItemAmount)
  		}
 	}
 }
-
-
-

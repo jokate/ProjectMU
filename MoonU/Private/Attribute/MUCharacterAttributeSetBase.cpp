@@ -104,6 +104,7 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 
 	if (GetCurrentHp() <= 0.0f && !bOutOfHealth)
 	{
+		//죽었을 시 추가적인 처리가 필요하다.
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, FGameplayEventData());
 	}
 
