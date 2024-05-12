@@ -20,24 +20,7 @@ public :
 	virtual void PostLoad() override;
 	
 	static UGameDataManager* Get();
-
-	const FItemDataRow* GetItemDataRow(const FName& InNameId) const;
-
-	const FItemDataRow* GetItemDataRow(const int32 ItemId) const;
-
-	const FItemPoolStructRow* GetItemPoolRow(const FName& PoolName) const;
-
-	const FCraftDataRow* GetCraftDataRow(const FName& CraftItemName) const;
 	
-public :
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UDataTable> CraftItemTable;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UDataTable> ItemTable;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UDataTable> ItemPoolTable;
 protected:
 	UPROPERTY(Transient, BlueprintReadWrite)
 	TMap<int32, FName> ItemTableMap;
