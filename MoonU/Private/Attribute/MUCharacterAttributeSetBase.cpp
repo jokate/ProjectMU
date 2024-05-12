@@ -107,8 +107,13 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 		//죽었을 시 추가적인 처리가 필요하다.
 		FGameplayEventData EventData;
 		
-		EventData.Instigator = GetOwningActor();
-		EventData.Target = InstigatorActor;
+		FGameplayAbilityTargetData_ActorArray TargetData;
+		
+		TArray<TWeakObjectPtr<AActor>> TargetActor;
+		TargetActor.Add(InstigatorActor);
+		TargetData.SetActors(TargetActor);
+		
+		EventData.TargetData.Add(&TargetData);
 		
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, EventData);
 	}

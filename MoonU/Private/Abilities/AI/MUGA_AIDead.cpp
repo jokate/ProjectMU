@@ -3,6 +3,8 @@
 
 #include "Abilities/AI/MUGA_AIDead.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "MUDefines.h"
 #include "Abilities/AT/MUAT_CheckGoldenTime.h"
 #include "AI/MUAIController.h"
 #include "GameFramework/Character.h"
@@ -33,6 +35,28 @@ void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 void UMUGA_AIDead::OnGoldenTimeFinished()
 {
+	//파괴 전에 데이터를 기반으로 해서 아이템을 전달하는 방식으로 구현화를 이끌어야 한다.
+	//내부 데이터를 기준으로 해서 아이템 풀을 기준으로 데이터를 반환하면 될 것으로 보임.
+
+	FGameplayAbilityTargetData* EventData = CurrentEventData.TargetData.Get(0);
+
+	TArray<TWeakObjectPtr<AActor>> InstigatorActorArr = EventData->GetActors();
+
+	if (InstigatorActorArr.IsValidIndex(0))
+	{
+		AActor* InstigatorActor = InstigatorActorArr[0].Get();
+
+		if (InstigatorActor->IsValidLowLevel())
+		{
+			// 해당 부분에서 아이템을 받아야 함.
+			FGameplayEventData EventData;
+			EventData.Instigator = GetOwningActorFromActorInfo();
+
+			//임시적 코드 -> 이벤트 송신.
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_BLOCKRECOVER, EventData);
+		}
+	}
+	
 	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();
 
 	if (TargetActor)

@@ -22,4 +22,5 @@ protected :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float GoldenTimeInterval;
+	
 };
