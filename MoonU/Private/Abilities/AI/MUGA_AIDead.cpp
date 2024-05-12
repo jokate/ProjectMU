@@ -49,11 +49,11 @@ void UMUGA_AIDead::OnGoldenTimeFinished()
 		if (InstigatorActor->IsValidLowLevel())
 		{
 			// 해당 부분에서 아이템을 받아야 함.
-			FGameplayEventData EventData;
-			EventData.Instigator = GetOwningActorFromActorInfo();
+			FGameplayEventData TargetEventData;
+			TargetEventData.Instigator = GetOwningActorFromActorInfo();
 
 			//임시적 코드 -> 이벤트 송신.
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_BLOCKRECOVER, EventData);
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_BLOCKRECOVER, TargetEventData);
 		}
 	}
 	
