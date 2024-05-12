@@ -24,6 +24,8 @@ protected:
 
 	virtual void UseItem(int32 SlotIndex);
 
+	virtual void AddItem(int32 ItemId, int32 ItemAmount);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Slot")
-	TArray<FInventorySlotData> InventorySlot;
+	TArray<FInventorySlotData> InventorySlots;
 };

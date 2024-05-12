@@ -10,21 +10,21 @@ void UGameDataManager::PostLoad()
 {
 	UObject::PostLoad();
 
-	/*if (ItemTable != nullptr)
+	if (ItemDataTable != nullptr)
 	{
-		TArray<FName> RowNames = ItemTable->GetRowNames();
+		TArray<FName> RowNames = ItemDataTable->GetRowNames();
 		for (const auto& RowName : RowNames)
 		{
-			FItemDataRow* Item = ItemTable->FindRow<FItemDataRow>(RowName, "");
+			FItemDataRow* Item = ItemDataTable->FindRow<FItemDataRow>(RowName, "");
 			if (Item->ItemID == 0)
 			{
 				Item->ItemID = GetTypeHash(Item->ItemName);
-				ItemTable->AddRow(RowName, *Item);
+				ItemDataTable->AddRow(RowName, *Item);
 			}
 
 			ItemTableMap.Add(Item->ItemID, RowName);
 		}
-	}*/
+	}
 	
 }
 
@@ -38,4 +38,33 @@ UGameDataManager* UGameDataManager::Get()
 	}
 
 	return NewObject<UGameDataManager>();
+}
+
+const FItemDataRow UGameDataManager::GetItemDataRow(const FName& InNameId) const
+{
+	const FItemDataRow* Row = ItemDataTable->FindRow<FItemDataRow>(InNameId, "");
+
+	if (Row == nullptr)
+	{
+		return FItemDataRow();
+	}
+
+	return *Row;
+}
+
+const FItemDataRow UGameDataManager::GetItemDataRow(const int32 InItemId)
+{
+	if (ItemTableMap.Contains(InItemId) == false)
+	{
+		return FItemDataRow();
+	}
+
+	const FItemDataRow* Row = ItemDataTable->FindRow<FItemDataRow>(ItemTableMap[InItemId], "");
+
+	if (Row == nullptr)
+	{
+		return FItemDataRow();
+	}
+
+	return *Row;
 }

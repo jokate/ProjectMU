@@ -45,19 +45,32 @@ void UInventoryComponent::BeginPlay()
 	}
 
 	const int32 ItemMaxAmount = AttributeSet->GetItemMaxAmount();
-	InventorySlot.Init(FInventorySlotData(), ItemMaxAmount);
+	InventorySlots.Init(FInventorySlotData(), ItemMaxAmount);
 }
 
 void UInventoryComponent::UseItem(int32 SlotIndex)
 {
-	if (InventorySlot.IsValidIndex(SlotIndex)) 
+	if (InventorySlots.IsValidIndex(SlotIndex)) 
 	{
-		FInventorySlotData SlotData = InventorySlot[SlotIndex];
+		FInventorySlotData SlotData = InventorySlots[SlotIndex];
 		if (SlotData.ItemID != EMPTY_ID && SlotData.ItemAmount != EMPTY_AMOUNT)
 		{
 			FGameplayEventData EventData;
-			EventData.EventMagnitude = InventorySlot[SlotIndex].ItemID;
+			EventData.EventMagnitude = InventorySlots[SlotIndex].ItemID;
 		}
+	}
+}
+
+void UInventoryComponent::AddItem(int32 ItemId, int32 ItemAmount)
+{
+	int32 TempAmount = ItemAmount;
+	
+	for (const auto& InventorySlot : InventorySlots)
+	{
+		if (InventorySlot.ItemID == ItemId )
+		{
+			
+		}	
 	}
 }
 
