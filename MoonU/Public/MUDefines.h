@@ -8,6 +8,9 @@
 #define TIMESTOPDILATION 0.0f
 #define ORIGINALTIME 1.0f
 
+#define EMPTY_ID 0
+#define EMPTY_AMOUNT 0 
+
 #define HEAD_BONE_NAME TEXT("head")
 
 #define SUIT_TAG TEXT("Gameplay.Interactable.Suit")

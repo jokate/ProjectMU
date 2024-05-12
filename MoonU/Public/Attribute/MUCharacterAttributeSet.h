@@ -24,6 +24,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimewindConsumption);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopConsumption);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopDuration);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, ItemMaxAmount);
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
@@ -39,6 +40,9 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxStamina;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Item Max Amount", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData ItemMaxAmount;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CurrentTimeGauge;

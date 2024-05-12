@@ -7,6 +7,8 @@
 #include "InventoryComponent.generated.h"
 
 
+struct FInventorySlotData;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MOONU_API UInventoryComponent : public UActorComponent
 {
@@ -20,8 +22,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void UseItem(int32 SlotIndex);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Slot")
+	TArray<FInventorySlotData> InventorySlot;
 };

@@ -12,7 +12,8 @@ UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	  MaxTimeGauge(100.0f),
 	  TimewindConsumption(0.1f),
 	  TimeStopConsumption(50.0f),
-	  TimeStopDuration(3.0f)
+	  TimeStopDuration(3.0f),
+	  ItemMaxAmount(20)
 {
 }
 

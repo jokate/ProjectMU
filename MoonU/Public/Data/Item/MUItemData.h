@@ -32,3 +32,45 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ItemMaxAmount = 0;
 };
+
+USTRUCT(BlueprintType)
+struct FInventorySlotData
+{
+	GENERATED_BODY()
+
+	FInventorySlotData()
+	{
+	}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemID = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemAmount = 0;
+
+	bool operator==(const FInventorySlotData& InventorySlotData)
+	{
+		return ItemID == InventorySlotData.ItemID;
+	}
+	
+	bool operator==(int32 InID)
+	{
+		return ItemID == InID;
+	}
+};
+
+
+USTRUCT(BlueprintType)
+struct FItemDisplayDataRow : public FTableRowBase
+{
+	GENERATED_BODY()
+	public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Image")
+	TObjectPtr<UTexture2D> ImageTexture;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Text")
+	FText ItemText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Description")
+	FText ItemDescription;
+};

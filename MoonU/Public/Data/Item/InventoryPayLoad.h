@@ -17,5 +17,5 @@ class MOONU_API UInventoryPayLoad : public UObject
 
 public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FInventoryData PayloadInventoryData;
+	FInventorySlotData PayloadInventoryData;
 };
