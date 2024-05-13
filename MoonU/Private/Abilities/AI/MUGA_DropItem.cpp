@@ -3,7 +3,6 @@
 
 #include "Abilities/AI/MUGA_DropItem.h"
 
-#include "Abilities/AT/MUAT_CreateItemEntity.h"
 #include "Entity/InteractableEntity/ItemEntity.h"
 
 UMUGA_DropItem::UMUGA_DropItem()
