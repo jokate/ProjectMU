@@ -22,7 +22,9 @@ class MOONU_API IInventoryOwner
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void UseItem(int32 SlotIndex) = 0 ;
+	virtual void UseItemBySlot(int32 SlotIndex) = 0 ;
 
 	virtual void AddItem(int32 ItemId, int32 ItemAmount) = 0;
+
+	virtual void UseItemByItemID(int32 ItemID) = 0;
 };

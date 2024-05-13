@@ -18,7 +18,9 @@ class MOONU_API UInventoryComponent : public UActorComponent, public IInventoryO
 public:
 	UInventoryComponent();
 	
-	virtual void UseItem(int32 SlotIndex) override;
+	virtual void UseItemBySlot(int32 SlotIndex) override;
+
+	virtual void UseItemByItemID(int32 ItemID) override;
 
 	virtual void AddItem(int32 ItemId, int32 ItemAmount) override;
 

@@ -27,6 +27,9 @@ public :
 	FGameplayTag ItemTag;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemLevel;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UGameplayEffect> EffectClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

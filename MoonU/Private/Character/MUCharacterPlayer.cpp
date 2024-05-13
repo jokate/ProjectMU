@@ -246,9 +246,14 @@ void AMUCharacterPlayer::AddItem(int32 ItemId, int32 ItemAmount)
 	InventoryComponent->AddItem(ItemId, ItemAmount);
 }
 
-void AMUCharacterPlayer::UseItem(int32 SlotIndex)
+void AMUCharacterPlayer::UseItemBySlot(int32 SlotIndex)
 {
-	InventoryComponent->UseItem(SlotIndex);
+	InventoryComponent->UseItemBySlot(SlotIndex);
+}
+
+void AMUCharacterPlayer::UseItemByItemID(int32 SlotIndex)
+{
+	InventoryComponent->UseItemByItemID(SlotIndex);
 }
 
 void AMUCharacterPlayer::TryInteract()

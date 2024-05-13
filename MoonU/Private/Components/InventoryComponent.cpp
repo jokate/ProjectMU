@@ -49,7 +49,7 @@ void UInventoryComponent::BeginPlay()
 	InventorySlots.Init(FInventorySlotData(), ItemMaxAmount);
 }
 
-void UInventoryComponent::UseItem(int32 SlotIndex)
+void UInventoryComponent::UseItemBySlot(int32 SlotIndex)
 {
 	if (InventorySlots.IsValidIndex(SlotIndex)) 
 	{
@@ -58,6 +58,49 @@ void UInventoryComponent::UseItem(int32 SlotIndex)
 		{
 			FGameplayEventData EventData;
 			EventData.EventMagnitude = InventorySlots[SlotIndex].ItemID;
+		}
+	}
+}
+
+void UInventoryComponent::UseItemByItemID(int32 ItemID)
+{
+	IAbilitySystemInterface* ASI = GetOwner<IAbilitySystemInterface>();
+
+	if (ASI == nullptr)
+	{
+		return;	
+	}
+
+	UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
+
+	if (ASC == nullptr)
+	{
+		return;
+	}
+
+	UGameDataManager* GDM = UGameDataManager::Get();
+
+	if (GDM == nullptr)
+	{
+		return;
+	} 
+	
+	for (auto& InventorySlot : InventorySlots)
+	{
+		if (InventorySlot.ItemID == ItemID)
+		{
+			InventorySlot.ItemAmount--;
+
+			FItemDataRow ItemDataRow = GDM->GetItemDataRow(InventorySlot.ItemID);
+
+			FGameplayEffectContextHandle Context = ASC->MakeEffectContext();
+			FGameplayEffectSpecHandle Spec = ASC->MakeOutgoingSpec(ItemDataRow.EffectClass, ItemDataRow.ItemLevel, Context);
+			ASC->ApplyGameplayEffectSpecToSelf(*Spec.Data.Get());
+			
+			if (InventorySlot.ItemAmount <= EMPTY_AMOUNT)
+			{
+				InventorySlot = FInventorySlotData();
+			} 
 		}
 	}
 }
