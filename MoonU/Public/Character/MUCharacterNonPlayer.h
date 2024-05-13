@@ -8,6 +8,8 @@
 #include "Interface/MUEnemy.h"
 #include "MUCharacterNonPlayer.generated.h"
 
+struct FGameplayEventData;
+
 UCLASS()
 class MOONU_API AMUCharacterNonPlayer : public AMUCharacterBase, public IMUEnemy
 {

@@ -37,7 +37,6 @@ void UMUGA_AIDead::OnGoldenTimeFinished()
 {
 	//파괴 전에 데이터를 기반으로 해서 아이템을 전달하는 방식으로 구현화를 이끌어야 한다.
 	//내부 데이터를 기준으로 해서 아이템 풀을 기준으로 데이터를 반환하면 될 것으로 보임.
-	// 따로 Ability로 관리를 들어가는 것이
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActorInfo->AvatarActor.Get(), MU_CHARACTERSTATE_DEFENDING, CurrentEventData);
 	
 	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();

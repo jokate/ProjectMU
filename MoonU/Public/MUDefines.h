@@ -56,3 +56,6 @@
 #define MU_CHARACTERSTATE_TIMEWINDING FGameplayTag::RequestGameplayTag(FName("Character.State.TimeWinding"))
 #define MU_CHARACTERSTATE_TIMESTOP FGameplayTag::RequestGameplayTag(FName("Character.State.TimeStop"))
 #define MU_CHARACTERSTATE_PARRY FGameplayTag::RequestGameplayTag(FName("Character.State.Parry"))
+
+#define MU_ITEM_TAG_CONSUMABLE FGameplayTag::RequestGameplayTag(FName("Item.Type.Consumable"))
+#define MU_ITEM_TAG_EQUIPPABLE FGameplayTag::RequestGameplayTag(FName("Item.Type.Equippable"))
