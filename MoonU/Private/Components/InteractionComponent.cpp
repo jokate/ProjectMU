@@ -26,7 +26,8 @@ void UInteractionComponent::BeginPlay()
 
 		if (ASC)
 		{
-			ASC->TryActivateAbilityByClass(RelatedAbility);
+			FGameplayAbilitySpec Spec(RelatedAbility);
+			ASC->GiveAbilityAndActivateOnce(Spec);
 		}
 	}
 }
