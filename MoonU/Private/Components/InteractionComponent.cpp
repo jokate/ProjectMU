@@ -3,6 +3,8 @@
 
 #include "Components/InteractionComponent.h"
 
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
 #include "Interface/InteractableTarget.h"
 
 
@@ -10,8 +12,23 @@
 UInteractionComponent::UInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+}
 
-	// ...
+void UInteractionComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	IAbilitySystemInterface* ASI = GetOwner<IAbilitySystemInterface>();
+
+	if (ASI)
+	{
+		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
+
+		if (ASC)
+		{
+			ASC->TryActivateAbilityByClass(RelatedAbility);
+		}
+	}
 }
 
 void UInteractionComponent::TryInteract()

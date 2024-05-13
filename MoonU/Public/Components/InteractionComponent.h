@@ -16,15 +16,19 @@ class MOONU_API UInteractionComponent : public UActorComponent, public IInteract
 public:
 	// Sets default values for this component's properties
 	UInteractionComponent();
-
-protected:
-
+	
 #pragma region IInteractor
 	virtual void TryInteract() override;
 
 	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
 #pragma endregion IInteractor
+
+protected:
+	virtual void BeginPlay() override;
 public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<AActor> CachedActor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<class UGameplayAbility> RelatedAbility;
 };

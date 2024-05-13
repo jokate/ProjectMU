@@ -14,6 +14,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Framework/MUPlayerState.h"
 
@@ -36,6 +37,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 }
 
 // Called when the game starts or when spawned
@@ -245,6 +247,16 @@ void AMUCharacterPlayer::AddItem(int32 ItemId, int32 ItemAmount)
 void AMUCharacterPlayer::UseItem(int32 SlotIndex)
 {
 	InventoryComponent->UseItem(SlotIndex);
+}
+
+void AMUCharacterPlayer::TryInteract()
+{
+	InteractionComponent->TryInteract();
+}
+
+void AMUCharacterPlayer::SetCachedInteractionTarget(AActor* TargetActor)
+{
+	InteractionComponent->SetCachedInteractionTarget(TargetActor);
 }
 
 

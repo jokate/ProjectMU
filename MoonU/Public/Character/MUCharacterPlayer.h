@@ -7,6 +7,7 @@
 #include "InputAction.h"
 #include "MUCharacterBase.h"
 #include "Data/MUEnum.h"
+#include "Interface/Interactor.h"
 #include "Interface/InventoryOwner.h"
 #include "Interface/MUPlayer.h"
 #include "MUCharacterPlayer.generated.h"
@@ -14,7 +15,8 @@
 struct FInputActionValue;
 
 UCLASS()
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer, public IInventoryOwner
+
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer, public IInventoryOwner, public IInteractor
 {
 	GENERATED_BODY()
 
@@ -61,6 +63,12 @@ protected :
 
 	virtual void UseItem(int32 SlotIndex) override;
 #pragma endregion IInventoryOwner
+
+#pragma region IInteractor
+	virtual void TryInteract() override;
+
+	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
+#pragma endregion IInteractor
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -71,6 +79,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Inventory, meta = (AloowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Interaction, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInteractionComponent> InteractionComponent;
 
 protected:
 	UPROPERTY()

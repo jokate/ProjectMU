@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MUGASWidget.h"
+#include "Attribute/MUCharacterAttributeSet.h"
 #include "MUHpWidget.generated.h"
 
 /**
