@@ -49,4 +49,5 @@ void AItemEntity::OnInitialize(const FName& InName)
 void AItemEntity::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
