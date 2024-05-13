@@ -111,6 +111,11 @@ struct FItemDropTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName, FItemDropData> ItemPoolingData;
+	FItemDropTableRow()
+	{
+		
+	}
+	
+	UPROPERTY(EditAnywhere, BLueprintReadWrite)
+	TArray<FItemDropData> DropData;
 };

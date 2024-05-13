@@ -40,7 +40,7 @@ UGameDataManager* UGameDataManager::Get()
 	return NewObject<UGameDataManager>();
 }
 
-const FItemDataRow UGameDataManager::GetItemDataRow(const FName& InNameId) const
+FItemDataRow UGameDataManager::GetItemDataRow(const FName& InNameId) const
 {
 	const FItemDataRow* Row = ItemDataTable->FindRow<FItemDataRow>(InNameId, "");
 
@@ -52,7 +52,7 @@ const FItemDataRow UGameDataManager::GetItemDataRow(const FName& InNameId) const
 	return *Row;
 }
 
-const FItemDataRow UGameDataManager::GetItemDataRow(const int32 InItemId)
+FItemDataRow UGameDataManager::GetItemDataRow(const int32 InItemId)
 {
 	if (ItemTableMap.Contains(InItemId) == false)
 	{
@@ -64,6 +64,18 @@ const FItemDataRow UGameDataManager::GetItemDataRow(const int32 InItemId)
 	if (Row == nullptr)
 	{
 		return FItemDataRow();
+	}
+
+	return *Row;
+}
+
+FItemDropTableRow UGameDataManager::GetItemDropTableRow(const FName& InNameId) const
+{
+	const FItemDropTableRow* Row = ItemDropTable->FindRow<FItemDropTableRow>(InNameId, "");
+
+	if (Row == nullptr)
+	{
+		return FItemDropTableRow();
 	}
 
 	return *Row;

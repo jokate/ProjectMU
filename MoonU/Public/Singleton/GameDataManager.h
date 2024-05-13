@@ -21,14 +21,19 @@ public :
 	
 	static UGameDataManager* Get();
 
-	const FItemDataRow GetItemDataRow(const FName& InNameId) const;
+	FItemDataRow GetItemDataRow(const FName& InNameId) const;
 
-	const FItemDataRow GetItemDataRow(const int32 InItemId);
+	FItemDataRow GetItemDataRow(const int32 InItemId);
+
+	FItemDropTableRow GetItemDropTableRow(const FName& InNameId) const;
 	
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UDataTable> ItemDataTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UDataTable> ItemDropTable;
 	
 	UPROPERTY(Transient, BlueprintReadWrite)
 	TMap<int32, FName> ItemTableMap;
