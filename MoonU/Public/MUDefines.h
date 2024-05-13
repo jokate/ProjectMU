@@ -38,6 +38,7 @@
 #define MU_EVENT_TIMESTOP FGameplayTag::RequestGameplayTag(FName("Event.TimeStop"))
 #define MU_EVENT_TIMESTOPEND FGameplayTag::RequestGameplayTag(FName("Event.TimeStopEnd"))
 #define MU_EVENT_TIMEREWINDEND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewindEnd"))
+#define MU_EVENT_DROPITEM FGameplayTag::RequestGameplayTag(FName("Event.DropItem"))
 
 #define MU_EVENT_ATTACKFINISHED FGameplayTag::RequestGameplayTag(FName("Event.AttackFinished"))
 #define MU_EVENT_ATTACKSTARTED FGameplayTag::RequestGameplayTag(FName("Event.AttackStarted"))

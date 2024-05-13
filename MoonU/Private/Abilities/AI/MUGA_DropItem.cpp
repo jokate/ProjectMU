@@ -23,7 +23,7 @@ void UMUGA_DropItem::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		return;
 	}
 	// 해당 부분에서 데이터를 기반으로 해서 아이템 Entity를 생성해줘야 한다고 생각한다.
-	AItemEntity* Entity = GetWorld()->SpawnActorDeferred<AItemEntity>(AItemEntity::StaticClass(), AbilityActor->GetActorTransform());
+	AItemEntity* Entity = GetWorld()->SpawnActorDeferred<AItemEntity>(ItemEntityClass, AbilityActor->GetActorTransform());
 	Entity->OnInitialize(ItemDropName);
 
 	Entity->FinishSpawning(AbilityActor->GetActorTransform());

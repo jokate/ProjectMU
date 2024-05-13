@@ -18,6 +18,9 @@ public :
 	UMUGA_DropItem();
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Item Class")
+	TSubclassOf<class AItemEntity> ItemEntityClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Drop ID")
 	FName ItemDropName;
