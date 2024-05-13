@@ -10,7 +10,7 @@
 struct FInventorySlotData;
 
 UCLASS()
-class MOONU_API AItemEntity : public AInteractableEntity, public IItemGiver
+class MOONU_API AItemEntity : public AInteractableEntity
 {
 	GENERATED_BODY()
 
@@ -18,14 +18,14 @@ public:
 	// Sets default values for this actor's properties
 	AItemEntity();
 
+	virtual void OnInitialize(const FName& InName);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
-	UPROPERTY()
+protected :
 	UPROPERTY(VisibleAnywhere)
-	TArray<FInventorySlotData> InventoryData;
-	
+	TArray<FInventorySlotData> InventorySlotData;
 };
 

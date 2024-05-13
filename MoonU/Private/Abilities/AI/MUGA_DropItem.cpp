@@ -4,6 +4,7 @@
 #include "Abilities/AI/MUGA_DropItem.h"
 
 #include "Abilities/AT/MUAT_CreateItemEntity.h"
+#include "Entity/InteractableEntity/ItemEntity.h"
 
 UMUGA_DropItem::UMUGA_DropItem()
 {
@@ -16,7 +17,20 @@ void UMUGA_DropItem::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UMUAT_CreateItemEntity* NewTask = UMUAT_CreateItemEntity::CreateTask(this, ItemDropName);
+	AActor* AbilityActor = ActorInfo->AvatarActor.Get();
 
-	NewTask->ReadyForActivation();
+	if (AbilityActor == nullptr)
+	{
+		return;
+	}
+	// 해당 부분에서 데이터를 기반으로 해서 아이템 Entity를 생성해줘야 한다고 생각한다.
+	AItemEntity* Entity = GetWorld()->SpawnActorDeferred<AItemEntity>(AItemEntity::StaticClass(), AbilityActor->GetActorTransform());
+	Entity->OnInitialize(ItemDropName);
+
+	Entity->FinishSpawning(AbilityActor->GetActorTransform());
+
+	bool bReplicateEndAbility = true;
+	bool bWasCancelled = false;
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
