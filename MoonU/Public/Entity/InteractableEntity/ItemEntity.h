@@ -19,6 +19,8 @@ public:
 	AItemEntity();
 
 	virtual void OnInitialize(const FName& InName);
+
+	virtual void OnInteracted(AActor* InstigatorActor) override;
 	
 protected:
 	// Called when the game starts or when spawned

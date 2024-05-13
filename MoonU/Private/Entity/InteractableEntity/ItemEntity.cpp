@@ -45,6 +45,23 @@ void AItemEntity::OnInitialize(const FName& InName)
 	}
 }
 
+void AItemEntity::OnInteracted(AActor* InstigatorActor)
+{
+	Super::OnInteracted(InstigatorActor);
+
+	IInventoryOwner* InventoryOwner = Cast<IInventoryOwner>(InstigatorActor);
+
+	if (InventoryOwner == nullptr)
+	{
+		return;
+	}
+
+	for (const auto& InventorySlot : InventorySlotData)
+	{
+		InventoryOwner->AddItem(InventorySlot.ItemID, InventorySlot.ItemAmount);	
+	}
+}
+
 // Called when the game starts or when spawned
 void AItemEntity::BeginPlay()
 {
