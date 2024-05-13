@@ -37,26 +37,8 @@ void UMUGA_AIDead::OnGoldenTimeFinished()
 {
 	//파괴 전에 데이터를 기반으로 해서 아이템을 전달하는 방식으로 구현화를 이끌어야 한다.
 	//내부 데이터를 기준으로 해서 아이템 풀을 기준으로 데이터를 반환하면 될 것으로 보임.
-
-	FGameplayAbilityTargetData* EventData = CurrentEventData.TargetData.Get(0);
-
-	TArray<TWeakObjectPtr<AActor>> InstigatorActorArr = EventData->GetActors();
-
-	if (InstigatorActorArr.IsValidIndex(0))
-	{
-		AActor* InstigatorActor = InstigatorActorArr[0].Get();
-
-		if (InstigatorActor->IsValidLowLevel())
-		{
-			// 해당 부분에서 아이템을 받아야 함.
-			FGameplayEventData TargetEventData;
-			TargetEventData.Instigator = GetOwningActorFromActorInfo();
-
-			//임시적 코드 -> 이벤트 송신.
-			// Actor 레벨에서 데이터를 관리해야 하는가? Ability 레벨에서 데이터가 관리가 되어야 하는가? 이건 조금 애매할 수 있다고 봄.
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_BLOCKRECOVER, TargetEventData);
-		}
-	}
+	// 따로 Ability로 관리를 들어가는 것이
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActorInfo->AvatarActor.Get(), MU_CHARACTERSTATE_DEFENDING, CurrentEventData);
 	
 	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();
 
