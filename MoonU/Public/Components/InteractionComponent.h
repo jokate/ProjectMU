@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interface/Interactor.h"
 #include "InteractionComponent.generated.h"
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UInteractionComponent : public UActorComponent
+class MOONU_API UInteractionComponent : public UActorComponent, public IInteractor
 {
 	GENERATED_BODY()
 
@@ -17,8 +18,12 @@ public:
 	UInteractionComponent();
 
 protected:
-	virtual void TryInteract();
 
+#pragma region IInteractor
+	virtual void TryInteract() override;
+
+	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
+#pragma endregion IInteractor
 public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<AActor> CachedActor;

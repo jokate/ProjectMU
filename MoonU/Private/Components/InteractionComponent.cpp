@@ -28,3 +28,8 @@ void UInteractionComponent::TryInteract()
 		InteractableTarget->OnInteracted(GetOwner());
 	}
 }
+
+void UInteractionComponent::SetCachedInteractionTarget(AActor* TargetActor)
+{
+	CachedActor = TargetActor;
+}

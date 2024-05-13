@@ -38,6 +38,11 @@ void UMUAT_TraceforInteraction::TickTask(float DeltaTime)
 	{
 		SphereTraceForInteraction();
 	}
+
+	if (InteractionCheckFinished.IsBound())
+	{
+		InteractionCheckFinished.Broadcast(CachedActor);	
+	}
 }
 
 void UMUAT_TraceforInteraction::SphereTraceForInteraction()
