@@ -51,56 +51,27 @@ void UInventoryComponent::BeginPlay()
 
 void UInventoryComponent::UseItemBySlot(int32 SlotIndex)
 {
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
+	
 	if (InventorySlots.IsValidIndex(SlotIndex)) 
 	{
 		FInventorySlotData SlotData = InventorySlots[SlotIndex];
 		if (SlotData.ItemID != EMPTY_ID && SlotData.ItemAmount != EMPTY_AMOUNT)
 		{
-			FGameplayEventData EventData;
-			EventData.EventMagnitude = InventorySlots[SlotIndex].ItemID;
+			UseItem(SlotData, ASC);
 		}
 	}
 }
 
 void UInventoryComponent::UseItemByItemID(int32 ItemID)
 {
-	IAbilitySystemInterface* ASI = GetOwner<IAbilitySystemInterface>();
-
-	if (ASI == nullptr)
-	{
-		return;	
-	}
-
-	UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
-
-	if (ASC == nullptr)
-	{
-		return;
-	}
-
-	UGameDataManager* GDM = UGameDataManager::Get();
-
-	if (GDM == nullptr)
-	{
-		return;
-	} 
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
 	
 	for (auto& InventorySlot : InventorySlots)
 	{
 		if (InventorySlot.ItemID == ItemID)
 		{
-			InventorySlot.ItemAmount--;
-
-			FItemDataRow ItemDataRow = GDM->GetItemDataRow(InventorySlot.ItemID);
-
-			FGameplayEffectContextHandle Context = ASC->MakeEffectContext();
-			FGameplayEffectSpecHandle Spec = ASC->MakeOutgoingSpec(ItemDataRow.EffectClass, ItemDataRow.ItemLevel, Context);
-			ASC->ApplyGameplayEffectSpecToSelf(*Spec.Data.Get());
-			
-			if (InventorySlot.ItemAmount <= EMPTY_AMOUNT)
-			{
-				InventorySlot = FInventorySlotData();
-			} 
+			UseItem(InventorySlot, ASC);
 		}
 	}
 }
@@ -156,4 +127,27 @@ void UInventoryComponent::AddItem(int32 ItemId, int32 ItemAmount)
 			InventorySlots[Index].ItemID = ItemId;
  		}
 	}
+}
+
+void UInventoryComponent::UseItem(FInventorySlotData& SlotData, UAbilitySystemComponent* ASC)
+{
+	UGameDataManager* GDM = UGameDataManager::Get();
+
+	if (GDM == nullptr)
+	{
+		return;
+	}
+	
+	SlotData.ItemAmount--;
+
+	FItemDataRow ItemDataRow = GDM->GetItemDataRow(SlotData.ItemID);
+
+	FGameplayEffectContextHandle Context = ASC->MakeEffectContext();
+	FGameplayEffectSpecHandle Spec = ASC->MakeOutgoingSpec(ItemDataRow.EffectClass, ItemDataRow.ItemLevel, Context);
+	ASC->ApplyGameplayEffectSpecToSelf(*Spec.Data.Get());
+			
+	if (SlotData.ItemAmount <= EMPTY_AMOUNT)
+	{
+		SlotData = FInventorySlotData();
+	} 
 }

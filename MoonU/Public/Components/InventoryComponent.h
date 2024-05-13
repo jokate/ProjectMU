@@ -24,6 +24,8 @@ public:
 
 	virtual void AddItem(int32 ItemId, int32 ItemAmount) override;
 
+	void UseItem(FInventorySlotData& SlotData, class UAbilitySystemComponent* ASC);  
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

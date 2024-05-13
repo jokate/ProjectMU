@@ -29,6 +29,7 @@
 #define MU_INPUT_PERFECTDODGE  FGameplayTag::RequestGameplayTag(FName("InputTag.PerfectDodgeAttack"))
 #define MU_INPUT_TIMESTOP  FGameplayTag::RequestGameplayTag(FName("InputTag.TimeStop"))
 #define MU_INPUT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("InputTag.TimeRewind"))
+#define MU_INPUT_ITEMUSE_QUICK FGameplayTag::RequestGameplayTag(FName("InputTag.ItemUse"))
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
 #define MU_EVENT_TRACEEND  FGameplayTag::RequestGameplayTag(FName("Event.TraceEnd"))

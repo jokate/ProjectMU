@@ -60,7 +60,7 @@ protected :
 
 #pragma region IInventoryOwner
 	virtual void AddItem(int32 ItemId, int32 ItemAmount) override;
-
+	
 	virtual void UseItemBySlot(int32 SlotIndex) override;
 	virtual void UseItemByItemID(int32 ItemID) override;
 #pragma endregion IInventoryOwner
