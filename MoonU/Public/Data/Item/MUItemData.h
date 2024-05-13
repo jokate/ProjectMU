@@ -77,3 +77,40 @@ struct FItemDisplayDataRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Description")
 	FText ItemDescription;
 };
+
+USTRUCT(BlueprintType)
+struct FItemDropPool
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item ID")
+	FName ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Amount")
+	int32 MinAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Amount")
+	int32 MaxAmount;
+};
+
+USTRUCT(BlueprintType)
+struct FItemDropData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FItemDropPool> DropPools;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Percentage = 0.f;
+};
+
+
+USTRUCT(BlueprintType)
+struct FItemDropTableRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, FItemDropData> ItemPoolingData;
+};

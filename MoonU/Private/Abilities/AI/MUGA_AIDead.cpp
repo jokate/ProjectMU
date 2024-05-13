@@ -53,6 +53,7 @@ void UMUGA_AIDead::OnGoldenTimeFinished()
 			TargetEventData.Instigator = GetOwningActorFromActorInfo();
 
 			//임시적 코드 -> 이벤트 송신.
+			// Actor 레벨에서 데이터를 관리해야 하는가? Ability 레벨에서 데이터가 관리가 되어야 하는가? 이건 조금 애매할 수 있다고 봄.
 			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_BLOCKRECOVER, TargetEventData);
 		}
 	}
