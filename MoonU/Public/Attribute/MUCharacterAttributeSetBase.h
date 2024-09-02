@@ -33,6 +33,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRange);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackDamage);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRate);
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DropExperience);
 	
 	
 public :
@@ -71,5 +72,10 @@ protected :
 	UPROPERTY(BlueprintReadOnly, Category = "DefendRange", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData DefendRange;
 
+#pragma region Experience
+	UPROPERTY(BlueprintReadOnly, Category = "Experience", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData DropExperience;
+#pragma endregion
+	
 	bool bOutOfHealth = false;
 };

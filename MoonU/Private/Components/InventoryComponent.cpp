@@ -45,8 +45,8 @@ void UInventoryComponent::BeginPlay()
 		return;
 	}
 
-	const int32 ItemMaxAmount = AttributeSet->GetItemMaxAmount();
-	InventorySlots.Init(FInventorySlotData(), ItemMaxAmount);
+	//const int32 ItemMaxAmount = AttributeSet->GetItemMaxAmount();
+	//InventorySlots.Init(FInventorySlotData(), ItemMaxAmount);
 }
 
 void UInventoryComponent::UseItemBySlot(int32 SlotIndex)

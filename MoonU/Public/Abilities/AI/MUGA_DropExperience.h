@@ -4,29 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "MUGA_Dead.generated.h"
+#include "MUGA_DropExperience.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_Dead : public UGameplayAbility
+class MOONU_API UMUGA_DropExperience : public UGameplayAbility
 {
 	GENERATED_BODY()
-	
-public : 
 
-	UMUGA_Dead();
+public :
+	UMUGA_DropExperience();
 
-protected :
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
-	virtual void OnCharacterDead(const FGameplayEventData* TriggerEventData);
-	
-	UFUNCTION()
-	void OnDeadAnimationEnded();
-	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UAnimMontage> DeadAnimMontage;
-};
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DropEXP | Level")
+	float Level;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DropEXP | EffectClass")
+	TSubclassOf<UGameplayEffect> DropExpClass;
+};

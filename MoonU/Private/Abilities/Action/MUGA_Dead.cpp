@@ -3,9 +3,11 @@
 
 #include "Abilities/Action/MUGA_Dead.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
 
 UMUGA_Dead::UMUGA_Dead()
 {
@@ -17,13 +19,13 @@ void UMUGA_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	OnCharacterDead();
+	OnCharacterDead(TriggerEventData);
 	
 	UAbilityTask_PlayMontageAndWait* MontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("DEADMONTAAGE"), DeadAnimMontage);
 	MontageTask->ReadyForActivation();
 }
 
-void UMUGA_Dead::OnCharacterDead()
+void UMUGA_Dead::OnCharacterDead(const FGameplayEventData* TriggerEventData)
 {
 	ACharacter* TargetCharacter = Cast<ACharacter>(CurrentActorInfo->AvatarActor.Get());
 

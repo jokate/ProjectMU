@@ -13,7 +13,9 @@ UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	  TimewindConsumption(0.1f),
 	  TimeStopConsumption(50.0f),
 	  TimeStopDuration(3.0f),
-	  ItemMaxAmount(20)
+	  MaxExperience(100.f),
+	  CurrentExperience(0.f),
+	  CurrentLevel(1.f)
 {
 }
 
@@ -30,6 +32,19 @@ void UMUCharacterAttributeSet::PreAttributeChange(const FGameplayAttribute& Attr
 void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
 { 
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+
+	constexpr float MinValue = 0.f;
+	
+	if (Attribute == GetCurrentExperienceAttribute())
+	{
+		//만약 레벨업이 되었다면 0으로 만든다.
+		if (CurrentExperience.GetCurrentValue() == GetMaxExperience())
+		{
+			CurrentExperience = MinValue;
+			CurrentLevel = GetCurrentLevel() + 1;
+		}
+	}
+	
 }
 
 bool UMUCharacterAttributeSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
@@ -51,5 +66,11 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetCurrentTimeGaugeAttribute())
 	{
 		CurrentTimeGauge = FMath::Clamp(GetCurrentTimeGauge(), MinValue, GetMaxTimeGauge());	
+	}
+
+	// 경험치 Attribute에 대한 처리.
+	if (Data.EvaluatedData.Attribute == GetCurrentExperienceAttribute())
+	{
+		CurrentExperience = FMath::Clamp(GetCurrentExperience(), MinValue, GetMaxExperience());
 	}
 }
