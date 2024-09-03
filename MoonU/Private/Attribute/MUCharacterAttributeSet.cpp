@@ -41,7 +41,9 @@ void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Att
 		if (CurrentExperience.GetCurrentValue() == GetMaxExperience())
 		{
 			CurrentExperience = MinValue;
-			CurrentLevel = GetCurrentLevel() + 1;
+			CurrentLevel = GetCurrentLevel() + 1; 
+
+			UE_LOG(LogTemp, Log, TEXT("LevelUp"));
 		}
 	}
 	
@@ -72,5 +74,6 @@ void UMUCharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetCurrentExperienceAttribute())
 	{
 		CurrentExperience = FMath::Clamp(GetCurrentExperience(), MinValue, GetMaxExperience());
+		UE_LOG(LogTemp, Log, TEXT("Current Exp : %f"), CurrentExperience.GetCurrentValue());
 	}
 }

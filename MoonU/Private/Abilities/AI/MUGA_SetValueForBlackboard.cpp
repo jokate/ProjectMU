@@ -67,6 +67,7 @@ void UMUGA_SetValueForBlackboard::TryChangeBlackboardValue()
 			}
 
 			BBComponent->SetValueAsEnum(SelectedKey, Enum->GetValueByName(EnumValue));
+			break;
 		}
 	default :
 		UE_LOG(LogTemp, Warning, TEXT("INVALID TYPE"));
