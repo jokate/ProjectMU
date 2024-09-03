@@ -92,7 +92,7 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 	{
 		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
 
-		if (InstigatorActor)
+		if (IsValid(InstigatorActor) == true)
 		{
 			//여기서 관련 데이터를 업데이팅을 해줘야 한다.
 			FGameplayEventData EventData;

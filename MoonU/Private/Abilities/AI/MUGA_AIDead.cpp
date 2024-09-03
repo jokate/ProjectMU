@@ -23,7 +23,6 @@ void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		if (AIController)
 		{
 			AIController->StopAI();
-
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 		}
 	}
@@ -37,9 +36,7 @@ void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 void UMUGA_AIDead::OnGoldenTimeFinished()
 {
-	//파괴 전에 데이터를 기반으로 해서 아이템을 전달하는 방식으로 구현화를 이끌어야 한다.
-	//내부 데이터를 기준으로 해서 아이템 풀을 기준으로 데이터를 반환하면 될 것으로 보임.
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActorInfo->AvatarActor.Get(), MU_EVENT_DROPITEM, CurrentEventData);
+	//파괴 전에 경험치를 부여한다.
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CurrentActorInfo->AvatarActor.Get(), MU_EVENT_DROP_EXP, CurrentEventData);
 	
 	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();

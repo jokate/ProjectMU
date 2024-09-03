@@ -38,7 +38,7 @@ void UMUGA_AIMoveTo::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 {
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(CurrentActorInfo->AvatarActor.Get());
 
-	if (ASC)
+	if (IsValid(ASC) == true)
 	{
 		ASC->GenericGameplayEventCallbacks.Remove(RetriggerTag);
 	}

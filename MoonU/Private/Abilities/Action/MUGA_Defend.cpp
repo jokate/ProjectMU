@@ -22,7 +22,7 @@ void UMUGA_Defend::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 	AActor* CurrentActor = CurrentActorInfo->AvatarActor.Get();
 
-	if (CurrentActor)
+	if (IsValid(CurrentActor) == true)
 	{
 		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(CurrentActor);
 
@@ -34,7 +34,7 @@ void UMUGA_Defend::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	
 	ACharacter* CurrentCharacter = Cast<ACharacter>(CurrentActor);
 
-	if (CurrentCharacter)
+	if (IsValid(CurrentCharacter) == true)
 	{
 		UCharacterMovementComponent* CharacterMovementComp = CurrentCharacter->GetCharacterMovement();
 

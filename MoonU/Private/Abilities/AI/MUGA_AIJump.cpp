@@ -4,7 +4,6 @@
 #include "Abilities/AI/MUGA_AIJump.h"
 
 #include "Abilities/AT/MUAT_LaunchCharacter.h"
-#include "Data/MUStruct.h"
 #include "Utility/VectorWrapper.h"
 
 UMUGA_AIJump::UMUGA_AIJump()

@@ -73,7 +73,7 @@ void UMUGA_OrderTimeWind::EndAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	ITimeWinder* TimeWinder = GetWorld()->GetAuthGameMode<ITimeWinder>();
 
-	if (TimeWinder)
+	if (TimeWinder != nullptr)
 	{
 		TimeWinder->TimeWindDeactivate();
 	}

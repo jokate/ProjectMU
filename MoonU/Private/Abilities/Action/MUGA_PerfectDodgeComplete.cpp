@@ -49,7 +49,7 @@ void UMUGA_PerfectDodgeComplete::EndAbility(const FGameplayAbilitySpecHandle Han
 		WorldSettings->SetTimeDilation(1.0f);
 	}
 	
-	if (ASC)
+	if (IsValid(ASC) == true)
 	{
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
