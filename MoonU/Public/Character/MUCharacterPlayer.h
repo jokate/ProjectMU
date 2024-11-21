@@ -93,4 +93,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
 	TObjectPtr<class UInputConfig> InputConfig;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Test Character ID")
+	int32 TestCharacterID;
 };

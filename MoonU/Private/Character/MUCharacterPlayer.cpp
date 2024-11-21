@@ -16,7 +16,9 @@
 #include "Components/AbilityInitComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Data/DataTable/MUData.h"
 #include "Framework/MUPlayerState.h"
+#include "Library/MUFunctionLibrary.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -53,6 +55,12 @@ void AMUCharacterPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+
+	FMUCharacterInfo Characterinfo;
+	if (UMUFunctionLibrary::GetCharacterInfoData(this, TestCharacterID, Characterinfo) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Character Load Failed"));	
 	}
 }
 
@@ -93,7 +101,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	// Set up action bindings
 	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent))
-		{
+	{
 		//Moving
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
 		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::OnStopMove);
@@ -240,7 +248,7 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
-		//AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
 

@@ -5,6 +5,7 @@
 
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Singleton/MUDataTableSubsystem.h"
 
 ACharacter* UMUFunctionLibrary::GetLocalPlayerCharacter(UObject* WorldObject)
 {
@@ -21,5 +22,60 @@ FGameplayTag UMUFunctionLibrary::GetInteractableGameplayTag(UObject* Interactabl
 	}
 	
 	return Target->GetEntityTag();
+}
+
+UGameInstance* UMUFunctionLibrary::GetGameInstance(UObject* Object)
+{
+	if ( IsValid(Object) == false)
+	{
+		return nullptr;
+	}
+
+	UWorld* World = Object->GetWorld();
+
+	if ( IsValid(World) == false)
+	{
+		return nullptr;	
+	}
+	
+	return World->GetGameInstance();
+}
+
+bool UMUFunctionLibrary::GetInputMapperData(UObject* Object, int32 InCharacterID, FMUInputMapper& InputMapperData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetInputMapperData(InCharacterID, InputMapperData);
+}
+
+bool UMUFunctionLibrary::GetCharacterInfoData(UObject* Object, int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+    if ( IsValid(GameInstance) == false)
+    {
+    	return false;
+    }
+
+    UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+    if ( IsValid(DataTableSubsystem) == false )
+    {
+    	return false;
+    }
+
+    return DataTableSubsystem->GetCharacterInfoData(InCharacterID, OutCharacterInfo);
 }
 

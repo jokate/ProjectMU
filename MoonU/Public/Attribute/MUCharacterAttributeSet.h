@@ -37,6 +37,7 @@ public :
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 protected :
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CurrentStamina;
 
@@ -44,6 +45,7 @@ protected :
 	FGameplayAttributeData MaxStamina;
 
 #pragma region Experience
+	
 	UPROPERTY(BlueprintReadWrite, Category = "Experience", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxExperience;
 
@@ -61,6 +63,7 @@ protected :
 	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxTimeGauge;
 
+	//리팩토링 필요. 캐릭터에 대한 부분이 있어야 한다면 나중에 리펙토링이 필요해보인다.
 	UPROPERTY(BlueprintReadOnly, Category = "Time Wind Consumption")
 	FGameplayAttributeData TimewindConsumption;
 

@@ -21,4 +21,13 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	static FGameplayTag GetInteractableGameplayTag(UObject* InteractableTarget);
+
+	UFUNCTION(BlueprintCallable)
+	static UGameInstance* GetGameInstance(UObject* Object);
+
+	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	static bool GetInputMapperData(UObject* Object, int32 InCharacterID, FMUInputMapper& InputMapperData);
+
+	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	static bool GetCharacterInfoData(UObject* Object, int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
 };

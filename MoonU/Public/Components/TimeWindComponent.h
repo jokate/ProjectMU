@@ -27,6 +27,7 @@ public:
 	virtual FOnTimewindEnd& GetTimeWindEndEvent() override;
 	
 	void OnIntialize();
+	
 protected :
 	void TimeRewind();
 	
