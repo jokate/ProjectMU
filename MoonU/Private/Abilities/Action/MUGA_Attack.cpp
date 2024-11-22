@@ -8,11 +8,8 @@
 #include "MUDefines.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
-#include "Attribute/MUCharacterAttributeSet.h"
 #include "Attribute/MUStaminaAttributeSet.h"
 #include "Data/Animation/MUComboActionData.h"
-
-class UMUStaminaAttributeSet;
 
 UMUGA_Attack::UMUGA_Attack()
 {
