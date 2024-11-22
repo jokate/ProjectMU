@@ -29,6 +29,12 @@ void AMUCharacterBase::BeginPlay()
 	TimeWindComponent->OnIntialize();
 }
 
+void AMUCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	AbilityInitComponent->OnEndPlay(CharacterID);
+	Super::EndPlay(EndPlayReason);
+}
+
 void AMUCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

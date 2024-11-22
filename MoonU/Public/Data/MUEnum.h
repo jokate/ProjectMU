@@ -32,6 +32,7 @@ enum EMovementSpeedEnum
 {
 	NoMove,
 	Walking,
+	
 	Sprinting
 };
 
@@ -58,4 +59,11 @@ enum EEffectApplicationMode
 {
 	Self,
 	Target,
+};
+
+UENUM(BlueprintType)
+enum EGASInputFunctionalType
+{
+	Pressed,
+	Released,
 };

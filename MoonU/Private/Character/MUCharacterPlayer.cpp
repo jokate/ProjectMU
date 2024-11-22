@@ -51,14 +51,20 @@ void AMUCharacterPlayer::BeginPlay()
 	
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
+		FMUInputMapper InputMapper;
+		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
+		{
+			return;
+		}
+
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			Subsystem->AddMappingContext(InputMapper.InputMappingContext, 0);
 		}
 	}
 
 	FMUCharacterInfo Characterinfo;
-	if (UMUFunctionLibrary::GetCharacterInfoData(this, TestCharacterID, Characterinfo) == false)
+	if (UMUFunctionLibrary::GetCharacterInfoData(this, CharacterID, Characterinfo) == false)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Character Load Failed"));	
 	}
@@ -66,7 +72,12 @@ void AMUCharacterPlayer::BeginPlay()
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	Super::EndPlay(EndPlayReason);
+	if (IsValid(AbilityInitComponent ) == true)
+	{
+		AbilityInitComponent->OnEndPlay(CharacterID);	
+	}
+	
+  	Super::EndPlay(EndPlayReason);
 }
 
 void AMUCharacterPlayer::PossessedBy(AController* NewController)
@@ -83,7 +94,7 @@ void AMUCharacterPlayer::PossessedBy(AController* NewController)
 	ASC = PS->GetAbilitySystemComponent();
 	ASC->InitAbilityActorInfo(PS, this);
 
-	AbilityInitComponent->InitAbilities();
+	AbilityInitComponent->InitAbilities(CharacterID);
 }
 
 void AMUCharacterPlayer::PostInitializeComponents()
@@ -102,17 +113,23 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	// Set up action bindings
 	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent))
 	{
+		FMUInputMapper InputMapper;
+		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
+		{
+			return;
+		}
+
 		//Moving
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_MOVE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::OnStopMove);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_MOVE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Move);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_MOVE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::OnStopMove);
 
 		//Looking
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
 
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
 
 		//TestCode
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_ITEMUSE_QUICK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::UseItemBySlot, 0);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_ITEMUSE_QUICK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::UseItemBySlot, 0);
 	}
 
 	SetupGASInputComponent();
@@ -156,20 +173,38 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 	{
 		UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(InputComponent);
 
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_SPRINT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 0);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_SPRINT, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 0);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_LMATTACK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 1);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DODGE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 2);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 3);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_JUMP, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 3);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_CHARGE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputPressed, 4);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DEFENSE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 5);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_DEFENSE, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 5);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 6);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMEREWIND, ETriggerEvent::Completed, this, &AMUCharacterPlayer::GASInputReleased, 6);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_PERFECTDODGE, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 7);
-		EnhancedInputComponent->BindActionByTag(InputConfig, MU_INPUT_TIMESTOP, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::GASInputPressed, 8);
+		if ( IsValid(EnhancedInputComponent) == false)
+		{
+			return;
+		}
+		
+		FMUInputMapper InputMapper;
+		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
+		{
+			return;
+		}
 
+		for ( FTagByInput InputByTag : InputMapper.InputByTags )
+		{
+			switch (InputByTag.GASFunctionalType)
+			{
+			case EGASInputFunctionalType::Pressed:
+				{
+					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig,  InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputPressed, InputByTag.InputID);
+					break;
+				}
+
+			case EGASInputFunctionalType::Released:
+				{
+					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputReleased, InputByTag.InputID);
+					break;
+				}
+			default:
+				{
+					break;
+				}
+			}
+		}
 	}
 }
 

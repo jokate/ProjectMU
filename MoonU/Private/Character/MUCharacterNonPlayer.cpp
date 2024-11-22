@@ -46,8 +46,8 @@ void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	ASC->InitAbilityActorInfo(this, this);
-
-	AbilityInitComponent->InitAbilities();
+	
+	AbilityInitComponent->InitAbilities(CharacterID);
 }
 
 void AMUCharacterNonPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType,

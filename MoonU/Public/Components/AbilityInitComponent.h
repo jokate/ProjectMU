@@ -16,24 +16,13 @@ public:
 	// Sets default values for this component's properties
 	UAbilityInitComponent();
 	
-	virtual void InitAbilities();
+	virtual void InitAbilities(int32 CharacterID);
 
-	virtual void OnEndPlay();
+	virtual void OnEndPlay(int32 CharacterID);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 protected:
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TArray<TSubclassOf<class UGameplayAbility>> StartAbilities;
-
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TMap<int32, TSubclassOf<class UGameplayAbility>> StartInputAbilities;
-
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TArray<TSubclassOf<class UGameplayEffect>> InfiniteGameplayEffects;
-
-	UPROPERTY(EditAnywhere, Category = "GAS")
-	TArray<TSubclassOf<class UGameplayAbility>> NeedToStartAbilities;
 };

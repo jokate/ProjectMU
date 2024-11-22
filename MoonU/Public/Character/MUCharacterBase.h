@@ -49,6 +49,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;	
+
 	virtual void PostInitializeComponents() override;
 	
 #pragma region ITimeWindTarget
@@ -95,4 +97,7 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Defend Extent")
 	FVector DefendExtent;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Test Character ID")
+	int32 CharacterID;
 };

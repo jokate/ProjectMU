@@ -87,13 +87,4 @@ protected:
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input | Config")
-	TObjectPtr<class UInputConfig> InputConfig;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Test Character ID")
-	int32 TestCharacterID;
 };

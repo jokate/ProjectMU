@@ -7,6 +7,8 @@
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
+#include "Data/DataTable/MUData.h"
+#include "Library/MUFunctionLibrary.h"
 
 
 // Sets default values for this component's properties
@@ -21,13 +23,11 @@ void UAbilityInitComponent::BeginPlay()
 }
 
 void UAbilityInitComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	OnEndPlay();
-	
+{	
 	Super::EndPlay(EndPlayReason);
 }
 
-void UAbilityInitComponent::InitAbilities()
+void UAbilityInitComponent::InitAbilities(int32 CharacterID)
 {
 	const auto* AbilityUser = GetOwner<IAbilitySystemInterface>();
 
@@ -37,26 +37,29 @@ void UAbilityInitComponent::InitAbilities()
 	}
 
 	UAbilitySystemComponent* ASC = AbilityUser->GetAbilitySystemComponent();
+
+	FMUCharacterInfo CharacterInfo;
+	UMUFunctionLibrary::GetCharacterInfoData( GetOwner(), CharacterID, CharacterInfo);
 	
-	for (const auto& StartAbility : StartAbilities)
+	for (const auto& StartAbility : CharacterInfo.StartAbilities)
 	{
 		FGameplayAbilitySpec StartSpec(StartAbility);
 		ASC->GiveAbility(StartSpec);
 	}
-	for (const auto& StartInputAbility : StartInputAbilities)
+	for (const auto& StartInputAbility : CharacterInfo.StartInputAbilities)
 	{
 		FGameplayAbilitySpec StartSpec(StartInputAbility.Value);
 		StartSpec.InputID = StartInputAbility.Key;
 		ASC->GiveAbility(StartSpec);
 	}
 
-	for (const auto& StartAbility : NeedToStartAbilities)
+	for (const auto& StartAbility : CharacterInfo.NeedToStartAbilities)
 	{
 		FGameplayAbilitySpec StartSpec(StartAbility);
 		ASC->GiveAbilityAndActivateOnce(StartSpec);
 	}
 	
-	for (const auto& InfiniteGameplayEffect : InfiniteGameplayEffects)
+	for (const auto& InfiniteGameplayEffect : CharacterInfo.InfiniteGameplayEffects)
 	{
 		FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
 		EffectContext.AddSourceObject(this);
@@ -70,7 +73,7 @@ void UAbilityInitComponent::InitAbilities()
 	}
 }
 
-void UAbilityInitComponent::OnEndPlay()
+void UAbilityInitComponent::OnEndPlay(int32 CharacterID)
 {
 	const auto* AbilityUser = GetOwner<IAbilitySystemInterface>();
 
@@ -80,8 +83,16 @@ void UAbilityInitComponent::OnEndPlay()
 	}
 
 	UAbilitySystemComponent* ASC = AbilityUser->GetAbilitySystemComponent();
+
+	if (IsValid(ASC) == false)
+	{
+		return;
+	}
+
+	FMUCharacterInfo CharacterInfo;
+	UMUFunctionLibrary::GetCharacterInfoData( GetOwner(), CharacterID, CharacterInfo);
 	
-	for (const auto& NeedToStopAbility : NeedToStartAbilities)
+	for (const auto& NeedToStopAbility : CharacterInfo.NeedToStartAbilities)
 	{
 		FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(NeedToStopAbility);
 

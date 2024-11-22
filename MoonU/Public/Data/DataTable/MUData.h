@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "EnhancedInputComponent.h"
 #include "GameplayTagContainer.h"
+#include "Data/MUEnum.h"
 #include "UObject/Object.h"
 #include "Engine/DataTable.h"
 #include "MUData.generated.h"
@@ -24,7 +25,10 @@ struct FTagByInput
 	ETriggerEvent TriggerEvent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	int32 InputID = 0; 
+	int32 InputID = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType;
 };
 
 USTRUCT(BlueprintType)
@@ -36,6 +40,12 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Identity)
 	int32 CharacterID = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputMappingContext> InputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<class UInputConfig> InputConfig;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input)
 	TArray<FTagByInput> InputByTags;
 };
