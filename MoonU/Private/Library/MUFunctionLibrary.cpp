@@ -78,4 +78,3 @@ bool UMUFunctionLibrary::GetCharacterInfoData(UObject* Object, int32 InCharacter
 
     return DataTableSubsystem->GetCharacterInfoData(InCharacterID, OutCharacterInfo);
 }
-

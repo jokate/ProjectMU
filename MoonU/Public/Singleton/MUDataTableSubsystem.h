@@ -17,10 +17,10 @@ class MOONU_API UMUDataTableSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public :
-	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual bool GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData);
 
-	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual bool GetCharacterInfoData(int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
 	
 protected :
@@ -36,6 +36,6 @@ protected :
 	UPROPERTY(Config)
 	TSoftObjectPtr<UDataTable> InputMapperDataTablePath;
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY()
 	TObjectPtr<UDataTable> InputMapperDataTable;
 };

@@ -25,9 +25,9 @@ public :
 	UFUNCTION(BlueprintCallable)
 	static UGameInstance* GetGameInstance(UObject* Object);
 
-	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	static bool GetInputMapperData(UObject* Object, int32 InCharacterID, FMUInputMapper& InputMapperData);
 
-	UFUNCTION(BlueprintCallable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	static bool GetCharacterInfoData(UObject* Object, int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
 };

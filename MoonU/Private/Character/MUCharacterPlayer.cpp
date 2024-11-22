@@ -188,13 +188,13 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		{
 			switch (InputByTag.GASFunctionalType)
 			{
-			case EGASInputFunctionalType::Pressed:
+			case Pressed:
 				{
 					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig,  InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputPressed, InputByTag.InputID);
 					break;
 				}
 
-			case EGASInputFunctionalType::Released:
+			case Released:
 				{
 					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputReleased, InputByTag.InputID);
 					break;
