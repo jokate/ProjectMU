@@ -17,16 +17,8 @@ class MOONU_API UMUCharacterAttributeSet : public UMUCharacterAttributeSetBase
 
 	UMUCharacterAttributeSet();
 public :
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentStamina);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxStamina);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentTimeGauge);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxTimeGauge);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimewindConsumption);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopConsumption);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, TimeStopDuration);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, MaxExperience);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentExperience);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSet, CurrentLevel);
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
@@ -37,12 +29,6 @@ public :
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 protected :
-	
-	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData CurrentStamina;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData MaxStamina;
 
 #pragma region Experience
 	
@@ -52,24 +38,5 @@ protected :
 	UPROPERTY(BlueprintReadWrite, Category = "Experience", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CurrentExperience;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Experience", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData CurrentLevel;
-
 #pragma endregion Experience
-	
-	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData CurrentTimeGauge;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Time Gauge", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData MaxTimeGauge;
-
-	//리팩토링 필요. 캐릭터에 대한 부분이 있어야 한다면 나중에 리펙토링이 필요해보인다.
-	UPROPERTY(BlueprintReadOnly, Category = "Time Wind Consumption")
-	FGameplayAttributeData TimewindConsumption;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Time Stop Consmuption")
-	FGameplayAttributeData TimeStopConsumption;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Time Stop Duration")
-	FGameplayAttributeData TimeStopDuration;
 };

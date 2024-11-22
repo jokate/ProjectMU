@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUTimewinderAttribute.h"
 #include "Interface/TimeStopper.h"
 
 UMUGA_TimeStop::UMUGA_TimeStop()
@@ -29,7 +30,7 @@ void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	if (ASC)
 	{
-		const UMUCharacterAttributeSet* CharacterAttribute = ASC->GetSet<UMUCharacterAttributeSet>();
+		const UMUTimewinderAttribute* CharacterAttribute = ASC->GetSet<UMUTimewinderAttribute>();
 
 		if (CharacterAttribute)
 		{

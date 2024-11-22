@@ -80,28 +80,6 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
   	Super::EndPlay(EndPlayReason);
 }
 
-void AMUCharacterPlayer::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	AMUPlayerState* PS = GetPlayerState<AMUPlayerState>();
-	
-	if (PS == nullptr)
-	{
-		return;
-	}
-
-	ASC = PS->GetAbilitySystemComponent();
-	ASC->InitAbilityActorInfo(PS, this);
-
-	AbilityInitComponent->InitAbilities(CharacterID);
-}
-
-void AMUCharacterPlayer::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-}
-
 ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	return ETeamAttitude::Hostile;

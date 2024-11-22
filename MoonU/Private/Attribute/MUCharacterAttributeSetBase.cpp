@@ -16,7 +16,7 @@ UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	  AttackRange(150.0f),
 	  AttackDamage(10.0f),
 	  DefendRate(0.5f),
-	  DropExperience(50.f)
+	  Level(1.f)
 {
 	InitCurrentHp(GetMaxHp());
 }

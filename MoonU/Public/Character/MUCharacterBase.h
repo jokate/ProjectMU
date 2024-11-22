@@ -52,6 +52,8 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;	
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void PossessedBy(AController* NewController) override;
 	
 #pragma region ITimeWindTarget
 	virtual FOnTimewindEnd& GetTimeWindEndEvent() override;

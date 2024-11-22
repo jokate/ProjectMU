@@ -25,7 +25,6 @@ class MOONU_API UMUCharacterAttributeSetBase : public UAttributeSet
 	GENERATED_BODY()
 
 public :
-	
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, Damage);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, CurrentHp);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, MaxHp);
@@ -33,8 +32,7 @@ public :
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRange);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, AttackDamage);
 	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DefendRate);
-	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, DropExperience);
-	
+	ATTRIBUTE_ACCESSORS(UMUCharacterAttributeSetBase, Level);
 	
 public :
 	UMUCharacterAttributeSetBase();
@@ -71,11 +69,9 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "DefendRange", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData DefendRange;
-
-#pragma region Experience
-	UPROPERTY(BlueprintReadOnly, Category = "Experience", Meta = (AllowPrivateAccess = true))
-	FGameplayAttributeData DropExperience;
-#pragma endregion
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Level", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData Level;
 	
 	bool bOutOfHealth = false;
 };

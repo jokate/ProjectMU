@@ -4,6 +4,7 @@
 #include "UI/MUTimeGaugeWidget.h"
 
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUTimewinderAttribute.h"
 
 void UMUTimeGaugeWidget::SetAbilitySystemComponent(AActor* InOwner)
 {
@@ -11,8 +12,8 @@ void UMUTimeGaugeWidget::SetAbilitySystemComponent(AActor* InOwner)
 	
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnTimeGaugeChanged);
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetMaxTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnMaxTimeGaugeChanged);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnTimeGaugeChanged);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetMaxTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnMaxTimeGaugeChanged);
 
 		TimeGauge = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetCurrentHpAttribute());
 		MaxTimeGauge = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetMaxHpAttribute());

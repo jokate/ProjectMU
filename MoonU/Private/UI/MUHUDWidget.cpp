@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUStaminaAttributeSet.h"
 #include "UI/MUHpWidget.h"
 #include "UI/MUTimeGaugeWidget.h"
 
@@ -14,9 +15,9 @@ void UMUHUDWidget::SetAbilitySystemComponent(AActor* InOwner)
 
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentStaminaAttribute()).AddUObject(this, &UMUHUDWidget::OnStaminaChanged);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUStaminaAttributeSet::GetCurrentStaminaAttribute()).AddUObject(this, &UMUHUDWidget::OnStaminaChanged);
 
-		const UMUCharacterAttributeSet* CurrentAttributeSet = ASC->GetSet<UMUCharacterAttributeSet>();
+		const UMUStaminaAttributeSet* CurrentAttributeSet = ASC->GetSet<UMUStaminaAttributeSet>();
 
 		if (CurrentAttributeSet)
 		{

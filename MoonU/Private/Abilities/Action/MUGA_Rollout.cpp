@@ -9,6 +9,7 @@
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUStaminaAttributeSet.h"
 #include "Components/CapsuleComponent.h"
 
 UMUGA_Rollout::UMUGA_Rollout()
@@ -34,7 +35,7 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
-	const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
+	const float CurrentStamina = ASC->GetNumericAttribute(UMUStaminaAttributeSet::GetCurrentStaminaAttribute());
 	
 	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
 

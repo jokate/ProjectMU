@@ -6,7 +6,9 @@
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/TimeWindComponent.h"
+#include "Data/DataTable/MUData.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Library/MUFunctionLibrary.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 
@@ -20,6 +22,7 @@ AMUCharacterBase::AMUCharacterBase()
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("AbilityInitComponent"));
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpComponent"));
 	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliComponent"));
+	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +41,30 @@ void AMUCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AMUCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+}
+
+void AMUCharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (IsValid(ASC) == false )
+	{
+		return;
+	}
+	
+	ASC->InitAbilityActorInfo(this, this);
+	
+	AbilityInitComponent->InitAbilities(CharacterID);
+
+	FMUCharacterInfo CharacterInfo;
+	if ( UMUFunctionLibrary::GetCharacterInfoData(this, CharacterID, CharacterInfo) == true)
+	{
+		for (auto NeedToReg : CharacterInfo.NeedToRegisterAttributeSet)
+		{
+			UAttributeSet* AttributeSet = NewObject<UAttributeSet>(this, NeedToReg);
+			ASC->AddSpawnedAttribute(AttributeSet);
+		}	
+	}
 }
 
 UMUComboActionData* AMUCharacterBase::GetComboActionData() const

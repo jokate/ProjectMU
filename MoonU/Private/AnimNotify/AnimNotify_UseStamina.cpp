@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUStaminaAttributeSet.h"
 #include "Interface/TimerWindTarget.h"
 
 void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,  const FAnimNotifyEventReference& Ref)
@@ -29,8 +30,8 @@ void UAnimNotify_UseStamina::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 
 	if (ASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()))
 	{
-		const float CurrentStamina = ASC->GetNumericAttribute(UMUCharacterAttributeSet::GetCurrentStaminaAttribute());
+		const float CurrentStamina = ASC->GetNumericAttribute(UMUStaminaAttributeSet::GetCurrentStaminaAttribute());
 
-		ASC->SetNumericAttributeBase(UMUCharacterAttributeSet::GetCurrentStaminaAttribute(), CurrentStamina - StaminaToUse);	
+		ASC->SetNumericAttributeBase(UMUStaminaAttributeSet::GetCurrentStaminaAttribute(), CurrentStamina - StaminaToUse);	
 	}
 }

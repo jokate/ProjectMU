@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUTimewinderAttribute.h"
 #include "Interface/TimerWindTarget.h"
 #include "Interface/TimeWinder.h"
 
@@ -41,7 +42,7 @@ void UMUGA_OrderTimeWind::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUGA_OrderTimeWind::OnTimewindGaugeChanged);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUGA_OrderTimeWind::OnTimewindGaugeChanged);
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
 			ASC->ExecuteGameplayCue(GameplayCueTag);	
@@ -94,7 +95,7 @@ void UMUGA_OrderTimeWind::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentTimeGaugeAttribute()).RemoveAll(this);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetCurrentTimeGaugeAttribute()).RemoveAll(this);
 
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
@@ -118,7 +119,7 @@ bool UMUGA_OrderTimeWind::CanActivateAbility(const FGameplayAbilitySpecHandle Ha
 		return false;
 	}
 
-	const auto* AttributeSet = ASC->GetSet<UMUCharacterAttributeSet>();
+	const auto* AttributeSet = ASC->GetSet<UMUTimewinderAttribute>();
 
 	if (AttributeSet == nullptr)
 	{

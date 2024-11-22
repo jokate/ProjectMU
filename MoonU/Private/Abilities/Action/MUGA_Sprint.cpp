@@ -7,6 +7,7 @@
 #include "MUDefines.h"
 #include "Abilities/AT/MUAT_CheckVelocity.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUStaminaAttributeSet.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -47,7 +48,7 @@ void UMUGA_Sprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentStaminaAttribute()).AddUObject(this, &UMUGA_Sprint::OnChangedAttribute);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUStaminaAttributeSet::GetCurrentStaminaAttribute()).AddUObject(this, &UMUGA_Sprint::OnChangedAttribute);
 	}
 
 	UMUAT_CheckVelocity* NewTask = UMUAT_CheckVelocity::CreateNewTask(this);
@@ -97,7 +98,7 @@ void UMUGA_Sprint::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 
 	if (ASC)
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UMUCharacterAttributeSet::GetCurrentStaminaAttribute()).RemoveAll(this);
+		ASC->GetGameplayAttributeValueChangeDelegate(UMUStaminaAttributeSet::GetCurrentStaminaAttribute()).RemoveAll(this);
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);

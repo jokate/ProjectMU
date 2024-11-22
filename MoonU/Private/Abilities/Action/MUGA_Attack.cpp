@@ -9,7 +9,10 @@
 #include "Character/MUCharacterPlayer.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "Attribute/MUStaminaAttributeSet.h"
 #include "Data/Animation/MUComboActionData.h"
+
+class UMUStaminaAttributeSet;
 
 UMUGA_Attack::UMUGA_Attack()
 {
@@ -84,7 +87,7 @@ void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const F
 		{
 			return;
 		}
-		const UMUCharacterAttributeSet* Attributes = ASC->GetSet<UMUCharacterAttributeSet>();
+		const UMUStaminaAttributeSet* Attributes = ASC->GetSet<UMUStaminaAttributeSet>();
 
 		if (!Attributes)
 		{

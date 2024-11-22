@@ -20,9 +20,6 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
-	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
-	AttributeSet = CreateDefaultSubobject<UMUCharacterAttributeSetBase>(TEXT("CharacterAttribute"));
 	TimeStopComponent = CreateDefaultSubobject<UTimeStopComponent>("TimeStopComponent");
 }
 
@@ -39,15 +36,6 @@ UAbilitySystemComponent* AMUCharacterNonPlayer::GetAbilitySystemComponent() cons
 void AMUCharacterNonPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-}
-
-void AMUCharacterNonPlayer::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	ASC->InitAbilityActorInfo(this, this);
-	
-	AbilityInitComponent->InitAbilities(CharacterID);
 }
 
 void AMUCharacterNonPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType,
@@ -73,7 +61,6 @@ void AMUCharacterNonPlayer::SetMotionWarp(const FName InName, EMotionWarpType In
 	const FVector ToTargetActor = TargetActor->GetActorLocation() - ActorLocation;
 	const FVector DirVector = FVector(ToTargetActor.X, ToTargetActor.Y, 0).GetSafeNormal();
 	const FVector TargetLoc = ActorLocation + DirVector * MotionWarpValue;
-
 	
 	const FRotator ComponentRot = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TargetActor->GetActorLocation());
 	const FRotator ComponentRotChanged = FRotator(0, ComponentRot.Yaw, 0);

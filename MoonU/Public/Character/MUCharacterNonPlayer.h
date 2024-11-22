@@ -26,14 +26,9 @@ protected:
 
 	virtual void PostInitializeComponents() override;
 
-	virtual void PossessedBy(AController* NewController) override;
-
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue) override;
 	
 protected :
-	UPROPERTY()
-	TObjectPtr<class UMUCharacterAttributeSetBase> AttributeSet;
-
 	UPROPERTY()
 	TObjectPtr<class UTimeStopComponent> TimeStopComponent;
 };

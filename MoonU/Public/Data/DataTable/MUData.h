@@ -70,4 +70,7 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
 	TArray<TSubclassOf<class UGameplayAbility>> NeedToStartAbilities;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
+	TArray<TSubclassOf<class UAttributeSet>> NeedToRegisterAttributeSet;
 };
