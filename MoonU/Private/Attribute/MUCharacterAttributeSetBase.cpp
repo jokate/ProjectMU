@@ -6,11 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "MUDefines.h"
-#include "Data/DataTable/MUData.h"
-#include "Elements/Framework/TypedElementOwnerStore.h"
 #include "Interface/MUEnemy.h"
-#include "Library/MUFunctionLibrary.h"
-#include "Perception/AISense_Damage.h"
 
 UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	: Damage(0.0f),
@@ -18,7 +14,8 @@ UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	  DefendRange(300.0f),
 	  AttackRange(150.0f),
 	  AttackDamage(10.0f),
-	  DefendRate(0.5f)
+	  DefendRate(0.5f),
+	  DropExperience(0.f)
 {
 	InitCurrentHp(GetMaxHp());
 }
@@ -27,7 +24,7 @@ void UMUCharacterAttributeSetBase::PreAttributeChange(const FGameplayAttribute& 
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	if (Attribute == GetDamageAttribute())
+ 	if (Attribute == GetDamageAttribute())
 	{
 		NewValue = NewValue < 0.0f ? 0.0f : NewValue;
 	}
