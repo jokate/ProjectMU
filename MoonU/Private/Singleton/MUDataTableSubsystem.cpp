@@ -54,6 +54,32 @@ bool UMUDataTableSubsystem::GetCharacterInfoData(int32 InCharacterID, FMUCharact
 	return true;
 }
 
+bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforcementData& OutEnforcementData)
+{
+	if ( IsValid(EnforcementDataTable) == false)
+	{
+		UDataTable* EnforcementDataTableLoaded = EnforcementDataTablePath.LoadSynchronous();
+		if ( IsValid(EnforcementDataTableLoaded) == false)
+		{
+			UE_LOG( LogTemp, Log, TEXT("Enforcement DataTable Is Not Valid") );
+			return false;
+		}
+
+		EnforcementDataTable = EnforcementDataTableLoaded;
+	}
+
+	EnforcementDataTable->ForeachRow<FMUEnforcementData>
+	(TEXT(""),[&] (const FName& Key, const FMUEnforcementData& Value)
+	{
+		if ( Value.EnforcementID == InEnforcementID )
+		{
+			OutEnforcementData = Value;
+		}	
+	});
+
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

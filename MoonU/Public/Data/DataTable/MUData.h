@@ -16,7 +16,7 @@
  */
 
 USTRUCT( BlueprintType )
-struct FMUCharacterAttributeInitializer
+struct FMUAttributeValue
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -34,9 +34,21 @@ struct FMUAttributeInitValues
 	GENERATED_BODY()
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	TArray<FMUCharacterAttributeInitializer> Attributes;
+	TArray<FMUAttributeValue> Attributes;
 };
 
+USTRUCT( BlueprintType )
+struct FInputFunctionalType
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	ETriggerEvent TriggerEvent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType;
+	
+};
 USTRUCT(BlueprintType)
 struct FTagByInput
 {
@@ -46,13 +58,28 @@ struct FTagByInput
 	FGameplayTag InputTag;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	ETriggerEvent TriggerEvent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
 	int32 InputID = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = InputSetter)
+	TArray<FInputFunctionalType> InputFunctionalTypes;
+};
+
+USTRUCT( BlueprintType )
+struct FSkillInfoData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = InputSetter )
+	bool bNeedToSetInput = true;
+	
+	//스킬에 따른 동작.
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = InputSetter,
+		meta = (EditCondition = "bNeedToSetInput == true", EditConditionHides))
+	FTagByInput TagByInput;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")
+	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
 };
 
 USTRUCT(BlueprintType)
@@ -100,4 +127,29 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TMap<int32, FMUAttributeInitValues> AttributeValueByLevel;
+};
+
+USTRUCT( BlueprintType )
+struct FMUEnforcementData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnforcementID")
+	int32 EnforcementID = 0;
+
+	// 정보에 대한 서술.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Dev Comment")
+	FString DevComment;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement Type")
+	TEnumAsByte<EEnforcementType> EnforcementType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Enforcement",
+		meta = (EditCondition = "EnforcementType == EEnforcementType::Attribute", EditConditionHides))
+	FMUAttributeValue EnforcementAttributeValue;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Enforcement",
+		meta = (EditCondition = "EnforcementType == EEnforcementType::SkillOpen", EditConditionHides))
+	FSkillInfoData SkillInfoData;
 };

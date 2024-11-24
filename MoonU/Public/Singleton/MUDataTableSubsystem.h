@@ -22,6 +22,9 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool GetCharacterInfoData(int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool GetEnforcementData(int32 InEnforcementID, FMUEnforcementData& OutEnforcementData);
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -38,4 +41,10 @@ protected :
 	
 	UPROPERTY()
 	TObjectPtr<UDataTable> InputMapperDataTable;
+
+	UPROPERTY(Config)
+	TSoftObjectPtr<UDataTable> EnforcementDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> EnforcementDataTable;
 };

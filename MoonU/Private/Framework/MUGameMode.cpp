@@ -3,6 +3,7 @@
 
 #include "Framework/MUGameMode.h"
 
+#include "Character/MUCharacterPlayer.h"
 #include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
 
@@ -50,4 +51,25 @@ void AMUGameMode::RegisterTimerStopTarget(AActor* InActor)
 void AMUGameMode::UnregisterTimeStopTarget(AActor* InActor)
 {
 	TimeStopManager->UnregisterTimeStopTarget(InActor);
+}
+
+void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
+{
+	APlayerController* MyPlayerController = GetWorld()->GetFirstPlayerController();
+
+	if (IsValid(MyPlayerController) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Player Controller Is Not Valid"));
+		return;
+	}
+
+	AMUCharacterPlayer* CurrentPlayer = MyPlayerController->GetPawn<AMUCharacterPlayer>();
+
+	if ( IsValid(CurrentPlayer) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Player Is Not Valid"));
+		return;
+	}
+
+	CurrentPlayer->EnforcementUnit(EnforcementID);
 }

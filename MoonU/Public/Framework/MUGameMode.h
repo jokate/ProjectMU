@@ -46,5 +46,9 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UTimeStopManager> TimeStopManager;
+
+	UFUNCTION(Exec)
+	virtual void CheatSetupEnforcement(int32 EnforcementID);
+
 };
 

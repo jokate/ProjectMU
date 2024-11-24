@@ -67,3 +67,11 @@ enum EGASInputFunctionalType
 	Pressed,
 	Released,
 };
+
+UENUM(BlueprintType)
+enum EEnforcementType
+{
+	Attribute,
+	SkillOpen,
+	SkillEnforcement,
+};

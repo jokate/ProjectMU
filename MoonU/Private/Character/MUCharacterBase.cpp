@@ -187,7 +187,7 @@ void AMUCharacterBase::OnLevelSetCallbackFunction(int32 InLevel)
 
 	FMUAttributeInitValues& AttributeInit = AttributeByLevel[InLevel];
 
-	for (FMUCharacterAttributeInitializer& Initializer : AttributeInit.Attributes)
+	for (FMUAttributeValue& Initializer : AttributeInit.Attributes)
 	{
 		//데이터에 대한 InitValue Setting
 		ASC->SetNumericAttributeBase( Initializer.InitAttribute,Initializer.InitializedValue );

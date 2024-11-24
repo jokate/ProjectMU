@@ -14,6 +14,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/EnforcementComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Data/DataTable/MUData.h"
@@ -40,6 +41,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
+	EnforcementComponent = CreateDefaultSubobject<UEnforcementComponent>("EnforcementComponent");
 }
 
 // Called when the game starts or when spawned
@@ -159,26 +161,9 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 			return;
 		}
 
-		for ( FTagByInput InputByTag : InputMapper.InputByTags )
+		for ( FTagByInput& InputByTag : InputMapper.InputByTags )
 		{
-			switch (InputByTag.GASFunctionalType)
-			{
-			case Pressed:
-				{
-					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig,  InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputPressed, InputByTag.InputID);
-					break;
-				}
-
-			case Released:
-				{
-					EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, InputByTag.InputTag, InputByTag.TriggerEvent, this, &AMUCharacterPlayer::GASInputReleased, InputByTag.InputID);
-					break;
-				}
-			default:
-				{
-					break;
-				}
-			}
+			UMUFunctionLibrary::BindInputActionByTag(this, CharacterID, InputByTag);
 		}
 	}
 }
@@ -285,6 +270,17 @@ void AMUCharacterPlayer::TryInteract()
 void AMUCharacterPlayer::SetCachedInteractionTarget(AActor* TargetActor)
 {
 	InteractionComponent->SetCachedInteractionTarget(TargetActor);
+}
+
+void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)
+{
+	if ( IsValid(EnforcementComponent) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Enforcement Component Is Not Valid"));
+		return;
+	}
+
+	EnforcementComponent->EnforceUnit(EnforcementID);
 }
 
 

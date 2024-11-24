@@ -38,12 +38,18 @@ public:
 	const FVector2D GetRecentlyMovedVector();
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
-protected :
-	void SetupGASInputComponent();
 
 	void GASInputPressed(int32 InputId);
 
 	void GASInputReleased(int32 InputId);
+
+#pragma region Enforcement 
+	virtual void EnforcementUnit(int32 EnforcementID);
+#pragma endregion
+	
+protected :
+	
+	void SetupGASInputComponent();
 	
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);
@@ -66,6 +72,7 @@ protected :
 
 	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
 #pragma endregion IInteractor
+
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -80,7 +87,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInteractionComponent> InteractionComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UEnforcementComponent> EnforcementComponent;
+
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
 };
+
+

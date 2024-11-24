@@ -48,7 +48,9 @@ public:
 
 	virtual void ReleaseMotionWarp(const FName InName);
 #pragma endregion
-	
+
+	int32 GetCharacterID() const { return CharacterID; } 
+ 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

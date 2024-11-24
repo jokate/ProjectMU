@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/DataTable/MUData.h"
 #include "Interface/InteractableTarget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MUFunctionLibrary.generated.h"
@@ -30,4 +31,10 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	static bool GetCharacterInfoData(UObject* Object, int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
+
+	UFUNCTION(BlueprintCallable)
+	static bool GetEnforcementData(UObject* Object, int32 EnforcementID, FMUEnforcementData& OutEnforcementData);
+
+	UFUNCTION( BlueprintCallable )
+	static bool BindInputActionByTag( class AMUCharacterPlayer* CharacterPlayer, int32 CharacterID, FTagByInput& TagByInput);
 };
