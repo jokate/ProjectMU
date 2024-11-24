@@ -9,17 +9,21 @@
 #include "Data/MUEnum.h"
 #include "GameFramework/Character.h"
 #include "Interface/Defender.h"
+#include "Interface/LevelManager.h"
 #include "Interface/MotionWarpTarget.h"
 #include "Interface/TimerWindTarget.h"
 #include "MUCharacterBase.generated.h"
 
 UCLASS()
-class MOONU_API AMUCharacterBase : public ACharacter, public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget, public IGameplayTagAssetInterface, public IDefender, public IGenericTeamAgentInterface
+class MOONU_API AMUCharacterBase : public ACharacter,
+	public ITimeWindTarget, public IAbilitySystemInterface, public IMotionWarpTarget,
+	public IGameplayTagAssetInterface, public IDefender, public IGenericTeamAgentInterface,
+	public ILevelManager
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	
 	AMUCharacterBase();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -60,12 +64,14 @@ protected:
 #pragma endregion
 
 #pragma region IDefender
+	
 	virtual const FVector GetDefendRange() override;
 
 	virtual const FTransform GetDefendTransform() override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	const FTransform GetDefendTransform_BP();
+	
 #pragma endregion
 
 #pragma region IGenericTeamAgentInterface
@@ -76,7 +82,16 @@ protected:
 
 	virtual FGenericTeamId GetGenericTeamId() const override;
 	
-#pragma endregion 
+#pragma endregion
+
+#pragma region ILevelManager
+
+	virtual void LevelUp() override;
+
+	UFUNCTION()
+	void OnLevelSetCallbackFunction( int32 InLevel );
+	
+#pragma endregion
 	
 protected :
 	UPROPERTY()
@@ -97,9 +112,12 @@ protected :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Time Wind Component")
 	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Up Component")
+	TObjectPtr<class UMULevelUpComponent> LevelUpComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Defend Extent")
 	FVector DefendExtent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Test Character ID")
-	int32 CharacterID;
+	int32 CharacterID = 0;
 };

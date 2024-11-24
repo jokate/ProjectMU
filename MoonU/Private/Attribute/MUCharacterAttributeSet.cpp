@@ -4,6 +4,7 @@
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "MUDefines.h"
+#include "Interface/LevelManager.h"
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()
 	: MaxExperience(100.f),
@@ -28,7 +29,16 @@ void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Att
 		if (CurrentExperience.GetCurrentValue() == GetMaxExperience())
 		{
 			CurrentExperience = MinValue;
-			Level = GetLevel() + 1; 
+
+			AActor* OwningActor = GetOwningActor();
+			ILevelManager* LevelManager = Cast<ILevelManager>(OwningActor);
+
+			if ( LevelManager == nullptr )
+			{
+				return;
+			}
+
+			LevelManager->LevelUp();
 			
 			UE_LOG(LogTemp, Log, TEXT("LevelUp"));
 

@@ -24,7 +24,7 @@ void UMUGA_OnHit::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 	//해당 Ability는 Hit 정보 및 현재 플레이어의 방어 및 패리에 관한 정보를 기반으로 동작을 확립한다.
 	AActor* TargetActor = ActorInfo->AvatarActor.Get();
 
-	if (TargetActor == nullptr)
+	if ( IsValid(TargetActor) == false )
 	{
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 	}

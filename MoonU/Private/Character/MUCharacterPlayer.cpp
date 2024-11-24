@@ -105,9 +105,6 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
 
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
-
-		//TestCode
-		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_ITEMUSE_QUICK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::UseItemBySlot, 0);
 	}
 
 	SetupGASInputComponent();

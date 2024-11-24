@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AttributeSet.h"
 #include "EnhancedInputComponent.h"
 #include "GameplayTagContainer.h"
 #include "Data/MUEnum.h"
@@ -13,6 +14,29 @@
 /**
  * 
  */
+
+USTRUCT( BlueprintType )
+struct FMUCharacterAttributeInitializer
+{
+	GENERATED_USTRUCT_BODY()
+
+public :
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	FGameplayAttribute InitAttribute;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	float InitializedValue = 0;
+};
+
+USTRUCT( BlueprintType )
+struct FMUAttributeInitValues
+{
+	GENERATED_BODY()
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	TArray<FMUCharacterAttributeInitializer> Attributes;
+};
+
 USTRUCT(BlueprintType)
 struct FTagByInput
 {
@@ -73,4 +97,7 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TArray<TSubclassOf<class UAttributeSet>> NeedToRegisterAttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
+	TMap<int32, FMUAttributeInitValues> AttributeValueByLevel;
 };
