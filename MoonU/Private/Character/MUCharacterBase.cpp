@@ -164,6 +164,14 @@ void AMUCharacterBase::LevelUp()
 	}
 }
 
+void AMUCharacterBase::SetLevel(int32 InLevel)
+{
+	if ( IsValid(LevelUpComponent) == true)
+	{
+		LevelUpComponent->SetLevel(InLevel);
+	}
+}
+
 void AMUCharacterBase::OnLevelSetCallbackFunction(int32 InLevel)
 {
 	if ( IsValid(ASC) == false)

@@ -22,4 +22,6 @@ class MOONU_API ILevelManager
 
 public:
 	virtual void LevelUp() = 0;
+
+	virtual void SetLevel(int32 InLevel) = 0;
 };

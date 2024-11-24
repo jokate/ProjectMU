@@ -30,7 +30,7 @@ public:
 
 	FORCEINLINE virtual int32 GetLevel() const { return Level; }  
 
-	void SetLevel(const int32 InLevel);
+	FORCEINLINE virtual void SetLevel(const int32 InLevel) override { Level = InLevel; }
 	
 public :
 	UPROPERTY( BlueprintReadOnly, BlueprintAssignable)

@@ -35,4 +35,7 @@ protected:
 protected: 
 	UPROPERTY(Transient)
 	TArray<TWeakObjectPtr<AActor>> RegActors;
+
+private:
+	bool bIsTimeStopped = false;
 };

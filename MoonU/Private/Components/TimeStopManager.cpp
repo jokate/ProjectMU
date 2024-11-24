@@ -28,6 +28,12 @@ void UTimeStopManager::RegisterTimerStopTarget(AActor* InActor)
 	}
 
 	RegActors.Add(InActor);
+
+	//현재 시간이 멈춘 경우에는 스포너에서 지속 스폰되더라도 멈추도록 설계
+	if (bIsTimeStopped)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InActor, MU_EVENT_TIMESTOP, FGameplayEventData());
+	}
 }
 
 void UTimeStopManager::UnregisterTimeStopTarget(AActor* InActor)
@@ -42,6 +48,7 @@ void UTimeStopManager::UnregisterTimeStopTarget(AActor* InActor)
 
 void UTimeStopManager::TimeStopActivate()
 {
+	bIsTimeStopped = true;
 	for (auto& RegisteredActor : RegActors)
 	{
 		AActor* RegActor = RegisteredActor.Get();
@@ -57,6 +64,7 @@ void UTimeStopManager::TimeStopActivate()
 
 void UTimeStopManager::TimeStopDeactivate()
 {
+	bIsTimeStopped = false;
 	for (auto& RegisteredActor : RegActors)
 	{
 		AActor* RegActor = RegisteredActor.Get();

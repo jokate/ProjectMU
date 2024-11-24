@@ -8,6 +8,7 @@
 #include "MUDefines.h"
 #include "Data/DataTable/MUData.h"
 #include "Elements/Framework/TypedElementOwnerStore.h"
+#include "Interface/MUEnemy.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Perception/AISense_Damage.h"
 
@@ -45,6 +46,14 @@ void UMUCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute&
 			// 단 AI의 한정으로 하여 제한을 걸어줘야 한다.
 			bOutOfHealth = false;
 			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_EVENT_REGENERATED, FGameplayEventData());
+		}
+	}
+
+	if ( IMUEnemy* Enemy = Cast<IMUEnemy>(GetOwningActor()))
+	{
+		if (Attribute == GetMaxHpAttribute())
+		{
+			SetCurrentHp(GetMaxHp());
 		}
 	}
 }

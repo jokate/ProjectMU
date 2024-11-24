@@ -30,11 +30,3 @@ void UMULevelUpComponent::LevelUp()
 	OnLevelUpEventCallback.Broadcast(Level);
 }
 
-void UMULevelUpComponent::SetLevel(const int32 InLevel)
-{
-	// 현재 레벨에 대한 세팅.
-	Level = InLevel;
-
-	//Ability System에 대한 가정, 현재 가지고 있는 Character의 ID값을 기반으로 세팅되는 부분이 무조건적으로 필요.
-	
-}

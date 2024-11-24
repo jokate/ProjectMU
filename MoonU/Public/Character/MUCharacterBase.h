@@ -90,6 +90,8 @@ protected:
 
 	virtual void LevelUp() override;
 
+	virtual void SetLevel(int32 InLevel) override;
+
 	UFUNCTION()
 	void OnLevelSetCallbackFunction( int32 InLevel );
 	
