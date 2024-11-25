@@ -44,8 +44,14 @@ public:
 	void GASInputReleased(int32 InputId);
 
 #pragma region Enforcement
+	UFUNCTION()
+	virtual void OnLevelUpCallbackFunction(int32 InLevel);
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void EnforcementUnit(int32 EnforcementID);
+#pragma endregion
+
+#pragma region Level p
 #pragma endregion
 	
 protected :
@@ -95,5 +101,3 @@ protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;
 };
-
-

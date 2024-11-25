@@ -189,7 +189,7 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, i
 		float RandomValue = FMath::RandRange(0.f, 1.0f);
 
 		bool bNeedToAdd = RandomValue < DropProbability.EnforcementProbability;
-		bNeedToAdd &= DropEnforcement.Contains(DropProbability.EnforcementID);
+		bNeedToAdd &= DropEnforcement.Contains(DropProbability.EnforcementID) == false;
 		if (bNeedToAdd == true)
 		{
 			DropEnforcement.Add(DropProbability.EnforcementID);

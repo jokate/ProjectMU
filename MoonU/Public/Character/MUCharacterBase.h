@@ -49,7 +49,9 @@ public:
 	virtual void ReleaseMotionWarp(const FName InName);
 #pragma endregion
 
-	int32 GetCharacterID() const { return CharacterID; } 
+	int32 GetCharacterID() const { return CharacterID; }
+
+	virtual void LevelUp() override;
  	
 protected:
 	// Called when the game starts or when spawned
@@ -87,9 +89,6 @@ protected:
 #pragma endregion
 
 #pragma region ILevelManager
-
-	virtual void LevelUp() override;
-
 	virtual void SetLevel(int32 InLevel) override;
 
 	UFUNCTION()

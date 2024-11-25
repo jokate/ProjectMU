@@ -17,9 +17,11 @@
 #include "Components/EnforcementComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Components/MULevelUpComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Framework/MUPlayerState.h"
 #include "Library/MUFunctionLibrary.h"
+#include "Singleton/MUWidgetDelegateSubsystem.h"
 
 // Sets default values
 AMUCharacterPlayer::AMUCharacterPlayer()
@@ -70,6 +72,8 @@ void AMUCharacterPlayer::BeginPlay()
 	{
 		UE_LOG(LogTemp, Log, TEXT("Character Load Failed"));	
 	}
+
+	LevelUpComponent->OnLevelUpEventCallback.AddDynamic(this, &AMUCharacterPlayer::OnLevelUpCallbackFunction);
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -78,7 +82,8 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		AbilityInitComponent->OnEndPlay(CharacterID);	
 	}
-	
+
+	LevelUpComponent->OnLevelUpEventCallback.RemoveAll(this);
   	Super::EndPlay(EndPlayReason);
 }
 
@@ -282,5 +287,17 @@ void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)
 
 	EnforcementComponent->EnforceUnit(EnforcementID);
 }
+void AMUCharacterPlayer::OnLevelUpCallbackFunction(int32 InLevel)
+{
+	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GetGameInstance()->GetSubsystem<UMUWidgetDelegateSubsystem>();
 
+	if (IsValid(WidgetDelegateSubsystem) == true)
+	{
+		FOnLevelChanged& LevelChanged = WidgetDelegateSubsystem->OnLevelChanged;
 
+		if (LevelChanged.IsBound() == true)
+		{
+			LevelChanged.Broadcast(InLevel);
+		}
+	}
+}

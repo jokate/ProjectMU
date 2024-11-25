@@ -73,3 +73,24 @@ void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
 
 	CurrentPlayer->EnforcementUnit(EnforcementID);
 }
+
+void AMUGameMode::CheatLevelUp()
+{
+	APlayerController* MyPlayerController = GetWorld()->GetFirstPlayerController();
+
+	if (IsValid(MyPlayerController) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Player Controller Is Not Valid"));
+		return;
+	}
+
+	AMUCharacterPlayer* CurrentPlayer = MyPlayerController->GetPawn<AMUCharacterPlayer>();
+
+	if ( IsValid(CurrentPlayer) == false)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Player Is Not Valid"));
+		return;
+	}
+
+	CurrentPlayer->LevelUp();
+}
