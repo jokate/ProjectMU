@@ -73,6 +73,7 @@ bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforce
 	{
 		if ( Value.EnforcementID == InEnforcementID )
 		{
+			UE_LOG(LogTemp, Log, TEXT("Enforcement Founded"));
 			OutEnforcementData = Value;
 		}	
 	});
@@ -91,10 +92,10 @@ bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDr
     		return false;
     	}
 
-    	EnforcementDataTable = EnforcementDataTableLoaded;
+    	EnforcementDropTable = EnforcementDataTableLoaded;
     }
 
-    EnforcementDataTable->ForeachRow<FMUEnforcementDropSelect>
+    EnforcementDropTable->ForeachRow<FMUEnforcementDropSelect>
     (TEXT(""),[&] (const FName& Key, const FMUEnforcementDropSelect& Value)
     {
     	if ( Value.Level == Level )
