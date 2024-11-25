@@ -80,6 +80,32 @@ bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforce
 	return true;
 }
 
+bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect)
+{
+	if ( IsValid(EnforcementDropTable) == false)
+    {
+    	UDataTable* EnforcementDataTableLoaded = EnforcementDropTablePath.LoadSynchronous();
+    	if ( IsValid(EnforcementDataTableLoaded) == false)
+    	{
+    		UE_LOG( LogTemp, Log, TEXT("Enforcement Drop DataTable Is Not Valid") );
+    		return false;
+    	}
+
+    	EnforcementDataTable = EnforcementDataTableLoaded;
+    }
+
+    EnforcementDataTable->ForeachRow<FMUEnforcementDropSelect>
+    (TEXT(""),[&] (const FName& Key, const FMUEnforcementDropSelect& Value)
+    {
+    	if ( Value.Level == Level )
+    	{
+    		OutEnforcementDropSelect = Value;
+    	}	
+    });
+
+    return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

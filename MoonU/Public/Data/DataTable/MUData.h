@@ -152,4 +152,39 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Enforcement",
 		meta = (EditCondition = "EnforcementType == EEnforcementType::SkillOpen", EditConditionHides))
 	FSkillInfoData SkillInfoData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Description")
+	FText DescriptionText;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Description")
+	FText DescriptionDetailText;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Description")
+	UTexture2D* DescriptionIcon;
+};
+
+USTRUCT( BlueprintType )
+struct FMUEnforcementProbability
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 EnforcementID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float EnforcementProbability = 0.f;
+};
+
+USTRUCT( BlueprintType )
+struct FMUEnforcementDropSelect : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 Level = 0;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<FMUEnforcementProbability> EnforcementProbabilities;
 };

@@ -43,7 +43,8 @@ public:
 
 	void GASInputReleased(int32 InputId);
 
-#pragma region Enforcement 
+#pragma region Enforcement
+	UFUNCTION(BlueprintCallable)
 	virtual void EnforcementUnit(int32 EnforcementID);
 #pragma endregion
 	

@@ -101,8 +101,28 @@ bool UMUFunctionLibrary::GetEnforcementData(UObject* Object, int32 EnforcementID
 	return DataTableSubsystem->GetEnforcementData(EnforcementID, OutEnforcementData);
 }
 
+bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Level,
+	FMUEnforcementDropSelect& OutEnforcementDropSelect)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetEnforcementDropData(Level, OutEnforcementDropSelect);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
-	FTagByInput& TagByInput)
+                                              FTagByInput& TagByInput)
 {
 	UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(CharacterPlayer->InputComponent);
 
@@ -141,6 +161,39 @@ bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlaye
 				break;
 			}
 		}	
+	}
+
+	return true;
+}
+
+bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement)
+{
+	if (IsValid(Object) == false)
+	{
+		return false;
+	}
+
+	FMUEnforcementDropSelect DropSelect;
+	if (GetEnforcementDropData(Object, Level, DropSelect) == false)
+	{
+		return false;
+	}
+
+	for (FMUEnforcementProbability& DropProbability : DropSelect.EnforcementProbabilities)
+	{
+		if (DropEnforcement.Num() >= ArrCount)
+		{
+			break;
+		}
+		
+		float RandomValue = FMath::RandRange(0.f, 1.0f);
+
+		bool bNeedToAdd = RandomValue < DropProbability.EnforcementProbability;
+		bNeedToAdd &= DropEnforcement.Contains(DropProbability.EnforcementID);
+		if (bNeedToAdd == true)
+		{
+			DropEnforcement.Add(DropProbability.EnforcementID);
+		}
 	}
 
 	return true;
