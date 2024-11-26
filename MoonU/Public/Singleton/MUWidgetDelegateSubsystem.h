@@ -11,13 +11,19 @@
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelChanged, int32, Level);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEnforcementSelected);
 
 UCLASS()
 class MOONU_API UMUWidgetDelegateSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-
+	
 public :
 	UPROPERTY(BlueprintAssignable)
 	FOnLevelChanged OnLevelChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnEnforcementSelected OnEnforcementSelected;
+
+	
 };

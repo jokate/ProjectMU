@@ -75,3 +75,11 @@ enum EEnforcementType
 	SkillOpen,
 	SkillEnforcement,
 };
+
+UENUM(BlueprintType)
+enum ECheckOperationType
+{
+	AND,
+	OR,
+	NOR
+};

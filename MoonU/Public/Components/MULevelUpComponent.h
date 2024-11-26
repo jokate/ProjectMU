@@ -32,6 +32,10 @@ public:
 
 	FORCEINLINE virtual void SetLevel(const int32 InLevel) override { Level = InLevel; }
 	
+	FORCEINLINE virtual void SetContinuousEnforcementLevel(const int32 InLevel) { ContinuousEnforcementLevel = InLevel; }
+
+	FORCEINLINE virtual int32 GetContinuousEnforcementLevel() const { return ContinuousEnforcementLevel; }
+	
 public :
 	UPROPERTY( BlueprintReadOnly, BlueprintAssignable)
 	FOnLevelUpEventCallback OnLevelUpEventCallback;
@@ -41,4 +45,7 @@ public :
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Level")
 	int32 Level = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Continuous Enforcement")
+	int32 ContinuousEnforcementLevel = 0;
 };

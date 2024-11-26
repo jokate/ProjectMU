@@ -84,6 +84,9 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	}
 
 	LevelUpComponent->OnLevelUpEventCallback.RemoveAll(this);
+	
+	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GetGameInstance()->GetSubsystem<UMUWidgetDelegateSubsystem>();
+	
   	Super::EndPlay(EndPlayReason);
 }
 
@@ -147,6 +150,16 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, TargetLoc, FRotator::ZeroRotator);
 		break;
 	}
+}
+
+int32 AMUCharacterPlayer::GetContinuousEnforcementLevel()
+{
+	if (IsValid(LevelUpComponent) == true)
+	{
+		return LevelUpComponent->GetContinuousEnforcementLevel();
+	}
+
+	return 0;
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent()
@@ -287,6 +300,15 @@ void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)
 
 	EnforcementComponent->EnforceUnit(EnforcementID);
 }
+
+void AMUCharacterPlayer::ResetContinuousEnforcementLevel()
+{
+	if (IsValid(LevelUpComponent) == true )
+	{
+		LevelUpComponent->SetContinuousEnforcementLevel( 0 );
+	}
+}
+
 void AMUCharacterPlayer::OnLevelUpCallbackFunction(int32 InLevel)
 {
 	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GetGameInstance()->GetSubsystem<UMUWidgetDelegateSubsystem>();

@@ -27,6 +27,9 @@ void UMULevelUpComponent::OnCharacterInitialized()
 void UMULevelUpComponent::LevelUp()
 {
 	SetLevel( Level + 1 );
+
+	ContinuousEnforcementLevel++;
+	
 	OnLevelUpEventCallback.Broadcast(Level);
 }
 

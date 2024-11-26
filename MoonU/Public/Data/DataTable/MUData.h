@@ -161,6 +161,12 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Description")
 	UTexture2D* DescriptionIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Prerequisite")
+	TArray<int32> PrerequisiteID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Prerequisite")
+	TEnumAsByte<ECheckOperationType> CheckOperationType;
 };
 
 USTRUCT( BlueprintType )

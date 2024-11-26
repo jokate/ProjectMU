@@ -51,7 +51,12 @@ public:
 	virtual void EnforcementUnit(int32 EnforcementID);
 #pragma endregion
 
-#pragma region Level p
+#pragma region Level
+	UFUNCTION(BlueprintCallable)
+	virtual void ResetContinuousEnforcementLevel();
+
+	UFUNCTION(BlueprintPure)
+	virtual int32 GetContinuousEnforcementLevel();
 #pragma endregion
 	
 protected :
