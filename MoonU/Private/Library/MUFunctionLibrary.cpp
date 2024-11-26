@@ -182,35 +182,38 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, i
 		return false;
 	}
 
-	for (FMUEnforcementProbability& DropProbability : DropSelect.EnforcementProbabilities)
+	while (DropEnforcement.Num() < ArrCount)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Drop ID : %d"), DropProbability.EnforcementID);
-		// 목록에 다 찬 경우.
-		if (DropEnforcement.Num() >= ArrCount)
+		for (FMUEnforcementProbability& DropProbability : DropSelect.EnforcementProbabilities)
 		{
-			break;
-		}
+			UE_LOG(LogTemp, Log, TEXT("Drop ID : %d"), DropProbability.EnforcementID);
+			// 목록에 다 찬 경우.
+			if (DropEnforcement.Num() >= ArrCount)
+			{
+				break;
+			}
 		
-		//전제조건에 대한 만족이 안된 경우.
-		if (IsEnforcementPrerequisiteSatisfied(Object, DropProbability) == false)
-		{ 
-			continue;
-		}
+			//전제조건에 대한 만족이 안된 경우.
+			if (IsEnforcementPrerequisiteSatisfied(Object, DropProbability) == false)
+			{ 
+				continue;
+			}
 
-		//이미 스킬이 등록된 경우.
-		if (IsSkillRegisteredToCharacter(Object, DropProbability.EnforcementID) == true)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Already Registered"));
-			continue;
-		}
+			//이미 스킬이 등록된 경우.
+			if (IsSkillRegisteredToCharacter(Object, DropProbability.EnforcementID) == true)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Already Registered"));
+				continue;
+			}
 		
-		float RandomValue = FMath::RandRange(0.f, 1.0f);
+			float RandomValue = FMath::RandRange(0.f, 1.0f);
 
-		bool bNeedToAdd = RandomValue < DropProbability.EnforcementProbability;
-		bNeedToAdd &= DropEnforcement.Contains(DropProbability.EnforcementID) == false;
-		if (bNeedToAdd == true)
-		{
-			DropEnforcement.Add(DropProbability.EnforcementID);
+			bool bNeedToAdd = RandomValue < DropProbability.EnforcementProbability;
+			bNeedToAdd &= DropEnforcement.Contains(DropProbability.EnforcementID) == false;
+			if (bNeedToAdd == true)
+			{
+				DropEnforcement.Add(DropProbability.EnforcementID);
+			}
 		}
 	}
 

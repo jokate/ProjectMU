@@ -41,11 +41,6 @@ void UMUCharacterAttributeSet::PostAttributeChange(const FGameplayAttribute& Att
 			LevelManager->LevelUp();
 			
 			UE_LOG(LogTemp, Log, TEXT("LevelUp"));
-
-			//레벨업에 대한 피드백을 보인다.
-			//시간을 멈추고 + 강화 선택지를 준다던지
-			//-> 이거는 이벤트를 기반으로 설계되게끔
-			
 		}
 	}
 }
