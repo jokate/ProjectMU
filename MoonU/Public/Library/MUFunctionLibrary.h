@@ -32,6 +32,12 @@ public :
 	UFUNCTION( BlueprintPure )
 	static bool GetEnforcementDropTable(UObject* Object, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement);
 
+	UFUNCTION( BlueprintPure )
+	static bool IsEnforcementPrerequisiteSatisfied(UObject* Object, FMUEnforcementProbability& InProbabilityData);
+
+	UFUNCTION( BlueprintPure )
+	static bool IsSkillRegisteredToCharacter(UObject* Object, int32 EnforcementID);
+	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)
 	static bool GetInputMapperData(UObject* Object, int32 InCharacterID, FMUInputMapper& InputMapperData);

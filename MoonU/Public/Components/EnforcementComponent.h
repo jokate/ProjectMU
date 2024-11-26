@@ -19,15 +19,19 @@ public:
 	UEnforcementComponent();
 	
 	virtual void EnforceUnit(int32 InEnforcementID);
-
+	
+	virtual TArray<int32>& GetEnforcementIDs() { return EnforcementIDs; }
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	
 #pragma region Enforcement
 	virtual void EnforcementAttribute(FMUAttributeValue& AttributeValue);
 
-	virtual void OpenSkill(FSkillInfoData& SkillInfoData );
+	virtual void OpenSkill( FSkillInfoData& SkillInfoData );
 #pragma endregion
+	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enforcement ID")
 	TArray<int32> EnforcementIDs;

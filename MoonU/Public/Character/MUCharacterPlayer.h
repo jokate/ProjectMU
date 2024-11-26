@@ -57,6 +57,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	virtual int32 GetContinuousEnforcementLevel();
+
+	virtual bool GetEnforcementIDs(TArray<int32>& OutEnforcementIDs);
 #pragma endregion
 	
 protected :
@@ -84,7 +86,6 @@ protected :
 
 	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
 #pragma endregion IInteractor
-
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

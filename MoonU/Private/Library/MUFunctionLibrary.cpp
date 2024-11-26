@@ -3,7 +3,10 @@
 
 #include "Library/MUFunctionLibrary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Character/MUCharacterPlayer.h"
+#include "Components/EnforcementComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -181,9 +184,24 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, i
 
 	for (FMUEnforcementProbability& DropProbability : DropSelect.EnforcementProbabilities)
 	{
+		UE_LOG(LogTemp, Log, TEXT("Drop ID : %d"), DropProbability.EnforcementID);
+		// 목록에 다 찬 경우.
 		if (DropEnforcement.Num() >= ArrCount)
 		{
 			break;
+		}
+		
+		//전제조건에 대한 만족이 안된 경우.
+		if (IsEnforcementPrerequisiteSatisfied(Object, DropProbability) == false)
+		{ 
+			continue;
+		}
+
+		//이미 스킬이 등록된 경우.
+		if (IsSkillRegisteredToCharacter(Object, DropProbability.EnforcementID) == true)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Already Registered"));
+			continue;
 		}
 		
 		float RandomValue = FMath::RandRange(0.f, 1.0f);
@@ -197,4 +215,97 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, i
 	}
 
 	return true;
+}
+
+bool UMUFunctionLibrary::IsEnforcementPrerequisiteSatisfied(UObject* Object, FMUEnforcementProbability& InProbabilityData)
+{
+	if (IsValid(Object) == false)
+	{
+		return false;
+	}
+
+	ACharacter* Character = GetLocalPlayerCharacter(Object);
+	AMUCharacterPlayer* CharacterPlayer = Cast<AMUCharacterPlayer>(Character);
+
+	TArray<int32>& ProbabilityChecker = InProbabilityData.PrerequisiteID;
+	ECheckOperationType CheckOperationType = InProbabilityData.CheckOperationType;
+	bool bResult = true;
+	if ( IsValid(CharacterPlayer) == true )
+	{
+		TArray<int32> EnforcementIDs;
+		if (CharacterPlayer->GetEnforcementIDs(EnforcementIDs) == false)
+		{
+			return false;
+		}
+		
+		switch (CheckOperationType)
+		{
+		case AND:
+			{
+				if (ProbabilityChecker.Num() > 0)
+				{
+					bResult = true;
+					for ( int32 Probability : ProbabilityChecker)
+					{
+						bResult &= EnforcementIDs.Contains(Probability);	
+					}	
+				}
+				break;	
+			}
+		case OR:
+			{
+				if (ProbabilityChecker.Num() > 0)
+				{
+					bResult = false;
+					for ( int32 Probability : ProbabilityChecker)
+					{
+						bResult |= EnforcementIDs.Contains(Probability);	
+					}	
+				}
+				break;
+			}
+		default :
+			{
+				break;
+			}
+		}
+	}
+
+	return bResult;
+}
+
+bool UMUFunctionLibrary::IsSkillRegisteredToCharacter(UObject* Object, int32 EnforcementID)
+{
+	ACharacter* Character = GetLocalPlayerCharacter(Object);
+	if (IsValid(Character) == false)
+	{
+		return true;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Character);
+	if (IsValid(ASC) == false)
+	{
+		return true;
+	}
+
+	FMUEnforcementData EnforcementData;
+	if (GetEnforcementData(Object, EnforcementID, EnforcementData) == false )
+	{
+		return true;
+	}
+
+	if (EnforcementData.EnforcementType == Attribute )
+	{
+		return false;
+	}
+	
+	FSkillInfoData SkillInfoData = EnforcementData.SkillInfoData;
+	//이미 등록된 Ability인 경우에는 배제
+	if (ASC->FindAbilitySpecFromClass(SkillInfoData.NeedToRegAbility))
+	{
+		UE_LOG(LogTemp, Log, TEXT("IsSkillRegisteredToCharacter : Already Registered Ability"));
+		return true;
+	}
+
+	return false;
 }

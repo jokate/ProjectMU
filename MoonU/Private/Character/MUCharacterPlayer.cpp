@@ -162,6 +162,18 @@ int32 AMUCharacterPlayer::GetContinuousEnforcementLevel()
 	return 0;
 }
 
+bool AMUCharacterPlayer::GetEnforcementIDs(TArray<int32>& OutEnforcementIDs)
+{
+	if ( IsValid(EnforcementComponent) == false)
+	{
+		return false;
+	}
+
+	OutEnforcementIDs = EnforcementComponent->GetEnforcementIDs();
+	
+	return true;
+}
+
 void AMUCharacterPlayer::SetupGASInputComponent()
 {
 	if (IsValid(ASC) && IsValid(InputComponent))
