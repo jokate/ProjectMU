@@ -19,11 +19,12 @@ class MOONU_API UBTS_ActivateAbility : public UBTS_AbilityAction
 protected :
 	virtual void OnActivateNode(UBehaviorTreeComponent& OwnerComp) override;
 
+	UPROPERTY(EditAnywhere, Category = AbilityActivation)
 	TEnumAsByte<EAbilityActivationMode> ActivationMode;
 	
 	UPROPERTY(EditAnywhere, Category = AbilityActivation)
-	FGameplayTag ActivationAbilityTag;
+	FGameplayTagContainer ActivationAbilityTags;
 
 	UPROPERTY(EditAnywhere, Category = AbilityActivation)
-	int32 InputID;
+	TArray<int32> InputIDs;
 };

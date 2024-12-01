@@ -28,7 +28,14 @@ void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
 	switch (ActivationMode)
 	{
 	case ByEvent :
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn, ActivationAbilityTag, FGameplayEventData());
+		{
+			TArray<FGameplayTag> EventTags;
+			ActivationAbilityTags.GetGameplayTagArray(EventTags);
+			for (FGameplayTag& ActivationAbilityTag : EventTags)
+			{
+				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn, ActivationAbilityTag, FGameplayEventData());	
+			}	
+		}
 		break;
 
 	case ByInputID :
@@ -38,16 +45,19 @@ void UBTS_ActivateAbility::OnActivateNode(UBehaviorTreeComponent& OwnerComp)
 			{
 				break;
 			}
-			
-			FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputID);
 
-			if (Spec->IsActive())
+			for (int32 InputID : InputIDs)
 			{
-				ASC->AbilitySpecInputPressed(*Spec);	
-			}
-			else
-			{
-				ASC->TryActivateAbility(Spec->Handle);
+				FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputID);
+
+				if (Spec->IsActive())
+				{
+					ASC->AbilitySpecInputPressed(*Spec);	
+				}
+				else
+				{
+					ASC->TryActivateAbility(Spec->Handle);
+				}	
 			}
 		}
 	default :

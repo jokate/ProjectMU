@@ -20,7 +20,14 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 	switch (ActivationMode)
 	{
 	case ByEvent :
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, StartAbilityTag, FGameplayEventData());
+		{
+			TArray<FGameplayTag> EventTags;
+			StartAbilityTags.GetGameplayTagArray(EventTags);
+			for (FGameplayTag& ActivationAbilityTag : EventTags)
+			{
+				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ControllingPawn, ActivationAbilityTag, FGameplayEventData());	
+			}	
+		}
 		break;
 
 	case ByInputID :
@@ -60,9 +67,8 @@ EBTNodeResult::Type UBTTask_ActivateAbility::AbortTask(UBehaviorTreeComponent& O
 	}
 	
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ControllingPawn);
-
-	const FGameplayTagContainer TagContainer(StartAbilityTag);
-	ASC->CancelAbilities(&TagContainer);
+	
+	ASC->CancelAbilities(&StartAbilityTags);
 	
 	return Super::AbortTask(OwnerComp, NodeMemory);
 }

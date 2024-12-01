@@ -27,7 +27,7 @@ protected :
 	TEnumAsByte<EAbilityActivationMode> ActivationMode;
 	
 	UPROPERTY(EditAnywhere)
-	FGameplayTag StartAbilityTag;
+	FGameplayTagContainer StartAbilityTags;
 
 	UPROPERTY(EditAnywhere)
 	int32 InputID;
