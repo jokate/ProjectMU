@@ -83,3 +83,11 @@ enum ECheckOperationType
 	OR,
 	NOR
 };
+
+UENUM(BlueprintType)
+enum ETargetActivationType
+{
+	NoTarget,
+	Location,
+	Actor
+};
