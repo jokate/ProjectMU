@@ -22,13 +22,4 @@ class MOONU_API ITargetManager
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual bool IsTargetValid() const = 0;
-
-	virtual AActor* GetActorTarget() const = 0;
-	
-	virtual void SetupTarget(AActor* NewTarget) = 0;
-
-	virtual FVector GetTargetLocation() const = 0;
-	
-	virtual void SetupTargetLocation(FVector NewTargetLocation) = 0;
 };

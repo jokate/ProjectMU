@@ -13,7 +13,7 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UTargetManagingComponent : public UActorComponent, public ITargetManager
+class MOONU_API UTargetManagingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -21,25 +21,24 @@ public:
 	// Sets default values for this component's properties
 	UTargetManagingComponent();
 
+#pragma region Target Setter
+	// Target에 대한 
+	virtual bool IsTargetValid() const;
+	
+	virtual AActor* GetActorTarget() const { return TargetActor; }
+	
+	virtual void SetupTarget(AActor* NewTarget);
+
+	virtual FVector GetTargetLocation() const { return TargetLocation; }
+	
+	virtual void SetupTargetLocation(FVector NewTargetLocation);
+
+	virtual void ResetTarget();
+#pragma endregion
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-#pragma region ITargetManager
-	// Target에 대한 
-	virtual bool IsTargetValid() const override;
-	
-	virtual AActor* GetActorTarget() const override { return TargetActor; }
-	
-	virtual void SetupTarget(AActor* NewTarget) override;
-
-	virtual FVector GetTargetLocation() const override { return TargetLocation; }
-	
-	virtual void SetupTargetLocation(FVector NewTargetLocation) override;
-
-	virtual void ResetTarget();
-	
-#pragma endregion
 	
 public:
 	UPROPERTY()

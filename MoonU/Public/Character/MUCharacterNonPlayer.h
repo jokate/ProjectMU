@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "MUCharacterBase.h"
 #include "Interface/MUEnemy.h"
+#include "Interface/TargetManager.h"
 #include "MUCharacterNonPlayer.generated.h"
 
 struct FGameplayEventData;
@@ -27,8 +28,22 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue) override;
+
+#pragma region ITargetManager
+	virtual bool IsTargetValid() const override;
+
+	virtual AActor* GetActorTarget() const override;
+	
+	virtual void SetupTarget(AActor* NewTarget) override;
+
+	virtual FVector GetTargetLocation() const override;
+	
+	virtual void SetupTargetLocation(FVector NewTargetLocation) override;
+#pragma endregion
 	
 protected :
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UTargetManagingComponent> TargetManagingComponent;
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UTimeStopComponent> TimeStopComponent;
 };
