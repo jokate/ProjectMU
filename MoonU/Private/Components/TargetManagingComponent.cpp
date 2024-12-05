@@ -3,6 +3,8 @@
 
 #include "Components/TargetManagingComponent.h"
 
+#include "AIController.h"
+
 
 // Sets default values for this component's properties
 UTargetManagingComponent::UTargetManagingComponent()

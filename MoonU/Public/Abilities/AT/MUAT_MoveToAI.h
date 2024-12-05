@@ -6,6 +6,7 @@
 #include "AITypes.h"
 #include "Abilities/Tasks/AbilityTask.h"
 #include "AI/AIEnum.h"
+#include "Data/MUEnum.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "MUAT_MoveToAI.generated.h"
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAIMoveCompleted, FAIRequestID, RequestID, EPathFollowingResult::Type, Type);
@@ -19,7 +20,7 @@ class MOONU_API UMUAT_MoveToAI : public UAbilityTask
 
 public :
 	
-	static UMUAT_MoveToAI* CreateTask(UGameplayAbility* OwningAbility, const FName& InTargetKey, EBlackboardKeyData InBlackboardKeyType, float InAcceptanceRadius);
+	static UMUAT_MoveToAI* CreateTask(UGameplayAbility* OwningAbility, ETargetActivationType TargetActivationType, float InAcceptanceRadius);
 	
 	virtual void Activate() override;
 
@@ -32,11 +33,9 @@ public :
 
 	FAIMoveCompleted MoveCompleted;
 protected:
-	UPROPERTY()
-	FName TargetKey;
 
 	UPROPERTY()
-	TEnumAsByte<EBlackboardKeyData> BlackboardKeyData;
+	TEnumAsByte<ETargetActivationType> ActivationKeyType;
 
 	UPROPERTY()
 	float AcceptanceRadius;

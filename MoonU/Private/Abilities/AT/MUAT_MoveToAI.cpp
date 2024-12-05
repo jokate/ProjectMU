@@ -5,13 +5,12 @@
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Interface/MUEnemy.h"
 
-UMUAT_MoveToAI* UMUAT_MoveToAI::CreateTask(UGameplayAbility* OwningAbility, const FName& InTargetKey,
-                                           EBlackboardKeyData InBlackboardKeyType, float InAcceptanceRadius)
+UMUAT_MoveToAI* UMUAT_MoveToAI::CreateTask(UGameplayAbility* OwningAbility, ETargetActivationType TargetActivationType, float InAcceptanceRadius)
 {
 	UMUAT_MoveToAI* NewTask = NewAbilityTask<UMUAT_MoveToAI>(OwningAbility);
-	NewTask->TargetKey = InTargetKey;
-	NewTask->BlackboardKeyData = InBlackboardKeyType;
+	NewTask->ActivationKeyType = TargetActivationType;
 	NewTask->AcceptanceRadius = InAcceptanceRadius;
 
 	return NewTask;
@@ -56,22 +55,35 @@ void UMUAT_MoveToAI::OnMoveCompleted(FAIRequestID RequestID, const EPathFollowin
 void UMUAT_MoveToAI::AIMove()
 {
 	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
-	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
-	UBlackboardComponent* BBComponent = AIController->GetBlackboardComponent();
-	switch (BlackboardKeyData)
+
+	IMUEnemy* MUEnemy = Cast<IMUEnemy>(OwnerPawn);
+
+	if (MUEnemy == nullptr)
 	{
-	case ActorType :
+		return;
+	}
+	
+	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
+	switch (ActivationKeyType)
+	{
+	case Actor:
 		{
-			AActor* TargetActor = CastChecked<AActor>(BBComponent->GetValueAsObject(TargetKey));
+			AActor* TargetActor = MUEnemy->GetActorTarget();
+			
+			if (IsValid(TargetActor) == false)
+			{
+				return;
+			}
+			
 			AIController->MoveToActor(TargetActor, AcceptanceRadius, false);
-			break;	
 		}
-	case VectorType:
+		break;	
+	case Location : 
 		{
-			FVector TargetLocation = BBComponent->GetValueAsVector(TargetKey);
+			FVector TargetLocation = MUEnemy->GetTargetLocation();
 			AIController->MoveToLocation(TargetLocation, AcceptanceRadius, false);
-			break;	
 		}
+		break;	
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Wrong Type init"));
 		break;

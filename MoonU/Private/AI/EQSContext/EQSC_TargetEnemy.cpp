@@ -8,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_Point.h"
+#include "Interface/MUEnemy.h"
 
 void UEQSC_TargetEnemy::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
 {
@@ -25,32 +26,24 @@ void UEQSC_TargetEnemy::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQue
 		return;
 	}
 
+	IMUEnemy* Enemy = Cast<IMUEnemy>(QueryPawn);
 
-	AAIController* AIController = Cast<AAIController>(QueryPawn->GetController());
-
-	if (AIController == nullptr)
+	if ( Enemy == nullptr )
 	{
 		return;
 	}
 
-	UBlackboardComponent* BBComponent = AIController->GetBlackboardComponent();
+	AActor* TargetActor = Enemy->GetActorTarget();
 
-	if (BBComponent == nullptr)
+	if ( IsValid(TargetActor) == false)
 	{
 		return;
 	}
+	
+	const FVector& TargetActorLocation = TargetActor->GetActorLocation();
 
-	UObject* Object = BBComponent->GetValueAsObject(MU_AI_TARGET);
-
-	if (Object)
+	if (FAISystem::IsValidLocation(TargetActorLocation))
 	{
-		AActor* TargetActor = Cast<AActor>(Object);
-
-		const FVector& TargetActorLocation = TargetActor->GetActorLocation();
-
-		if (FAISystem::IsValidLocation(TargetActorLocation))
-		{
-			UEnvQueryItemType_Point::SetContextHelper(ContextData, TargetActorLocation);
-		}
+		UEnvQueryItemType_Point::SetContextHelper(ContextData, TargetActorLocation);
 	}
 }

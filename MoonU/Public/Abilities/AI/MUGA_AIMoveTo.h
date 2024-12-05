@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "AI/AIEnum.h"
+#include "Data/MUEnum.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "MUGA_AIMoveTo.generated.h"
 
@@ -29,10 +30,7 @@ public :
 	void OnRetriggered(const FGameplayEventData* EventData);
 
 	UPROPERTY(EditDefaultsOnly)
-	FName TargetKeyName;
-
-	UPROPERTY(EditDefaultsOnly)
-	TEnumAsByte<EBlackboardKeyData> BlackboardKeyData;
+	TEnumAsByte<ETargetActivationType> TargetActivationType;
 
 	UPROPERTY(EditDefaultsOnly)
 	float AcceptanceRadius;

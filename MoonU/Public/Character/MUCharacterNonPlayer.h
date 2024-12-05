@@ -44,6 +44,7 @@ protected:
 protected :
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UTargetManagingComponent> TargetManagingComponent;
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UTimeStopComponent> TimeStopComponent;
 };

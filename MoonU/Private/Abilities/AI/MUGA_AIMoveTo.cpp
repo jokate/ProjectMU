@@ -19,7 +19,7 @@ void UMUGA_AIMoveTo::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	MoveToAITask = UMUAT_MoveToAI::CreateTask(this, TargetKeyName, BlackboardKeyData, AcceptanceRadius);
+	MoveToAITask = UMUAT_MoveToAI::CreateTask(this, TargetActivationType, AcceptanceRadius);
 
 	MoveToAITask->MoveCompleted.AddDynamic(this, &UMUGA_AIMoveTo::OnCompleteMove);
 	
