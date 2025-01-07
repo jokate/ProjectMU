@@ -9,7 +9,6 @@
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
-#include "Components/TargetManagingComponent.h"
 #include "Components/TimeStopComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Interface/MUPlayer.h"
@@ -22,7 +21,6 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	TimeStopComponent = CreateDefaultSubobject<UTimeStopComponent>("TimeStopComponent");
-	TargetManagingComponent = CreateDefaultSubobject<UTargetManagingComponent>("TargetManagingComponent");
 }
 
 void AMUCharacterNonPlayer::OnDead(const FGameplayEventData* Data)
@@ -80,49 +78,3 @@ void AMUCharacterNonPlayer::SetMotionWarp(const FName InName, EMotionWarpType In
 		break;
 	}
 }
-
-bool AMUCharacterNonPlayer::IsTargetValid() const
-{
-	if (IsValid(TargetManagingComponent) == false)
-	{
-		return false;
-	}
-
-	return TargetManagingComponent->IsTargetValid();
-}
-
-AActor* AMUCharacterNonPlayer::GetActorTarget() const
-{
-	if (IsValid(TargetManagingComponent) == false)
-	{
-		return nullptr;		
-	}
-
-	return TargetManagingComponent->GetActorTarget();
-}
-
-void AMUCharacterNonPlayer::SetupTarget(AActor* NewTarget)
-{
-	if (IsValid(TargetManagingComponent) == true)
-	{
-		TargetManagingComponent->SetupTarget(NewTarget);
-	}
-}
-
-FVector AMUCharacterNonPlayer::GetTargetLocation() const
-{
-	if (IsValid(TargetManagingComponent) == false)
-	{
-		return FVector::ZeroVector;
-	}
-
-	return TargetManagingComponent->GetTargetLocation();
-}
-
-void AMUCharacterNonPlayer::SetupTargetLocation(FVector NewTargetLocation)
-{
-	if (IsValid(TargetManagingComponent) == true)
-	{
-		TargetManagingComponent->SetupTargetLocation(NewTargetLocation);
-	}
-} 

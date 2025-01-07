@@ -26,15 +26,22 @@ void UEQSC_TargetEnemy::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQue
 		return;
 	}
 
-	IMUEnemy* Enemy = Cast<IMUEnemy>(QueryPawn);
+	AAIController* AIController = Cast<AAIController>(QueryPawn->Controller);
 
-	if ( Enemy == nullptr )
+	if ( IsValid(AIController) == false)
+	{
+		return;
+	}
+	
+	UBlackboardComponent* BBComp = AIController->GetBlackboardComponent();
+
+	if (IsValid(BBComp) == false)
 	{
 		return;
 	}
 
-	AActor* TargetActor = Enemy->GetActorTarget();
-
+	AActor* TargetActor = Cast<AActor>(BBComp->GetValueAsObject(MU_AI_TARGET));
+	
 	if ( IsValid(TargetActor) == false)
 	{
 		return;

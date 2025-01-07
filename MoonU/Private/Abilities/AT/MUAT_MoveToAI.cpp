@@ -4,6 +4,7 @@
 #include "Abilities/AT/MUAT_MoveToAI.h"
 
 #include "AIController.h"
+#include "AI/MUAIDefines.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Interface/MUEnemy.h"
 
@@ -55,21 +56,25 @@ void UMUAT_MoveToAI::OnMoveCompleted(FAIRequestID RequestID, const EPathFollowin
 void UMUAT_MoveToAI::AIMove()
 {
 	APawn* OwnerPawn = CastChecked<APawn>(GetAvatarActor());
+	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
 
-	IMUEnemy* MUEnemy = Cast<IMUEnemy>(OwnerPawn);
+	if (IsValid(AIController) == false)
+	{
+		return;		
+	}
 
-	if (MUEnemy == nullptr)
+	UBlackboardComponent* BBComp = AIController->GetBlackboardComponent();
+
+	if (IsValid(BBComp) == false)
 	{
 		return;
 	}
 	
-	AAIController* AIController = CastChecked<AAIController>(OwnerPawn->GetController());
 	switch (ActivationKeyType)
 	{
 	case Actor:
 		{
-			AActor* TargetActor = MUEnemy->GetActorTarget();
-			
+			AActor* TargetActor = Cast<AActor>(BBComp->GetValueAsObject(MU_AI_TARGET));
 			if (IsValid(TargetActor) == false)
 			{
 				return;
@@ -80,7 +85,7 @@ void UMUAT_MoveToAI::AIMove()
 		break;	
 	case Location : 
 		{
-			FVector TargetLocation = MUEnemy->GetTargetLocation();
+			FVector TargetLocation = BBComp->GetValueAsVector(MU_AI_INTEREST_POINT);
 			AIController->MoveToLocation(TargetLocation, AcceptanceRadius, false);
 		}
 		break;	
