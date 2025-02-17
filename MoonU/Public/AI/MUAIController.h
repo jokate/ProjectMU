@@ -30,6 +30,8 @@ public:
 	UFUNCTION()
 	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 #pragma region IGenericTeamAgentInteface
 	ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 #pragma endregion 
@@ -37,6 +39,9 @@ public:
 protected :
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UEQSActivationComponent> EQSActivationComponent;
 
 	UPROPERTY(EditDefaultsOnly)
 	TMap<TSubclassOf<class UAISense>, FName> KeyForBlackboard;

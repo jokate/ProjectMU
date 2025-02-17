@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AI/AIEnum.h"
 #include "UObject/Object.h"
 #include "MUStruct.generated.h"
 
@@ -20,4 +21,17 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector BoxExtent;
+};
+
+USTRUCT(BlueprintType)
+struct FAIBlackboardKey
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EBlackboardKeyData> BlackboardKeyType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BlackboardKeyName;
 };

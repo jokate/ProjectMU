@@ -8,6 +8,7 @@
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/EQSActivationComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 
 
@@ -18,6 +19,7 @@ AMUAIController::AMUAIController()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerception");
+	EQSActivationComponent = CreateDefaultSubobject<UEQSActivationComponent>("EQSActivation");
 }
 
 void AMUAIController::RunAI()
@@ -109,6 +111,16 @@ void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Sti
 	const FName KeyName = KeyForBlackboard[CurrentSense];
 	
 	Blackboard->SetValueAsBool(KeyName, CurrentValue);	
+}
+
+void AMUAIController::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	
+	if ( IsValid(EQSActivationComponent) == true )
+	{
+		EQSActivationComponent->InitializeEQSActivationComponent(BBAsset);
+	}
 }
 
 ETeamAttitude::Type AMUAIController::GetTeamAttitudeTowards(const AActor& Other) const

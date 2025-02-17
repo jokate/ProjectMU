@@ -9,6 +9,7 @@
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
+#include "Components/EQSActivationComponent.h"
 #include "Components/TimeStopComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Interface/MUPlayer.h"

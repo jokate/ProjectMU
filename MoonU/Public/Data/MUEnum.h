@@ -66,6 +66,7 @@ enum EGASInputFunctionalType
 {
 	Pressed,
 	Released,
+	Invalid
 };
 
 UENUM(BlueprintType)
@@ -74,6 +75,7 @@ enum EEnforcementType
 	Attribute,
 	SkillOpen,
 	SkillEnforcement,
+	MAX
 };
 
 UENUM(BlueprintType)

@@ -17,7 +17,7 @@ public :
 	FName ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 NeedAmount;
+	int32 NeedAmount = 0;
 };
 
 USTRUCT(BlueprintType)

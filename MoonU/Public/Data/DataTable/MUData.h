@@ -43,10 +43,10 @@ struct FInputFunctionalType
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	ETriggerEvent TriggerEvent;
+	ETriggerEvent TriggerEvent = ETriggerEvent::None;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType;
+	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType = EGASInputFunctionalType::Invalid;
 	
 };
 USTRUCT(BlueprintType)
@@ -143,7 +143,7 @@ public :
 	FString DevComment;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement Type")
-	TEnumAsByte<EEnforcementType> EnforcementType;
+	TEnumAsByte<EEnforcementType> EnforcementType = EEnforcementType::MAX;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Enforcement",
 		meta = (EditCondition = "EnforcementType == EEnforcementType::Attribute", EditConditionHides))
