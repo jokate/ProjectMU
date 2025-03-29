@@ -204,6 +204,9 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	ESkillCastingType CastingType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditConditionHides = "CastingType = ESkillCastingType::"))
+	ESkillIndicatorType SkillIndicatorType;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SkillGameplayTag;
 

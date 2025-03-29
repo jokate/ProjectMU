@@ -49,7 +49,12 @@ void UMUGA_CastSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 			EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 			break;
 		}
+	default:
+		{
+			EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+		}
 	}
+	
 }
 
 void UMUGA_CastSkill::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

@@ -110,3 +110,11 @@ enum class ESkillCastingType : uint8
 	Instant,
 	Indicator
 };
+
+UENUM( BlueprintType )
+enum class ESkillIndicatorType : uint8
+{
+	NONE,
+	LINEAR,
+	CIRCULAR
+};

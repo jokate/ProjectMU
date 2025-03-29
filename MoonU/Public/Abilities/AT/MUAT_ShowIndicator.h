@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
+#include "Data/MUEnum.h"
 #include "MUAT_ShowIndicator.generated.h"
 
 /**
@@ -15,4 +16,15 @@ UCLASS()
 class MOONU_API UMUAT_ShowIndicator : public UAbilityTask
 {
 	GENERATED_BODY()
+
+public : 
+	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability, ESkillIndicatorType SkillIndicatorType, float SkillDistance);
+
+	
+public : 
+	UPROPERTY()
+	ESkillIndicatorType IndicatorType;
+
+	UPROPERTY()
+	float SkillDistance = 0;
 };
