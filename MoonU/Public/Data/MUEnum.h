@@ -93,3 +93,20 @@ enum ETargetActivationType
 	Location,
 	Actor
 };
+
+UENUM(BlueprintType)
+enum class ESkillSlotType : uint8
+{
+	NONE,
+	SkillSlot_1,
+	SkillSlot_2,
+	SkillSlot_3
+};
+
+UENUM( BlueprintType )
+enum class ESkillCastingType : uint8
+{
+	NONE,
+	Instant,
+	Indicator
+};

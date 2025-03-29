@@ -194,3 +194,19 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FMUEnforcementProbability> EnforcementProbabilities;
 };
+
+USTRUCT( BlueprintType )
+struct FMUSkillData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ESkillCastingType CastingType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag SkillGameplayTag;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")
+	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
+};

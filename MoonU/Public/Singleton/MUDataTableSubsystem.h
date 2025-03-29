@@ -28,7 +28,9 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool GetEnforcementDropData(int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
-	
+
+	UFUNCTION( BlueprintCallable )
+	virtual bool GetSkillData( FName SkillName, FMUSkillData& OutSkillData );	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
@@ -56,4 +58,10 @@ protected :
 
 	UPROPERTY()
 	TObjectPtr<UDataTable> EnforcementDropTable;
+
+	UPROPERTY(Config)
+	TSoftObjectPtr<UDataTable> SkillDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> SkillDataTable;
 };

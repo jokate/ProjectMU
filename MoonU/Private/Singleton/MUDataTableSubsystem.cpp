@@ -107,6 +107,32 @@ bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDr
     return true;
 }
 
+bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkillData)
+{
+	if ( IsValid(SkillDataTable) == false)
+	{
+		UDataTable* SkillDataTableLoaded = SkillDataTablePath.LoadSynchronous();
+		if ( IsValid(SkillDataTableLoaded) == false)
+		{
+			UE_LOG( LogTemp, Log, TEXT("Enforcement Drop DataTable Is Not Valid") );
+			return false;
+		}
+
+		SkillDataTable = SkillDataTableLoaded;
+	}
+
+	FMUSkillData* SkillData = SkillDataTable->FindRow<FMUSkillData>( SkillName, TEXT(""));
+
+	if ( SkillData == nullptr )
+	{
+		return false;
+	}
+
+	OutSkillData = *SkillData;
+
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

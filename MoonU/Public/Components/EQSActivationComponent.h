@@ -45,7 +45,7 @@ protected :
 	void OnQueryFinished(TSharedPtr<FEnvQueryResult> QueryResult);
 	
 public :
-	
+	// 결국에 해당 부분에 대해서 다중 교체가 이루어져야 함.
 	UPROPERTY(Category = EQS, EditAnywhere)
 	FEQSParametrizedQueryExecutionRequest EQSRequest;
 
