@@ -6,11 +6,13 @@
 #include "AttributeSet.h"
 #include "Components/ActorComponent.h"
 #include "Data/DataTable/MUData.h"
+#include "Interface/SkillManager.h"
 #include "EnforcementComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillUpdated );
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UEnforcementComponent : public UActorComponent
+class MOONU_API UEnforcementComponent : public UActorComponent, public ISkillManager
 {
 	GENERATED_BODY()
 
@@ -21,6 +23,12 @@ public:
 	virtual void EnforceUnit(int32 InEnforcementID);
 	
 	virtual TArray<int32>& GetEnforcementIDs() { return EnforcementIDs; }
+
+	virtual void AddSkillSlot( ESkillSlotType SkillSlotType, FName SkillID ) override;
+
+	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) override;
+
+	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
 	
 protected:
 	// Called when the game starts
@@ -29,10 +37,17 @@ protected:
 #pragma region Enforcement
 	virtual void EnforcementAttribute(FMUAttributeValue& AttributeValue);
 
-	virtual void OpenSkill( FSkillInfoData& SkillInfoData );
+	virtual void OpenSkill( FName SkillID );
 #pragma endregion
+
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enforcement ID")
 	TArray<int32> EnforcementIDs;
+
+	UPROPERTY( BlueprintAssignable, BlueprintReadWrite )
+	FOnSkillUpdated	OnSkillUpdated;
+
+		UPROPERTY( VisibleAnywhere )
+	TMap<ESkillSlotType, FName> AllocatedSkillID;
 };

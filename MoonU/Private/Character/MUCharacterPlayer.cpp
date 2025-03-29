@@ -302,6 +302,32 @@ void AMUCharacterPlayer::SetCachedInteractionTarget(AActor* TargetActor)
 	InteractionComponent->SetCachedInteractionTarget(TargetActor);
 }
 
+void AMUCharacterPlayer::AddSkillSlot(ESkillSlotType SkillSlotType, FName SkillID)
+{
+	if ( IsValid( EnforcementComponent ) == true )
+	{
+		EnforcementComponent->AddSkillSlot(SkillSlotType, SkillID);
+	}
+}
+
+void AMUCharacterPlayer::RemoveSkillSlot(ESkillSlotType SkillSlotType)
+{
+	if ( IsValid(EnforcementComponent ) == true )
+	{
+		EnforcementComponent->RemoveSkillSlot(SkillSlotType);
+	} 
+}
+
+const FName AMUCharacterPlayer::GetSkillIDBySlot(ESkillSlotType SkillSlot)
+{
+	if ( IsValid(EnforcementComponent) == true )
+	{
+		return EnforcementComponent->GetSkillIDBySlot(SkillSlot);
+	}
+
+	return FName();
+}
+
 void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)
 {
 	if ( IsValid(EnforcementComponent) == false)

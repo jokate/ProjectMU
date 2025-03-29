@@ -10,13 +10,15 @@
 #include "Interface/Interactor.h"
 #include "Interface/InventoryOwner.h"
 #include "Interface/MUPlayer.h"
+#include "Interface/SkillManager.h"
 #include "MUCharacterPlayer.generated.h"
 
 struct FInputActionValue;
 
 UCLASS()
 
-class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer, public IInventoryOwner, public IInteractor
+class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer,
+									 public IInventoryOwner, public IInteractor, public ISkillManager
 {
 	GENERATED_BODY()
 
@@ -86,6 +88,16 @@ protected :
 
 	virtual void SetCachedInteractionTarget(AActor* TargetActor) override;
 #pragma endregion IInteractor
+
+#pragma region ISkillManager
+	
+	virtual void AddSkillSlot( ESkillSlotType SkillSlotType, FName SkillID ) override;
+
+	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) override;
+
+	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
+	
+#pragma endregion 
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

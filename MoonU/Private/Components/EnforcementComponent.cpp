@@ -45,7 +45,7 @@ void UEnforcementComponent::EnforceUnit(int32 InEnforcementID)
 	case SkillOpen :
 		{
 			// ASC에 Skill Ability 부여 + Input Binding이 필요한 경우에는 Input Binder 필요.
-			OpenSkill(EnforcementData.SkillInfoData);
+			OpenSkill(EnforcementData.SkillID);
 		}
 		break;
 
@@ -88,8 +88,13 @@ void UEnforcementComponent::EnforcementAttribute(FMUAttributeValue& AttributeVal
 	ASC->SetNumericAttributeBase(AttributeValue.InitAttribute, CalculatedAttributeValue);
 }
 
-void UEnforcementComponent::OpenSkill(FSkillInfoData& SkillInfoData)
+void UEnforcementComponent::OpenSkill(FName SkillID)
 {
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData(GetOwner(), SkillID, SkillData) == false )
+	{
+		return;
+	}
 	IAbilitySystemInterface* ASI = GetOwner<IAbilitySystemInterface>();
 
 	if (ASI == nullptr)
@@ -105,42 +110,45 @@ void UEnforcementComponent::OpenSkill(FSkillInfoData& SkillInfoData)
 	}
 
 	//이미 등록된 Ability인 경우에는 배제
-	if (ASC->FindAbilitySpecFromClass(SkillInfoData.NeedToRegAbility) != nullptr)
+	if (ASC->FindAbilitySpecFromClass(SkillData.NeedToRegAbility) != nullptr)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Already Allocated Ability"));
 		return;
 	}
-	
+
 	// Input Binding이 필요한 경우에는 별도 세팅이 필요한 것은 사실임.
-	FGameplayAbilitySpec AbilitySpec(SkillInfoData.NeedToRegAbility);
-	
-	if (SkillInfoData.bNeedToSetInput)
-	{
-		AMUCharacterPlayer* Character = GetOwner<AMUCharacterPlayer>();
-		if ( IsValid(Character) == false)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Character Is Not Valid"));
-			return;
-		}
-		
-		// Skill에 대한 동작 Input을 Dynamic하게 지정해야 한다.
-		FTagByInput& AbilityTagByInput = SkillInfoData.TagByInput;
-
-		//만약 선제적으로 이미 지정된 Ability가 있는 경우에는 굳이 할당 자체를 하지 않는 것이 좋음.
-		int32 AbilityInputID = AbilityTagByInput.InputID;
-		if (ASC->FindAbilitySpecFromInputID(AbilityInputID) != nullptr)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Already Has Input Binding"));
-			return;
-		}
-		
-		AbilitySpec.InputID = AbilityInputID;
-
-		// 태깅에 따른 부분 지정.
-		UMUFunctionLibrary::BindInputActionByTag(Character, Character->GetCharacterID(), AbilityTagByInput);
-	}
+	FGameplayAbilitySpec AbilitySpec(SkillData.NeedToRegAbility);
 
 	ASC->GiveAbility(AbilitySpec);
+}
+
+void UEnforcementComponent::AddSkillSlot(ESkillSlotType SkillSlotType, FName SkillID)
+{
+	AllocatedSkillID.Add(SkillSlotType, SkillID);
+
+	if ( OnSkillUpdated.IsBound() == true )
+	{
+		OnSkillUpdated.Broadcast();
+	}
+}
+
+void UEnforcementComponent::RemoveSkillSlot(ESkillSlotType SkillSlotType)
+{
+	AllocatedSkillID.Remove(SkillSlotType);
+	if ( OnSkillUpdated.IsBound() == true )
+	{
+		OnSkillUpdated.Broadcast();
+	}
+}
+
+const FName UEnforcementComponent::GetSkillIDBySlot(ESkillSlotType SkillSlot)
+{
+	if ( AllocatedSkillID.Contains(SkillSlot) == false )
+	{
+		return FName();
+	}
+
+	return AllocatedSkillID[SkillSlot];
 }
 
 

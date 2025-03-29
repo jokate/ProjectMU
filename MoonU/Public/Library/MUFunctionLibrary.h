@@ -50,5 +50,8 @@ public :
 
 	UFUNCTION(BlueprintPure)
 	static bool GetEnforcementDropData(UObject* Object, int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
+
+	UFUNCTION( BlueprintPure )
+	static bool GetSkillData( UObject* Object, FName SkillID, FMUSkillData& OutSkillData);
 #pragma endregion
 };

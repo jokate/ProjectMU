@@ -151,7 +151,7 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Enforcement",
 		meta = (EditCondition = "EnforcementType == EEnforcementType::SkillOpen", EditConditionHides))
-	FSkillInfoData SkillInfoData;
+	FName SkillID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Description")
 	FText DescriptionText;

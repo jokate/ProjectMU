@@ -124,6 +124,25 @@ bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Level,
 	return DataTableSubsystem->GetEnforcementDropData(Level, OutEnforcementDropSelect);
 }
 
+bool UMUFunctionLibrary::GetSkillData(UObject* Object, FName SkillID, FMUSkillData& OutSkillData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetSkillData(SkillID, OutSkillData);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {
@@ -302,9 +321,15 @@ bool UMUFunctionLibrary::IsSkillRegisteredToCharacter(UObject* Object, int32 Enf
 		return false;
 	}
 	
-	FSkillInfoData SkillInfoData = EnforcementData.SkillInfoData;
+	FName SkillInfoData = EnforcementData.SkillID;
+	FMUSkillData SkillData;
+	if ( GetSkillData(Object, SkillInfoData, SkillData ) == false )
+	{
+		return false;
+	}
+	
 	//이미 등록된 Ability인 경우에는 배제
-	if (ASC->FindAbilitySpecFromClass(SkillInfoData.NeedToRegAbility))
+	if (ASC->FindAbilitySpecFromClass(SkillData.NeedToRegAbility))
 	{
 		UE_LOG(LogTemp, Log, TEXT("IsSkillRegisteredToCharacter : Already Registered Ability"));
 		return true;
