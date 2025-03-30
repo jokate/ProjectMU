@@ -14,3 +14,10 @@ const FGameplayTag& UMUEnhancedInputComponent::GetGameplayTagByInputAction(const
 
 	return InputGameplayTagMap[InputActionWrapper]; 
 }
+
+void UMUEnhancedInputComponent::ClearActionBindings()
+{
+	Super::ClearActionBindings();
+
+	InputGameplayTagMap.Empty();
+}

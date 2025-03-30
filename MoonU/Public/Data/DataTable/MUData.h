@@ -99,6 +99,12 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input)
 	TArray<FTagByInput> InputByTags;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Comment")
+	FString DevComment;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Priority")
+	int32 Priority = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -212,4 +218,7 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")
 	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
+	float CastingRange = 0;
 };

@@ -41,6 +41,8 @@ public:
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
 
+	virtual void SetMotionWarpToCursorDirection( const FName TargetName, EMotionWarpType InMotionWarpType, const float MotionWarpValue, const FVector& DirectionVector ) override;
+	
 	void GASInputPressed(int32 InputId);
 
 	void GASInputReleased(int32 InputId);

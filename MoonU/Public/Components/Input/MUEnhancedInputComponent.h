@@ -40,6 +40,8 @@ public:
 	void BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func);
 
 	const FGameplayTag& GetGameplayTagByInputAction(const UInputAction* InputAction);
+
+	virtual void ClearActionBindings() override;
 	
 protected:
 	UPROPERTY(VisibleAnywhere)

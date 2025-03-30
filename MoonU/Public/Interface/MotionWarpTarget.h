@@ -28,4 +28,6 @@ public:
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) = 0;
 
 	virtual void ReleaseMotionWarp(const FName InName) = 0;
+
+	virtual void SetMotionWarpToCursorDirection( const FName TargetName, EMotionWarpType InMotionWarpType, const float MotionWarpValue, const FVector& DirectionVector ) {};
 };

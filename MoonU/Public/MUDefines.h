@@ -12,6 +12,7 @@
 #define EMPTY_AMOUNT 0 
 
 #define HEAD_BONE_NAME TEXT("head")
+#define COMMON_CHARACTER_INPUT 100
 
 #define SUIT_TAG TEXT("Gameplay.Interactable.Suit")
 #define DASH_MOTION_WARP TEXT("Dash")

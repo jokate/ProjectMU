@@ -20,6 +20,7 @@
 #include "Components/MULevelUpComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Framework/MUPlayerState.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 
@@ -50,8 +51,6 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 void AMUCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	const auto* GS = UMUGameSettings::Get();
 	
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -148,6 +147,28 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 		break;
 	case EMotionWarpType::TranslationOnly:
 		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(InName, TargetLoc, FRotator::ZeroRotator);
+		break;
+	}
+}
+
+void AMUCharacterPlayer::SetMotionWarpToCursorDirection(const FName TargetName, EMotionWarpType InMotionWarpType,
+	const float MotionWarpValue, const FVector& DirectionVector)
+{
+	ReleaseMotionWarp(TargetName);
+
+	const FVector TargetLocation = GetActorLocation() + DirectionVector * MotionWarpValue;
+	FRotator DesiredRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+
+	switch (InMotionWarpType)
+	{
+	case EMotionWarpType::TranslationAndRotation:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation, DesiredRotator);
+		break;
+	case EMotionWarpType::RotationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,FVector::ZeroVector, DesiredRotator);
+		break;
+	case EMotionWarpType::TranslationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation,FRotator::ZeroRotator);
 		break;
 	}
 }

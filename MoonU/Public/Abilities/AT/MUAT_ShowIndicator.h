@@ -20,12 +20,23 @@ class MOONU_API UMUAT_ShowIndicator : public UAbilityTask
 public :
 	UMUAT_ShowIndicator();
 	
-	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability, ESkillIndicatorType SkillIndicatorType, float SkillDistance);
+	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability,
+		ESkillIndicatorType SkillIndicatorType, float SkillDistance);
 
 	virtual void TickTask(float DeltaTime) override;
 
 	virtual void ShowIndicatorByIndicatorType();
-public : 
+
+	virtual void Activate() override;
+
+	virtual void OnDestroy(bool bInOwnerFinished) override;
+public :
+	UPROPERTY()
+	TSubclassOf<UMaterialInterface> MaterialClass;
+
+	UPROPERTY()
+	TObjectPtr<UDecalComponent> SpawnedDecalComponent;
+	
 	UPROPERTY()
 	ESkillIndicatorType IndicatorType;
 
