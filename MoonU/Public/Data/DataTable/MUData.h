@@ -215,7 +215,7 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	ESkillCastingType CastingType;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditConditionHides = "CastingType = ESkillCastingType::"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
 	ESkillIndicatorType SkillIndicatorType;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
