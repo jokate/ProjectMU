@@ -55,12 +55,6 @@ void AMUCharacterPlayer::BeginPlay()
 	SetupInputByID(COMMON_CHARACTER_INPUT);
 	SetupInputByID(CharacterID);
 
-	FMUCharacterInfo Characterinfo;
-	if (UMUFunctionLibrary::GetCharacterInfoData(this, CharacterID, Characterinfo) == false)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Character Load Failed"));	
-	}
-
 	LevelUpComponent->OnLevelUpEventCallback.AddDynamic(this, &AMUCharacterPlayer::OnLevelUpCallbackFunction);
 }
 
@@ -73,8 +67,6 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	LevelUpComponent->OnLevelUpEventCallback.RemoveAll(this);
 	
-	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GetGameInstance()->GetSubsystem<UMUWidgetDelegateSubsystem>();
-	
   	Super::EndPlay(EndPlayReason);
 }
 
@@ -82,7 +74,6 @@ ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Oth
 {
 	return ETeamAttitude::Hostile;
 }
-
 
 void AMUCharacterPlayer::SetupInputByID(int32 InputID)
 {
