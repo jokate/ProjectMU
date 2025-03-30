@@ -42,6 +42,8 @@ public:
 	const FGameplayTag& GetGameplayTagByInputAction(const UInputAction* InputAction);
 
 	virtual void ClearActionBindings() override;
+
+	void RemoveActionBinding(const FGameplayTag& InputTag);
 	
 protected:
 	UPROPERTY(VisibleAnywhere)

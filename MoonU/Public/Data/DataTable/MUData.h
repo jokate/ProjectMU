@@ -49,6 +49,8 @@ struct FInputFunctionalType
 	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType = EGASInputFunctionalType::Invalid;
 	
 };
+
+//절대로 중복되는 경우는 없어야 합니다.
 USTRUCT(BlueprintType)
 struct FTagByInput
 {
@@ -59,6 +61,9 @@ struct FTagByInput
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
 	int32 InputID = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputAbility)
+	TSubclassOf<class UGameplayAbility> InputAbility;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = InputSetter)
 	TArray<FInputFunctionalType> InputFunctionalTypes;

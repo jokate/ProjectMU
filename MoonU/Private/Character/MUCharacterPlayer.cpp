@@ -51,20 +51,9 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 void AMUCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		FMUInputMapper InputMapper;
-		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
-		{
-			return;
-		}
 
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(InputMapper.InputMappingContext, 0);
-		}
-	}
+	SetupInputByID(COMMON_CHARACTER_INPUT);
+	SetupInputByID(CharacterID);
 
 	FMUCharacterInfo Characterinfo;
 	if (UMUFunctionLibrary::GetCharacterInfoData(this, CharacterID, Characterinfo) == false)
@@ -94,14 +83,38 @@ ETeamAttitude::Type AMUCharacterPlayer::GetTeamAttitudeTowards(const AActor& Oth
 	return ETeamAttitude::Hostile;
 }
 
+
+void AMUCharacterPlayer::SetupInputByID(int32 InputID)
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		FMUInputMapper InputMapper;
+		if (UMUFunctionLibrary::GetInputMapperData(this, InputID, InputMapper) == false)
+		{
+			return;
+		}
+
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(InputMapper.InputMappingContext, InputMapper.Priority);
+		}
+	}
+}
+
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	SetupDefaultInput(PlayerInputComponent);
+	SetupGASInputComponent(CharacterID);
+}
+
+void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UMUEnhancedInputComponent* EnhancedInputComponent = CastChecked<UMUEnhancedInputComponent>(PlayerInputComponent))
 	{
 		FMUInputMapper InputMapper;
-		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
+		if (UMUFunctionLibrary::GetInputMapperData(this, COMMON_CHARACTER_INPUT, InputMapper) == false)
 		{
 			return;
 		}
@@ -116,7 +129,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
 	}
 
-	SetupGASInputComponent();
+	SetupGASInputComponent(COMMON_CHARACTER_INPUT);
 }
 
 
@@ -195,7 +208,7 @@ bool AMUCharacterPlayer::GetEnforcementIDs(TArray<int32>& OutEnforcementIDs)
 	return true;
 }
 
-void AMUCharacterPlayer::SetupGASInputComponent()
+void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 {
 	if (IsValid(ASC) && IsValid(InputComponent))
 	{
@@ -207,14 +220,18 @@ void AMUCharacterPlayer::SetupGASInputComponent()
 		}
 		
 		FMUInputMapper InputMapper;
-		if (UMUFunctionLibrary::GetInputMapperData(this, CharacterID, InputMapper) == false)
+		if (UMUFunctionLibrary::GetInputMapperData(this, InputID, InputMapper) == false)
 		{
 			return;
 		}
 
 		for ( FTagByInput& InputByTag : InputMapper.InputByTags )
 		{
-			UMUFunctionLibrary::BindInputActionByTag(this, CharacterID, InputByTag);
+			FGameplayAbilitySpec StartSpec(InputByTag.InputAbility);
+			StartSpec.InputID = InputByTag.InputID;
+			ASC->GiveAbility(StartSpec);
+			
+			UMUFunctionLibrary::BindInputActionByTag(this, InputID, InputByTag);
 		}
 	}
 }

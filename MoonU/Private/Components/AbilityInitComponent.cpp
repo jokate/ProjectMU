@@ -46,12 +46,6 @@ void UAbilityInitComponent::InitAbilities(int32 CharacterID)
 		FGameplayAbilitySpec StartSpec(StartAbility);
 		ASC->GiveAbility(StartSpec);
 	}
-	for (const auto& StartInputAbility : CharacterInfo.StartInputAbilities)
-	{
-		FGameplayAbilitySpec StartSpec(StartInputAbility.Value);
-		StartSpec.InputID = StartInputAbility.Key;
-		ASC->GiveAbility(StartSpec);
-	}
 
 	for (const auto& StartAbility : CharacterInfo.NeedToStartAbilities)
 	{

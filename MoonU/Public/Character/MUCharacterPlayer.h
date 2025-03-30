@@ -32,7 +32,8 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
-
+	virtual void SetupInputByID( int32 InputID );
+	
 public:	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -67,7 +68,9 @@ public:
 	
 protected :
 	
-	void SetupGASInputComponent();
+	void SetupGASInputComponent( int32 InputID );
+
+	void SetupDefaultInput(UInputComponent* PlayerInputComponent);
 	
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);

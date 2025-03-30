@@ -8,6 +8,11 @@
 #include "Interface/SkillManager.h"
 #include "Library/MUFunctionLibrary.h"
 
+UMUGA_CastSkill::UMUGA_CastSkill()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
 void UMUGA_CastSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                       const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                       const FGameplayEventData* TriggerEventData)
@@ -47,6 +52,8 @@ void UMUGA_CastSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 			// 스킬 캐스팅 용 Task 생성.
 			UMUAT_ShowIndicator* IndicatorTask = UMUAT_ShowIndicator::CreateTask( this, SkillData.SkillIndicatorType, SkillData.CastingRange );
 			IndicatorTask->ReadyForActivation();
+			//저렇게 되는 경우 세팅 필요. -> 인풋에 대한 교체 작업 필요하다. (필수적인 구현사항)
+			//단, Ability에 대한 세팅..?
 			break;
 		}
 
