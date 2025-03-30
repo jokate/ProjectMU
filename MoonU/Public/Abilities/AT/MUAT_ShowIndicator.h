@@ -17,10 +17,14 @@ class MOONU_API UMUAT_ShowIndicator : public UAbilityTask
 {
 	GENERATED_BODY()
 
-public : 
+public :
+	UMUAT_ShowIndicator();
+	
 	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability, ESkillIndicatorType SkillIndicatorType, float SkillDistance);
 
-	
+	virtual void TickTask(float DeltaTime) override;
+
+	virtual void ShowIndicatorByIndicatorType();
 public : 
 	UPROPERTY()
 	ESkillIndicatorType IndicatorType;

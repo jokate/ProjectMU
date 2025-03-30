@@ -62,3 +62,15 @@ void UMUGA_CastSkill::CancelAbility(const FGameplayAbilitySpecHandle Handle, con
 {
 	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 }
+
+void UMUGA_CastSkill::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
+
+	if ( bIsCastingSkill )
+	{
+		// 인디케이터가 있는 경우 관련 방향으로 세팅 후 조정해줘야 함.		
+	}
+	
+}
