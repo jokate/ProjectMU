@@ -4,22 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "Data/MUEnum.h"
-#include "MUGA_CastSkill.generated.h"
+#include "MUGA_ActivateSkill.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_CastSkill : public UGameplayAbility
+class MOONU_API UMUGA_ActivateSkill : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public :
-	UMUGA_CastSkill();
-	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
-	UPROPERTY( EditDefaultsOnly )
-	ESkillSlotType CastSkillSlotType;
+	virtual void ActivateInstantSkill() {};
+
+	virtual void ActivateIndicatorSkill() {};
 };

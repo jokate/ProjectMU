@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "AI/AIEnum.h"
+#include "DataTable/MUData.h"
 #include "UObject/Object.h"
 #include "MUStruct.generated.h"
 
@@ -34,4 +36,20 @@ public :
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName BlackboardKeyName;
+};
+
+USTRUCT( BlueprintType )
+struct FGameplayEventData_Skill : public FGameplayEventData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ESkillCastingType CastingType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
+	ESkillIndicatorType SkillIndicatorType;
+	
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
+	float CastingRange = 0;
 };
