@@ -56,7 +56,10 @@ void UMUGA_CastSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 
 	FGameplayEventData_Skill EventDataSkill;
-	EventDataSkill.SkillName = SkillID;
+	
+	EventDataSkill.CastingRange = SkillData.CastingRange;
+	EventDataSkill.CastingType = SkillData.CastingType;
+	EventDataSkill.SkillIndicatorType = SkillData.SkillIndicatorType;
 
 	OwnerASC->HandleGameplayEvent(SkillData.SkillGameplayTag, &EventDataSkill);
 	

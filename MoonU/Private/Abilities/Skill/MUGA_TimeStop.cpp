@@ -13,37 +13,6 @@ UMUGA_TimeStop::UMUGA_TimeStop()
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
-void UMUGA_TimeStop::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-                                     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-                                     const FGameplayEventData* TriggerEventData)
-{
-	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
-	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
-
-	if (TimeStopper)
-	{
-		TimeStopper->TimeStopActivate();
-	}
-	
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
-	
-	if (ASC)
-	{
-		const UMUTimewinderAttribute* CharacterAttribute = ASC->GetSet<UMUTimewinderAttribute>();
-
-		if (CharacterAttribute)
-		{
-			GetWorld()->GetTimerManager().SetTimer(TimeStopHandle, this, &UMUGA_TimeStop::OnTimeFinished, CharacterAttribute->GetTimeStopDuration(), false);
-		}
-
-		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
-		{
-			ASC->ExecuteGameplayCue(GameplayCueTag);
-		}
-	}
-}
-
 void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                 const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
@@ -73,4 +42,31 @@ void UMUGA_TimeStop::OnTimeFinished()
 	bool bWasCancelled = false;
 
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UMUGA_TimeStop::ActivateSkill()
+{
+	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
+
+	if (TimeStopper)
+	{
+		TimeStopper->TimeStopActivate();
+	}
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	
+	if (ASC)
+	{
+		const UMUTimewinderAttribute* CharacterAttribute = ASC->GetSet<UMUTimewinderAttribute>();
+
+		if (CharacterAttribute)
+		{
+			GetWorld()->GetTimerManager().SetTimer(TimeStopHandle, this, &UMUGA_TimeStop::OnTimeFinished, CharacterAttribute->GetTimeStopDuration(), false);
+		}
+
+		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
+		{
+			ASC->ExecuteGameplayCue(GameplayCueTag);
+		}
+	}
 }
