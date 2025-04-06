@@ -9,8 +9,6 @@
 #include "Interface/SkillManager.h"
 #include "EnforcementComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillUpdated );
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MOONU_API UEnforcementComponent : public UActorComponent, public ISkillManager
 {
@@ -40,13 +38,11 @@ protected:
 	virtual void OpenSkill( FName SkillID );
 #pragma endregion
 
+	virtual void CallSkillUpdatedEvent();
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enforcement ID")
 	TArray<int32> EnforcementIDs;
-
-	UPROPERTY( BlueprintAssignable, BlueprintReadWrite )
-	FOnSkillUpdated	OnSkillUpdated;
 
 		UPROPERTY( VisibleAnywhere )
 	TMap<ESkillSlotType, FName> AllocatedSkillID;

@@ -221,9 +221,15 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SkillGameplayTag;
 
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")              
 	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;
-};
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Apply SkillSlot" )
+	ESkillSlotType ApplySlotType = ESkillSlotType::NONE;
+	
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Visual Info")
+	UTexture2D* SkillIcon = nullptr;
+;};

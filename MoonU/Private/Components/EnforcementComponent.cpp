@@ -8,6 +8,7 @@
 #include "Character/MUCharacterPlayer.h"
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
+#include "Singleton/MUWidgetDelegateSubsystem.h"
 
 UEnforcementComponent::UEnforcementComponent()
 {
@@ -120,25 +121,49 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 	FGameplayAbilitySpec AbilitySpec(SkillData.NeedToRegAbility);
 
 	ASC->GiveAbility(AbilitySpec);
+
+	AddSkillSlot(SkillData.ApplySlotType, SkillID);
+}
+
+void UEnforcementComponent::CallSkillUpdatedEvent()
+{
+	UWorld* World = GetWorld();
+
+	if ( IsValid(World) == false )
+	{
+		return;		
+	}
+
+	UGameInstance* GameInstance = World->GetGameInstance();
+
+	if ( IsValid(GameInstance) == false	)
+	{
+		return;
+	}
+
+	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GameInstance->GetSubsystem<UMUWidgetDelegateSubsystem>();
+
+	if ( IsValid( WidgetDelegateSubsystem ) == false )
+	{
+		return;	
+	}
+
+	if ( WidgetDelegateSubsystem->OnSkillUpdated.IsBound() == true )
+	{
+		WidgetDelegateSubsystem->OnSkillUpdated.Broadcast();
+	} 
 }
 
 void UEnforcementComponent::AddSkillSlot(ESkillSlotType SkillSlotType, FName SkillID)
 {
 	AllocatedSkillID.Add(SkillSlotType, SkillID);
-
-	if ( OnSkillUpdated.IsBound() == true )
-	{
-		OnSkillUpdated.Broadcast();
-	}
+	CallSkillUpdatedEvent();
 }
 
 void UEnforcementComponent::RemoveSkillSlot(ESkillSlotType SkillSlotType)
 {
 	AllocatedSkillID.Remove(SkillSlotType);
-	if ( OnSkillUpdated.IsBound() == true )
-	{
-		OnSkillUpdated.Broadcast();
-	}
+	CallSkillUpdatedEvent();
 }
 
 const FName UEnforcementComponent::GetSkillIDBySlot(ESkillSlotType SkillSlot)
