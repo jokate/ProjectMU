@@ -5,6 +5,7 @@
 
 #include "Components/DecalComponent.h"
 #include "Framework/MUPlayerController.h"
+#include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -13,11 +14,11 @@ UMUAT_ShowIndicator::UMUAT_ShowIndicator()
 	bTickingTask = true;
 }
 
-UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, ESkillIndicatorType SkillIndicatorType, float SkillDistance )
+UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, UMaterialInterface* SkillMaterial, float SkillDistance )
 {
 	UMUAT_ShowIndicator* IndicatorTask = NewAbilityTask<UMUAT_ShowIndicator>(Ability);
 
-	IndicatorTask->IndicatorType = SkillIndicatorType;
+	IndicatorTask->IndicatorMaterial = SkillMaterial;
 	IndicatorTask->SkillDistance = SkillDistance;
 
 	return IndicatorTask;
@@ -59,6 +60,8 @@ void UMUAT_ShowIndicator::ShowIndicatorByIndicatorType()
 			
 			LookAtRotation.Pitch = 0.f;
 			LookAtRotation.Roll = 0.f;
+
+			UE_LOG(LogTemp, Log, TEXT(""))
 			
 			SpawnedDecalComponent->SetWorldRotation(LookAtRotation);
 		}
@@ -69,7 +72,20 @@ void UMUAT_ShowIndicator::Activate()
 {
 	Super::Activate();
 
-	//UGameplayStatics::SpawnDecalAttached(MaterialClass, );
+	AActor* OwnerActor = GetAvatarActor();
+
+	if ( IsValid( OwnerActor ) == false )
+	{
+		return;
+	}
+
+	ACharacter* Character = Cast<ACharacter>(OwnerActor);
+
+	if ( IsValid( Character ) == false)
+	{
+		return;
+	}	
+	SpawnedDecalComponent = UGameplayStatics::SpawnDecalAttached(IndicatorMaterial, FVector::ForwardVector, Character->GetMesh() );
 }
 
 void UMUAT_ShowIndicator::OnDestroy(bool bInOwnerFinished)

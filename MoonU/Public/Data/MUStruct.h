@@ -48,7 +48,7 @@ public :
 	ESkillCastingType CastingType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
-	ESkillIndicatorType SkillIndicatorType;
+	UMaterialInterface* IndicatorMaterial;
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;

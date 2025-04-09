@@ -21,7 +21,7 @@ public :
 	UMUAT_ShowIndicator();
 	
 	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability,
-		ESkillIndicatorType SkillIndicatorType, float SkillDistance);
+		UMaterialInterface* SkillMaterial, float SkillDistance);
 
 	virtual void TickTask(float DeltaTime) override;
 
@@ -32,13 +32,10 @@ public :
 	virtual void OnDestroy(bool bInOwnerFinished) override;
 public :
 	UPROPERTY()
-	TSubclassOf<UMaterialInterface> MaterialClass;
-
-	UPROPERTY()
 	TObjectPtr<UDecalComponent> SpawnedDecalComponent;
 	
 	UPROPERTY()
-	ESkillIndicatorType IndicatorType;
+	TObjectPtr<UMaterialInterface> IndicatorMaterial;
 
 	UPROPERTY()
 	float SkillDistance = 0;
