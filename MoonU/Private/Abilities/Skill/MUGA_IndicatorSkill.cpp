@@ -28,10 +28,18 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	ShowIndicatorTask->ReadyForActivation();
 }
 
-void UMUGA_IndicatorSkill::InputPressed(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+	bool bReplicateEndAbility, bool bWasCancelled)
 {
-	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
-
 	ActivateSkill();
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UMUGA_IndicatorSkill::CancelAbility(const FGameplayAbilitySpecHandle Handle,
+                                         const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+                                         bool bReplicateCancelAbility)
+{
+	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 }

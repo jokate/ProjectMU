@@ -254,7 +254,7 @@ void AMUCharacterPlayer::GASInputReleased(int32 InputId)
 		Spec->InputPressed = false;
 		if (Spec->IsActive())
 		{
-			ASC->AbilitySpecInputReleased(*Spec);	
+			ASC->AbilitySpecInputReleased(*Spec);
 		}
 	}
 }
