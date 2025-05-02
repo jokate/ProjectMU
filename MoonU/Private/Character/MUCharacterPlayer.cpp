@@ -119,10 +119,26 @@ void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
 
-		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);	
 	}
 
 	SetupGASInputComponent(COMMON_CHARACTER_INPUT);
+}
+
+void AMUCharacterPlayer::TriggerSkill()
+{
+	if ( IsValid( SkillCastingComponent ) == true )
+	{
+		SkillCastingComponent->TriggerSkill();	
+	}
+}
+
+void AMUCharacterPlayer::CancelSkill()
+{
+	if ( IsValid( SkillCastingComponent ) == true )
+	{
+		SkillCastingComponent->CancelSkill();
+	}
 }
 
 

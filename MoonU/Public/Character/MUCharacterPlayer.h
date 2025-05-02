@@ -72,6 +72,9 @@ protected :
 	void SetupGASInputComponent( int32 InputID );
 
 	void SetupDefaultInput(UInputComponent* PlayerInputComponent);
+
+	virtual void TriggerSkill();
+	virtual void CancelSkill();
 	
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);

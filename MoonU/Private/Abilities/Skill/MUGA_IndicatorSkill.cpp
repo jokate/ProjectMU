@@ -40,6 +40,24 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	}
 }
 
+void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+	bool bReplicateEndAbility, bool bWasCancelled)
+{
+	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
+
+	if ( ISkillInputTarget* SkillInputTarget = Cast<ISkillInputTarget>(AvatarActor) )
+	{
+		FOnSkillActivate& SkillActivateEvent = SkillInputTarget->GetActivationSkillEvent();
+		SkillActivateEvent.RemoveAll( this );
+
+		FOnSkillDeactivate& DeactivateEvent = SkillInputTarget->GetDeactivationSkillEvent();
+		DeactivateEvent.RemoveAll( this );
+	}
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
 void UMUGA_IndicatorSkill::ActivateSkill()
 {
 	// 스킬 캐스팅에 대한 부분 처리.
