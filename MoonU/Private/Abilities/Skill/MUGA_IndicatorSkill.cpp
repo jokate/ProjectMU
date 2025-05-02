@@ -5,6 +5,7 @@
 
 #include "Abilities/AT/MUAT_ShowIndicator.h"
 #include "Data/MUStruct.h"
+#include "Interface/SkillInputTarget.h"
 
 UMUGA_IndicatorSkill::UMUGA_IndicatorSkill()
 {
@@ -26,20 +27,35 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 	UMUAT_ShowIndicator* ShowIndicatorTask = UMUAT_ShowIndicator::CreateTask( this, EventData->IndicatorMaterial, EventData->CastingRange);
 	ShowIndicatorTask->ReadyForActivation();
+
+	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
+
+	if ( ISkillInputTarget* SkillInputTarget = Cast<ISkillInputTarget>(AvatarActor) )
+	{
+		FOnSkillActivate& SkillActivateEvent = SkillInputTarget->GetActivationSkillEvent();
+		SkillActivateEvent.AddUObject( this, &UMUGA_IndicatorSkill::ActivateSkill );
+
+		FOnSkillDeactivate& DeactivateEvent = SkillInputTarget->GetDeactivationSkillEvent();
+		DeactivateEvent.AddUObject( this, &UMUGA_IndicatorSkill::CancelSkill );
+	}
 }
 
-void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	bool bReplicateEndAbility, bool bWasCancelled)
+void UMUGA_IndicatorSkill::ActivateSkill()
 {
-	ActivateSkill();
+	// 스킬 캐스팅에 대한 부분 처리.
 	
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	bool bReplicateEndAbility = true;
+	bool bWasCancelled = false;
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-void UMUGA_IndicatorSkill::CancelAbility(const FGameplayAbilitySpecHandle Handle,
-                                         const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-                                         bool bReplicateCancelAbility)
+void UMUGA_IndicatorSkill::CancelSkill()
 {
-	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
+	// 스킬 취소 캐스팅
+
+	bool bReplicateEndAbility = true;
+	bool bWasCancelled = true;
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

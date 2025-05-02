@@ -18,6 +18,7 @@
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/MULevelUpComponent.h"
+#include "Components/SkillInputComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Framework/MUPlayerState.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -45,6 +46,7 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 	EnforcementComponent = CreateDefaultSubobject<UEnforcementComponent>("EnforcementComponent");
+	SkillCastingComponent = CreateDefaultSubobject<USkillInputComponent>("SkillInputComponent");
 }
 
 // Called when the game starts or when spawned
@@ -355,6 +357,20 @@ const FName AMUCharacterPlayer::GetSkillIDBySlot(ESkillSlotType SkillSlot)
 	}
 
 	return FName();
+}
+
+FOnSkillActivate& AMUCharacterPlayer::GetActivationSkillEvent()
+{
+	// 해당 함수는 무조건 SkillCastingComponent가 있어야 합니다./
+	check(SkillCastingComponent);
+	return SkillCastingComponent->GetActivationSkillEvent();
+}
+
+FOnSkillDeactivate& AMUCharacterPlayer::GetDeactivationSkillEvent()
+{
+	// 해당 함수는 무조건 SkillCastingComponent가 있어야 합니다.
+	check(SkillCastingComponent);
+	return SkillCastingComponent->GetDeactivationSkillEvent();
 }
 
 void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)

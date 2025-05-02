@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "SkillActivateAbility.generated.h"
+#include "SkillInputTarget.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class USkillActivateAbility : public UInterface
+class USkillInputTarget : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,12 +16,16 @@ class USkillActivateAbility : public UInterface
 /**
  * 
  */
-class MOONU_API ISkillActivateAbility
+
+DECLARE_MULTICAST_DELEGATE( FOnSkillActivate );
+DECLARE_MULTICAST_DELEGATE( FOnSkillDeactivate );
+
+class MOONU_API ISkillInputTarget
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void ActivateSkill() = 0;
-	virtual void CancelSkill() = 0;
+	virtual FOnSkillActivate& GetActivationSkillEvent() = 0;
+	virtual FOnSkillDeactivate& GetDeactivationSkillEvent() = 0;
 };
