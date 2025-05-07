@@ -31,6 +31,9 @@
 #define MU_INPUT_TIMESTOP  FGameplayTag::RequestGameplayTag(FName("InputTag.TimeStop"))
 #define MU_INPUT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("InputTag.TimeRewind"))
 #define MU_INPUT_ITEMUSE_QUICK FGameplayTag::RequestGameplayTag(FName("InputTag.ItemUse"))
+#define MU_INPUT_SIMPLE_CAST FGameplayTag::RequestGameplayTag(FName("InputTag.Skill.SimpleCast"))
+#define MU_INPUT_CANCEL FGameplayTag::RequestGameplayTag(FName("InputTag.Skill.CANCEL"))
+
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))
 #define MU_EVENT_TRACEEND  FGameplayTag::RequestGameplayTag(FName("Event.TraceEnd"))
@@ -54,6 +57,7 @@
 #define MU_CHARACTERSTATE_PERFECTDODGE_COMPLETE FGameplayTag::RequestGameplayTag(FName("Character.State.PerfectDodge.Complete"))
 #define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))
 #define MU_CHARACTERSTATE_SUPERARMOR FGameplayTag::RequestGameplayTag(FName("Character.State.SuperArmor"))
+#define MU_CHARACTERSTATE_READYSKILL FGameplayTag::RequestGameplayTag(FName("Character.State.ReadySkill"))
 #define MU_EVENT_REGENERATED FGameplayTag::RequestGameplayTag(FName("Event.Regenerated"))
 
 #define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))

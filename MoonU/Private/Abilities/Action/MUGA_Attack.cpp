@@ -14,6 +14,9 @@
 UMUGA_Attack::UMUGA_Attack()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
+	// 레디 스킬 중에서는 공격 불가.
+	ActivationBlockedTags.AddTag( MU_CHARACTERSTATE_READYSKILL );
 	MinStaminaToAttack = 3.0f; 
 	
 }

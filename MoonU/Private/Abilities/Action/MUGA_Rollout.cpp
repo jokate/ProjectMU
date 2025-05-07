@@ -15,6 +15,7 @@
 UMUGA_Rollout::UMUGA_Rollout()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	ActivationBlockedTags.AddTag( MU_CHARACTERSTATE_READYSKILL );
 }
 
 void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

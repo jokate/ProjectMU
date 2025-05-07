@@ -15,5 +15,7 @@ class MOONU_API UMUGA_TestIndicatorSkill : public UMUGA_IndicatorSkill
 	GENERATED_BODY()
 
 public :
-	void ActivateSkill() override;
+	UMUGA_TestIndicatorSkill( );
+	virtual void ActivateSkill() override;
+	virtual void CancelSkill() override;
 };

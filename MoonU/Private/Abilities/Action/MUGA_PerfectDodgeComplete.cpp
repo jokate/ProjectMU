@@ -10,6 +10,7 @@
 UMUGA_PerfectDodgeComplete::UMUGA_PerfectDodgeComplete()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	
 	SlomoRate = 0.75f;
 }
 

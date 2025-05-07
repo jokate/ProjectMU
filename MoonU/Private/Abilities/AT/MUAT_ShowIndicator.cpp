@@ -14,11 +14,9 @@ UMUAT_ShowIndicator::UMUAT_ShowIndicator()
 	bTickingTask = true;
 }
 
-UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, UMaterialInterface* SkillMaterial, float SkillDistance )
+UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, float SkillDistance )
 {
 	UMUAT_ShowIndicator* IndicatorTask = NewAbilityTask<UMUAT_ShowIndicator>(Ability);
-
-	IndicatorTask->IndicatorMaterial = SkillMaterial;
 	IndicatorTask->SkillDistance = SkillDistance;
 
 	return IndicatorTask;
@@ -63,7 +61,7 @@ void UMUAT_ShowIndicator::ShowIndicatorByIndicatorType()
 
 			UE_LOG(LogTemp, Log, TEXT(""))
 			
-			SpawnedDecalComponent->SetWorldRotation(LookAtRotation);
+			//SpawnedDecalComponent->SetWorldRotation(LookAtRotation);
 		}
 	}
 }
@@ -85,13 +83,13 @@ void UMUAT_ShowIndicator::Activate()
 	{
 		return;
 	}	
-	SpawnedDecalComponent = UGameplayStatics::SpawnDecalAttached(IndicatorMaterial, FVector::ForwardVector, Character->GetMesh() );
+	//SpawnedDecalComponent = UGameplayStatics::SpawnDecalAttached(IndicatorMaterial, FVector::ForwardVector, Character->GetMesh() );
 }
 
 void UMUAT_ShowIndicator::OnDestroy(bool bInOwnerFinished)
 {
-	SpawnedDecalComponent->DestroyComponent();
-	SpawnedDecalComponent = nullptr;
+	//SpawnedDecalComponent->DestroyComponent();
+	//SpawnedDecalComponent = nullptr;
 	
 	Super::OnDestroy(bInOwnerFinished);
 }

@@ -119,7 +119,11 @@ void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent
 		//Looking
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_LOOK, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::Look);
 
-		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);	
+		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
+
+		//SkillCast
+		EnhancedInputComponent->BindActionByTag( InputMapper.InputConfig, MU_INPUT_SIMPLE_CAST, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TriggerSkill);
+		EnhancedInputComponent->BindActionByTag( InputMapper.InputConfig, MU_INPUT_CANCEL, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::CancelSkill);
 	}
 
 	SetupGASInputComponent(COMMON_CHARACTER_INPUT);

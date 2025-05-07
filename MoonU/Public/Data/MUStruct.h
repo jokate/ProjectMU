@@ -46,9 +46,6 @@ struct FGameplayEventData_Skill : public FGameplayEventData
 public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	ESkillCastingType CastingType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
-	UMaterialInterface* IndicatorMaterial;
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;
