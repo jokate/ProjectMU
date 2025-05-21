@@ -9,18 +9,7 @@
 // Sets default values
 AMUSkillIndicator::AMUSkillIndicator()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	IndicatorMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("IndicatorMeshComponent");
-	IndicatorDecalComponent = CreateDefaultSubobject<UDecalComponent>("IndicatorDecalComponent");
-}
-
-// Called when the game starts or when spawned
-void AMUSkillIndicator::BeginPlay()
-{
-	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -33,5 +22,17 @@ void AMUSkillIndicator::Tick(float DeltaTime)
 
 void AMUSkillIndicator::CalculateIndicatorMesh()
 {
+}
+
+void AMUSkillIndicator::SetupIndicatorInfo(APawn* OwnerPawn)
+{
+	APlayerController* PlayerController = OwnerPawn->GetController<APlayerController>();
+    
+    if ( IsValid( PlayerController ) == false )
+    {
+    	return;
+    }
+    
+    OwnerPlayerController = PlayerController;
 }
 

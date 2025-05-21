@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
-#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystemInterface.h"
 #include "GameplayTagContainer.h"
 #include "Data/MUEnum.h"
 #include "UObject/Object.h"
