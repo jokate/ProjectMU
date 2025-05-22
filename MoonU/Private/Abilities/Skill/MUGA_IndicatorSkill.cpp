@@ -28,7 +28,7 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		return;
 	}
 
-	UMUAT_ShowIndicator* ShowIndicatorTask = UMUAT_ShowIndicator::CreateTask( this, EventData->CastingRange);
+	UMUAT_ShowIndicator* ShowIndicatorTask = UMUAT_ShowIndicator::CreateTask( this, EventData->CastingRange, EventData->IndicatorClass );
 	ShowIndicatorTask->ReadyForActivation();
 
 	AActor* AvatarActor = ActorInfo->AvatarActor.Get();

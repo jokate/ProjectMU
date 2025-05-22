@@ -9,6 +9,7 @@
 #include "Data/MUEnum.h"
 #include "UObject/Object.h"
 #include "Engine/DataTable.h"
+#include "Indicator/MUSkillIndicator.h"
 #include "MUData.generated.h"
 
 /**
@@ -221,7 +222,7 @@ public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SkillGameplayTag;
 
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")              
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Ability To Register")              
 	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
@@ -232,4 +233,8 @@ public :
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Visual Info")
 	UTexture2D* SkillIcon = nullptr;
-;};
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Indicator Class")
+	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
+};
+

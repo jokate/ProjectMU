@@ -24,15 +24,11 @@ void AMUSkillIndicator::CalculateIndicatorMesh()
 {
 }
 
-void AMUSkillIndicator::SetupIndicatorInfo(APawn* OwnerPawn)
+void AMUSkillIndicator::SetupIndicatorInfo( APlayerController*  OwnerController )
 {
-	APlayerController* PlayerController = OwnerPawn->GetController<APlayerController>();
-    
-    if ( IsValid( PlayerController ) == false )
-    {
-    	return;
-    }
-    
-    OwnerPlayerController = PlayerController;
+	if ( IsValid( OwnerController ) == true )
+	{
+		OwnerPlayerController = OwnerController;	
+	}
 }
 

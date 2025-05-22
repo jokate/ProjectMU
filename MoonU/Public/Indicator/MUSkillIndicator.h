@@ -21,7 +21,11 @@ public:
 
 	virtual void CalculateIndicatorMesh();
 
-	virtual void SetupIndicatorInfo( APawn* OwnerPawn );
+	virtual void SetupIndicatorInfo( APlayerController* OwnerController );
+
+	virtual FVector GetTargetLocation() { return FVector::ZeroVector; }
+
+	virtual FRotator GetTargetRotation() { return FRotator::ZeroRotator; }
 
 public :
 	UPROPERTY()

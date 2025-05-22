@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
-#include "Data/MUEnum.h"
+#include "Indicator/MUSkillIndicator.h"
 #include "MUAT_ShowIndicator.generated.h"
 
 /**
@@ -21,7 +21,7 @@ public :
 	UMUAT_ShowIndicator();
 	
 	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability,
-		float SkillDistance);
+		float SkillDistance, TSubclassOf<AMUSkillIndicator> InSkillIndicatorClass );
 
 	virtual void TickTask(float DeltaTime) override;
 
@@ -34,4 +34,7 @@ public :
 
 	UPROPERTY()
 	float SkillDistance = 0;
+
+	UPROPERTY()
+	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
 };

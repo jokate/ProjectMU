@@ -14,11 +14,12 @@ UMUAT_ShowIndicator::UMUAT_ShowIndicator()
 	bTickingTask = true;
 }
 
-UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, float SkillDistance )
+UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, float SkillDistance, TSubclassOf<AMUSkillIndicator> InSkillIndicatorClass )
 {
 	UMUAT_ShowIndicator* IndicatorTask = NewAbilityTask<UMUAT_ShowIndicator>(Ability);
 	IndicatorTask->SkillDistance = SkillDistance;
-
+	IndicatorTask->SkillIndicatorClass = InSkillIndicatorClass;
+	
 	return IndicatorTask;
 }
 
@@ -45,25 +46,6 @@ void UMUAT_ShowIndicator::ShowIndicatorByIndicatorType()
 		return;
 	}
 
-	//해당 데칼은 붙어서 동작하는 경우.
-	float MouseX, MouseY;
-	if ( PlayerController->GetMousePosition(MouseX, MouseY) == true )
-	{
-		FVector WorldLocation, WorldDirection;
-		if ( PlayerController->DeprojectScreenPositionToWorld(MouseX, MouseY, WorldLocation, WorldDirection) )
-		{
-			// 현재 캐릭터를 기준으로 해서 돌려줘야 한다. -> Line일 경우.
-			FVector CharacterLocation = AvatarActor->GetActorLocation();
-			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CharacterLocation, WorldLocation);
-			
-			LookAtRotation.Pitch = 0.f;
-			LookAtRotation.Roll = 0.f;
-
-			UE_LOG(LogTemp, Log, TEXT(""))
-			
-			//SpawnedDecalComponent->SetWorldRotation(LookAtRotation);
-		}
-	}
 }
 
 void UMUAT_ShowIndicator::Activate()
@@ -88,9 +70,6 @@ void UMUAT_ShowIndicator::Activate()
 
 void UMUAT_ShowIndicator::OnDestroy(bool bInOwnerFinished)
 {
-	//SpawnedDecalComponent->DestroyComponent();
-	//SpawnedDecalComponent = nullptr;
-	
 	Super::OnDestroy(bInOwnerFinished);
 }
 
