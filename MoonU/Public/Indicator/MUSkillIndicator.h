@@ -21,7 +21,7 @@ public:
 
 	virtual void CalculateIndicatorMesh();
 
-	virtual void SetupIndicatorInfo( APlayerController* OwnerController );
+	virtual void SetupIndicatorInfo( APlayerController* OwnerController, float AttackDistance = 0, float InAOERadius = 0 );
 
 	virtual FVector GetTargetLocation() { return FVector::ZeroVector; }
 
@@ -30,4 +30,10 @@ public:
 public :
 	UPROPERTY()
 	TObjectPtr<APlayerController> OwnerPlayerController;
+
+	UPROPERTY( BlueprintReadOnly )
+	float MaxAttackDistance;
+
+	UPROPERTY( BlueprintReadOnly )
+	float AOERadius;
 };

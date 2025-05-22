@@ -217,7 +217,7 @@ public :
 	ESkillCastingType CastingType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
-	UMaterialInterface* IndicatorMaterial;
+	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SkillGameplayTag;
@@ -233,8 +233,5 @@ public :
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Visual Info")
 	UTexture2D* SkillIcon = nullptr;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Indicator Class")
-	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
 };
 

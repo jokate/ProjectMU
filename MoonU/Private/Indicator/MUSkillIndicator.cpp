@@ -24,11 +24,14 @@ void AMUSkillIndicator::CalculateIndicatorMesh()
 {
 }
 
-void AMUSkillIndicator::SetupIndicatorInfo( APlayerController*  OwnerController )
+void AMUSkillIndicator::SetupIndicatorInfo(APlayerController* OwnerController, float AttackDistance, float InAOERadius )
 {
 	if ( IsValid( OwnerController ) == true )
 	{
 		OwnerPlayerController = OwnerController;	
 	}
+
+	MaxAttackDistance = AttackDistance;
+	AOERadius = InAOERadius;
 }
 

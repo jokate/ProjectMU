@@ -41,7 +41,7 @@ void UMUAT_ShowIndicator::Activate()
 
 	if ( IsValid(SpawnedSkillIndicator ) == true )
 	{
-		SpawnedSkillIndicator->SetupIndicatorInfo( PlayerController );
+		SpawnedSkillIndicator->SetupIndicatorInfo( PlayerController, SkillDistance );
 
 		FAttachmentTransformRules AttachmentRule {
 			EAttachmentRule::SnapToTarget,
@@ -51,14 +51,16 @@ void UMUAT_ShowIndicator::Activate()
 		};
 		
 		SpawnedSkillIndicator->AttachToActor( OwnerActor, AttachmentRule );
+		SpawnedSkillIndicator->FinishSpawning(OwnerActor->GetActorTransform() );
 	}
-
-	SpawnedSkillIndicator->FinishSpawning(OwnerActor->GetActorTransform() );
 }
 
 void UMUAT_ShowIndicator::OnDestroy(bool bInOwnerFinished)
 {
-	SpawnedSkillIndicator->Destroy();
+	if ( IsValid( SpawnedSkillIndicator ) == true )
+	{
+		SpawnedSkillIndicator->Destroy();	
+	}
 	
 	Super::OnDestroy(bInOwnerFinished);
 }
