@@ -2,12 +2,8 @@
 
 
 #include "Abilities/AT/MUAT_ShowIndicator.h"
-
-#include "Components/DecalComponent.h"
 #include "Framework/MUPlayerController.h"
-#include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "Indicator/MUSkillIndicator.h"
 
 UMUAT_ShowIndicator::UMUAT_ShowIndicator()
 {
@@ -23,31 +19,6 @@ UMUAT_ShowIndicator* UMUAT_ShowIndicator::CreateTask(UGameplayAbility* Ability, 
 	return IndicatorTask;
 }
 
-void UMUAT_ShowIndicator::TickTask(float DeltaTime)
-{
-	Super::TickTask(DeltaTime);
-
-	ShowIndicatorByIndicatorType();
-}
-
-void UMUAT_ShowIndicator::ShowIndicatorByIndicatorType()
-{
-	AActor* AvatarActor = GetAvatarActor();
-
-	if ( IsValid(AvatarActor) == false )
-	{
-		return;
-	}
-	
-	AMUPlayerController* PlayerController = AvatarActor->GetInstigatorController<AMUPlayerController>();
-
-	if ( IsValid( PlayerController ) == false )
-	{
-		return;
-	}
-
-}
-
 void UMUAT_ShowIndicator::Activate()
 {
 	Super::Activate();
@@ -59,17 +30,36 @@ void UMUAT_ShowIndicator::Activate()
 		return;
 	}
 
-	ACharacter* Character = Cast<ACharacter>(OwnerActor);
+	AMUPlayerController* PlayerController = OwnerActor->GetInstigatorController<AMUPlayerController>();
 
-	if ( IsValid( Character ) == false)
+	if ( IsValid( PlayerController ) == false )
 	{
 		return;
-	}	
-	//SpawnedDecalComponent = UGameplayStatics::SpawnDecalAttached(IndicatorMaterial, FVector::ForwardVector, Character->GetMesh() );
+	}
+
+	SpawnedSkillIndicator = GetWorld()->SpawnActorDeferred<AMUSkillIndicator>(SkillIndicatorClass, OwnerActor->GetActorTransform() );
+
+	if ( IsValid(SpawnedSkillIndicator ) == true )
+	{
+		SpawnedSkillIndicator->SetupIndicatorInfo( PlayerController );
+
+		FAttachmentTransformRules AttachmentRule {
+			EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget,
+			true
+		};
+		
+		SpawnedSkillIndicator->AttachToActor( OwnerActor, AttachmentRule );
+	}
+
+	SpawnedSkillIndicator->FinishSpawning(OwnerActor->GetActorTransform() );
 }
 
 void UMUAT_ShowIndicator::OnDestroy(bool bInOwnerFinished)
 {
+	SpawnedSkillIndicator->Destroy();
+	
 	Super::OnDestroy(bInOwnerFinished);
 }
 

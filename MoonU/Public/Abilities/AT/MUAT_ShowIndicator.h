@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
-#include "Indicator/MUSkillIndicator.h"
 #include "MUAT_ShowIndicator.generated.h"
 
 /**
  * 
  */
-
+class AMUSkillIndicator;
 // Purpose : Input에 대한 처리가 들어오기 전까지는 인디케이터를 보여줄 수 있도록 한다.
 UCLASS()
 class MOONU_API UMUAT_ShowIndicator : public UAbilityTask
@@ -23,10 +22,6 @@ public :
 	static UMUAT_ShowIndicator* CreateTask(UGameplayAbility* Ability,
 		float SkillDistance, TSubclassOf<AMUSkillIndicator> InSkillIndicatorClass );
 
-	virtual void TickTask(float DeltaTime) override;
-
-	virtual void ShowIndicatorByIndicatorType();
-
 	virtual void Activate() override;
 
 	virtual void OnDestroy(bool bInOwnerFinished) override;
@@ -37,4 +32,7 @@ public :
 
 	UPROPERTY()
 	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
+
+	UPROPERTY()
+	TObjectPtr<AMUSkillIndicator> SpawnedSkillIndicator;
 };
