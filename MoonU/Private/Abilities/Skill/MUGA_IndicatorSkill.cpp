@@ -4,7 +4,6 @@
 #include "Abilities/Skill/MUGA_IndicatorSkill.h"
 
 #include "MUDefines.h"
-#include "Abilities/AT/MUAT_ShowIndicator.h"
 #include "Data/MUStruct.h"
 #include "Interface/SkillInputTarget.h"
 
@@ -27,9 +26,6 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	{
 		return;
 	}
-
-	UMUAT_ShowIndicator* ShowIndicatorTask = UMUAT_ShowIndicator::CreateTask( this, EventData->CastingRange, EventData->IndicatorClass );
-	ShowIndicatorTask->ReadyForActivation();
 
 	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
 

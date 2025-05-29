@@ -46,7 +46,4 @@ struct FGameplayEventData_Skill : public FGameplayEventData
 public : 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Indicator Class")
-	TSubclassOf<AMUSkillIndicator> IndicatorClass;
 };
