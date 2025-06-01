@@ -27,6 +27,9 @@ public:
 
 	virtual FRotator GetTargetRotation() { return FRotator::ZeroRotator; }
 
+	virtual void ActivateSkillIndicator();
+	virtual void DeactivateSkillIndicator();
+
 public :
 	UPROPERTY()
 	TObjectPtr<APlayerController> OwnerPlayerController;

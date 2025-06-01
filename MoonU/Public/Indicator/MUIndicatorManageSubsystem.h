@@ -21,15 +21,18 @@ class MOONU_API UMUIndicatorManageSubsystem : public ULocalPlayerSubsystem
 
 public :
 
+	virtual void ActivateSkillIndicator( FName IndicatorID );
+	virtual void DeactivateSkillIndicator( FName IndicatorID );
+	
 	void UnRegisterIndicator( FName IndicatorID );
 
 	AMUSkillIndicator* GetIndicatorByID( FName IndicatorID );
 
-	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }
-
 	virtual void PlayerControllerChanged(APlayerController* NewPlayerController) override;
 
 protected :
+	
+	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }
 	
 	bool RegisterIndicator( FName IndicatorID );
 	

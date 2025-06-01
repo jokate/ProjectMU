@@ -78,3 +78,28 @@ void UMUIndicatorManageSubsystem::PlayerControllerChanged(APlayerController* New
 	LocalPlayerController = NewPlayerController;
 	LocalPlayerActor = NewPlayerController->GetPawn();
 }
+
+void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
+{
+	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );
+
+	if ( IsValid( SkillIndicator ) == false )
+	{
+		return;
+	}
+
+	SkillIndicator->ActivateSkillIndicator();
+}
+
+void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
+{
+	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );
+
+	if ( IsValid( SkillIndicator ) == false )
+	{
+		return;
+	}
+
+	SkillIndicator->DeactivateSkillIndicator();
+}
+

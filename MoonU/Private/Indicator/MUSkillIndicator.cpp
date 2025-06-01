@@ -35,3 +35,13 @@ void AMUSkillIndicator::SetupIndicatorInfo(APlayerController* OwnerController, f
 	AOERadius = InAOERadius;
 }
 
+void AMUSkillIndicator::ActivateSkillIndicator()
+{
+	SetActorHiddenInGame( false );
+}
+
+void AMUSkillIndicator::DeactivateSkillIndicator()
+{
+	SetActorHiddenInGame( true );
+}
+
