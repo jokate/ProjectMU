@@ -24,7 +24,6 @@ public :
 	virtual void OnInputPressed();
 	virtual void TriggerSkill( FName SkillID );
 
-
 public:
 	UPROPERTY( EditAnywhere )
 	FName ReadySkillID = NAME_None;

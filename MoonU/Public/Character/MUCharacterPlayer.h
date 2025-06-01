@@ -73,7 +73,7 @@ protected :
 
 	void SetupDefaultInput(UInputComponent* PlayerInputComponent);
 
-	virtual void TriggerSkill();
+	virtual void TriggerSkill( ESkillSlotType SkillSlotType );
 	virtual void CancelSkill();
 	
 #pragma region InputActionEvent
@@ -126,8 +126,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Cast", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USkillInputComponent> SkillCastingComponent;
-
-	
 
 protected:
 	UPROPERTY()

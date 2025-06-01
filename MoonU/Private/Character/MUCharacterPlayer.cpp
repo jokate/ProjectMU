@@ -122,15 +122,20 @@ void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, MU_INPUT_INTERACT, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TryInteract);
 
 		//SkillCast
-		EnhancedInputComponent->BindActionByTag( InputMapper.InputConfig, MU_INPUT_SIMPLE_CAST, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TriggerSkill);
+		EnhancedInputComponent->BindActionByTag( InputMapper.InputConfig, MU_INPUT_SIMPLE_CAST, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::TriggerSkill );
 		EnhancedInputComponent->BindActionByTag( InputMapper.InputConfig, MU_INPUT_CANCEL, ETriggerEvent::Triggered, this, &AMUCharacterPlayer::CancelSkill);
 	}
 
 	SetupGASInputComponent(COMMON_CHARACTER_INPUT);
 }
 
-void AMUCharacterPlayer::TriggerSkill()
+void AMUCharacterPlayer::TriggerSkill(ESkillSlotType SkillSlotType)
 {
+	if ( IsValid( EnforcementComponent ) == true && IsValid( SkillCastingComponent ) == true )
+	{
+		const FName& SkillID = EnforcementComponent->GetSkillIDBySlot( SkillSlotType );
+		SkillCastingComponent->CastSkill( SkillID );
+	}
 }
 
 void AMUCharacterPlayer::CancelSkill()

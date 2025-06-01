@@ -170,7 +170,7 @@ const FName UEnforcementComponent::GetSkillIDBySlot(ESkillSlotType SkillSlot)
 {
 	if ( AllocatedSkillID.Contains(SkillSlot) == false )
 	{
-		return FName();
+		return NAME_None;
 	}
 
 	return AllocatedSkillID[SkillSlot];

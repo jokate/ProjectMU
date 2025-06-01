@@ -86,4 +86,5 @@ void USkillInputComponent::OnInputPressed()
 
 void USkillInputComponent::TriggerSkill(FName SkillID)
 {
+	// 실질적인 GAS 트리거.
 }
