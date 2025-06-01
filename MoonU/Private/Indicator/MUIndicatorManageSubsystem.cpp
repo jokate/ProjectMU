@@ -3,20 +3,78 @@
 
 #include "Indicator/MUIndicatorManageSubsystem.h"
 
-void UMUIndicatorManageSubsystem::RegisterIndicator(FName IndicatorID, AMUSkillIndicator* Indicator)
+#include "Data/DataTable/MUData.h"
+#include "Library/MUFunctionLibrary.h"
+
+bool UMUIndicatorManageSubsystem::RegisterIndicator(FName IndicatorID )
 {
-	if ( IndicatorManagement.Contains(IndicatorID) == false)
+	if ( IndicatorManagement.Contains(IndicatorID) == true )
 	{
-		IndicatorManagement.Add(IndicatorID, Indicator);
+		return false;
+	}
+
+	if ( IsValid(LocalPlayerActor ) == false )
+	{
+		return false;		
+	}
+	
+	FMUSkillData SkillData;
+	// 가정. 스킬에 대한 부분에 대해서 호출
+	if ( UMUFunctionLibrary::GetSkillData( this, IndicatorID, SkillData) == false )
+	{
+		return false;
+	}
+ 	
+	AMUSkillIndicator* SkillIndicator = GetWorld()->SpawnActorDeferred<AMUSkillIndicator>( SkillData.SkillIndicatorClass, LocalPlayerActor->GetActorTransform() );
+
+	// 데이터 처리.
+	SkillIndicator->SetupIndicatorInfo( LocalPlayerController, SkillData.CastingRange, SkillData.CastingAOE );
+	
+	SkillIndicator->FinishSpawning( LocalPlayerActor->GetActorTransform());
+	IndicatorManagement.Add(IndicatorID, SkillIndicator);
+
+	return true;
+}
+
+void UMUIndicatorManageSubsystem::UnRegisterIndicator(FName IndicatorID)
+{
+	if ( IndicatorManagement.Contains(IndicatorID) == true )
+	{
+		AMUSkillIndicator* SkillIndicator = IndicatorManagement[IndicatorID];
+
+		SkillIndicator->Destroy();
+		SkillIndicator = nullptr;
+
+		IndicatorManagement.Remove(IndicatorID);
 	}
 }
 
-AMUSkillIndicator* UMUIndicatorManageSubsystem::GetIndicatorByType(FName IndicatorID)
+AMUSkillIndicator* UMUIndicatorManageSubsystem::GetIndicatorByID(FName IndicatorID)
 {
 	if ( HasIndicator(IndicatorID) == false)
 	{
-		return nullptr;		
+		bool bResult = RegisterIndicator(IndicatorID);
+
+		if ( bResult == false )
+		{
+			return nullptr;
+		}
+	}
+	
+	return IndicatorManagement[IndicatorID];
+}
+
+void UMUIndicatorManageSubsystem::PlayerControllerChanged(APlayerController* NewPlayerController)
+{
+	Super::PlayerControllerChanged(NewPlayerController);
+
+	UE_LOG( LogTemp, Log, TEXT("Player Controller Set"));
+
+	if ( IsValid(NewPlayerController ) == false )
+	{
+		return;
 	}
 
-	return IndicatorManagement[IndicatorID];
+	LocalPlayerController = NewPlayerController;
+	LocalPlayerActor = NewPlayerController->GetPawn();
 }

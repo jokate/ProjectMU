@@ -228,6 +228,9 @@ public :
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting AOE" )
+	float CastingAOE = 0;
+
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Apply SkillSlot" )
 	ESkillSlotType ApplySlotType = ESkillSlotType::NONE;
 	
