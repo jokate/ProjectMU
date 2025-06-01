@@ -3,24 +3,87 @@
 
 #include "Components/SkillInputComponent.h"
 
+#include "Indicator/MUIndicatorManageSubsystem.h"
+#include "Library/MUFunctionLibrary.h"
+
 
 // Sets default values for this component's properties
 USkillInputComponent::USkillInputComponent()
 {
 }
 
-void USkillInputComponent::TriggerSkill()
+void USkillInputComponent::BeginPlay()
 {
-	if ( ActivateSkillEvent.IsBound() == true )
+	Super::BeginPlay();
+	InitializePlayerController();
+}
+
+void USkillInputComponent::InitializePlayerController()
+{
+	AActor* OwningActor = GetOwner();
+	
+	if ( IsValid( OwningActor ) == false )
 	{
-		ActivateSkillEvent.Broadcast();
+		return;		
+	}
+
+	APlayerController* OwnerActorController = OwningActor->GetInstigatorController<APlayerController>();
+
+	if ( IsValid( OwnerActorController ) == false )
+	{
+		return;
+	}
+
+	PlayerController = OwnerActorController;
+}
+
+void USkillInputComponent::CastSkill(FName SkillID)
+{
+	FMUSkillData SkillData;
+    if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData ) == false )
+    {
+    	return;
+    }
+
+	if ( SkillData.bUseIndicator == true )
+    {
+    	ReadySkill( SkillID );
+    	return;
+    }
+
+	TriggerSkill( SkillID );
+}
+
+void USkillInputComponent::ReadySkill(FName SkillID)
+{
+	if ( ReadySkillID == SkillID )
+	{
+		return;
+	}
+	
+	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
+	{
+		Subsystem->DeactivateSkillIndicator( ReadySkillID );
+		
+		ReadySkillID = SkillID;
+		
+		Subsystem->ActivateSkillIndicator( ReadySkillID );
 	}
 }
 
-void USkillInputComponent::CancelSkill()
+void USkillInputComponent::OnInputPressed()
 {
-	if ( DeactivateSkillEvent.IsBound() == true)
+	if ( ReadySkillID != NAME_None )
 	{
-		DeactivateSkillEvent.Broadcast();
+		if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->DeactivateSkillIndicator( ReadySkillID );
+		}
+		
+		TriggerSkill( ReadySkillID );
 	}
+}
+
+void USkillInputComponent::TriggerSkill(FName SkillID)
+{
 }

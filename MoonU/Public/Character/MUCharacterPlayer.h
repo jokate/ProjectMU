@@ -107,11 +107,6 @@ protected :
 	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
 	
 #pragma endregion
-
-#pragma region ISkillInputTarget
-	virtual FOnSkillActivate& GetActivationSkillEvent() override;
-	virtual FOnSkillDeactivate& GetDeactivationSkillEvent() override;
-#pragma endregion
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -131,6 +126,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Cast", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USkillInputComponent> SkillCastingComponent;
+
+	
 
 protected:
 	UPROPERTY()

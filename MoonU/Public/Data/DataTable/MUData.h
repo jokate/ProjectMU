@@ -214,9 +214,9 @@ struct FMUSkillData : public FTableRowBase
 
 public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	ESkillCastingType CastingType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "CastingType == ESkillCastingType::Indicator", EditConditionHides))
+	bool bUseIndicator = false;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
 	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

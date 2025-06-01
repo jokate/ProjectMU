@@ -131,18 +131,11 @@ void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent
 
 void AMUCharacterPlayer::TriggerSkill()
 {
-	if ( IsValid( SkillCastingComponent ) == true )
-	{
-		SkillCastingComponent->TriggerSkill();	
-	}
 }
 
 void AMUCharacterPlayer::CancelSkill()
 {
-	if ( IsValid( SkillCastingComponent ) == true )
-	{
-		SkillCastingComponent->CancelSkill();
-	}
+
 }
 
 
@@ -377,20 +370,6 @@ const FName AMUCharacterPlayer::GetSkillIDBySlot(ESkillSlotType SkillSlot)
 	}
 
 	return FName();
-}
-
-FOnSkillActivate& AMUCharacterPlayer::GetActivationSkillEvent()
-{
-	// 해당 함수는 무조건 SkillCastingComponent가 있어야 합니다./
-	check(SkillCastingComponent);
-	return SkillCastingComponent->GetActivationSkillEvent();
-}
-
-FOnSkillDeactivate& AMUCharacterPlayer::GetDeactivationSkillEvent()
-{
-	// 해당 함수는 무조건 SkillCastingComponent가 있어야 합니다.
-	check(SkillCastingComponent);
-	return SkillCastingComponent->GetDeactivationSkillEvent();
 }
 
 void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)

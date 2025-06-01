@@ -16,16 +16,21 @@ public:
 	// Sets default values for this component's properties
 	USkillInputComponent();
 	
-public : 
-	void TriggerSkill();
-	void CancelSkill();
-	virtual FOnSkillActivate& GetActivationSkillEvent() override { return ActivateSkillEvent; }
-	virtual FOnSkillDeactivate& GetDeactivationSkillEvent() override { return DeactivateSkillEvent; } 
+public :
+	virtual void BeginPlay() override;
+	virtual void InitializePlayerController();
+	virtual void CastSkill( FName SkillID );
+	virtual void ReadySkill( FName SkillID );
+	virtual void OnInputPressed();
+	virtual void TriggerSkill( FName SkillID );
 
-protected : 
-	FOnSkillActivate ActivateSkillEvent;
-	
-	FOnSkillDeactivate DeactivateSkillEvent;
+
+public:
+	UPROPERTY( EditAnywhere )
+	FName ReadySkillID = NAME_None;
+
+	UPROPERTY( VisibleAnywhere )
+	APlayerController* PlayerController;
 };
 
 

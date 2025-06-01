@@ -19,41 +19,12 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
                                            const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
-	const FGameplayEventData_Skill* EventData = static_cast<const FGameplayEventData_Skill*>(TriggerEventData);
-
-	if ( EventData == nullptr )
-	{
-		return;
-	}
-
-	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
-
-	if ( ISkillInputTarget* SkillInputTarget = Cast<ISkillInputTarget>(AvatarActor) )
-	{
-		FOnSkillActivate& SkillActivateEvent = SkillInputTarget->GetActivationSkillEvent();
-		SkillActivateEvent.AddUObject( this, &UMUGA_IndicatorSkill::ActivateSkill );
-
-		FOnSkillDeactivate& DeactivateEvent = SkillInputTarget->GetDeactivationSkillEvent();
-		DeactivateEvent.AddUObject( this, &UMUGA_IndicatorSkill::CancelSkill );
-	}
 }
 
 void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
-	AActor* AvatarActor = ActorInfo->AvatarActor.Get();
-
-	if ( ISkillInputTarget* SkillInputTarget = Cast<ISkillInputTarget>(AvatarActor) )
-	{
-		FOnSkillActivate& SkillActivateEvent = SkillInputTarget->GetActivationSkillEvent();
-		SkillActivateEvent.RemoveAll( this );
-
-		FOnSkillDeactivate& DeactivateEvent = SkillInputTarget->GetDeactivationSkillEvent();
-		DeactivateEvent.RemoveAll( this );
-	}
-	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
