@@ -23,8 +23,3 @@ void UMUGA_ActivateSkill::SkillUnTriggered(const FGameplayAbilitySpecHandle Hand
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
 }
-
-void UMUGA_ActivateSkill::SetTargetLocation(FVector& TargetLocation)
-{
-	TargetLocation = 
-}
