@@ -23,9 +23,10 @@ void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 	{
 		TimeStopper->TimeStopDeactivate();
 	}
+	
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
-	if (ASC)
+	if ( IsValid(ASC) == true )
 	{
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{

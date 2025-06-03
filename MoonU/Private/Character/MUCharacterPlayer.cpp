@@ -8,11 +8,11 @@
 #include "InputActionValue.h"
 #include "MUDefines.h"
 #include "Camera/CameraComponent.h"
-#include "Data/MUGameSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/EnforcementComponent.h"
 #include "Components/InteractionComponent.h"
@@ -20,7 +20,6 @@
 #include "Components/MULevelUpComponent.h"
 #include "Components/SkillInputComponent.h"
 #include "Data/DataTable/MUData.h"
-#include "Framework/MUPlayerState.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
@@ -121,6 +120,11 @@ void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent
 	}
 
 	SetupGASInputComponent(COMMON_CHARACTER_INPUT);
+}
+
+void AMUCharacterPlayer::SetupSkillInput(int32 InputID)
+{
+	
 }
 
 void AMUCharacterPlayer::TriggerSkill(ESkillSlotType SkillSlotType)

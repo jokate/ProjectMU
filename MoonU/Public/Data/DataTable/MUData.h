@@ -48,7 +48,18 @@ struct FInputFunctionalType
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
 	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType = EGASInputFunctionalType::Invalid;
-	
+};
+
+USTRUCT( BlueprintType )
+struct FMUSkillInput
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	ETriggerEvent TriggerEvent = ETriggerEvent::None;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	TEnumAsByte<ESkillSlotType> SkillSlotType = ESkillSlotType::NONE;
 };
 
 //절대로 중복되는 경우는 없어야 합니다.
@@ -70,24 +81,6 @@ struct FTagByInput
 	TArray<FInputFunctionalType> InputFunctionalTypes;
 };
 
-USTRUCT( BlueprintType )
-struct FSkillInfoData
-{
-	GENERATED_BODY()
-
-public :
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = InputSetter )
-	bool bNeedToSetInput = true;
-	
-	//스킬에 따른 동작.
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = InputSetter,
-		meta = (EditCondition = "bNeedToSetInput == true", EditConditionHides))
-	FTagByInput TagByInput;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Ability To Register")
-	TSubclassOf<class UGameplayAbility> NeedToRegAbility;
-};
-
 USTRUCT(BlueprintType)
 struct FMUInputMapper : public FTableRowBase
 {
@@ -96,7 +89,7 @@ struct FMUInputMapper : public FTableRowBase
 public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Identity)
 	int32 CharacterID = 0;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 
@@ -105,6 +98,9 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input)
 	TArray<FTagByInput> InputByTags;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SkillInput)
+	TArray<FMUSkillInput> SkillInputs;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Comment")
 	FString DevComment;

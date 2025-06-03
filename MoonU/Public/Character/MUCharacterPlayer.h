@@ -49,6 +49,7 @@ public:
 
 	void GASInputReleased(int32 InputId);
 
+
 #pragma region Enforcement
 	UFUNCTION()
 	virtual void OnLevelUpCallbackFunction(int32 InLevel);
@@ -72,6 +73,8 @@ protected :
 	void SetupGASInputComponent( int32 InputID );
 
 	void SetupDefaultInput(UInputComponent* PlayerInputComponent);
+
+	void SetupSkillInput( int32 InputID );
 
 	virtual void TriggerSkill( ESkillSlotType SkillSlotType );
 	virtual void CancelSkill();

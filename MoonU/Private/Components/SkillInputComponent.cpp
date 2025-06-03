@@ -94,3 +94,13 @@ void USkillInputComponent::TriggerSkill(FName SkillID)
 		MUASC->TryTriggerSkill( SkillID );
 	}
 }
+
+void USkillInputComponent::CancelSkill()
+{
+	UMUAbilitySystemComponent* MUASC = UMUFunctionLibrary::GetAbilitySystemComponent( GetOwner() );
+
+	if ( IsValid(MUASC) == true )
+	{
+		//MUASC->TryCancelSkill( );
+	}
+}

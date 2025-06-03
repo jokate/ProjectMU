@@ -27,6 +27,8 @@ public:
 
 	virtual void TryTriggerSkill( FName SkillID );
 
+	virtual void TryCancelSkill( FName SkillID );
+
 public :
 	UPROPERTY()
 	TMap<FName, FGameplayAbilitySpecHandle> SkillAbilitySpec;
