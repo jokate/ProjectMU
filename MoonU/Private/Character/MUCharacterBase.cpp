@@ -4,6 +4,7 @@
 #include "Character/MUCharacterBase.h"
 
 #include "MotionWarpingComponent.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/MULevelUpComponent.h"
 #include "Components/TimeWindComponent.h"
@@ -22,7 +23,7 @@ AMUCharacterBase::AMUCharacterBase()
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("AbilityInitComponent"));
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpComponent"));
 	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliComponent"));
-	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
+	ASC = CreateDefaultSubobject<UMUAbilitySystemComponent>(TEXT("ASC"));
 	LevelUpComponent = CreateDefaultSubobject<UMULevelUpComponent>(TEXT("LevelUpComponent"));
 }
 

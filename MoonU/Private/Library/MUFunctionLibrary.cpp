@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Components/EnforcementComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
@@ -336,4 +337,25 @@ bool UMUFunctionLibrary::IsSkillRegisteredToCharacter(UObject* Object, int32 Enf
 	}
 
 	return false;
+}
+
+UMUAbilitySystemComponent* UMUFunctionLibrary::GetAbilitySystemComponent(AActor* Owner)
+{
+	IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(Owner);
+
+	if (ASI == nullptr)
+	{
+		return nullptr;
+	}
+
+	UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
+
+	if ( IsValid(ASC) == false)
+	{
+		return nullptr;		
+	}
+
+	UMUAbilitySystemComponent* MUASC = Cast<UMUAbilitySystemComponent>(ASC);
+
+	return MUASC;
 }

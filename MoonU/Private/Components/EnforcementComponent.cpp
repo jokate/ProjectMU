@@ -9,6 +9,7 @@
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 
 UEnforcementComponent::UEnforcementComponent()
 {
@@ -96,29 +97,17 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 	{
 		return;
 	}
-	IAbilitySystemInterface* ASI = GetOwner<IAbilitySystemInterface>();
 
-	if (ASI == nullptr)
-	{
-		return;
-	}
-
-	UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
-
-	if (IsValid(ASC) == false)
-	{
-		return;
-	}
-
-	//이미 등록된 Ability인 경우에는 배제
-	if (ASC->FindAbilitySpecFromClass(SkillData.NeedToRegAbility) != nullptr)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Already Allocated Ability"));
-		return;
-	}
 
 	// Input Binding이 필요한 경우에는 별도 세팅이 필요한 것은 사실임.
 	FGameplayAbilitySpec AbilitySpec(SkillData.NeedToRegAbility);
+
+	UMUAbilitySystemComponent* MUASC = UMUFunctionLibrary::GetAbilitySystemComponent( GetOwner() );
+
+	if ( IsValid(MUASC) == true )
+	{
+		MUASC->AllocateSkill( SkillID, AbilitySpec );
+	}
 
 	AddSkillSlot(SkillData.ApplySlotType, SkillID);
 }

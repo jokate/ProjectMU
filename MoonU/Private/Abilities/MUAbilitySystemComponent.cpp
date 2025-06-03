@@ -54,6 +54,7 @@ void UMUAbilitySystemComponent::TryTriggerSkill(FName SkillID)
 
 	if ( IsValid( ActivateSkill ) == true )
 	{
+		// 스킬 타입 별로 관련 데이터 세팅하는 것이 좋아보인다는 생각이 든다.
 		ActivateSkill->SkillTriggered( AbilitySpec->Handle, AbilityActorInfo.Get(), AbilitySpec->ActivationInfo );
 	}
 }

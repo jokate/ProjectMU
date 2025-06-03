@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MUSkillIndicator.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 #include "Data/MUEnum.h"
 #include "MUIndicatorManageSubsystem.generated.h"
 
@@ -35,6 +36,7 @@ protected :
 	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }
 	
 	bool RegisterIndicator( FName IndicatorID );
+
 	
 public :
 	UPROPERTY()

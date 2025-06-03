@@ -98,7 +98,7 @@ protected:
 	
 protected :
 	UPROPERTY()
-	TObjectPtr<class UAbilitySystemComponent> ASC;
+	TObjectPtr<class UMUAbilitySystemComponent> ASC;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Perception Stimuli Component")
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSourceComponent;

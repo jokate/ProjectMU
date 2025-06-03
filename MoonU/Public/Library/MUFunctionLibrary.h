@@ -11,6 +11,7 @@
 /**
  * 
  */
+class UMUAbilitySystemComponent;
 UCLASS()
 class MOONU_API UMUFunctionLibrary : public UBlueprintFunctionLibrary
 {
@@ -37,6 +38,9 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool IsSkillRegisteredToCharacter(UObject* Object, int32 EnforcementID);
+
+	UFUNCTION( BlueprintCallable )
+	static UMUAbilitySystemComponent* GetAbilitySystemComponent( AActor* Owner );
 	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)
