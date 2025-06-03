@@ -16,6 +16,9 @@ class MOONU_API UMUGA_ActivateSkill : public UGameplayAbility, public ISkillActi
 	GENERATED_BODY()
 
 public :
+	
+	UMUGA_ActivateSkill();
+	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 	virtual void ActivateSkill() override {}
@@ -25,6 +28,6 @@ public :
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 
 	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
-
+	
 public :
 };

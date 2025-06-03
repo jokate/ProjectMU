@@ -120,8 +120,6 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 	// Input Binding이 필요한 경우에는 별도 세팅이 필요한 것은 사실임.
 	FGameplayAbilitySpec AbilitySpec(SkillData.NeedToRegAbility);
 
-	ASC->GiveAbility(AbilitySpec);
-
 	AddSkillSlot(SkillData.ApplySlotType, SkillID);
 }
 
