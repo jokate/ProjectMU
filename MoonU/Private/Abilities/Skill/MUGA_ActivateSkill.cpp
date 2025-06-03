@@ -12,3 +12,19 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	
 	ActivateSkill();
 }
+
+void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	
+}
+
+void UMUGA_ActivateSkill::SkillUnTriggered(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+{
+}
+
+void UMUGA_ActivateSkill::SetTargetLocation(FVector& TargetLocation)
+{
+	TargetLocation = 
+}

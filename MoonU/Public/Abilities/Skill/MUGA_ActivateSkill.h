@@ -21,4 +21,10 @@ public :
 	virtual void ActivateSkill() override {}
 
 	virtual void CancelSkill() override {};
+
+	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
+
+	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
+
+public :
 };
