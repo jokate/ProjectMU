@@ -87,4 +87,10 @@ void USkillInputComponent::OnInputPressed()
 void USkillInputComponent::TriggerSkill(FName SkillID)
 {
 	// 실질적인 GAS 트리거.
+	UMUAbilitySystemComponent* MUASC = UMUFunctionLibrary::GetAbilitySystemComponent( GetOwner() );
+
+	if ( IsValid(MUASC) == true )
+	{
+		MUASC->TryTriggerSkill( SkillID );
+	}
 }
