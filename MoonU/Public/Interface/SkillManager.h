@@ -27,5 +27,5 @@ public:
 
 	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) = 0 ;
 
-	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) = 0;;
+	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) = 0;
 };

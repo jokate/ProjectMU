@@ -27,6 +27,8 @@ public:
 	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) override;
 
 	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
+
+	virtual void SetupSkillInput( FName SkillID );
 	
 protected:
 	// Called when the game starts
@@ -39,8 +41,25 @@ protected:
 #pragma endregion
 
 	virtual void CallSkillUpdatedEvent();
+
+	// 스킬 캐스팅 관련
+	UFUNCTION()
+	virtual void TriggerInputSkill( ESkillSlotType SkillSlot );
 	
+	virtual void InitializePlayerController();
+	virtual void CastSkill( FName SkillID );
+	virtual void ReadySkill( FName SkillID );
+	virtual void OnInputPressed();
+	virtual void TriggerSkill( FName SkillID );
+	virtual void CancelSkill();
+
 public:
+	UPROPERTY( EditAnywhere )
+	FName ReadySkillID = NAME_None;
+
+	UPROPERTY( VisibleAnywhere )
+	APlayerController* PlayerController;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enforcement ID")
 	TArray<int32> EnforcementIDs;
 

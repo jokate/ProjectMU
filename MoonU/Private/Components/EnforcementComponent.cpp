@@ -5,11 +5,14 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
+#include "EnhancedInputSubsystems.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 #include "Abilities/MUAbilitySystemComponent.h"
+#include "Components/Input/MUEnhancedInputComponent.h"
+#include "Indicator/MUIndicatorManageSubsystem.h"
 
 UEnforcementComponent::UEnforcementComponent()
 {
@@ -21,6 +24,7 @@ UEnforcementComponent::UEnforcementComponent()
 void UEnforcementComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	InitializePlayerController();
 }
 
 void UEnforcementComponent::EnforceUnit(int32 InEnforcementID)
@@ -109,8 +113,52 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 		MUASC->AllocateSkill( SkillID, AbilitySpec );
 	}
 
+	SetupSkillInput( SkillID );
+
 	AddSkillSlot(SkillData.ApplySlotType, SkillID);
 }
+
+void UEnforcementComponent::SetupSkillInput(FName SkillID)
+{
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData(GetOwner(), SkillID, SkillData) == false )
+	{
+		return;
+	}
+
+	APawn* OwnerActor = GetOwner<APawn>();
+
+	if ( IsValid(OwnerActor) == false )
+	{
+		return;
+	}
+	UMUEnhancedInputComponent* EnhancedInputComponent = Cast<UMUEnhancedInputComponent>(OwnerActor->InputComponent);
+
+	if ( IsValid( EnhancedInputComponent ) == false )
+	{
+		return;
+	}
+
+	UInputConfig* InputConfig = UMUFunctionLibrary::GetInputConfigByOwner( GetOwner() );
+
+	if ( IsValid(InputConfig) == false )
+	{
+		return;
+	}
+	
+	const FMUSkillInput& SkillInput = SkillData.SkillInput;
+
+	if ( SkillInput.ReleaseEvent != ETriggerEvent::None )
+	{
+		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::CancelSkill );
+	}
+
+	if ( SkillInput.TriggerEvent != ETriggerEvent::None )
+	{
+		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
+	}
+}
+
 
 void UEnforcementComponent::CallSkillUpdatedEvent()
 {
@@ -139,6 +187,105 @@ void UEnforcementComponent::CallSkillUpdatedEvent()
 	{
 		WidgetDelegateSubsystem->OnSkillUpdated.Broadcast();
 	} 
+}
+
+void UEnforcementComponent::TriggerInputSkill(ESkillSlotType SkillSlot)
+{
+	FName SkillID = GetSkillIDBySlot( SkillSlot );
+
+	if ( SkillID == NAME_None )
+	{
+		return;
+	}
+
+	CastSkill( SkillID );
+}
+
+void UEnforcementComponent::InitializePlayerController()
+{
+	AActor* OwningActor = GetOwner();
+	
+	if ( IsValid( OwningActor ) == false )
+	{
+		return;		
+	}
+
+	APlayerController* OwnerActorController = OwningActor->GetInstigatorController<APlayerController>();
+
+	if ( IsValid( OwnerActorController ) == false )
+	{
+		return;
+	}
+
+	PlayerController = OwnerActorController;
+}
+
+void UEnforcementComponent::CastSkill(FName SkillID)
+{
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData ) == false )
+	{
+		return;
+	}
+
+	if ( SkillData.bUseIndicator == true )
+	{
+		ReadySkill( SkillID );
+		return;
+	}
+
+	TriggerSkill( SkillID );
+}
+
+void UEnforcementComponent::ReadySkill(FName SkillID)
+{
+	if ( ReadySkillID == SkillID )
+	{
+		return;
+	}
+	
+	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
+	{
+		Subsystem->DeactivateSkillIndicator( ReadySkillID );
+		
+		ReadySkillID = SkillID;
+		
+		Subsystem->ActivateSkillIndicator( ReadySkillID );
+	}
+}
+
+void UEnforcementComponent::OnInputPressed()
+{
+	if ( ReadySkillID != NAME_None )
+	{
+		if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->DeactivateSkillIndicator( ReadySkillID );
+		}
+		
+		TriggerSkill( ReadySkillID );
+	}
+}
+
+void UEnforcementComponent::TriggerSkill(FName SkillID)
+{
+	// 실질적인 GAS 트리거.
+	UMUAbilitySystemComponent* MUASC = UMUFunctionLibrary::GetAbilitySystemComponent( GetOwner() );
+
+	if ( IsValid(MUASC) == true )
+	{
+		MUASC->TryTriggerSkill( SkillID );
+	}
+}
+
+void UEnforcementComponent::CancelSkill()
+{
+	UMUAbilitySystemComponent* MUASC = UMUFunctionLibrary::GetAbilitySystemComponent( GetOwner() );
+
+	if ( IsValid(MUASC) == true )
+	{
+
+	}
 }
 
 void UEnforcementComponent::AddSkillSlot(ESkillSlotType SkillSlotType, FName SkillID)

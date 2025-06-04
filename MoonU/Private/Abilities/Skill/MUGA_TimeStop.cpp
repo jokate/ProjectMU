@@ -16,7 +16,6 @@ UMUGA_TimeStop::UMUGA_TimeStop()
 void UMUGA_TimeStop::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                 const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	
 	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
 
 	if (TimeStopper)
@@ -47,7 +46,13 @@ void UMUGA_TimeStop::OnTimeFinished()
 
 void UMUGA_TimeStop::ActivateSkill()
 {
-	ITimeStopper* TimeStopper = Cast<ITimeStopper>(GetWorld()->GetAuthGameMode());
+	UWorld* World = GetWorld();
+	if ( IsValid(World) == false )
+	{
+		return;
+	}
+	
+	ITimeStopper* TimeStopper = Cast<ITimeStopper>(World->GetAuthGameMode());
 
 	if (TimeStopper)
 	{
@@ -70,4 +75,12 @@ void UMUGA_TimeStop::ActivateSkill()
 			ASC->ExecuteGameplayCue(GameplayCueTag);
 		}
 	}
+}
+
+void UMUGA_TimeStop::SkillTriggered(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	Super::SkillTriggered(Handle, ActorInfo, ActivationInfo);
+	
+	CallActivateAbility(Handle, ActorInfo, ActivationInfo);
 }

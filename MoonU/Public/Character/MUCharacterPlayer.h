@@ -49,6 +49,7 @@ public:
 
 	void GASInputReleased(int32 InputId);
 
+	virtual const int32 GetPlayerCharacterID() override { return GetCharacterID(); }
 
 #pragma region Enforcement
 	UFUNCTION()
@@ -76,9 +77,6 @@ protected :
 
 	void SetupSkillInput( int32 InputID );
 
-	virtual void TriggerSkill( ESkillSlotType SkillSlotType );
-	virtual void CancelSkill();
-	
 #pragma region InputActionEvent
 	void Move(const FInputActionValue& Value);
 
@@ -126,9 +124,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UEnforcementComponent> EnforcementComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Cast", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USkillInputComponent> SkillCastingComponent;
 
 protected:
 	UPROPERTY()

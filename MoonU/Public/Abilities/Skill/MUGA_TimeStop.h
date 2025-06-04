@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS() 
 class MOONU_API UMUGA_TimeStop : public UMUGA_ActivateSkill
 {
 	GENERATED_BODY()
@@ -22,6 +22,8 @@ public :
 	void OnTimeFinished();
 
 	virtual void ActivateSkill() override;
+
+	virtual void SkillTriggered(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 	
 	FTimerHandle TimeStopHandle;
 

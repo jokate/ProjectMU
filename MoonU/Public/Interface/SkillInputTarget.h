@@ -17,9 +17,6 @@ class USkillInputTarget : public UInterface
  * 
  */
 
-DECLARE_MULTICAST_DELEGATE( FOnSkillActivate );
-DECLARE_MULTICAST_DELEGATE( FOnSkillDeactivate );
-
 class MOONU_API ISkillInputTarget
 {
 	GENERATED_BODY()

@@ -50,13 +50,14 @@ void UMUAbilitySystemComponent::TryTriggerSkill(FName SkillID)
 	}
 
 	// instanced per actor를 전제로 만든다.
-	UMUGA_ActivateSkill* ActivateSkill = Cast<UMUGA_ActivateSkill>(AbilitySpec->Ability);
-
+	
+	UMUGA_ActivateSkill* ActivateSkill = Cast<UMUGA_ActivateSkill>(AbilitySpec->GetPrimaryInstance());
+	
 	if ( IsValid( ActivateSkill ) == true )
 	{
 		// 스킬 타입 별로 관련 데이터 세팅하는 것이 좋아보인다는 생각이 든다.
 		ActivateSkill->SkillTriggered( AbilitySpec->Handle, AbilityActorInfo.Get(), AbilitySpec->ActivationInfo );
-	}
+	}	
 }
 
 void UMUAbilitySystemComponent::TryCancelSkill(FName SkillID)

@@ -41,6 +41,9 @@ public :
 
 	UFUNCTION( BlueprintCallable )
 	static UMUAbilitySystemComponent* GetAbilitySystemComponent( AActor* Owner );
+
+	UFUNCTION( BlueprintCallable )
+	static class UInputConfig* GetInputConfigByOwner( AActor* Owner );
 	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)

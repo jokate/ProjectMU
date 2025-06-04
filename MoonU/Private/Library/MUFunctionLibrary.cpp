@@ -351,7 +351,7 @@ UMUAbilitySystemComponent* UMUFunctionLibrary::GetAbilitySystemComponent(AActor*
 	UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
 
 	if ( IsValid(ASC) == false)
-	{
+	{ 
 		return nullptr;		
 	}
 
@@ -359,3 +359,24 @@ UMUAbilitySystemComponent* UMUFunctionLibrary::GetAbilitySystemComponent(AActor*
 
 	return MUASC;
 }
+
+UInputConfig* UMUFunctionLibrary::GetInputConfigByOwner(AActor* Owner)
+{
+	IMUPlayer* Player = Cast<IMUPlayer>(Owner);
+
+	if (Player == nullptr)
+	{
+		return nullptr;
+	}
+
+	int32 PlayerCharacterID = Player->GetPlayerCharacterID();
+
+	FMUInputMapper InputMapper;
+	if ( GetInputMapperData( Owner, PlayerCharacterID, InputMapper ) == false )
+	{
+		return nullptr;
+	}
+
+	return InputMapper.InputConfig;
+}
+

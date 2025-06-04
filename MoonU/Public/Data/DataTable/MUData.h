@@ -50,18 +50,6 @@ struct FInputFunctionalType
 	TEnumAsByte<EGASInputFunctionalType> GASFunctionalType = EGASInputFunctionalType::Invalid;
 };
 
-USTRUCT( BlueprintType )
-struct FMUSkillInput
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	ETriggerEvent TriggerEvent = ETriggerEvent::None;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	TEnumAsByte<ESkillSlotType> SkillSlotType = ESkillSlotType::NONE;
-};
-
 //절대로 중복되는 경우는 없어야 합니다.
 USTRUCT(BlueprintType)
 struct FTagByInput
@@ -81,6 +69,22 @@ struct FTagByInput
 	TArray<FInputFunctionalType> InputFunctionalTypes;
 };
 
+USTRUCT( BlueprintType )
+struct FMUSkillInput
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	FGameplayTag InputTag;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	ETriggerEvent TriggerEvent = ETriggerEvent::None;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	ETriggerEvent ReleaseEvent = ETriggerEvent::None;
+};
+
+
 USTRUCT(BlueprintType)
 struct FMUInputMapper : public FTableRowBase
 {
@@ -98,9 +102,6 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Input)
 	TArray<FTagByInput> InputByTags;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SkillInput)
-	TArray<FMUSkillInput> SkillInputs;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Comment")
 	FString DevComment;
@@ -232,5 +233,8 @@ public :
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Visual Info")
 	UTexture2D* SkillIcon = nullptr;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Input" )
+	FMUSkillInput SkillInput;
 };
 

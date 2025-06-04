@@ -18,7 +18,6 @@
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/MULevelUpComponent.h"
-#include "Components/SkillInputComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
@@ -45,7 +44,6 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 	EnforcementComponent = CreateDefaultSubobject<UEnforcementComponent>("EnforcementComponent");
-	SkillCastingComponent = CreateDefaultSubobject<USkillInputComponent>("SkillInputComponent");
 }
 
 // Called when the game starts or when spawned
@@ -96,6 +94,8 @@ void AMUCharacterPlayer::SetupInputByID(int32 InputID)
 // Called to bind functionality to input
 void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
 	SetupDefaultInput(PlayerInputComponent);
 	SetupGASInputComponent(CharacterID);
 }
@@ -126,21 +126,6 @@ void AMUCharacterPlayer::SetupSkillInput(int32 InputID)
 {
 	
 }
-
-void AMUCharacterPlayer::TriggerSkill(ESkillSlotType SkillSlotType)
-{
-	if ( IsValid( EnforcementComponent ) == true && IsValid( SkillCastingComponent ) == true )
-	{
-		const FName& SkillID = EnforcementComponent->GetSkillIDBySlot( SkillSlotType );
-		SkillCastingComponent->CastSkill( SkillID );
-	}
-}
-
-void AMUCharacterPlayer::CancelSkill()
-{
-	
-}
-
 
 const FVector2D AMUCharacterPlayer::GetRecentlyMovedVector()
 {
