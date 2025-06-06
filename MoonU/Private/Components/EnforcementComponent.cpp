@@ -115,7 +115,7 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 
 	SetupSkillInput( SkillID );
 
-	AddSkillSlot(SkillData.ApplySlotType, SkillID);
+	AddSkillSlot( SkillData.ApplySlotType, SkillID );
 }
 
 void UEnforcementComponent::SetupSkillInput(FName SkillID)
@@ -147,7 +147,7 @@ void UEnforcementComponent::SetupSkillInput(FName SkillID)
 	}
 	
 	const FMUSkillInput& SkillInput = SkillData.SkillInput;
-
+	
 	if ( SkillInput.ReleaseEvent != ETriggerEvent::None )
 	{
 		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::CancelSkill );
@@ -156,6 +156,13 @@ void UEnforcementComponent::SetupSkillInput(FName SkillID)
 	if ( SkillInput.TriggerEvent != ETriggerEvent::None )
 	{
 		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
+	}
+
+	if ( SkillData.bUseIndicator == true )
+	{
+		const FMUSkillInput IndicatorInput = SkillData.IndicatorSkillInput;
+		
+		EnhancedInputComponent->BindActionByTag( InputConfig, IndicatorInput.InputTag, SkillInput.TriggerEvent, this,  &UEnforcementComponent::OnInputPressed );
 	}
 }
 

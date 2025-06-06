@@ -14,8 +14,6 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
                                           const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	
-	ActivateSkill();
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,

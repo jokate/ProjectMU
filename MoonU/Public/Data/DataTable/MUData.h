@@ -236,5 +236,9 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Input" )
 	FMUSkillInput SkillInput;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
+	FMUSkillInput IndicatorSkillInput;
+	
 };
 
