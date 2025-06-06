@@ -43,7 +43,7 @@ public:
 
 	virtual void ClearActionBindings() override;
 
-	void RemoveActionBinding(const FGameplayTag& InputTag);
+	//void RemoveActionBinding(const FGameplayTag& InputTag);
 	
 protected:
 	UPROPERTY(VisibleAnywhere)

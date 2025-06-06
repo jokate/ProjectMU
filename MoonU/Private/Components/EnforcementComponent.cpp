@@ -157,13 +157,6 @@ void UEnforcementComponent::SetupSkillInput(FName SkillID)
 	{
 		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
 	}
-
-	if ( SkillData.bUseIndicator == true )
-	{
-		const FMUSkillInput IndicatorInput = SkillData.IndicatorSkillInput;
-		
-		EnhancedInputComponent->BindActionByTag( InputConfig, IndicatorInput.InputTag, SkillInput.TriggerEvent, this,  &UEnforcementComponent::OnInputPressed );
-	}
 }
 
 
