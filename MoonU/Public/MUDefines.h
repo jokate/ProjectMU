@@ -67,3 +67,6 @@
 
 #define MU_ITEM_TAG_CONSUMABLE FGameplayTag::RequestGameplayTag(FName("Item.Type.Consumable"))
 #define MU_ITEM_TAG_EQUIPPABLE FGameplayTag::RequestGameplayTag(FName("Item.Type.Equippable"))
+
+#define MU_SKILL_INSTANT FGameplayTag::RequestGameplayTag(FName("SkillTag.Instant"))
+#define MU_SKILL_INDICATOR FGameplayTag::RequestGameplayTag(FName("SkillTag.Indicator"))
