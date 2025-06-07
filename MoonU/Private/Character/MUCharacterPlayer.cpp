@@ -301,7 +301,7 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 	
-	if (Controller != nullptr)
+	if ( Controller != nullptr && bCanLook == true )
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
