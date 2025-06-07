@@ -20,6 +20,8 @@ public :
 	UMUGA_ActivateSkill();
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	
 	virtual void ActivateSkill() override {}
 
@@ -30,6 +32,9 @@ public :
 	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 	
 public :
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer GameplayCueTags;
+	
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
 };

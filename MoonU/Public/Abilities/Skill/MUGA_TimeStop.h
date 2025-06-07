@@ -26,8 +26,5 @@ public :
 	virtual void SkillTriggered(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 	
 	FTimerHandle TimeStopHandle;
-
-	UPROPERTY(EditDefaultsOnly)
-	FGameplayTagContainer GameplayCueTags;
 };
 

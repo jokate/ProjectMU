@@ -39,7 +39,7 @@ bool UMUIndicatorManageSubsystem::RegisterIndicator( FName IndicatorID )
 	FAttachmentTransformRules AttachmentRule = FAttachmentTransformRules( EAttachmentRule::SnapToTarget,
 		EAttachmentRule::SnapToTarget,  EAttachmentRule::SnapToTarget, false );
 	
-	SkillIndicator->AttachToActor( LocalPlayerActor, AttachmentRule );
+	SkillIndicator->AttachToActor( LocalPlayerActor, AttachmentRule, TEXT("IndicatorSpawn") );
 	IndicatorManagement.Add(IndicatorID, SkillIndicator);
 
 	return true;
