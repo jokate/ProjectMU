@@ -25,7 +25,7 @@ bool AMUGC_IndicatorCam::OnExecute_Implementation(AActor* MyTarget, const FGamep
 
 	if ( IsValid(CharacterPlayer) == true )
 	{
-		CharacterPlayer->SetupCanLook( false );
+		CharacterPlayer->SetupCanLook( true );
 	}
 
 	return true;
@@ -39,7 +39,7 @@ bool AMUGC_IndicatorCam::OnRemove_Implementation(AActor* MyTarget, const FGamepl
 
 	if ( IsValid(CharacterPlayer) == true )
 	{
-		CharacterPlayer->SetupCanLook( true );
+		CharacterPlayer->SetupCanLook( false );
 	}
 	
 	return true;

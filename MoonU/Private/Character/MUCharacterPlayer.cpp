@@ -202,6 +202,18 @@ bool AMUCharacterPlayer::GetEnforcementIDs(TArray<int32>& OutEnforcementIDs)
 	return true;
 }
 
+void AMUCharacterPlayer::SetupCanLook( bool bInCanLook )
+{
+	APlayerController* PC = GetController<APlayerController>();
+
+	if ( IsValid(PC) == true )
+	{
+		PC->SetIgnoreLookInput( bInCanLook );
+	}
+
+	//if ( )
+}
+
 void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 {
 	if (IsValid(ASC) && IsValid(InputComponent))
@@ -301,7 +313,7 @@ void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 	
-	if ( Controller != nullptr && bCanLook == true )
+	if ( Controller != nullptr )
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);

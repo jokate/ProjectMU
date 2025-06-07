@@ -69,10 +69,7 @@ public:
 	virtual bool GetEnforcementIDs(TArray<int32>& OutEnforcementIDs);
 #pragma endregion
 
-	void SetupCanLook( bool bInCanLook )
-	{
-		bCanLook = bInCanLook;
-	}
+	void SetupCanLook( bool bInCanLook );
 	
 protected :
 	
@@ -129,9 +126,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UEnforcementComponent> EnforcementComponent;
-
-	UPROPERTY()
-	bool bCanLook = true;
 
 protected:
 	UPROPERTY()
