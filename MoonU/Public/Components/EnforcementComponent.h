@@ -48,8 +48,6 @@ protected:
 	
 	virtual void InitializePlayerController();
 	virtual void CastSkill( FName SkillID );
-	virtual void ReadySkill( FName SkillID );
-	virtual void OnInputPressed();
 	virtual void TriggerSkill( FName SkillID );
 	virtual void CancelSkill();
 

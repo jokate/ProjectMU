@@ -228,43 +228,7 @@ void UEnforcementComponent::CastSkill(FName SkillID)
 		return;
 	}
 
-	if ( SkillData.bUseIndicator == true )
-	{
-		ReadySkill( SkillID );
-		return;
-	}
-
 	TriggerSkill( SkillID );
-}
-
-void UEnforcementComponent::ReadySkill(FName SkillID)
-{
-	if ( ReadySkillID == SkillID )
-	{
-		return;
-	}
-	
-	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
-	{
-		Subsystem->DeactivateSkillIndicator( ReadySkillID );
-		
-		ReadySkillID = SkillID;
-		
-		Subsystem->ActivateSkillIndicator( ReadySkillID );
-	}
-}
-
-void UEnforcementComponent::OnInputPressed()
-{
-	if ( ReadySkillID != NAME_None )
-	{
-		if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->DeactivateSkillIndicator( ReadySkillID );
-		}
-		
-		TriggerSkill( ReadySkillID );
-	}
 }
 
 void UEnforcementComponent::TriggerSkill(FName SkillID)
@@ -284,7 +248,7 @@ void UEnforcementComponent::CancelSkill()
 
 	if ( IsValid(MUASC) == true )
 	{
-
+		
 	}
 }
 

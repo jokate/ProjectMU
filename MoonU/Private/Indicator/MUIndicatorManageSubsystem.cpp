@@ -6,16 +6,21 @@
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
 
-bool UMUIndicatorManageSubsystem::RegisterIndicator(FName IndicatorID )
+bool UMUIndicatorManageSubsystem::RegisterIndicator( FName IndicatorID )
 {
 	if ( IndicatorManagement.Contains(IndicatorID) == true )
 	{
 		return false;
 	}
 
-	if ( IsValid(LocalPlayerActor ) == false )
+	if ( IsValid( LocalPlayerActor ) == false )
 	{
-		return false;		
+		LocalPlayerActor = LocalPlayerController->GetPawn();
+
+		if ( IsValid( LocalPlayerActor ) == false )
+		{
+			return false;
+		}
 	}
 	
 	FMUSkillData SkillData;
@@ -31,6 +36,10 @@ bool UMUIndicatorManageSubsystem::RegisterIndicator(FName IndicatorID )
 	SkillIndicator->SetupIndicatorInfo( LocalPlayerController, SkillData.CastingRange, SkillData.CastingAOE );
 	
 	SkillIndicator->FinishSpawning( LocalPlayerActor->GetActorTransform());
+	FAttachmentTransformRules AttachmentRule = FAttachmentTransformRules( EAttachmentRule::SnapToTarget,
+		EAttachmentRule::SnapToTarget,  EAttachmentRule::SnapToTarget, false );
+	
+	SkillIndicator->AttachToActor( LocalPlayerActor, AttachmentRule );
 	IndicatorManagement.Add(IndicatorID, SkillIndicator);
 
 	return true;
@@ -76,7 +85,6 @@ void UMUIndicatorManageSubsystem::PlayerControllerChanged(APlayerController* New
 	}
 
 	LocalPlayerController = NewPlayerController;
-	LocalPlayerActor = NewPlayerController->GetPawn();
 }
 
 void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)

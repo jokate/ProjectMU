@@ -38,10 +38,12 @@ void AMUSkillIndicator::SetupIndicatorInfo(APlayerController* OwnerController, f
 void AMUSkillIndicator::ActivateSkillIndicator()
 {
 	SetActorHiddenInGame( false );
+	SetActorTickEnabled( true );
 }
 
 void AMUSkillIndicator::DeactivateSkillIndicator()
 {
 	SetActorHiddenInGame( true );
+	SetActorTickEnabled( false );
 }
 

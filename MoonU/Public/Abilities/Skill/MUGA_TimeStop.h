@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MUGA_ActivateSkill.h"
+#include "MUGA_InstantSkill.h"
 #include "MUGA_TimeStop.generated.h"
 
 /**
  * 
  */
 UCLASS() 
-class MOONU_API UMUGA_TimeStop : public UMUGA_ActivateSkill
+class MOONU_API UMUGA_TimeStop : public UMUGA_InstantSkill
 {
 	GENERATED_BODY()
 

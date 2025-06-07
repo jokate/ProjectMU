@@ -43,7 +43,8 @@ public:
 
 	virtual void ClearActionBindings() override;
 
-	//void RemoveActionBinding(const FGameplayTag& InputTag);
+	template<class UserClass>
+	void RemoveActionBinding(const UInputConfig* InputConfig, const FGameplayTag& InputTag, UserClass* Object);
 	
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -83,5 +84,20 @@ void UMUEnhancedInputComponent::BindActionByTag(const UInputConfig* InputConfig,
 		FInputActionWrapper Wrapper(IA);
 
 		InputGameplayTagMap.Emplace(Wrapper,InputTag);
+	}
+}
+
+template <class UserClass>
+void UMUEnhancedInputComponent::RemoveActionBinding(const UInputConfig* InputConfig, const FGameplayTag& InputTag,
+	UserClass* Object)
+{
+	if ( InputConfig == nullptr)
+	{
+		return;
+	}
+
+	if (const UInputAction* IA = InputConfig->FindInputActionForTag(InputTag))
+	{
+		RemoveBinding()
 	}
 }
