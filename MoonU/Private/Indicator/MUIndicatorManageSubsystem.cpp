@@ -3,6 +3,8 @@
 
 #include "Indicator/MUIndicatorManageSubsystem.h"
 
+#include "Camera/CameraActor.h"
+#include "Camera/CameraComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
 
@@ -87,6 +89,65 @@ void UMUIndicatorManageSubsystem::PlayerControllerChanged(APlayerController* New
 	LocalPlayerController = NewPlayerController;
 }
 
+void UMUIndicatorManageSubsystem::SetupCamera(FName IndicatorID)
+{
+	if ( IsValid( LocalPlayerController) == false || IsValid(LocalPlayerActor) == false )
+	{
+		return;
+	}
+	
+	FMUSkillData SkillData;
+	// 가정. 스킬에 대한 부분에 대해서 호출
+	if ( UMUFunctionLibrary::GetSkillData( this, IndicatorID, SkillData) == false )
+	{
+		return;
+	}
+	
+	if ( IsValid(IndicatorCameraActor) == false )
+	{
+		ACameraActor* CamActor = GetWorld()->SpawnActorDeferred<ACameraActor>(ACameraActor::StaticClass(), LocalPlayerActor->GetActorTransform());
+
+		if ( IsValid( CamActor ) == false )
+		{
+			return;
+		}
+
+		IndicatorCameraActor = CamActor;
+		FAttachmentTransformRules AttachmentRule = FAttachmentTransformRules( EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget,  EAttachmentRule::SnapToTarget, false );
+		IndicatorCameraActor->AttachToActor( LocalPlayerActor, AttachmentRule );
+		UCameraComponent* IndicatorCameraComponent = IndicatorCameraActor->GetCameraComponent();
+		UCameraComponent* PlayerCam = LocalPlayerActor->FindComponentByClass<UCameraComponent>();
+
+		if ( IsValid(IndicatorCameraComponent) && IsValid(PlayerCam) )
+		{
+			IndicatorCameraComponent->FieldOfView = PlayerCam->FieldOfView;
+			IndicatorCameraComponent->AspectRatio = PlayerCam->AspectRatio;
+			IndicatorCameraComponent->bConstrainAspectRatio = PlayerCam->bConstrainAspectRatio;
+			IndicatorCameraComponent->ProjectionMode = PlayerCam->ProjectionMode;
+
+			IndicatorCameraComponent->PostProcessSettings = PlayerCam->PostProcessSettings;
+			IndicatorCameraComponent->PostProcessBlendWeight = PlayerCam->PostProcessBlendWeight;
+		}
+		
+	}
+
+	IndicatorCameraActor->SetActorRelativeLocation(SkillData.IndicatorCameraOffSet);
+	IndicatorCameraActor->SetActorRelativeRotation(SkillData.IndicatorCameraRotation);
+
+	LocalPlayerController->SetViewTargetWithBlend( IndicatorCameraActor, 0.3f );
+}
+
+void UMUIndicatorManageSubsystem::DeactivateCamera()
+{
+	if ( IsValid( LocalPlayerController) == false || IsValid(LocalPlayerActor) == false || IsValid(IndicatorCameraActor) == false)
+	{
+		return;
+	}
+
+	LocalPlayerController->SetViewTargetWithBlend( LocalPlayerActor, 0.3f );
+}
+
 void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
 {
 	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );
@@ -97,6 +158,8 @@ void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
 	}
 
 	SkillIndicator->ActivateSkillIndicator();
+
+	SetupCamera( IndicatorID );
 }
 
 void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
@@ -109,5 +172,7 @@ void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
 	}
 
 	SkillIndicator->DeactivateSkillIndicator();
+
+	DeactivateCamera();
 }
 

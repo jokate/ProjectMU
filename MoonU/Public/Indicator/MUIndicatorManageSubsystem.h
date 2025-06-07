@@ -31,6 +31,9 @@ public :
 
 	virtual void PlayerControllerChanged(APlayerController* NewPlayerController) override;
 
+	virtual void SetupCamera( FName IndicatorID );
+	virtual void DeactivateCamera();
+
 protected :
 	
 	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }
@@ -41,6 +44,9 @@ protected :
 public :
 	UPROPERTY()
 	TMap<FName, AMUSkillIndicator*> IndicatorManagement;
+
+	UPROPERTY()
+	TObjectPtr<ACameraActor> IndicatorCameraActor;
 
 	UPROPERTY()
 	APawn* LocalPlayerActor;

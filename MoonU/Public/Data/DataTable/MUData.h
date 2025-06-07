@@ -215,6 +215,12 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
 	TSubclassOf<AMUSkillIndicator> SkillIndicatorClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
+	FVector IndicatorCameraOffSet = FVector::Zero();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
+	FRotator IndicatorCameraRotation = FRotator::ZeroRotator;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SkillGameplayTag;
@@ -236,9 +242,5 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Input" )
 	FMUSkillInput SkillInput;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseIndicator == true", EditConditionHides))
-	FMUSkillInput IndicatorSkillInput;
-	
 };
 
