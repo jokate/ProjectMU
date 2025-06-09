@@ -7,28 +7,37 @@
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "Character/MUCharacterPlayer.h"
-
-UMUGA_ChargeAttack::UMUGA_ChargeAttack()
-{
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-}
+#include "Library/MUFunctionLibrary.h"
 
 void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
+
+void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
 	
-	AMUCharacterBase* MUCharacter = Cast<AMUCharacterBase>(ActorInfo->AvatarActor.Get());
-	
-	if (!MUCharacter)
+	if (MotionWarp != nullptr)
 	{
-		return;
+		MotionWarp->ReleaseMotionWarp(DASH_MOTION_WARP);
 	}
 
-	UAbilitySystemComponent* ASC = MUCharacter->GetAbilitySystemComponent();
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
 
-	if (!ASC)
+void UMUGA_ChargeAttack::ActivateSkill()
+{
+	Super::ActivateSkill();
+
+	AActor* OwnerActor = GetOwningActorFromActorInfo();
+	
+	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor);
+	
+	if (MotionWarp == nullptr)
 	{
 		return;
 	}
@@ -39,29 +48,9 @@ void UMUGA_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	NewTask->OnCancelled.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_ChargeAttack::OnInterruptedCallback);
 	
-	MUCharacter->SetMotionWarp(DASH_MOTION_WARP, EMotionWarpType::TranslationAndRotation, 500.0f);
+	MotionWarp->SetMotionWarpToCursorDirection(DASH_MOTION_WARP, EMotionWarpType::TranslationAndRotation, TargetLocation, TargetRotation );
 	
 	NewTask->ReadyForActivation();
-}
-
-void UMUGA_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
-{
-	AMUCharacterBase* MUCharacter = Cast<AMUCharacterBase>(ActorInfo->AvatarActor.Get());
-	
-	if (!MUCharacter)
-	{
-		return;
-	}
-
-	UAbilitySystemComponent* ASC = MUCharacter->GetAbilitySystemComponent();
-
-	if (!ASC)
-	{
-		return;
-	}
-	
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 

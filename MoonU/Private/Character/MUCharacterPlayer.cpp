@@ -159,20 +159,19 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 }
 
 void AMUCharacterPlayer::SetMotionWarpToCursorDirection(const FName TargetName, EMotionWarpType InMotionWarpType,
-	const float MotionWarpValue, const FVector& DirectionVector)
+	const FVector& TargetLocation, const FRotator& TargetRotation)
 {
 	ReleaseMotionWarp(TargetName);
 
-	const FVector TargetLocation = GetActorLocation() + DirectionVector * MotionWarpValue;
-	FRotator DesiredRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
-
+	//SetActorRotation(TargetRotation);
+	
 	switch (InMotionWarpType)
 	{
 	case EMotionWarpType::TranslationAndRotation:
-		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation, DesiredRotator);
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation, TargetRotation);
 		break;
 	case EMotionWarpType::RotationOnly:
-		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,FVector::ZeroVector, DesiredRotator);
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,FVector::ZeroVector,TargetRotation);
 		break;
 	case EMotionWarpType::TranslationOnly:
 		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation,FRotator::ZeroRotator);

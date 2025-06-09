@@ -29,5 +29,5 @@ public:
 
 	virtual void ReleaseMotionWarp(const FName InName) = 0;
 
-	virtual void SetMotionWarpToCursorDirection( const FName TargetName, EMotionWarpType InMotionWarpType, const float MotionWarpValue, const FVector& DirectionVector ) {};
+	virtual void SetMotionWarpToCursorDirection( const FName TargetName, EMotionWarpType InMotionWarpType, const FVector& TargetLocation, const FRotator& TargetRotation ) {};
 };

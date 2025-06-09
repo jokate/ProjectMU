@@ -28,4 +28,13 @@ public :
 
 	UFUNCTION()
 	virtual void OnSkillCanceled();
+
+	virtual void ResetInput();
+
+public :
+	UPROPERTY()
+	FVector TargetLocation;
+
+	UPROPERTY()
+	FRotator TargetRotation;
 };

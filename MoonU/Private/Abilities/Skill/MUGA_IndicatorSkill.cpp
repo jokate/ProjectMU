@@ -75,7 +75,56 @@ void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
 
+void UMUGA_IndicatorSkill::ActivateSkill()
+{
+	AActor* OwnerActor = GetAvatarActorFromActorInfo();
+
+	if ( IsValid(OwnerActor) == false )
+	{
+		return;
+	}
+
+	APawn* OwnerPawn = Cast<APawn>(OwnerActor);
+
+	if ( IsValid( OwnerPawn ) == false )
+	{
+		return;
+	}
+	
+	APlayerController* PC = OwnerPawn->GetController<APlayerController>();
+
+	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PC->GetLocalPlayer()))
+	{
+		TargetLocation = Subsystem->GetIndicatorTargetLocation( SkillID );
+		TargetRotation = Subsystem->GetIndicatorTargetRotation( SkillID );
+
+		UE_LOG(LogTemp, Log, TEXT("Rotation : %s"), *TargetRotation.ToString() )
+	}
+	
+
+	ResetInput();
+
+	UE_LOG(LogTemp, Log, TEXT("Skill Active"));
+}
+
+
+void UMUGA_IndicatorSkill::OnSkillInputPressed()
+{
+	ActivateSkill();
+}
+
+void UMUGA_IndicatorSkill::OnSkillCanceled()
+{
+	bool bReplicateEndAbility = true;
+	bool bWasCancelled = false;
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UMUGA_IndicatorSkill::ResetInput()
+{
 	// Input에 대한 바인딩 처리 필요.
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
@@ -105,26 +154,4 @@ void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		Subsystem->DeactivateSkillIndicator( SkillID );
 	}
-}
-
-void UMUGA_IndicatorSkill::ActivateSkill()
-{
-	bool bReplicateEndAbility = true;
-	bool bWasCancelled = false;
-
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
-}
-
-
-void UMUGA_IndicatorSkill::OnSkillInputPressed()
-{
-	ActivateSkill();
-}
-
-void UMUGA_IndicatorSkill::OnSkillCanceled()
-{
-	bool bReplicateEndAbility = true;
-	bool bWasCancelled = false;
-
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

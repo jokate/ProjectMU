@@ -34,6 +34,9 @@ public :
 	virtual void SetupCamera( FName IndicatorID );
 	virtual void DeactivateCamera();
 
+	virtual FVector GetIndicatorTargetLocation( FName IndicatorID );
+	virtual FRotator GetIndicatorTargetRotation( FName IndicatorID );
+
 protected :
 	
 	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }

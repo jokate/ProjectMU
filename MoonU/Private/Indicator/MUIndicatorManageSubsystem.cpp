@@ -148,6 +148,30 @@ void UMUIndicatorManageSubsystem::DeactivateCamera()
 	LocalPlayerController->SetViewTargetWithBlend( LocalPlayerActor, 0.3f );
 }
 
+FVector UMUIndicatorManageSubsystem::GetIndicatorTargetLocation(FName IndicatorID)
+{
+	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );
+    
+    if ( IsValid( SkillIndicator ) == false )
+    {
+    	return FVector::ZeroVector;
+    }
+
+	return SkillIndicator->GetTargetLocation();
+}
+
+FRotator UMUIndicatorManageSubsystem::GetIndicatorTargetRotation(FName IndicatorID)
+{
+	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );
+    
+	if ( IsValid( SkillIndicator ) == false )
+	{
+		return FRotator::ZeroRotator;
+	}
+
+	return SkillIndicator->GetTargetRotation();
+}
+
 void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
 {
 	AMUSkillIndicator* SkillIndicator = GetIndicatorByID( IndicatorID );

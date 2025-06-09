@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void CalculateIndicatorMesh() override;
 
+	virtual void SetupIndicatorInfo(APlayerController* OwnerController, float AttackDistance = 0, float InAOERadius = 0) override;
+
 public:
 	UPROPERTY( EditDefaultsOnly, Category = "Indicator Mesh" )
 	TObjectPtr<UStaticMeshComponent> IndicatorMeshComponent;

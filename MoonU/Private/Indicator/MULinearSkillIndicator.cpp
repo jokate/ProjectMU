@@ -32,7 +32,7 @@ void AMULinearSkillIndicator::CalculateIndicatorMesh()
 	);
 
 	//DrawDebugSphere( GetWorld(), WorldPos, 50, 50, FColor::White, true);
-	DrawDebugSphere( GetWorld(), GroundIntersection, 50, 50, FColor::Blue);
+	//DrawDebugSphere( GetWorld(), GroundIntersection, 50, 50, FColor::Blue);
 
 	APawn* OwnerPawn = PC->GetPawn();
 
@@ -45,8 +45,26 @@ void AMULinearSkillIndicator::CalculateIndicatorMesh()
 	FVector SkillDirection = GroundIntersection - OwnerPawn->GetActorLocation();
 	SkillDirection.Z = 0;
 	SkillDirection.Normalize();
-
+	
 	// 목표 회전 계산
-	FRotator TargetRotation = SkillDirection.Rotation();
-	SetActorRotation(TargetRotation);
+	FRotator TempTargetRotation = SkillDirection.Rotation();
+	SetActorRotation(TempTargetRotation);
+
+	TargetLocation = OwnerPawn->GetActorLocation() + SkillDirection * MaxAttackDistance;
+	TargetLocation.Z = GroundIntersection.Z;
+	
+	TargetRotation = TempTargetRotation;
+	
+	DrawDebugSphere( GetWorld(), TargetLocation, 50, 50, FColor::Blue);
+}
+
+void AMULinearSkillIndicator::SetupIndicatorInfo(APlayerController* OwnerController, float AttackDistance,
+	float InAOERadius)
+{
+	Super::SetupIndicatorInfo(OwnerController, AttackDistance, InAOERadius);
+
+	if ( IsValid( IndicatorMeshComponent ) == true )
+	{
+			
+	}
 }

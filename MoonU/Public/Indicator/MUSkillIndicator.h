@@ -23,10 +23,10 @@ public:
 
 	virtual void SetupIndicatorInfo( APlayerController* OwnerController, float AttackDistance = 0, float InAOERadius = 0 );
 
-	virtual FVector GetTargetLocation() { return FVector::ZeroVector; }
+	virtual FVector GetTargetLocation() { return TargetLocation; }
 
-	virtual FRotator GetTargetRotation() { return FRotator::ZeroRotator; }
-
+	virtual FRotator GetTargetRotation() { return TargetRotation; }
+	
 	virtual void ActivateSkillIndicator();
 	virtual void DeactivateSkillIndicator();
 
@@ -39,4 +39,10 @@ public :
 
 	UPROPERTY( BlueprintReadOnly )
 	float AOERadius;
+
+	UPROPERTY( VisibleAnywhere, Category = "Indicator Direction")
+	FVector TargetLocation = FVector::Zero();
+
+	UPROPERTY( VisibleAnywhere, Category = "Indicator Direction" )
+	FRotator TargetRotation = FRotator::ZeroRotator;
 };
