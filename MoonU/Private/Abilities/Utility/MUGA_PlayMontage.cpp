@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Interface/MotionWarpTarget.h"
 
 
 UMUGA_PlayMontage::UMUGA_PlayMontage()
@@ -26,7 +27,41 @@ void UMUGA_PlayMontage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	PlayMontageTask->OnBlendOut.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);
 	PlayMontageTask->OnCancelled.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);
 
+	const FGameplayAbilityTargetData* EventData = TriggerEventData->TargetData.Get(0);
+
+	if ( EventData != nullptr && bUseMotionWarp == true )
+	{
+		AActor* OwnerActor = GetOwningActorFromActorInfo();
+	
+		IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor);
+
+		const FHitResult* HitResult = EventData->GetHitResult();
+
+		if ( HitResult != nullptr && MotionWarp != nullptr )
+		{
+			FVector Direction = HitResult->ImpactPoint - OwnerActor->GetActorLocation();
+			FVector Point = HitResult->ImpactPoint;
+			MotionWarp->SetMotionWarpToCursorDirection(MotionWarpName, MotionWarpType, Point, Direction.Rotation() );
+		}
+	}
+
 	PlayMontageTask->ReadyForActivation();
+}
+
+void UMUGA_PlayMontage::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	AActor* OwnerActor = GetOwningActorFromActorInfo();
+	
+	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor);
+		
+	if (MotionWarp != nullptr)
+	{
+		MotionWarp->ReleaseMotionWarp(MotionWarpName);
+	}
+		
 }
 
 void UMUGA_PlayMontage::OnMontagePlayed()

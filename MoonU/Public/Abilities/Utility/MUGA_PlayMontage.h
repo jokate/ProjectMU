@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Data/MUEnum.h"
 #include "MUGA_PlayMontage.generated.h"
 
 /**
@@ -19,6 +20,8 @@ public :
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+	
 	UFUNCTION()
 	void OnMontagePlayed();
 
@@ -27,4 +30,13 @@ public :
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UAnimMontage> MontageToPlay;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bUseMotionWarp = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName MotionWarpName = NAME_None;
+
+	UPROPERTY(EditDefaultsOnly)
+	TEnumAsByte<EMotionWarpType> MotionWarpType = EMotionWarpType::NoneMotionWarp;
 };

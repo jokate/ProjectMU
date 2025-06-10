@@ -24,7 +24,8 @@ enum EMotionWarpType
 {
 	TranslationAndRotation,
 	TranslationOnly,
-	RotationOnly
+	RotationOnly,
+	NoneMotionWarp,
 };
 
 UENUM(BlueprintType)

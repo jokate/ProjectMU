@@ -111,7 +111,7 @@ void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 
 				//Hit가 된 캐릭터에게 즉각적으로 데미지를 가하는 로직.
 				UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
-				if (SourceASC)
+				if ( IsValid(SourceASC) == true ) 
 				{
 					FGameplayEffectContextHandle EffectContext = SourceASC->MakeEffectContext();
 					FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
