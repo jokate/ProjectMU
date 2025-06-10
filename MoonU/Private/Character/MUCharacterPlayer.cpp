@@ -208,9 +208,8 @@ void AMUCharacterPlayer::SetupCanLook( bool bInCanLook )
 	if ( IsValid(PC) == true )
 	{
 		PC->SetIgnoreLookInput( bInCanLook );
+		bUseControllerRotationYaw = !bInCanLook;
 	}
-
-	//if ( )
 }
 
 void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
