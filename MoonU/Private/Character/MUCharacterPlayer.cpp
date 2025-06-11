@@ -158,27 +158,6 @@ void AMUCharacterPlayer::SetMotionWarp(const FName InName, EMotionWarpType InMot
 	}
 }
 
-void AMUCharacterPlayer::SetMotionWarpToCursorDirection(const FName TargetName, EMotionWarpType InMotionWarpType,
-	const FVector& TargetLocation, const FRotator& TargetRotation)
-{
-	ReleaseMotionWarp(TargetName);
-
-	//SetActorRotation(TargetRotation);
-	
-	switch (InMotionWarpType)
-	{
-	case EMotionWarpType::TranslationAndRotation:
-		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation, TargetRotation);
-		break;
-	case EMotionWarpType::RotationOnly:
-		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,FVector::ZeroVector,TargetRotation);
-		break;
-	case EMotionWarpType::TranslationOnly:
-		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation,FRotator::ZeroRotator);
-		break;
-	}
-}
-
 int32 AMUCharacterPlayer::GetContinuousEnforcementLevel()
 {
 	if (IsValid(LevelUpComponent) == true)

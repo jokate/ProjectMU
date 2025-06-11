@@ -203,6 +203,23 @@ void AMUCharacterBase::OnLevelSetCallbackFunction(int32 InLevel)
 	}
 }
 
+void AMUCharacterBase::SetMotionWarpToCursorDirection(const FName TargetName, EMotionWarpType InMotionWarpType,
+	const FVector& TargetLocation, const FRotator& TargetRotation)
+{
+	switch (InMotionWarpType)
+	{
+	case EMotionWarpType::TranslationAndRotation:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation, TargetRotation);
+		break;
+	case EMotionWarpType::RotationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,FVector::ZeroVector,TargetRotation);
+		break;
+	case EMotionWarpType::TranslationOnly:
+		MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(TargetName,  TargetLocation,FRotator::ZeroRotator);
+		break;
+	}
+}
+
 UMotionWarpingComponent* AMUCharacterBase::GetMotionWarpComponent()
 {
 	return MotionWarpingComponent;

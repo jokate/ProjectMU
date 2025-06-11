@@ -95,6 +95,8 @@ protected:
 	void OnLevelSetCallbackFunction( int32 InLevel );
 	
 #pragma endregion
+
+	virtual void SetMotionWarpToCursorDirection(const FName TargetName, EMotionWarpType InMotionWarpType, const FVector& TargetLocation, const FRotator& TargetRotation) override;
 	
 protected :
 	UPROPERTY()

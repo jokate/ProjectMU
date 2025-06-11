@@ -42,8 +42,6 @@ public:
 	const FVector2D GetRecentlyMovedVector();
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
-
-	virtual void SetMotionWarpToCursorDirection( const FName TargetName, EMotionWarpType InMotionWarpType, const FVector& TargetLocation, const FRotator& TargetRotation ) override;
 	
 	void GASInputPressed(int32 InputId);
 
