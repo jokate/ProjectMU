@@ -45,6 +45,12 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+void UMUGA_ActivateSkill::ActivateSkill()
+{
+	ApplyCost( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
+	ApplyCooldown( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
+}
+
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,
                                          const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
