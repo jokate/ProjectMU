@@ -21,7 +21,7 @@ void UMUGA_InstantSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	// 스킬 활성화.
-	ActivateSkill();
+	CastSkill();
 }
 
 void UMUGA_InstantSkill::ActivateSkill()

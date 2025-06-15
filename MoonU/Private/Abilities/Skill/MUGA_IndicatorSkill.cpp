@@ -20,6 +20,12 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	if ( CanUseSkill() == false )
+	{
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false );
+		return;
+	}
+	
 	// Input에 대한 바인딩 처리 필요.
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
@@ -79,6 +85,8 @@ void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 
 void UMUGA_IndicatorSkill::ActivateSkill()
 {
+	Super::ActivateSkill();
+	
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
 	if ( IsValid(OwnerActor) == false )

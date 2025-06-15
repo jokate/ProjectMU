@@ -45,6 +45,33 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+bool UMUGA_ActivateSkill::CanUseSkill()
+{
+	if ( CheckCooldown(CurrentSpecHandle, CurrentActorInfo ) == false )
+	{
+		return false;
+	}
+
+	if ( CheckCooldown(CurrentSpecHandle, CurrentActorInfo ) == false )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void UMUGA_ActivateSkill::CastSkill()
+{
+	if ( CanUseSkill() == false )
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false );
+	}
+	else
+	{
+		ActivateSkill();
+	}
+}
+
 void UMUGA_ActivateSkill::ActivateSkill()
 {
 	ApplyCost( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );

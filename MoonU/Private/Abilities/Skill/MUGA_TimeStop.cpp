@@ -36,6 +36,8 @@ void UMUGA_TimeStop::OnTimeFinished()
 
 void UMUGA_TimeStop::ActivateSkill()
 {
+	Super::ActivateSkill();
+	
 	UWorld* World = GetWorld();
 	if ( IsValid(World) == false )
 	{
