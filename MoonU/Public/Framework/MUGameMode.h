@@ -40,6 +40,12 @@ protected :
 
 	virtual void UnregisterTimeStopTarget(AActor* InActor) override;
 #pragma endregion ITimeStopper
+
+#pragma region IWorldManager
+	// 월드 관련한 부분에 대해서 로드 언로드 하는 부분에 대해서 관리하는 거가 필요함.
+	// Register 되고 관리가 되어야 하나?
+	// 로컬 플레이 기준으로 하면..
+#pragma endregion IWorldManager
 protected :
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UTimeWindManager> TimeWindManager;

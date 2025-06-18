@@ -244,3 +244,14 @@ public :
 	FMUSkillInput SkillInput;
 };
 
+USTRUCT( BLueprintType )
+struct FMULevelData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY( EditAnywhere )
+	TSoftObjectPtr<UWorld> RoomLevel;
+
+	UPROPERTY( EditAnywhere )
+	
+};
