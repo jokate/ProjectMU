@@ -251,7 +251,5 @@ struct FMULevelData : public FTableRowBase
 
 	UPROPERTY( EditAnywhere )
 	TSoftObjectPtr<UWorld> RoomLevel;
-
-	UPROPERTY( EditAnywhere )
 	
 };

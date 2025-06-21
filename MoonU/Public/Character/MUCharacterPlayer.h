@@ -125,6 +125,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enforcement", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UEnforcementComponent> EnforcementComponent;
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "World Partition" )
+	TObjectPtr<class UWorldPartitionStreamingSourceComponent> StreamingComponent;
+
 protected:
 	UPROPERTY()
 	FVector2D RecentlyMovedVector;

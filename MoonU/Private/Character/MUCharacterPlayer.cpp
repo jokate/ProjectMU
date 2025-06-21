@@ -18,6 +18,7 @@
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Components/MULevelUpComponent.h"
+#include "Components/WorldPartitionStreamingSourceComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
@@ -44,6 +45,8 @@ AMUCharacterPlayer::AMUCharacterPlayer()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 	EnforcementComponent = CreateDefaultSubobject<UEnforcementComponent>("EnforcementComponent");
+
+	StreamingComponent = CreateDefaultSubobject<UWorldPartitionStreamingSourceComponent>("StreamingComponent");
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +58,8 @@ void AMUCharacterPlayer::BeginPlay()
 	SetupInputByID(CharacterID);
 
 	LevelUpComponent->OnLevelUpEventCallback.AddDynamic(this, &AMUCharacterPlayer::OnLevelUpCallbackFunction);
+
+	StreamingComponent->EnableStreamingSource();
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -65,6 +70,8 @@ void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	}
 
 	LevelUpComponent->OnLevelUpEventCallback.RemoveAll(this);
+
+	StreamingComponent->DisableStreamingSource();
 	
   	Super::EndPlay(EndPlayReason);
 }
