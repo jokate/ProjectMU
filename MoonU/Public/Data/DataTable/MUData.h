@@ -251,5 +251,26 @@ struct FMULevelData : public FTableRowBase
 
 	UPROPERTY( EditAnywhere )
 	TSoftObjectPtr<UWorld> RoomLevel;
+};
+
+USTRUCT( BlueprintType )
+struct FMUStageInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditAnywhere )
+	int32 StageLevel = 0;
+
+	UPROPERTY( EditAnywhere )
+	TArray<FName> StageIDs;
+};
+
+USTRUCT( BlueprintType )
+struct FMUStageData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
 	
 };

@@ -3,6 +3,28 @@
 
 #include "Components/StageManagingComponent.h"
 
+void UStageManagingComponent::BeginPlay()
+{
+}
+
+void UStageManagingComponent::RegisterActor(AActor* NeedToRegActor)
+{
+	if ( IsValid( NeedToRegActor ) == true )
+	{
+		OwnerActor = NeedToRegActor;
+	}
+}
+
+void UStageManagingComponent::CheckSpawn()
+{
+	if ( IsValid( OwnerActor ) == false )
+	{
+		return;
+	}
+
+	FVector ActorLocation = OwnerActor->GetActorLocation();
+}
+
 void UStageManagingComponent::StartStage(FName StageName)
 {
 	// 레벨로딩 혹은 실질적인 스테이지 액터 스포닝. (몬스터 스포너나 혹은 액티베이션)
