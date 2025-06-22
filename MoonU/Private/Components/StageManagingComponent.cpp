@@ -3,7 +3,9 @@
 
 #include "Components/StageManagingComponent.h"
 
+#include "ParticleHelper.h"
 #include "Engine/LevelStreamingDynamic.h"
+#include "Library/MUFunctionLibrary.h"
 
 void UStageManagingComponent::BeginPlay()
 {
@@ -37,7 +39,50 @@ void UStageManagingComponent::CheckSpawn()
 	
 	for ( const FName& StageName : StagePools )
 	{
+		FMUStageData StageData;
+		if ( UMUFunctionLibrary::GetStageData( this, StageName, StageData )  == false )
+		{
+			continue;
+		}
 		
+		float Magnitude = FVector::Distance(StageData.StreamingPos, ActorLocation);
+
+		// 있는 경우.
+		if ( StreamedLevelList.Contains(StageName) == true )
+		{
+			// 이미 스폰된 경우.
+			ULevelStreamingDynamic* StreamingDynamic = StreamedLevelList[StageName];
+
+			if ( IsValid(StreamingDynamic) == false)
+			{
+				continue;
+			}
+			
+
+			if ( Magnitude > DestroyDistance )
+			{
+				StreamingDynamic->SetShouldBeLoaded( false );
+				StreamingDynamic->SetShouldBeVisible( false );
+				StreamingDynamic->SetIsRequestingUnloadAndRemoval( true );
+
+				StreamedLevelList.Remove( StageName );
+			}
+		}
+		else
+		{
+			// 없는 경우.
+			if ( Magnitude <= SpawnDistance )
+			{
+				bool OutSuccess = false;
+				ULevelStreamingDynamic* NewlyStreaming = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
+					this, StageData.RoomLevel, StageData.StreamingPos, FRotator::ZeroRotator, OutSuccess );
+
+				if ( OutSuccess == true )
+				{
+					StreamedLevelList.Add( StageName, NewlyStreaming );
+				}
+ 			}
+		}
 	}
 }
 
