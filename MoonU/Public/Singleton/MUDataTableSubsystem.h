@@ -17,20 +17,27 @@ class MOONU_API UMUDataTableSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public :
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION( BlueprintCallable )
 	virtual bool GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION( BlueprintCallable )
 	virtual bool GetCharacterInfoData(int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION( BlueprintCallable )
 	virtual bool GetEnforcementData(int32 InEnforcementID, FMUEnforcementData& OutEnforcementData);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION( BlueprintCallable )
 	virtual bool GetEnforcementDropData(int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
 
 	UFUNCTION( BlueprintCallable )
-	virtual bool GetSkillData( FName SkillName, FMUSkillData& OutSkillData );	
+	virtual bool GetSkillData( FName SkillName, FMUSkillData& OutSkillData );
+
+	UFUNCTION( BlueprintCallable )
+	virtual bool GetStageInfoData( FName StageInfoName, FMUStageInfo& OutStageInfo );
+
+	UFUNCTION( BlueprintCallable )
+	virtual bool GetStageData( FName StageName, FMUStageData& OutStageData );
+	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
@@ -64,4 +71,16 @@ protected :
 
 	UPROPERTY()
 	TObjectPtr<UDataTable> SkillDataTable;
+
+	UPROPERTY( Config )
+	TSoftObjectPtr<UDataTable> StageInfoDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> StageInfoDataTable;
+
+	UPROPERTY( Config )
+	TSoftObjectPtr<UDataTable> StageDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> StageDataTable;
 };

@@ -144,6 +144,44 @@ bool UMUFunctionLibrary::GetSkillData(UObject* Object, FName SkillID, FMUSkillDa
 	return DataTableSubsystem->GetSkillData(SkillID, OutSkillData);
 }
 
+bool UMUFunctionLibrary::GetStageInfoData(UObject* Object, FName StageInfoName, FMUStageInfo& OutStageInfo)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetStageInfoData(StageInfoName, OutStageInfo);
+}
+
+bool UMUFunctionLibrary::GetStageData(UObject* Object, FName StageName, FMUStageData& OutStageData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetStageData(StageName, OutStageData);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {

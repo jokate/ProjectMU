@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/LevelStreamingDynamic.h"
 #include "StageManagingComponent.generated.h"
 
 /**
@@ -19,12 +20,13 @@ class MOONU_API UStageManagingComponent : public UActorComponent
 public :
 
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay( const EEndPlayReason::Type EndPlayReason ) override;
 	virtual void RegisterActor( AActor* NeedToRegActor );
 
+	UFUNCTION()
 	void CheckSpawn();
-	// 등록하는 부분이 필요한 건 사실임.
 	
+	// 등록하는 부분이 필요한 건 사실임.
 	virtual void StartStage( FName StageName );
 
 	virtual void EndStage();
@@ -53,19 +55,15 @@ public :
 	UPROPERTY( VisibleAnywhere )
 	AActor* OwnerActor;
 
-	//임의적인 설정값.
-	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	float SpawnDistance = 1000.f;
-
-	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	float DestroyDistance = 2000.f;
-
 	// 매 틱마다 체크하는 건 그럴 수 있음.
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float SpawnTimeInterval = 0.5f;
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	TArray<FName> StagePools;
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly)
+	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;
 	
 	FTimerHandle SpawnCheckTimer;
 };

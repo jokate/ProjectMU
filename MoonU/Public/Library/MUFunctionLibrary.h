@@ -60,5 +60,11 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool GetSkillData( UObject* Object, FName SkillID, FMUSkillData& OutSkillData);
+
+	UFUNCTION( BlueprintPure )
+	static bool GetStageInfoData( UObject* Object, FName StageInfoName, FMUStageInfo& OutStageInfo );
+
+	UFUNCTION( BlueprintPure )
+	static bool GetStageData( UObject* Object, FName StageName, FMUStageData& OutStageData );
 #pragma endregion
 };

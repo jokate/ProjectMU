@@ -3,8 +3,19 @@
 
 #include "Components/StageManagingComponent.h"
 
+#include "Engine/LevelStreamingDynamic.h"
+
 void UStageManagingComponent::BeginPlay()
 {
+	Super::BeginPlay();
+
+	GetWorld()->GetTimerManager().SetTimer(SpawnCheckTimer, this, &UStageManagingComponent::CheckSpawn, SpawnTimeInterval, true );
+}
+
+void UStageManagingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	GetWorld()->GetTimerManager().ClearTimer( SpawnCheckTimer ); 
+	Super::EndPlay(EndPlayReason);
 }
 
 void UStageManagingComponent::RegisterActor(AActor* NeedToRegActor)
@@ -21,8 +32,13 @@ void UStageManagingComponent::CheckSpawn()
 	{
 		return;
 	}
-
+	
 	FVector ActorLocation = OwnerActor->GetActorLocation();
+	
+	for ( const FName& StageName : StagePools )
+	{
+		
+	}
 }
 
 void UStageManagingComponent::StartStage(FName StageName)

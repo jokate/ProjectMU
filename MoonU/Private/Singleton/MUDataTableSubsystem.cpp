@@ -114,7 +114,7 @@ bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkill
 		UDataTable* SkillDataTableLoaded = SkillDataTablePath.LoadSynchronous();
 		if ( IsValid(SkillDataTableLoaded) == false)
 		{
-			UE_LOG( LogTemp, Log, TEXT("Enforcement Drop DataTable Is Not Valid") );
+			UE_LOG( LogTemp, Log, TEXT("Skill DataTable Is Not Valid") );
 			return false;
 		}
 
@@ -130,6 +130,56 @@ bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkill
 
 	OutSkillData = *SkillData;
 
+	return true;
+}
+
+bool UMUDataTableSubsystem::GetStageInfoData(FName StageInfoName, FMUStageInfo& OutStageInfo)
+{
+	if ( IsValid( StageInfoDataTable ) == false )
+	{
+		UDataTable* StageInfoDataTableLoaded = StageInfoDataTablePath.LoadSynchronous();
+
+		if ( IsValid( StageInfoDataTableLoaded ) == false ) 
+		{
+			UE_LOG( LogTemp, Log, TEXT("StageInfo DataTable Is Not Valid") );
+			return false;
+		}
+
+		StageInfoDataTable = StageInfoDataTableLoaded;
+	}
+
+	FMUStageInfo* StageInfoData = StageInfoDataTable->FindRow<FMUStageInfo>( StageInfoName, TEXT(""));
+
+	if ( StageInfoData == nullptr )
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStageData)
+{
+	if ( IsValid( StageDataTable ) == false )
+	{
+		UDataTable* StageDataTableLoaded = StageDataTablePath.LoadSynchronous();
+
+		if ( IsValid( StageDataTableLoaded ) == false ) 
+		{
+			UE_LOG( LogTemp, Log, TEXT("Stage DataTable Is Not Valid") );
+			return false;
+		}
+
+		StageInfoDataTable = StageDataTableLoaded;
+	}
+
+	FMUStageData* StageData = StageInfoDataTable->FindRow<FMUStageData>( StageName, TEXT(""));
+
+	if ( StageData == nullptr )
+	{
+		return false;
+	}
+	
 	return true;
 }
 

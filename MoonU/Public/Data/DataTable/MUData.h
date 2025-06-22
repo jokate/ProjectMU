@@ -272,5 +272,13 @@ struct FMUStageData : public FTableRowBase
 	GENERATED_BODY()
 
 public :
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	TSoftObjectPtr<UWorld> RoomLevel;
 	
+	//임의적인 설정값.
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	float SpawnDistance = 1000.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	float DestroyDistance = 2000.f;
 };
