@@ -49,6 +49,8 @@ public:
 
 	virtual const int32 GetPlayerCharacterID() override { return GetCharacterID(); }
 
+	virtual void RegisterLocalStage();
+
 #pragma region Enforcement
 	UFUNCTION()
 	virtual void OnLevelUpCallbackFunction(int32 InLevel);

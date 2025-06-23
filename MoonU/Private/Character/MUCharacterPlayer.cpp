@@ -20,6 +20,8 @@
 #include "Components/MULevelUpComponent.h"
 #include "Components/WorldPartitionStreamingSourceComponent.h"
 #include "Data/DataTable/MUData.h"
+#include "GameFramework/GameModeBase.h"
+#include "Interface/StageManager.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
@@ -60,6 +62,8 @@ void AMUCharacterPlayer::BeginPlay()
 	LevelUpComponent->OnLevelUpEventCallback.AddDynamic(this, &AMUCharacterPlayer::OnLevelUpCallbackFunction);
 
 	StreamingComponent->EnableStreamingSource();
+
+	RegisterLocalStage();
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -256,6 +260,25 @@ void AMUCharacterPlayer::GASInputReleased(int32 InputId)
 			ASC->AbilitySpecInputReleased(*Spec);
 		}
 	}
+}
+
+void AMUCharacterPlayer::RegisterLocalStage()
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if ( IsValid(GameMode) == false )
+	{
+		return;
+	}
+	
+	IStageManager* StageManager = Cast<IStageManager>(GameMode);
+
+	if ( StageManager == nullptr )
+	{
+		return;
+	}
+
+	StageManager->RegisterOwnerActor( this );
 }
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)

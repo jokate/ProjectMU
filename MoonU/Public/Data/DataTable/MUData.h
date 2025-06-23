@@ -264,6 +264,9 @@ public :
 
 	UPROPERTY( EditAnywhere )
 	TArray<FName> StageIDs;
+
+	UPROPERTY( EditAnywhere )
+	int32 MaxStage = 0;
 };
 
 USTRUCT( BlueprintType )

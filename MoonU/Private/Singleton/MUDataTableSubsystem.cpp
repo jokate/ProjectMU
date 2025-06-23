@@ -154,6 +154,8 @@ bool UMUDataTableSubsystem::GetStageInfoData(FName StageInfoName, FMUStageInfo& 
 	{
 		return false;
 	}
+
+	OutStageInfo = *StageInfoData;
 	
 	return true;
 }
@@ -179,6 +181,8 @@ bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStage
 	{
 		return false;
 	}
+
+	OutStageData = *StageData;
 	
 	return true;
 }

@@ -11,7 +11,7 @@ void UStageManagingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorld()->GetTimerManager().SetTimer(SpawnCheckTimer, this, &UStageManagingComponent::CheckSpawn, SpawnTimeInterval, true );
+	SetupStage();
 }
 
 void UStageManagingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -20,11 +20,37 @@ void UStageManagingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void UStageManagingComponent::RegisterActor(AActor* NeedToRegActor)
+void UStageManagingComponent::RegisterOwnerActor(AActor* NeedToRegActor)
 {
 	if ( IsValid( NeedToRegActor ) == true )
 	{
 		OwnerActor = NeedToRegActor;
+	}
+	
+	GetWorld()->GetTimerManager().SetTimer(SpawnCheckTimer, this, &UStageManagingComponent::CheckSpawn, SpawnTimeInterval, true );
+}
+
+void UStageManagingComponent::SetupStage()
+{
+	FMUStageInfo StageInfo;
+	if ( UMUFunctionLibrary::GetStageInfoData( this, StageName, StageInfo) == false )
+	{
+		return;
+	}
+
+	const int32 StageNum = StageInfo.StageIDs.Num();
+	for ( int32 i = 0; i < StageInfo.MaxStage; ++i )
+	{
+		int32 RandRange = FMath::RandRange( 0, StageNum - 1 );
+
+		FName& RandSeed = StageInfo.StageIDs[RandRange];
+
+		if ( StagePools.Contains( RandSeed ) == true )
+		{
+			continue;
+		}
+
+		StagePools.Add(RandSeed);
 	}
 }
 
@@ -37,10 +63,10 @@ void UStageManagingComponent::CheckSpawn()
 	
 	FVector ActorLocation = OwnerActor->GetActorLocation();
 	
-	for ( const FName& StageName : StagePools )
+	for ( const FName& TempStageName : StagePools )
 	{
 		FMUStageData StageData;
-		if ( UMUFunctionLibrary::GetStageData( this, StageName, StageData )  == false )
+		if ( UMUFunctionLibrary::GetStageData( this, TempStageName, StageData )  == false )
 		{
 			continue;
 		}
@@ -48,10 +74,10 @@ void UStageManagingComponent::CheckSpawn()
 		float Magnitude = FVector::Distance(StageData.StreamingPos, ActorLocation);
 
 		// 있는 경우.
-		if ( StreamedLevelList.Contains(StageName) == true )
+		if ( StreamedLevelList.Contains(TempStageName) == true )
 		{
 			// 이미 스폰된 경우.
-			ULevelStreamingDynamic* StreamingDynamic = StreamedLevelList[StageName];
+			ULevelStreamingDynamic* StreamingDynamic = StreamedLevelList[TempStageName];
 
 			if ( IsValid(StreamingDynamic) == false)
 			{
@@ -65,7 +91,7 @@ void UStageManagingComponent::CheckSpawn()
 				StreamingDynamic->SetShouldBeVisible( false );
 				StreamingDynamic->SetIsRequestingUnloadAndRemoval( true );
 
-				StreamedLevelList.Remove( StageName );
+				StreamedLevelList.Remove( TempStageName );
 			}
 		}
 		else
@@ -79,17 +105,17 @@ void UStageManagingComponent::CheckSpawn()
 
 				if ( OutSuccess == true )
 				{
-					StreamedLevelList.Add( StageName, NewlyStreaming );
+					StreamedLevelList.Add( TempStageName, NewlyStreaming );
 				}
  			}
 		}
 	}
 }
 
-void UStageManagingComponent::StartStage(FName StageName)
+void UStageManagingComponent::StartStage(FName InStageName)
 {
 	// 레벨로딩 혹은 실질적인 스테이지 액터 스포닝. (몬스터 스포너나 혹은 액티베이션)
-	CurrentStageName = StageName;
+	CurrentStageName = InStageName;
 	
 	if ( OnStageStarted.IsBound() == true )
 	{

@@ -27,11 +27,17 @@ void AMUEnemySpawner::SpawnTimerCheckFunction()
 
 void AMUEnemySpawner::SpawnEnemy()
 {
-	float RandomPositionOffset = FMath::RandRange(0.f, SpawnRadius);
+	if ( IsValid( GetWorld() ) == false )
+	{
+		return;
+	}
+	
+ 	float RandomPositionOffset = FMath::RandRange(0.f, SpawnRadius);
 	FVector SpawnLocation = GetActorLocation() + FVector::OneVector * RandomPositionOffset;
 
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(SpawnLocation);
+	
 	ACharacter* DeferredActor = GetWorld()->SpawnActorDeferred<ACharacter>(NeedToSpawnActorClass, SpawnTransform, this, nullptr);
 
 	if (IsValid(DeferredActor) == false )

@@ -4,13 +4,15 @@
 #include "Framework/MUGameMode.h"
 
 #include "Character/MUCharacterPlayer.h"
+#include "Components/StageManagingComponent.h"
 #include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
 
 AMUGameMode::AMUGameMode()
 {
-	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>("TimeWindManager");
-	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>("TimeStopManager");
+	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>(TEXT("TimeWindManager"));
+	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>(TEXT("TimeStopManager"));
+	StageManagingComponent = CreateDefaultSubobject<UStageManagingComponent>(TEXT("StageManagingComponent"));
 }
 
 void AMUGameMode::TimeWindActivate()
@@ -51,6 +53,16 @@ void AMUGameMode::RegisterTimerStopTarget(AActor* InActor)
 void AMUGameMode::UnregisterTimeStopTarget(AActor* InActor)
 {
 	TimeStopManager->UnregisterTimeStopTarget(InActor);
+}
+
+void AMUGameMode::RegisterOwnerActor(AActor* LocalPlayer)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return;
+	}
+
+	StageManagingComponent->RegisterOwnerActor(LocalPlayer);
 }
 
 void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)

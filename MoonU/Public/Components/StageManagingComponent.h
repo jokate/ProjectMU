@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/LevelStreamingDynamic.h"
+#include "Interface/StageManager.h"
 #include "StageManagingComponent.generated.h"
 
 /**
@@ -14,20 +15,20 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnStageStarted, FName, StageName )
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnStageCleared, FName, StageName );
 
 UCLASS()
-class MOONU_API UStageManagingComponent : public UActorComponent
+class MOONU_API UStageManagingComponent : public UActorComponent, public IStageManager
 {
 	GENERATED_BODY()
 public :
-
 	virtual void BeginPlay() override;
 	virtual void EndPlay( const EEndPlayReason::Type EndPlayReason ) override;
-	virtual void RegisterActor( AActor* NeedToRegActor );
+	virtual void RegisterOwnerActor( AActor* NeedToRegActor ) override;
+	virtual void SetupStage();
 
 	UFUNCTION()
 	void CheckSpawn();
 	
 	// 등록하는 부분이 필요한 건 사실임.
-	virtual void StartStage( FName StageName );
+	virtual void StartStage( FName InStageName );
 
 	virtual void EndStage();
 	
@@ -60,6 +61,9 @@ public :
 	float SpawnTimeInterval = 0.5f;
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	FName StageName = NAME_None;
+	
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	TArray<FName> StagePools;
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
@@ -72,4 +76,6 @@ public :
 	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;
 	
 	FTimerHandle SpawnCheckTimer;
+
+	//FRandomStream SamplingSeed;
 };
