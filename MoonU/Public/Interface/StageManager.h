@@ -24,4 +24,8 @@ class MOONU_API IStageManager
 public:
 
 	virtual void RegisterOwnerActor( AActor* LocalPlayer ) = 0;
+
+	virtual void SendClearSpawner( FName ClearedSpawnID ) = 0;
+
+	virtual bool IsSpawnerCleared( FName SpawnerID ) = 0;
 };

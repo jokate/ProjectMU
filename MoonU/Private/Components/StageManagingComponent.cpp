@@ -30,6 +30,16 @@ void UStageManagingComponent::RegisterOwnerActor(AActor* NeedToRegActor)
 	GetWorld()->GetTimerManager().SetTimer(SpawnCheckTimer, this, &UStageManagingComponent::CheckSpawn, SpawnTimeInterval, true );
 }
 
+void UStageManagingComponent::SendClearSpawner(FName ClearedSpawnID)
+{
+	if ( ClearedMonsterSpawner.Contains(ClearedSpawnID) == true)
+	{
+		return;
+	}
+
+	ClearedMonsterSpawner.Add(ClearedSpawnID);
+}
+
 void UStageManagingComponent::SetupStage()
 {
 	FMUStageInfo StageInfo;

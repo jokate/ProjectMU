@@ -22,6 +22,8 @@ public :
 	virtual void BeginPlay() override;
 	virtual void EndPlay( const EEndPlayReason::Type EndPlayReason ) override;
 	virtual void RegisterOwnerActor( AActor* NeedToRegActor ) override;
+	virtual void SendClearSpawner( FName ClearedSpawnID ) override;
+	virtual bool IsSpawnerCleared(FName SpawnerID) override { return ClearedMonsterSpawner.Contains(SpawnerID);}
 	virtual void SetupStage();
 
 	UFUNCTION()
@@ -56,6 +58,9 @@ public :
 	UPROPERTY( VisibleAnywhere )
 	AActor* OwnerActor;
 
+	UPROPERTY( VisibleAnywhere )
+	TSet<FName> ClearedMonsterSpawner;
+	
 	// 매 틱마다 체크하는 건 그럴 수 있음.
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float SpawnTimeInterval = 0.5f;

@@ -6,6 +6,7 @@
 #include "AttributeSet.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "Character/MUCharacterBase.h"
 #include "Data/MUEnum.h"
 #include "UObject/Object.h"
 #include "Engine/DataTable.h"
@@ -280,4 +281,27 @@ public :
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	FVector StreamingPos = FVector::ZeroVector;
+};
+
+USTRUCT( BlueprintType )
+struct FMUMonsterSpawnData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly )
+	TSubclassOf<AMUCharacterBase> CharacterClass;
+
+	UPROPERTY( EditDefaultsOnly )
+	int32 SpawnCount = 0;
+};
+
+USTRUCT( BlueprintType )
+struct FMUMonsterSpawnList : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	TArray<FMUMonsterSpawnData> SpawnDatas;
 };

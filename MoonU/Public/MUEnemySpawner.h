@@ -24,7 +24,13 @@ protected:
 	virtual void BeginPlay() override;
 	
 protected :
-	FTimerHandle SpawnTimerHandle;
+	// 모드 상에서 관리될 명목하의 ID ( 해당 부분은, 다르게 설정해야 합니다. )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FName SpawnerID = NAME_None;
+
+	// 실제 스폰
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FName ReferenceID = NAME_None;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnRadius = 10.f;
@@ -36,7 +42,7 @@ protected :
 	int32 TargetActorLevel = 0 ;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<AActor> SpawnedActor;
+	TArray<AActor> SpawnedActor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnCheckTimerInterval = 1.0f;
