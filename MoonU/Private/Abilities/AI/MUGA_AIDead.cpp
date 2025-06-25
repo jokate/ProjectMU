@@ -8,6 +8,7 @@
 #include "Abilities/AT/MUAT_CheckGoldenTime.h"
 #include "AI/MUAIController.h"
 #include "GameFramework/Character.h"
+#include "Interface/MUEnemy.h"
 
 void UMUGA_AIDead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                    const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -41,6 +42,13 @@ void UMUGA_AIDead::OnGoldenTimeFinished()
 	
 	AActor* TargetActor = CurrentActorInfo->AvatarActor.Get();
 
+	IMUEnemy* Enemy =  Cast<IMUEnemy>(TargetActor);
+
+	if ( Enemy != nullptr )
+	{
+		Enemy->GetEnemyDeath().Broadcast(TargetActor);	
+	}
+	
 	if (TargetActor)
 	{
 		TargetActor->Destroy();

@@ -187,7 +187,7 @@ bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStage
 	return true;
 }
 
-bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData)
+bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData)
 {
 	if ( IsValid( MonsterSpawnDataTable ) == false )
 	{
@@ -202,7 +202,7 @@ bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpa
 		MonsterSpawnDataTable = SpawnerDataTableLoaded;
 	}
 
-	FMUMonsterSpawnData* SpawnerData = StageInfoDataTable->FindRow<FMUMonsterSpawnData>( SpawnerName, TEXT(""));
+	FMUMonsterSpawnList* SpawnerData = MonsterSpawnDataTable->FindRow<FMUMonsterSpawnList>( SpawnerName, TEXT(""));
 
 	if ( SpawnerData == nullptr )
 	{

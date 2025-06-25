@@ -15,10 +15,13 @@ public:
 	// Sets default values for this actor's properties
 	AMUEnemySpawner();
 
-	virtual void SpawnTimerCheckFunction();
+	virtual void CheckSpawn();
 	
 	virtual void SpawnEnemy();
 
+	UFUNCTION()
+	virtual void OnMonsterDeath( AActor* DeadActor );
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,13 +39,10 @@ protected :
 	float SpawnRadius = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> NeedToSpawnActorClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 TargetActorLevel = 0 ;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<AActor*> SpawnedActor;
+	TSet<AActor*> SpawnedActor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnCheckTimerInterval = 1.0f;

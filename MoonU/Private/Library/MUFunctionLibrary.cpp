@@ -182,7 +182,7 @@ bool UMUFunctionLibrary::GetStageData(UObject* Object, FName StageName, FMUStage
 	return DataTableSubsystem->GetStageData(StageName, OutStageData);
 }
 
-bool UMUFunctionLibrary::GetMonsterData(UObject* Object, FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData)
+bool UMUFunctionLibrary::GetMonsterData(UObject* Object, FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData)
 {
 	UGameInstance* GameInstance = GetGameInstance(Object);
 

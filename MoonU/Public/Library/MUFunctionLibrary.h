@@ -68,6 +68,6 @@ public :
 	static bool GetStageData( UObject* Object, FName StageName, FMUStageData& OutStageData );
 
 	UFUNCTION( BlueprintPure )
-	static bool GetMonsterData( UObject* Object, FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData );
+	static bool GetMonsterData( UObject* Object, FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData );
 #pragma endregion
 };

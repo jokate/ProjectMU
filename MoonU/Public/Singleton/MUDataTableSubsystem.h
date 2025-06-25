@@ -39,7 +39,7 @@ public :
 	virtual bool GetStageData( FName StageName, FMUStageData& OutStageData );
 
 	UFUNCTION( BlueprintCallable )
-	virtual bool GetMonsterSpawnData( FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData );
+	virtual bool GetMonsterSpawnData( FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
