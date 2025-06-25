@@ -17,10 +17,14 @@ class UMUEnemy : public UInterface
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnEnemyDeath, AActor*, Self );
+
 class MOONU_API IMUEnemy
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	
 };
+

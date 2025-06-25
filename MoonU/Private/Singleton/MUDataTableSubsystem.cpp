@@ -187,6 +187,33 @@ bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStage
 	return true;
 }
 
+bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData)
+{
+	if ( IsValid( MonsterSpawnDataTable ) == false )
+	{
+		UDataTable* SpawnerDataTableLoaded = MonsterSpawnDataTablePath.LoadSynchronous();
+
+		if ( IsValid( SpawnerDataTableLoaded ) == false ) 
+		{
+			UE_LOG( LogTemp, Log, TEXT("Monster DataTable Is Not Valid") );
+			return false;
+		}
+
+		MonsterSpawnDataTable = SpawnerDataTableLoaded;
+	}
+
+	FMUMonsterSpawnData* SpawnerData = StageInfoDataTable->FindRow<FMUMonsterSpawnData>( SpawnerName, TEXT(""));
+
+	if ( SpawnerData == nullptr )
+	{
+		return false;
+	}
+
+	OutSpawnerData = *SpawnerData;
+	
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

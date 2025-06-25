@@ -182,6 +182,25 @@ bool UMUFunctionLibrary::GetStageData(UObject* Object, FName StageName, FMUStage
 	return DataTableSubsystem->GetStageData(StageName, OutStageData);
 }
 
+bool UMUFunctionLibrary::GetMonsterData(UObject* Object, FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetMonsterSpawnData( SpawnerName, OutSpawnerData);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {

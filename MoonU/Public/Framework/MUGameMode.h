@@ -45,6 +45,10 @@ protected :
 #pragma region IStageManager
 	
 	virtual void RegisterOwnerActor( AActor* LocalPlayer ) override;
+	
+	virtual void SendClearSpawner( FName ClearedSpawnID ) override;
+
+	virtual bool IsSpawnerCleared( FName SpawnerID ) override;
 
 #pragma endregion IStageManager
 

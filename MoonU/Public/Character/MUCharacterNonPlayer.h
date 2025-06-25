@@ -27,6 +27,11 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue) override;
+
+public :
+
+	UPROPERTY( BlueprintAssignable )
+	FOnEnemyDeath EnemyDeath;
 	
 protected :
 	UPROPERTY(VisibleAnywhere)

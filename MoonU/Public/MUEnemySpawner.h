@@ -42,7 +42,7 @@ protected :
 	int32 TargetActorLevel = 0 ;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<AActor> SpawnedActor;
+	TArray<AActor*> SpawnedActor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnCheckTimerInterval = 1.0f;

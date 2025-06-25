@@ -26,6 +26,10 @@ AMUCharacterNonPlayer::AMUCharacterNonPlayer()
 
 void AMUCharacterNonPlayer::OnDead(const FGameplayEventData* Data)
 {
+	if ( EnemyDeath.IsBound() == true )
+	{
+		EnemyDeath.Broadcast( this );
+	}
 }
 
 

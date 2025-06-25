@@ -50,6 +50,7 @@ void AMUEnemySpawner::SpawnEnemy()
 	}
 
 	// 스포너 로직 재정비 필요.
+	
  	/*
  	float RandomPositionOffset = FMath::RandRange(0.f, SpawnRadius);
 	FVector SpawnLocation = GetActorLocation() + FVector::OneVector * RandomPositionOffset;

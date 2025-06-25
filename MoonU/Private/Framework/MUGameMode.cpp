@@ -65,6 +65,26 @@ void AMUGameMode::RegisterOwnerActor(AActor* LocalPlayer)
 	StageManagingComponent->RegisterOwnerActor(LocalPlayer);
 }
 
+void AMUGameMode::SendClearSpawner(FName ClearedSpawnID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return;
+	}
+
+	StageManagingComponent->SendClearSpawner( ClearedSpawnID );
+}
+
+bool AMUGameMode::IsSpawnerCleared(FName SpawnerID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return false;
+	}
+
+	return StageManagingComponent->IsSpawnerCleared( SpawnerID );
+}
+
 void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
 {
 	APlayerController* MyPlayerController = GetWorld()->GetFirstPlayerController();

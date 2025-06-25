@@ -37,6 +37,9 @@ public :
 
 	UFUNCTION( BlueprintCallable )
 	virtual bool GetStageData( FName StageName, FMUStageData& OutStageData );
+
+	UFUNCTION( BlueprintCallable )
+	virtual bool GetMonsterSpawnData( FName SpawnerName, FMUMonsterSpawnData& OutSpawnerData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -83,4 +86,10 @@ protected :
 
 	UPROPERTY()
 	TObjectPtr<UDataTable> StageDataTable;
+
+	UPROPERTY( Config )
+	TSoftObjectPtr<UDataTable> MonsterSpawnDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> MonsterSpawnDataTable;
 };
