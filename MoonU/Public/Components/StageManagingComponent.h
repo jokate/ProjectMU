@@ -72,10 +72,10 @@ public :
 	TArray<FName> StagePools;
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	float SpawnDistance = 1000.f;
+	float SpawnDistance = 12800.f;
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	float DestroyDistance = 2000.f;
+	float DestroyDistance = 25600.f;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly)
 	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;

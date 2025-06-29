@@ -122,3 +122,15 @@ void AMUEnemySpawner::BeginPlay()
 
 	CheckSpawn();
 }
+
+void AMUEnemySpawner::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	for ( AActor* SpawnActor : SpawnedActor )
+	{
+		SpawnActor->Destroy();
+	}
+
+	SpawnedActor.Empty();
+	
+	Super::EndPlay(EndPlayReason);
+}

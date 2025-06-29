@@ -15,6 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AMUEnemySpawner();
 
+	
 	virtual void CheckSpawn();
 	
 	virtual void SpawnEnemy();
@@ -25,6 +26,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 protected :
 	// 모드 상에서 관리될 명목하의 ID ( 해당 부분은, 다르게 설정해야 합니다. )
