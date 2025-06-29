@@ -60,6 +60,9 @@ public :
 
 	UPROPERTY( VisibleAnywhere )
 	TSet<FName> ClearedMonsterSpawner;
+
+	UPROPERTY( VisibleAnywhere )
+	TSet<FName> ClearedStage;
 	
 	// 매 틱마다 체크하는 건 그럴 수 있음.
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )

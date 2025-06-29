@@ -139,6 +139,8 @@ void UStageManagingComponent::EndStage()
 	{
 		OnStageCleared.Broadcast( CurrentStageName );
 	}
+
+	ClearedStage.Add(CurrentStageName);
 	
 	CurrentStageName = NAME_None;
 }
