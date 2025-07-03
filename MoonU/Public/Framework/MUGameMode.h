@@ -50,6 +50,16 @@ protected :
 
 	virtual bool IsSpawnerCleared( FName SpawnerID ) override;
 
+	virtual bool IsStageCleared( FName StageID ) override;
+
+	virtual void RegisterStageSpawner( FName SpawnerID ) override;
+
+	virtual void UnregisterStageSpawner( FName SpawnerID ) override;
+
+	virtual FOnStageEvents& GetStageEvents() override;
+	
+	virtual void StartStage( FName StageID ) override;
+
 #pragma endregion IStageManager
 
 protected :

@@ -5,7 +5,6 @@
 
 #include "Character/MUCharacterNonPlayer.h"
 #include "Components/TimeStopComponent.h"
-#include "GameFramework/Character.h"
 #include "GameFramework/GameMode.h"
 #include "Interface/LevelManager.h"
 #include "Interface/StageManager.h"
@@ -97,30 +96,8 @@ void AMUEnemySpawner::OnMonsterDeath(AActor* DeadActor)
 
 	if ( SpawnedActor.IsEmpty() == true )
 	{
-		AGameModeBase* GM = GetWorld()->GetAuthGameMode();
-
-		if (IsValid(GM) == false)
-		{
-			return;
-		}
-
-		IStageManager* StageManager = Cast<IStageManager>(GM);
-
-		if ( StageManager == nullptr )
-		{
-			return;
-		}
-
-		StageManager->SendClearSpawner( SpawnerID );
+		OnAllMonsterDeath();
 	}
-}
-
-// 시작시 아님.
-void AMUEnemySpawner::BeginPlay()
-{
-	Super::BeginPlay();
-
-	CheckSpawn();
 }
 
 void AMUEnemySpawner::EndPlay(const EEndPlayReason::Type EndPlayReason)

@@ -14,7 +14,6 @@ class MOONU_API AMUEnemySpawner : public AActor
 public:
 	// Sets default values for this actor's properties
 	AMUEnemySpawner();
-
 	
 	virtual void CheckSpawn();
 	
@@ -22,10 +21,10 @@ public:
 
 	UFUNCTION()
 	virtual void OnMonsterDeath( AActor* DeadActor );
+
+	virtual void OnAllMonsterDeath() {};
 	
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	

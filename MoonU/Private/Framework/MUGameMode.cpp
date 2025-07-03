@@ -85,6 +85,51 @@ bool AMUGameMode::IsSpawnerCleared(FName SpawnerID)
 	return StageManagingComponent->IsSpawnerCleared( SpawnerID );
 }
 
+bool AMUGameMode::IsStageCleared(FName StageID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+    {
+    	return false;
+    }
+
+	return StageManagingComponent->IsStageCleared( StageID );
+}
+
+void AMUGameMode::RegisterStageSpawner(FName SpawnerID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return;
+	}
+
+	StageManagingComponent->RegisterStageSpawner( SpawnerID );
+}
+
+void AMUGameMode::UnregisterStageSpawner(FName SpawnerID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return;
+	}
+
+	StageManagingComponent->UnregisterStageSpawner( SpawnerID );
+}
+
+FOnStageEvents& AMUGameMode::GetStageEvents()
+{
+	return StageManagingComponent->GetStageEvents();
+}
+
+void AMUGameMode::StartStage(FName StageID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return;
+	}
+
+	StageManagingComponent->StartStage( StageID );
+}
+
 void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
 {
 	APlayerController* MyPlayerController = GetWorld()->GetFirstPlayerController();

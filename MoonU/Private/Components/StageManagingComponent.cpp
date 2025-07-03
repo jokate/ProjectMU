@@ -40,6 +40,11 @@ void UStageManagingComponent::SendClearSpawner(FName ClearedSpawnID)
 	ClearedMonsterSpawner.Add(ClearedSpawnID);
 }
 
+bool UStageManagingComponent::IsStageCleared(FName StageID)
+{
+	return ClearedMonsterSpawner.Contains(StageID);
+}
+
 void UStageManagingComponent::SetupStage()
 {
 	FMUStageInfo StageInfo;
@@ -126,18 +131,22 @@ void UStageManagingComponent::StartStage(FName InStageName)
 {
 	// 레벨로딩 혹은 실질적인 스테이지 액터 스포닝. (몬스터 스포너나 혹은 액티베이션)
 	CurrentStageName = InStageName;
+
+	const FOnStageStarted& StageStarted = StageEvents.OnStageStarted;
 	
-	if ( OnStageStarted.IsBound() == true )
+	if ( StageStarted.IsBound() == true )
 	{
-		OnStageStarted.Broadcast(CurrentStageName);
+		StageStarted.Broadcast(CurrentStageName);
 	}
 }
 
 void UStageManagingComponent::EndStage()
 {
-	if ( OnStageCleared.IsBound() == true )
+	const FOnStageCleared& ClearedEvent = StageEvents.OnStageCleared;
+	
+	if ( ClearedEvent.IsBound() == true )
 	{
-		OnStageCleared.Broadcast( CurrentStageName );
+		ClearedEvent.Broadcast( CurrentStageName );
 	}
 
 	ClearedStage.Add(CurrentStageName);

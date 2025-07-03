@@ -16,7 +16,6 @@ AStageStartEntity::AStageStartEntity()
 void AStageStartEntity::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AStageStartEntity::OnInteracted(AActor* InstigatorActor)
@@ -44,6 +43,7 @@ void AStageStartEntity::OnInteracted(AActor* InstigatorActor)
     	return;
     }
 
+	StageManager->StartStage( StageName );
 }
 
 const bool AStageStartEntity::IsInteractable(AActor* InstigatorActor)
@@ -68,9 +68,11 @@ const bool AStageStartEntity::IsInteractable(AActor* InstigatorActor)
 	{
 		return false;
 	}
-
-	StageManager->IsSpawnerCleared( StageName );
+	
 	bool Interactable = Super::IsInteractable(InstigatorActor);
+	Interactable &= StageManager->IsStageCleared(StageName);
+
+	return Interactable;
 }
 
 

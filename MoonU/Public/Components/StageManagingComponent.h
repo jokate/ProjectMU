@@ -11,8 +11,6 @@
 /**
  * 
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnStageStarted, FName, StageName );
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnStageCleared, FName, StageName );
 
 UCLASS()
 class MOONU_API UStageManagingComponent : public UActorComponent, public IStageManager
@@ -23,6 +21,9 @@ public :
 	virtual void EndPlay( const EEndPlayReason::Type EndPlayReason ) override;
 	virtual void RegisterOwnerActor( AActor* NeedToRegActor ) override;
 	virtual void SendClearSpawner( FName ClearedSpawnID ) override;
+	virtual FOnStageEvents& GetStageEvents() override { return StageEvents; }
+	virtual bool IsStageCleared(FName StageID) override;
+	
 	virtual bool IsSpawnerCleared(FName SpawnerID) override { return ClearedMonsterSpawner.Contains(SpawnerID);}
 	virtual void SetupStage();
 
@@ -30,21 +31,21 @@ public :
 	void CheckSpawn();
 	
 	// 등록하는 부분이 필요한 건 사실임.
-	virtual void StartStage( FName InStageName );
+	virtual void StartStage( FName InStageName ) override;
 
 	virtual void EndStage();
 	
 	virtual void RegisterUnit( FName UnitName );
 
 	virtual void UnregisterUnit( FName UnitName );
-	
+
+	virtual void RegisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Add(SpawnerID); };
+
+	virtual void UnregisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Remove(SpawnerID); }
 public :
 
-	UPROPERTY( BlueprintAssignable, BlueprintCallable )
-	FOnStageStarted OnStageStarted;
-
-	UPROPERTY( BlueprintAssignable, BlueprintCallable )
-	FOnStageCleared OnStageCleared;
+	UPROPERTY()
+	FOnStageEvents StageEvents;
 
 public :
 	
@@ -54,26 +55,36 @@ public :
 	UPROPERTY( VisibleAnywhere )
 	FName CurrentStageName = NAME_None;
 
-	// 등록하는 것.
 	UPROPERTY( VisibleAnywhere )
-	AActor* OwnerActor;
-
-	UPROPERTY( VisibleAnywhere )
-	TSet<FName> ClearedMonsterSpawner;
-
+	TArray<FName> SpawnerNames;
+	
 	UPROPERTY( VisibleAnywhere )
 	TSet<FName> ClearedStage;
+
+#pragma region Spawners
 	
-	// 매 틱마다 체크하는 건 그럴 수 있음.
+	UPROPERTY( VisibleAnywhere )
+	TSet<FName> ClearedMonsterSpawner;
+	
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float SpawnTimeInterval = 0.5f;
+	
+#pragma endregion
 
+#pragma region StagePool
+	
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	FName StageName = NAME_None;
 	
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	TArray<FName> StagePools;
 
+#pragma endregion 
+
+	// 등록하는 것.
+	UPROPERTY( VisibleAnywhere )
+	AActor* OwnerActor;
+	
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float SpawnDistance = 12800.f;
 
@@ -84,6 +95,4 @@ public :
 	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;
 	
 	FTimerHandle SpawnCheckTimer;
-
-	//FRandomStream SamplingSeed;
 };
