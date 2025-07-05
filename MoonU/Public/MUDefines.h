@@ -32,7 +32,7 @@
 #define MU_INPUT_TIMEREWIND FGameplayTag::RequestGameplayTag(FName("InputTag.TimeRewind"))
 #define MU_INPUT_ITEMUSE_QUICK FGameplayTag::RequestGameplayTag(FName("InputTag.ItemUse"))
 #define MU_INPUT_SIMPLE_CAST FGameplayTag::RequestGameplayTag(FName("InputTag.Skill.SimpleCast"))
-#define MU_INPUT_CANCEL FGameplayTag::RequestGameplayTag(FName("InputTag.Skill.CANCEL"))
+#define MU_INPUT_CANCEL FGameplayTag::RequestGameplayTag(FName("InputTag.Skill.Cancel"))
 
 #define MU_UI_HUD  FGameplayTag::RequestGameplayTag(FName("Gameplay.UI.HUD"))
 #define MU_EVENT_BLOCKRECOVER  FGameplayTag::RequestGameplayTag(FName("Event.Block.RecoverStamina"))

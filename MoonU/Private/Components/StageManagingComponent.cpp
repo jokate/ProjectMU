@@ -65,6 +65,8 @@ void UStageManagingComponent::SetupStage()
 			continue;
 		}
 
+		
+		
 		StagePools.Add(RandSeed);
 	}
 }

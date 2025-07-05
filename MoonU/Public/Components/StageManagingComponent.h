@@ -11,6 +11,18 @@
 /**
  * 
  */
+USTRUCT( BlueprintType )
+struct FStagePoolingData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( BlueprintReadOnly )
+	FName StageName = NAME_None;
+
+	UPROPERTY( BlueprintReadOnly )
+	FVector SpawnLocation = FVector::ZeroVector;
+};
 
 UCLASS()
 class MOONU_API UStageManagingComponent : public UActorComponent, public IStageManager
@@ -90,6 +102,12 @@ public :
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float DestroyDistance = 25600.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	float StageSpawnCheckDistance = 6400.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	FVector WorldRand = FVector::ZeroVector;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly)
 	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;
