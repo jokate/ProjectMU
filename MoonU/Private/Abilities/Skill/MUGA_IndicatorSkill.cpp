@@ -125,6 +125,8 @@ void UMUGA_IndicatorSkill::OnSkillInputPressed()
 
 void UMUGA_IndicatorSkill::OnSkillCanceled()
 {
+	ResetInput();
+	
 	bool bReplicateEndAbility = true;
 	bool bWasCancelled = false;
 
