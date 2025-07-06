@@ -17,11 +17,21 @@ struct FStagePoolingData
 	GENERATED_BODY()
 
 public :
+	FStagePoolingData() {}
+
+	FStagePoolingData(FName InStageName, FVector2D InVector) : StageName(InStageName), SpawnLocation(InVector) {}
+	
+public :
 	UPROPERTY( BlueprintReadOnly )
 	FName StageName = NAME_None;
 
 	UPROPERTY( BlueprintReadOnly )
-	FVector SpawnLocation = FVector::ZeroVector;
+	FVector2D SpawnLocation = FVector2D::ZeroVector;
+
+	bool operator==( const FName& InName ) const
+	{
+		return StageName == InName;
+	}
 };
 
 UCLASS()
@@ -54,6 +64,8 @@ public :
 	virtual void RegisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Add(SpawnerID); };
 
 	virtual void UnregisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Remove(SpawnerID); }
+
+	bool CheckIsValidPosition( FVector2D RandPos );
 public :
 
 	UPROPERTY()
@@ -89,7 +101,7 @@ public :
 	FName StageName = NAME_None;
 	
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	TArray<FName> StagePools;
+	TArray<FStagePoolingData> StagePools;
 
 #pragma endregion 
 
@@ -106,8 +118,11 @@ public :
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	float StageSpawnCheckDistance = 6400.f;
 
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float StageSpawnHeight = 10000.f;
+
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	FVector WorldRand = FVector::ZeroVector;
+	FVector2D WorldRand = FVector2D::ZeroVector;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly)
 	TMap<FName, ULevelStreamingDynamic*> StreamedLevelList;

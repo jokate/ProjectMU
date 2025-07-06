@@ -64,10 +64,23 @@ void UStageManagingComponent::SetupStage()
 		{
 			continue;
 		}
+		
+		FVector2D RandPos = FVector2D::ZeroVector;
+		
+		while ( true )
+		{
+			RandPos = FVector2D( FMath::RandRange(-WorldRand.X, WorldRand.X), FMath::RandRange(-WorldRand.Y, WorldRand.Y) );
+			
+			if ( CheckIsValidPosition( RandPos ) == true )
+			{
+				UE_LOG(LogTemp, Log, TEXT("RandPos Complete %s, %s"), *RandPos.ToString(), *RandSeed.ToString() );
+				break;
+			}		
+		}
 
+		FStagePoolingData StagePoolData(RandSeed, RandPos);
 		
-		
-		StagePools.Add(RandSeed);
+		StagePools.Add(StagePoolData);
 	}
 }
 
@@ -79,17 +92,20 @@ void UStageManagingComponent::CheckSpawn()
 	}
 	
 	FVector ActorLocation = OwnerActor->GetActorLocation();
+
+	FVector2D ActorPos ( ActorLocation.X, ActorLocation.Y );
 	
-	for ( const FName& TempStageName : StagePools )
+	for ( const FStagePoolingData& TempStagePool : StagePools )
 	{
+		const FName& TempStageName = TempStagePool.StageName;
+		const FVector2D& TempStageLocation = TempStagePool.SpawnLocation;
 		FMUStageData StageData;
 		if ( UMUFunctionLibrary::GetStageData( this, TempStageName, StageData )  == false )
 		{
 			continue;
 		}
+		float Magnitude = FVector2D::Distance(TempStageLocation, ActorPos );
 		
-		float Magnitude = FVector::Distance(StageData.StreamingPos, ActorLocation);
-
 		// 있는 경우.
 		if ( StreamedLevelList.Contains(TempStageName) == true )
 		{
@@ -100,7 +116,6 @@ void UStageManagingComponent::CheckSpawn()
 			{
 				continue;
 			}
-			
 
 			if ( Magnitude > DestroyDistance )
 			{
@@ -116,9 +131,16 @@ void UStageManagingComponent::CheckSpawn()
 			// 없는 경우.
 			if ( Magnitude <= SpawnDistance )
 			{
+				FHitResult HitResult;
+				
+				GetWorld()->LineTraceSingleByChannel(HitResult, FVector(TempStageLocation.X, TempStageLocation.Y, -StageSpawnHeight),
+					FVector(TempStageLocation.X, TempStageLocation.Y, StageSpawnHeight), ECC_Visibility);
+
+				UE_LOG(LogTemp, Log, TEXT("Stage Spawn Location %s"), *HitResult.Location.ToString())
+				
 				bool OutSuccess = false;
 				ULevelStreamingDynamic* NewlyStreaming = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
-					this, StageData.RoomLevel, StageData.StreamingPos, FRotator::ZeroRotator, OutSuccess );
+					this, StageData.RoomLevel, HitResult.Location, FRotator::ZeroRotator, OutSuccess );
 
 				if ( OutSuccess == true )
 				{
@@ -187,3 +209,28 @@ void UStageManagingComponent::UnregisterUnit(FName UnitName)
 		}
 	}
 }
+
+bool UStageManagingComponent::CheckIsValidPosition(FVector2D RandPos)
+{
+	bool RetVal = true;
+	for ( FStagePoolingData& StagePool : StagePools )
+	{
+		FVector2D StagePoolLocation = StagePool.SpawnLocation;
+
+		// 현재 풀링된 정보와 대조.
+		float SquaredDist = FMath::Square( FVector2D::Distance( RandPos, StagePoolLocation ) );
+
+		// 체킹 레인지.
+		float SquaredRange = FMath::Square( StageSpawnCheckDistance );
+
+		// 만약 가깝다면?
+		if ( SquaredDist <= SquaredRange )
+		{
+			RetVal = false;
+			break;
+		}
+	}
+
+	return RetVal;
+}
+
