@@ -41,10 +41,13 @@ class MOONU_API UStageManagingComponent : public UActorComponent, public IStageM
 public :
 	virtual void BeginPlay() override;
 	virtual void EndPlay( const EEndPlayReason::Type EndPlayReason ) override;
+	
 	virtual void RegisterOwnerActor( AActor* NeedToRegActor ) override;
 	virtual void SendClearSpawner( FName ClearedSpawnID ) override;
+	
 	virtual FOnStageEvents& GetStageEvents() override { return StageEvents; }
 	virtual bool IsStageCleared(FName StageID) override;
+	virtual bool IsStageActiveOrCleared(FName StageID) override { return IsStageCleared(StageID) || StageName.IsEqual(StageID);}
 	
 	virtual bool IsSpawnerCleared(FName SpawnerID) override { return ClearedMonsterSpawner.Contains(SpawnerID);}
 	virtual void SetupStage();
@@ -61,9 +64,9 @@ public :
 
 	virtual void UnregisterUnit( FName UnitName );
 
-	virtual void RegisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Add(SpawnerID); };
+	virtual void RegisterStageSpawner( FName SpawnerID ) override { ActiveStageSpawners.Add(SpawnerID); };
 
-	virtual void UnregisterStageSpawner( FName SpawnerID ) override { SpawnerNames.Remove(SpawnerID); }
+	virtual void UnregisterStageSpawner( FName SpawnerID ) override; 
 
 	bool CheckIsValidPosition( FVector2D RandPos );
 public :
@@ -80,7 +83,7 @@ public :
 	FName CurrentStageName = NAME_None;
 
 	UPROPERTY( VisibleAnywhere )
-	TArray<FName> SpawnerNames;
+	TSet<FName> ActiveStageSpawners;
 	
 	UPROPERTY( VisibleAnywhere )
 	TSet<FName> ClearedStage;

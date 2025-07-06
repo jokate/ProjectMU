@@ -278,9 +278,7 @@ struct FMUStageData : public FTableRowBase
 public :
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	TSoftObjectPtr<UWorld> RoomLevel;
-
-	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	FVector StreamingPos = FVector::ZeroVector;
+	
 };
 
 USTRUCT( BlueprintType )

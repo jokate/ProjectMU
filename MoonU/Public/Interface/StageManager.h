@@ -48,6 +48,8 @@ public:
 
 	virtual bool IsStageCleared( FName StageID ) = 0;
 
+	virtual bool IsStageActiveOrCleared( FName StageID ) = 0;
+
 	virtual void RegisterStageSpawner( FName SpawnerID ) = 0;
 
 	virtual void UnregisterStageSpawner( FName SpawnerID ) = 0;

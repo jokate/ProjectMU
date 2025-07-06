@@ -13,17 +13,27 @@ ADataDrivenBoxActor::ADataDrivenBoxActor()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-// Called when the game starts or when spawned
-void ADataDrivenBoxActor::BeginPlay()
+void ADataDrivenBoxActor::SettingUpInformation()
 {
-	Super::BeginPlay();
 	GetWorld()->GetTimerManager().SetTimer(CheckTimerHandle, this, &ADataDrivenBoxActor::CharacterBoundCheckLoop, TimerInterval, true);
 	CachedLocalPlayerCharacter = UMUFunctionLibrary::GetLocalPlayerCharacter(this);
 }
 
+// Called when the game starts or when spawned
+void ADataDrivenBoxActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SettingUpInformation();
+}
+
 void ADataDrivenBoxActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	GetWorld()->GetTimerManager().ClearTimer(CheckTimerHandle);
+	if ( CheckTimerHandle.IsValid() == true )
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CheckTimerHandle);	
+	}
+	
 	Super::EndPlay(EndPlayReason);
 }
 

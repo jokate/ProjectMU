@@ -52,6 +52,8 @@ protected :
 
 	virtual bool IsStageCleared( FName StageID ) override;
 
+	virtual bool IsStageActiveOrCleared(FName StageID) override;
+
 	virtual void RegisterStageSpawner( FName SpawnerID ) override;
 
 	virtual void UnregisterStageSpawner( FName SpawnerID ) override;

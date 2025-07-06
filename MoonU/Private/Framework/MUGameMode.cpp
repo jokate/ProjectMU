@@ -95,6 +95,16 @@ bool AMUGameMode::IsStageCleared(FName StageID)
 	return StageManagingComponent->IsStageCleared( StageID );
 }
 
+bool AMUGameMode::IsStageActiveOrCleared(FName StageID)
+{
+	if ( IsValid(StageManagingComponent) == false )
+	{
+		return false;
+	}
+
+	return StageManagingComponent->IsStageActiveOrCleared( StageID );
+}
+
 void AMUGameMode::RegisterStageSpawner(FName SpawnerID)
 {
 	if ( IsValid(StageManagingComponent) == false )

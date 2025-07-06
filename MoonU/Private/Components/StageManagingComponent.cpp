@@ -210,6 +210,16 @@ void UStageManagingComponent::UnregisterUnit(FName UnitName)
 	}
 }
 
+void UStageManagingComponent::UnregisterStageSpawner(FName SpawnerID)
+{
+	ActiveStageSpawners.Remove(SpawnerID);
+
+	if ( ActiveStageSpawners.Num() <= 0 )
+	{
+		EndStage();
+	} 
+}
+
 bool UStageManagingComponent::CheckIsValidPosition(FVector2D RandPos)
 {
 	bool RetVal = true;
