@@ -16,7 +16,11 @@ public:
 	AStageDrivenBoxEntity();
 
 public:
+	virtual void OnConstruction(const FTransform& Transform) override;
+	
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	virtual void SettingUpInformation() override;
 
@@ -29,6 +33,11 @@ public:
 	virtual void OnBoxInBound() override;
 
 public :
+	UPROPERTY( EditAnywhere, BlueprintReadWrite)
+	TArray<FDataDrivenBox> BoundaryBoxes;
+
+	UPROPERTY( BlueprintReadWrite )
+	TArray<class UBoxComponent*> BoundaryBoxComponents;
 	
 	UPROPERTY(EditAnywhere)
 	FName StageID = NAME_None;
