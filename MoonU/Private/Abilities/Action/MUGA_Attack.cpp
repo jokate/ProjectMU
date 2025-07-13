@@ -74,10 +74,25 @@ void UMUGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGa
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo)
+void UMUGA_Attack::OnCompleteCallback()
 {
-	AMUCharacterPlayer* CharacterPlayer = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
+	//명시적으로 Ability가 끝났음을 알림
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = false;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+}
+
+void UMUGA_Attack::OnInterruptedCallback()
+{
+	//명시적으로 Ability가 끝났음을 알림
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = true;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+}
+
+void UMUGA_Attack::ReserveAttack()
+{
+	AMUCharacterPlayer* CharacterPlayer = Cast<AMUCharacterPlayer>(CurrentActorInfo->AvatarActor.Get());
 
 	if (CharacterPlayer)
 	{
@@ -102,22 +117,6 @@ void UMUGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const F
 	}
 
 	UpdateComboTimer();
-}
-
-void UMUGA_Attack::OnCompleteCallback()
-{
-	//명시적으로 Ability가 끝났음을 알림
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = false;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
-}
-
-void UMUGA_Attack::OnInterruptedCallback()
-{
-	//명시적으로 Ability가 끝났음을 알림
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = true;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
 
 FName UMUGA_Attack::GetNextSection()

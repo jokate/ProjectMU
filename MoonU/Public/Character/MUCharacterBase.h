@@ -24,7 +24,7 @@ class MOONU_API AMUCharacterBase : public ACharacter,
 
 public:
 	
-	AMUCharacterBase();
+	AMUCharacterBase( const FObjectInitializer& ObjectInitializer );
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 

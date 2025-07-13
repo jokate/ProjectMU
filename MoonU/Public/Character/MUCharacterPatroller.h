@@ -14,7 +14,7 @@ class MOONU_API AMUCharacterPatroller : public AMUCharacterNonPlayer, public IPa
 
 public:
 	// Sets default values for this character's properties
-	AMUCharacterPatroller();
+	AMUCharacterPatroller( const FObjectInitializer& ObjectInitializer );
 
 #pragma region IPatroller
 	virtual void IncrementPatrolRoute() override;

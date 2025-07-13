@@ -19,7 +19,7 @@ public:
 	virtual void InitAbilities(int32 CharacterID);
 
 	virtual void OnEndPlay(int32 CharacterID);
-protected:
+protected: 
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

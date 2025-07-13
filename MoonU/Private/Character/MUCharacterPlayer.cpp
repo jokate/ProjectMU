@@ -27,7 +27,7 @@
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 
 // Sets default values
-AMUCharacterPlayer::AMUCharacterPlayer()
+AMUCharacterPlayer::AMUCharacterPlayer(const FObjectInitializer& ObjectInitializer ) : Super(ObjectInitializer)
 {
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;

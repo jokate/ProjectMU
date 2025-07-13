@@ -81,12 +81,11 @@ void AMUEnemySpawner::SpawnEnemy()
 				continue;
 			}
 			
-			
+			DeferredActor->SetCharacterID(Spawner.CharacterID);
 			DeferredActor->SpawnDefaultController();
 			LevelManager->SetLevel(TargetActorLevel);
 			DeferredActor->FinishSpawning(SpawnTransform);
 			DeferredActor->EnemyDeath.AddDynamic( this, &AMUEnemySpawner::OnMonsterDeath );
-			DeferredActor->SetCharacterID(Spawner.CharacterID);
 			
 			SpawnedActor.Add( DeferredActor );
 		}

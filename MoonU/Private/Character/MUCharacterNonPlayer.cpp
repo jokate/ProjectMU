@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AIController.h"
 #include "MotionWarpingComponent.h"
+#include "MUAIAbilitySystemComponent.h"
 #include "MUDefines.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "Components/AbilityInitComponent.h"
@@ -17,7 +18,9 @@
 
 
 // Sets default values
-AMUCharacterNonPlayer::AMUCharacterNonPlayer()
+AMUCharacterNonPlayer::AMUCharacterNonPlayer( const FObjectInitializer& ObjectInitializer ) :
+	Super( ObjectInitializer.SetDefaultSubobjectClass<UMUAIAbilitySystemComponent>("ASC") )
+
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;

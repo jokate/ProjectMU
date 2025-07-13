@@ -25,7 +25,7 @@ class MOONU_API AMUCharacterPlayer : public AMUCharacterBase, public IMUPlayer,
 
 public:
 	// Sets default values for this character's properties
-	AMUCharacterPlayer();
+	AMUCharacterPlayer( const FObjectInitializer& ObjectInitializer );
 
 protected:
 	virtual void BeginPlay() override;

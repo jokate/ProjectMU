@@ -17,7 +17,7 @@ class MOONU_API AMUCharacterNonPlayer : public AMUCharacterBase, public IMUEnemy
 
 public:
 	// Sets default values for this character's properties
-	AMUCharacterNonPlayer();
+	AMUCharacterNonPlayer(const FObjectInitializer& ObjectInitializer);
 
 	virtual void OnDead(const FGameplayEventData* Data);
 protected:
