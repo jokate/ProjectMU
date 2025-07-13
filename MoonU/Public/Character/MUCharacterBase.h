@@ -51,6 +51,8 @@ public:
 
 	int32 GetCharacterID() const { return CharacterID; }
 
+	FORCEINLINE void SetCharacterID( int32 InCharacterID ) { CharacterID = InCharacterID; }
+	
 	virtual void LevelUp() override;
  	
 protected:

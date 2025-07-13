@@ -71,20 +71,23 @@ void AMUEnemySpawner::SpawnEnemy()
 
 			if (IsValid(DeferredActor) == false )
 			{
-				return;
+				continue;
 			}
 	
 			ILevelManager* LevelManager = Cast<ILevelManager>(DeferredActor);
 
 			if (LevelManager == nullptr)
 			{
-				return;
+				continue;
 			}
+			
+			
 			DeferredActor->SpawnDefaultController();
 			LevelManager->SetLevel(TargetActorLevel);
 			DeferredActor->FinishSpawning(SpawnTransform);
 			DeferredActor->EnemyDeath.AddDynamic( this, &AMUEnemySpawner::OnMonsterDeath );
-
+			DeferredActor->SetCharacterID(Spawner.CharacterID);
+			
 			SpawnedActor.Add( DeferredActor );
 		}
 	}

@@ -40,6 +40,11 @@ EBTNodeResult::Type UBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent&
 			
 			FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputID);
 
+			if ( Spec == nullptr)
+			{
+				break;
+			}
+			
 			if (Spec->IsActive())
 			{
 				ASC->AbilitySpecInputPressed(*Spec);	
