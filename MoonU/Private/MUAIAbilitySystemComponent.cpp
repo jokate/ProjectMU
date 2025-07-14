@@ -13,9 +13,9 @@ UMUAIAbilitySystemComponent::UMUAIAbilitySystemComponent()
 
 int32 UMUAIAbilitySystemComponent::HandleGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload)
 {
-	int32 TriggerCount = 0;
+	int32 TriggeredCount = 0;
 	FGameplayTag CurrentTag = EventTag;
-	
+	ABILITYLIST_SCOPE_LOCK();
 	while (CurrentTag.IsValid())
 	{
 		if (GameplayEventTriggeredAbilities.Contains(CurrentTag))
@@ -24,26 +24,26 @@ int32 UMUAIAbilitySystemComponent::HandleGameplayEvent(FGameplayTag EventTag, co
 
 			for (FGameplayAbilitySpecHandle& AbilityHandle : TriggeredAbilityHandles)
 			{
-				if ( RetriggerAbility(AbilityHandle ) == true )
+				if (RetriggerAbility(AbilityHandle))
 				{
-					TriggerCount++;
+					TriggeredCount++;
 				}
 			}
 		}
 
 		CurrentTag = CurrentTag.RequestDirectParent();
 	}
-	
-	TriggerCount += Super::HandleGameplayEvent(EventTag, Payload);
 
-	return TriggerCount;
+	TriggeredCount += Super::HandleGameplayEvent(EventTag, Payload);
+
+	return TriggeredCount;
 }
 
 bool UMUAIAbilitySystemComponent::RetriggerAbility(FGameplayAbilitySpecHandle& AbilitySpec)
 {
 	FGameplayAbilitySpec* Spec = FindAbilitySpecFromHandle(AbilitySpec);
 
-	if ( Spec == nullptr)
+	if ( Spec == nullptr )
 	{
 		return false;	
 	}
