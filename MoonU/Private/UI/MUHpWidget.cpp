@@ -5,6 +5,8 @@
 
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSetBase.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void UMUHpWidget::SetAbilitySystemComponent(AActor* InOwner)
 {
@@ -19,17 +21,31 @@ void UMUHpWidget::SetAbilitySystemComponent(AActor* InOwner)
 		CurrentMaxHealth = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetMaxHpAttribute());
 	}
 
-	UpdateHPBar_BP();
+	SetupPercent();
 }
 
 void UMUHpWidget::OnHpChanged(const FOnAttributeChangeData& ChangeData)
 {
 	CurrentHealth = ChangeData.NewValue;
-	UpdateHPBar_BP();
+	SetupPercent();
 }
 
 void UMUHpWidget::OnMaxHpChanged(const FOnAttributeChangeData& ChangeData)
 {
 	CurrentMaxHealth = ChangeData.NewValue;
-	UpdateHPBar_BP();
+	SetupPercent();
+}
+
+void UMUHpWidget::SetupPercent()
+{
+	if ( IsValid( PbHpBar ) == true )
+	{
+		PbHpBar->SetPercent( CurrentHealth / CurrentMaxHealth );
+	}
+
+	if ( IsValid( HpText ) == true )
+	{
+		FString HpString = FString::Printf(TEXT("%.0f / %.0f"), CurrentHealth, CurrentMaxHealth);
+		HpText->SetText( FText::FromString(HpString) );
+	}
 }

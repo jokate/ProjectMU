@@ -21,6 +21,8 @@ protected:
 	void OnTimeGaugeChanged(const FOnAttributeChangeData& IncomeData);
 	
 	void OnMaxTimeGaugeChanged(const FOnAttributeChangeData& IncomeData);
+
+	void SetupPercentage();
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnTimeGaugeChanged_BP();
@@ -30,4 +32,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Time Gauge")
 	float MaxTimeGauge;
+
+	UPROPERTY( meta = (BindWidget) )
+	TObjectPtr<class UProgressBar> PbTimeGauge;
 };

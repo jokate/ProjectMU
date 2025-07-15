@@ -21,10 +21,19 @@ public :
 protected :
 	virtual void OnHpChanged(const FOnAttributeChangeData& ChangeData);
 	virtual void OnMaxHpChanged(const FOnAttributeChangeData& ChangeData);
+
+	virtual void SetupPercent();
+	
 protected :
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateHPBar_BP();
 
+	UPROPERTY( meta = (BindWidget))
+	TObjectPtr<class UProgressBar> PbHpBar;
+	
+	UPROPERTY( meta = (BindWidget))
+	TObjectPtr<class UTextBlock> HpText;
+	
 protected :
 	UPROPERTY(BlueprintReadOnly)
 	float CurrentHealth = 0.f;

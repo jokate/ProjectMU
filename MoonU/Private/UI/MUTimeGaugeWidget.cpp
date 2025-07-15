@@ -5,6 +5,7 @@
 
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "Attribute/MUTimewinderAttribute.h"
+#include "Components/ProgressBar.h"
 
 void UMUTimeGaugeWidget::SetAbilitySystemComponent(AActor* InOwner)
 {
@@ -23,11 +24,20 @@ void UMUTimeGaugeWidget::SetAbilitySystemComponent(AActor* InOwner)
 void UMUTimeGaugeWidget::OnTimeGaugeChanged(const FOnAttributeChangeData& IncomeData)
 {
 	TimeGauge = IncomeData.NewValue;
-	OnTimeGaugeChanged_BP();
+	SetupPercentage();
 }
 
 void UMUTimeGaugeWidget::OnMaxTimeGaugeChanged(const FOnAttributeChangeData& IncomeData)
 {
 	MaxTimeGauge = IncomeData.NewValue;
-	OnTimeGaugeChanged_BP();
+	SetupPercentage();
 }
+
+void UMUTimeGaugeWidget::SetupPercentage()
+{
+	if ( IsValid(PbTimeGauge) == true )
+	{
+		PbTimeGauge->SetPercent( TimeGauge / MaxTimeGauge ); 
+	}
+}
+
