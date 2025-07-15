@@ -44,6 +44,21 @@ public :
 	virtual bool PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data) override;
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+#pragma region Hp Related Func
+	virtual void HandleHPAttributeChange( const FGameplayAttribute& Attribute, float OldValue, float NewValue );
+
+	virtual void HandleHPGameplayEffectCallback( const FGameplayEffectModCallbackData& Data );
+
+	virtual void CheckDeath(const FGameplayEffectModCallbackData& Data );
+	
+#pragma endregion 
+
+#pragma region Damage Related Func
+
+	virtual bool HandlePreDamage( const FGameplayEffectModCallbackData& Data );
+	
+#pragma endregion
 	
 	//const에서 열외를 시키도록 만든다.
 	mutable FOutOfHealthDelegate OnOutOfHealth;
@@ -72,6 +87,12 @@ protected :
 
 	UPROPERTY(BlueprintReadOnly, Category = "DropExperience", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData DropExperience;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	FGameplayTagContainer IgnoranceDamageTags;
+
+	UPROPERTY( EditDefaultsOnly )
+	FGameplayTagContainer DefenseTags;
 	
 	bool bOutOfHealth = false;
 };

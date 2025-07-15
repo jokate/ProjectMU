@@ -15,8 +15,8 @@ void UMUTimeGaugeWidget::SetAbilitySystemComponent(AActor* InOwner)
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetCurrentTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnTimeGaugeChanged);
 		ASC->GetGameplayAttributeValueChangeDelegate(UMUTimewinderAttribute::GetMaxTimeGaugeAttribute()).AddUObject(this, &UMUTimeGaugeWidget::OnMaxTimeGaugeChanged);
 
-		TimeGauge = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetCurrentHpAttribute());
-		MaxTimeGauge = ASC->GetNumericAttribute(UMUCharacterAttributeSetBase::GetMaxHpAttribute());
+		TimeGauge = ASC->GetNumericAttribute(UMUTimewinderAttribute::GetCurrentTimeGaugeAttribute());
+		MaxTimeGauge = ASC->GetNumericAttribute(UMUTimewinderAttribute::GetMaxTimeGaugeAttribute());
 	}
 }
 

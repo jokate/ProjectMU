@@ -34,7 +34,36 @@ void UMUCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute&
 	float NewValue)
 {
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	
+	HandleHPAttributeChange( Attribute, OldValue, NewValue );
+}
 
+bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
+{
+	if (!Super::PreGameplayEffectExecute(Data))
+	{
+		return false;
+	}
+
+	bool bResult = HandlePreDamage(Data);
+
+	return bResult;
+}
+
+void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	//GE로 Attribute가 변환된 경우.
+	HandleHPGameplayEffectCallback(Data);
+	
+	CheckDeath( Data );
+}
+
+void UMUCharacterAttributeSetBase::HandleHPAttributeChange(const FGameplayAttribute& Attribute, float OldValue,
+	float NewValue)
+{
+	// Attribute엗에 대한 성.
 	if (Attribute == GetCurrentHpAttribute()) 
 	{
 		if (bOutOfHealth && NewValue > 0.0f)
@@ -46,70 +75,44 @@ void UMUCharacterAttributeSetBase::PostAttributeChange(const FGameplayAttribute&
 		}
 	}
 
-	if ( IMUEnemy* Enemy = Cast<IMUEnemy>(GetOwningActor()))
+	if (Attribute == GetMaxHpAttribute())
 	{
-		if (Attribute == GetMaxHpAttribute())
-		{
-			SetCurrentHp(GetMaxHp());
-		}
+		SetCurrentHp(GetMaxHp());
 	}
 }
 
-bool UMUCharacterAttributeSetBase::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
+void UMUCharacterAttributeSetBase::HandleHPGameplayEffectCallback(const FGameplayEffectModCallbackData& Data)
 {
-	if (!Super::PreGameplayEffectExecute(Data))
-	{
-		return false;
-	}
-
-	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
-	{
-		if (Data.EvaluatedData.Magnitude > 0.0f)
-		{
-			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY) || Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_SUPERARMOR))
-			{
-				Data.EvaluatedData.Magnitude = 0.0f;
-				return false;
-			}
-
-			if (Data.Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DEFENDING))
-			{
-				Data.EvaluatedData.Magnitude *= GetDefendRate();
-				return true;
-			}
-		}
-	}
-
-	return true;
-}
-
-void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
-{
-	Super::PostGameplayEffectExecute(Data);
-
 	const FGameplayEffectContextHandle& EffectContext = Data.EffectSpec.GetEffectContext();
 	AActor* InstigatorActor = EffectContext.GetInstigator();
 	
 	const float MinHealth = 0.f;
-	if (Data.EvaluatedData.Attribute == GetCurrentHpAttribute())
-	{
-		SetCurrentHp(FMath::Clamp(GetCurrentHp(), MinHealth, GetMaxHp()));
-	}
-	else if (Data.EvaluatedData.Attribute == GetDamageAttribute())
-	{
-		SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
+	
+	float TempDamage = GetDamage();
+	
+	SetCurrentHp(FMath::Clamp(GetCurrentHp() - GetDamage(),  MinHealth, GetMaxHp()));
 
-		if (IsValid(InstigatorActor) == true)
-		{
-			//여기서 관련 데이터를 업데이팅을 해줘야 한다.
-			FGameplayEventData EventData;
-			EventData.Instigator = GetOwningAbilitySystemComponent()->GetAvatarActor();
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_HITCOMPLETE, EventData);
-		}
-		
-		SetDamage(0);
+	if ( TempDamage > 0.f && IsValid(InstigatorActor) == true )
+	{
+		//여기서 관련 데이터를 업데이팅을 해줘야 한다.
+		FGameplayEventData EventData;
+		EventData.Instigator = GetOwningAbilitySystemComponent()->GetAvatarActor();
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(InstigatorActor, MU_EVENT_HITCOMPLETE, EventData);
 	}
 
+	SetDamage(0);	
+}
+
+void UMUCharacterAttributeSetBase::CheckDeath(const FGameplayEffectModCallbackData& Data)
+{
+	const FGameplayEffectContextHandle& EffectContext = Data.EffectSpec.GetEffectContext();
+	AActor* InstigatorActor = EffectContext.GetInstigator();
+
+	if ( IsValid( InstigatorActor ) == false )
+	{
+		return;
+	}
+	
 	if (GetCurrentHp() <= 0.0f && !bOutOfHealth)
 	{
 		//죽었을 시 추가적인 처리가 필요하다.
@@ -125,7 +128,32 @@ void UMUCharacterAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffe
 		
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, EventData);
 	}
-
+	
 	bOutOfHealth = (GetCurrentHp() <= 0.0f);
 }
 
+bool UMUCharacterAttributeSetBase::HandlePreDamage(const FGameplayEffectModCallbackData& Data)
+{
+	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
+	{
+		FGameplayModifierEvaluatedData& EvaluatedData = Data.EvaluatedData;
+		UAbilitySystemComponent& Target = Data.Target;
+		if (EvaluatedData.Magnitude > 0.0f)
+		{
+			//Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_DODGE) || Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_PARRY) || Target.HasMatchingGameplayTag(MU_CHARACTERSTATE_SUPERARMOR)
+			if (Target.HasAnyMatchingGameplayTags(IgnoranceDamageTags))
+			{
+				Data.EvaluatedData.Magnitude = 0.0f;
+				return false;
+			}
+
+			if (Target.HasAnyMatchingGameplayTags(DefenseTags))
+			{
+				Data.EvaluatedData.Magnitude *= GetDefendRate();
+				return true;
+			}
+		}
+	}
+
+	return true;
+}

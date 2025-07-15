@@ -26,12 +26,17 @@ void UMUTimewinderAttribute::PostGameplayEffectExecute(const FGameplayEffectModC
 	}
 }
 
+void UMUTimewinderAttribute::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+}
+
 void UMUTimewinderAttribute::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
 	if (Attribute == GetCurrentTimeGaugeAttribute())
 	{
-		NewValue = NewValue < 0.0f ? 0.0f : NewValue;
+		NewValue = FMath::Clamp( NewValue, 0.0f, GetMaxTimeGauge() );
 	}
 }

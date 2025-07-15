@@ -28,6 +28,8 @@ public :
 protected :
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	
 	//캐릭터 별로 생성 및 붙여야 하는 Attribute의 수에 따른 부분.
