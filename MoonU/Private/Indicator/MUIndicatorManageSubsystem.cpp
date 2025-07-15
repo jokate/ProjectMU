@@ -184,6 +184,8 @@ void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
 	SkillIndicator->ActivateSkillIndicator();
 
 	SetupCamera( IndicatorID );
+
+	bIsSkillMode = true;
 }
 
 void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
@@ -198,5 +200,7 @@ void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
 	SkillIndicator->DeactivateSkillIndicator();
 
 	DeactivateCamera();
+
+	bIsSkillMode = false;
 }
 

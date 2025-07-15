@@ -70,6 +70,12 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	}
 
 	APlayerController* PC = OwnerPawn->GetController<APlayerController>();
+
+	if ( IsValid( PC ) == false )
+	{
+		return;
+	}
+	
 	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PC->GetLocalPlayer()))
 	{
 		Subsystem->ActivateSkillIndicator( SkillID );

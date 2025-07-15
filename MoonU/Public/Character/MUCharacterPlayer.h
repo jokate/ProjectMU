@@ -34,6 +34,8 @@ protected:
 	
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 	virtual void SetupInputByID( int32 InputID );
+
+	virtual bool IsSkillActive();
 	
 public:	
 	// Called to bind functionality to input

@@ -21,6 +21,7 @@
 #include "Components/WorldPartitionStreamingSourceComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "GameFramework/GameModeBase.h"
+#include "Indicator/MUIndicatorManageSubsystem.h"
 #include "Interface/StageManager.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
@@ -100,6 +101,24 @@ void AMUCharacterPlayer::SetupInputByID(int32 InputID)
 			Subsystem->AddMappingContext(InputMapper.InputMappingContext, InputMapper.Priority);
 		}
 	}
+}
+
+bool AMUCharacterPlayer::IsSkillActive()
+{
+	// input is a Vector2D
+	APlayerController* PC = GetController<APlayerController>();
+	if ( IsValid( PC ) == false )
+	{
+		return false;
+	}
+	
+	bool bIsActive = false;
+	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PC->GetLocalPlayer()))
+	{
+		bIsActive = Subsystem->IsSkillActive();
+	}
+
+	return bIsActive;
 }
 
 // Called to bind functionality to input
@@ -317,7 +336,11 @@ void AMUCharacterPlayer::OnStopMove(const FInputActionValue& Value)
 
 void AMUCharacterPlayer::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
+	if ( IsSkillActive() == true )
+	{
+		return;
+	} 
+	
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 	
 	if ( Controller != nullptr )

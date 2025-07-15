@@ -37,6 +37,8 @@ public :
 	virtual FVector GetIndicatorTargetLocation( FName IndicatorID );
 	virtual FRotator GetIndicatorTargetRotation( FName IndicatorID );
 
+	FORCEINLINE bool IsSkillActive() const { return bIsSkillMode; }
+
 protected :
 	
 	bool HasIndicator( FName IndicatorID ) const { return IndicatorManagement.Contains(IndicatorID); }
@@ -54,6 +56,9 @@ public :
 	UPROPERTY()
 	APawn* LocalPlayerActor;
 
+	UPROPERTY()
+	bool bIsSkillMode = false;
+	
 	UPROPERTY()
 	APlayerController* LocalPlayerController;
 };
