@@ -21,4 +21,8 @@ void UMUGA_SpawnAttack::ActivateSkill()
 
 	AttackEntity->RegisterOwner( CurrentActorInfo->OwnerActor.Get() );
 	AttackEntity->FinishSpawning(SpawnTransform);
+	
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = false;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
