@@ -3,6 +3,8 @@
 
 #include "Entity/AttackEntity/DebuffZone/MUTimeStopZone.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "MUDefines.h"
 #include "Interface/TimeStopper.h"
 
 
@@ -22,12 +24,7 @@ void AMUTimeStopZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
 			continue;
 		}
 		
-		ITimeStopper* TimeStop = Cast<ITimeStopper>(ReactedActor);
-
-		if ( TimeStop != nullptr )
-		{
-			TimeStop->TimeStopDeactivate();
-		}
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ReactedActor, MU_EVENT_TIMESTOPEND, FGameplayEventData());
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -35,11 +32,11 @@ void AMUTimeStopZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AMUTimeStopZone::OnReacted(AActor* ReactedActor)
 {
 	Super::OnReacted(ReactedActor);
-
-	ITimeStopper* TimeStop = Cast<ITimeStopper>(ReactedActor);
-
-	if ( TimeStop != nullptr )
+	
+	if (IsValid(ReactedActor) == false )
 	{
-		TimeStop->TimeStopActivate();
+		return;
 	}
+		
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ReactedActor, MU_EVENT_TIMESTOP, FGameplayEventData());
 }

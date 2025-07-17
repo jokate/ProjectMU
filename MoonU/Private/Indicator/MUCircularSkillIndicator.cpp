@@ -63,6 +63,8 @@ void AMUCircularSkillIndicator::CalculateIndicatorMesh()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Location : %s"), *ProjectedLocation.Location.ToString())
+
+	TargetLocation = GroundIntersection;
 	
 	DrawDebugSphere( GetWorld(), ProjectedLocation, SkillAOERadius, SkillAOERadius, FColor::Red);
 }
