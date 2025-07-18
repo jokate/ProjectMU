@@ -17,8 +17,14 @@ class MOONU_API UMUGA_SpawnAttack : public UMUGA_IndicatorSkill
 
 public :
 	virtual void ActivateSkill() override;
+
+	UFUNCTION()
+	virtual void OnFinishedSpawn();
 	
 public :
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	TSubclassOf<AMUAttackEntity> AttackEntityClass;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float SpawnWaitTime = 0.f;
 };

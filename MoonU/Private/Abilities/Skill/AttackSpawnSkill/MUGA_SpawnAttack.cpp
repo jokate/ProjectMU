@@ -3,6 +3,7 @@
 
 #include "Abilities/Skill/AttackSpawnSkill/MUGA_SpawnAttack.h"
 
+#include "Abilities/AT/MUAT_SpawnAttackEntity.h"
 #include "Entity/AttackEntity/MUAttackEntity.h"
 
 void UMUGA_SpawnAttack::ActivateSkill()
@@ -12,17 +13,19 @@ void UMUGA_SpawnAttack::ActivateSkill()
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(TargetLocation);
 	SpawnTransform.SetRotation(TargetRotation.Quaternion());
-	AMUAttackEntity* AttackEntity = GetWorld()->SpawnActorDeferred<AMUAttackEntity>(AttackEntityClass, SpawnTransform);
-
-	if ( IsValid(AttackEntity) == false )
-	{
-		return;
-	}
-
-	AttackEntity->RegisterOwner( CurrentActorInfo->OwnerActor.Get() );
-	AttackEntity->FinishSpawning(SpawnTransform);
 	
+	UMUAT_SpawnAttackEntity* Task = UMUAT_SpawnAttackEntity::StartSpawnAttackEntity(this, AttackEntityClass, SpawnTransform, SpawnWaitTime );
+
+	if ( IsValid(Task) == true )
+	{
+		Task->OnSpawnActorFinished.AddDynamic(this, &UMUGA_SpawnAttack::OnFinishedSpawn);
+		Task->ReadyForActivation();
+	}
+}
+
+void UMUGA_SpawnAttack::OnFinishedSpawn()
+{
 	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = false;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+    bool bWasCancelled = false;
+    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }
