@@ -4,6 +4,8 @@
 #include "Abilities/Skill/MUGA_IndicatorSkill.h"
 
 #include "MUDefines.h"
+#include "Abilities/AT/MUAT_SpawnIndicator.h"
+#include "Abilities/AT/MUAT_WaitTriggerInput.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Indicator/MUIndicatorManageSubsystem.h"
 #include "Library/MUFunctionLibrary.h"
@@ -25,60 +27,32 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, false );
 		return;
 	}
-	
-	// Input에 대한 바인딩 처리 필요.
-	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
-	if ( IsValid(OwnerActor) == false )
+	UMUAT_WaitTriggerInput* SkillCastInput = UMUAT_WaitTriggerInput::CreateTask(this, MU_INPUT_SIMPLE_CAST, ETriggerEvent::Triggered);
+	if ( IsValid( SkillCastInput ) == true )
 	{
-		return;
+		SkillCastInput->InputPressedCallback.AddDynamic( this, &UMUGA_IndicatorSkill::OnSkillInputPressed);
+		SkillCastInput->ReadyForActivation();
+
+		OnSkillStateChanged.AddDynamic( SkillCastInput, &UMUAT_WaitTriggerInput::EndTask);
 	}
 
-	APawn* OwnerPawn = Cast<APawn>(OwnerActor);
+	UMUAT_WaitTriggerInput* SkillCancelInput = UMUAT_WaitTriggerInput::CreateTask(this, MU_INPUT_CANCEL, ETriggerEvent::Triggered);
 
-	if ( IsValid( OwnerPawn ) == false )
+	if ( IsValid( SkillCancelInput ) == true )
 	{
-		return;
-	}
-	
-	UMUEnhancedInputComponent* EnhancedInputComponent = Cast<UMUEnhancedInputComponent>(OwnerActor->InputComponent);
-
-	if ( IsValid( EnhancedInputComponent ) == false )
-	{
-		return;
-	}
-	
-	UInputConfig* InputConfig = UMUFunctionLibrary::GetInputConfigByOwner( GetAvatarActorFromActorInfo() );
-
-	if ( IsValid(InputConfig) == false )
-	{
-		return;
+		SkillCancelInput->InputPressedCallback.AddDynamic( this, &UMUGA_IndicatorSkill::OnSkillCanceled);
+		SkillCancelInput->ReadyForActivation();
+		
+		OnSkillStateChanged.AddDynamic( SkillCancelInput, &UMUAT_WaitTriggerInput::EndTask);
 	}
 
-	const UInputAction* InputAction = InputConfig->FindInputActionForTag(MU_INPUT_SIMPLE_CAST);
+	UMUAT_SpawnIndicator* IndicatorSkill = UMUAT_SpawnIndicator::CreateTask(this, SkillID);
 
-	if ( IsValid( InputAction ) == true )
+	if ( IsValid( IndicatorSkill ) == true)
 	{
-		EnhancedInputComponent->BindAction( InputAction, ETriggerEvent::Triggered, this, &UMUGA_IndicatorSkill::OnSkillInputPressed);	
-	}
-
-	const UInputAction* CancelAction = InputConfig->FindInputActionForTag(MU_INPUT_CANCEL);
-
-	if ( IsValid( CancelAction ) == true )
-	{
-		EnhancedInputComponent->BindAction( CancelAction, ETriggerEvent::Triggered, this, &UMUGA_IndicatorSkill::OnSkillCanceled);	
-	}
-
-	APlayerController* PC = OwnerPawn->GetController<APlayerController>();
-
-	if ( IsValid( PC ) == false )
-	{
-		return;
-	}
-	
-	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PC->GetLocalPlayer()))
-	{
-		Subsystem->ActivateSkillIndicator( SkillID );
+		IndicatorSkill->ReadyForActivation();
+		OnSkillStateChanged.AddDynamic( IndicatorSkill, &UMUAT_SpawnIndicator::EndTask);
 	}
 }
 
@@ -116,9 +90,6 @@ void UMUGA_IndicatorSkill::ActivateSkill()
 
 		UE_LOG(LogTemp, Log, TEXT("Rotation : %s"), *TargetRotation.ToString() )
 	}
-	
-
-	ResetInput();
 
 	UE_LOG(LogTemp, Log, TEXT("Skill Active"));
 }
@@ -131,43 +102,10 @@ void UMUGA_IndicatorSkill::OnSkillInputPressed()
 
 void UMUGA_IndicatorSkill::OnSkillCanceled()
 {
-	ResetInput();
+	CancelSkill();
 	
 	bool bReplicateEndAbility = true;
 	bool bWasCancelled = false;
 
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
-}
-
-void UMUGA_IndicatorSkill::ResetInput()
-{
-	// Input에 대한 바인딩 처리 필요.
-	AActor* OwnerActor = GetAvatarActorFromActorInfo();
-
-	if ( IsValid(OwnerActor) == false )
-	{
-		return;
-	}
-
-	APawn* OwnerPawn = Cast<APawn>(OwnerActor);
-
-	if ( IsValid( OwnerPawn ) == false )
-	{
-		return;
-	}
-	
-	UMUEnhancedInputComponent* EnhancedInputComponent = Cast<UMUEnhancedInputComponent>(OwnerActor->InputComponent);
-
-	if ( IsValid( EnhancedInputComponent ) == false )
-	{
-		return;
-	}
-
-	EnhancedInputComponent->ClearBindingsForObject( this );
-
-	APlayerController* PC = OwnerPawn->GetController<APlayerController>();
-	if (UMUIndicatorManageSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUIndicatorManageSubsystem>(PC->GetLocalPlayer()))
-	{
-		Subsystem->DeactivateSkillIndicator( SkillID );
-	}
 }

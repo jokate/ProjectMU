@@ -76,6 +76,19 @@ void UMUGA_ActivateSkill::ActivateSkill()
 {
 	ApplyCost( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
 	ApplyCooldown( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
+
+	if ( OnSkillStateChanged.IsBound() == true )
+	{
+		OnSkillStateChanged.Broadcast();
+	}
+}
+
+void UMUGA_ActivateSkill::CancelSkill()
+{
+	if ( OnSkillStateChanged.IsBound() == true )
+	{
+		OnSkillStateChanged.Broadcast();
+	}
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,

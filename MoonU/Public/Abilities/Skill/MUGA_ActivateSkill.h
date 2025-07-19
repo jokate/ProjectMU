@@ -10,6 +10,8 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillStateChanged );
+
 UCLASS()
 class MOONU_API UMUGA_ActivateSkill : public UGameplayAbility, public ISkillActivateAbility
 {
@@ -29,7 +31,7 @@ public :
 	
 	virtual void ActivateSkill() override;
 
-	virtual void CancelSkill() override {};
+	virtual void CancelSkill() override;
 
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 
@@ -38,6 +40,9 @@ public :
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;
+
+	UPROPERTY( BlueprintAssignable )
+	FOnSkillStateChanged OnSkillStateChanged;
 	
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;

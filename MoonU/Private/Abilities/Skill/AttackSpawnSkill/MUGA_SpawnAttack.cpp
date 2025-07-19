@@ -4,7 +4,6 @@
 #include "Abilities/Skill/AttackSpawnSkill/MUGA_SpawnAttack.h"
 
 #include "Abilities/AT/MUAT_SpawnAttackEntity.h"
-#include "Entity/AttackEntity/MUAttackEntity.h"
 
 void UMUGA_SpawnAttack::ActivateSkill()
 {

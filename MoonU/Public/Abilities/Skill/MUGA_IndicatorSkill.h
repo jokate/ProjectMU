@@ -9,6 +9,7 @@
 /**
  * 
  */
+
 UCLASS()
 class MOONU_API UMUGA_IndicatorSkill : public UMUGA_ActivateSkill
 {
@@ -28,9 +29,6 @@ public :
 
 	UFUNCTION()
 	virtual void OnSkillCanceled();
-
-	virtual void ResetInput();
-
 public :
 	UPROPERTY()
 	FVector TargetLocation;
