@@ -84,11 +84,6 @@ void AMUCharacterBase::PossessedBy(AController* NewController)
 	}
 }
 
-UMUComboActionData* AMUCharacterBase::GetComboActionData() const
-{
-	return ComboActionData;
-}
-
 bool AMUCharacterBase::HasMatchingGameplayTag(FGameplayTag TagToCheck) const
 {
 	return ASC->HasMatchingGameplayTag(TagToCheck);

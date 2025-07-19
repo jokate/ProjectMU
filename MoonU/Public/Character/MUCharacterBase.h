@@ -27,9 +27,7 @@ public:
 	AMUCharacterBase( const FObjectInitializer& ObjectInitializer );
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	virtual class UMUComboActionData* GetComboActionData() const;
-
+	
 #pragma region IGameplayTaagAssetInterface
 	
 	virtual bool HasMatchingGameplayTag(FGameplayTag TagToCheck) const override;
@@ -106,9 +104,6 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Perception Stimuli Component")
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSourceComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combo Action Data")
-	TObjectPtr<class UMUComboActionData> ComboActionData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Motion Warping")
 	TObjectPtr<class UMotionWarpingComponent> MotionWarpingComponent;

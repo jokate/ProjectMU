@@ -38,8 +38,8 @@ protected:
 	void UpdateComboTimer();
 	
 protected:
-	UPROPERTY()
-	TObjectPtr<class UMUComboActionData> CurrentComboData;
+	UPROPERTY( EditDefaultsOnly )
+	TObjectPtr<class UMUComboActionData> ComboData;
 
 	uint8 CurrentCombo = 0;
 
