@@ -122,10 +122,7 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
 	TArray<TSubclassOf<class UGameplayAbility>> StartAbilities;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ability")
-	TMap<int32, TSubclassOf<class UGameplayAbility>> StartInputAbilities;
-
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
 	TArray<TSubclassOf<class UGameplayEffect>> InfiniteGameplayEffects;
 

@@ -27,6 +27,12 @@ public:
 	AMUCharacterBase( const FObjectInitializer& ObjectInitializer );
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode = 0) override;
+
+	virtual void RemoveMovementTags( EMovementMode PrevTag );
+
+	virtual void AddMovementTags( EMovementMode CurrentTag );
 	
 #pragma region IGameplayTaagAssetInterface
 	
@@ -117,9 +123,18 @@ protected :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Up Component")
 	TObjectPtr<class UMULevelUpComponent> LevelUpComponent;
 
+public :
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Defend Extent")
 	FVector DefendExtent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Test Character ID")
 	int32 CharacterID = 0;
+
+	public :
+	UPROPERTY( EditDefaultsOnly, Category = "MovementMode | Tag" )
+	TMap<TEnumAsByte<EMovementMode>, FGameplayTagContainer> NeedToAddMovementTag;
+
+	UPROPERTY( EditDefaultsOnly, Category = "MovementMode | Tag"  )
+	TMap<TEnumAsByte<EMovementMode>, FGameplayTagContainer> NeedToRemoveMovementTag;
 };

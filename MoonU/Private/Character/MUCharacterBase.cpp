@@ -9,6 +9,7 @@
 #include "Components/MULevelUpComponent.h"
 #include "Components/TimeWindComponent.h"
 #include "Data/DataTable/MUData.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 
@@ -107,6 +108,44 @@ void AMUCharacterBase::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer)
 UAbilitySystemComponent* AMUCharacterBase::GetAbilitySystemComponent() const
 {
 	return ASC;
+}
+
+void AMUCharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	RemoveMovementTags(PrevMovementMode);
+	AddMovementTags(GetCharacterMovement()->MovementMode);
+}
+
+void AMUCharacterBase::RemoveMovementTags(EMovementMode PrevTag)
+{
+	if ( IsValid(ASC) == false )
+	{
+		return;
+	}
+	
+	if ( NeedToRemoveMovementTag.Contains( PrevTag ) == false )
+	{
+		return;
+	}
+
+	ASC->RemoveLooseGameplayTags( NeedToRemoveMovementTag[PrevTag] );
+}
+
+void AMUCharacterBase::AddMovementTags(EMovementMode CurrentTag)
+{
+	if ( IsValid(ASC) == false )
+	{
+		return;
+	}
+	
+	if ( NeedToAddMovementTag.Contains( CurrentTag ) == false )
+	{
+		return;
+	}
+
+	ASC->AddLooseGameplayTags( NeedToAddMovementTag[CurrentTag] );
 }
 
 FOnTimewindEnd& AMUCharacterBase::GetTimeWindEndEvent()

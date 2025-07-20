@@ -58,6 +58,8 @@
 #define MU_CHARACTERSTATE_DEAD FGameplayTag::RequestGameplayTag(FName("Character.State.Dead"))
 #define MU_CHARACTERSTATE_SUPERARMOR FGameplayTag::RequestGameplayTag(FName("Character.State.SuperArmor"))
 #define MU_CHARACTERSTATE_READYSKILL FGameplayTag::RequestGameplayTag(FName("Character.State.ReadySkill"))
+#define MU_CHARACTERSTATE_JUMPING FGameplayTag::RequestGameplayTag(FName("Character.State.Jumping"))
+
 #define MU_EVENT_REGENERATED FGameplayTag::RequestGameplayTag(FName("Event.Regenerated"))
 
 #define MU_CHARACTERSTATE_DEFENDING FGameplayTag::RequestGameplayTag(FName("Character.State.Defend"))

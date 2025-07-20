@@ -74,7 +74,6 @@ void UMUGA_Rollout::CancelAbility(const FGameplayAbilitySpecHandle Handle, const
 void UMUGA_Rollout::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	AMUCharacterPlayer* Character = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
 
 	if (!ASC)

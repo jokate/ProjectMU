@@ -47,13 +47,6 @@ void UMUGA_Jump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGame
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
-
-	UMUAT_RemoveTag* NewTask = UMUAT_RemoveTag::CreateTask( this, RelatedActionTag );
-
-	if ( IsValid(NewTask) == true )
-	{
-		NewTask->ReadyForActivation();
-	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
