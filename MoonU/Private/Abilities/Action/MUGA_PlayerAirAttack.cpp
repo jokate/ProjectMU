@@ -3,6 +3,7 @@
 
 #include "Abilities/Action/MUGA_PlayerAirAttack.h"
 
+#include "Abilities/AT/MUAT_AddTagTemporary.h"
 #include "Abilities/AT/MUAT_SetNoSimulatedPhysics.h"
 
 
@@ -17,5 +18,12 @@ void UMUGA_PlayerAirAttack::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	if ( IsValid( NewTask ) == true )
 	{
 		NewTask->ReadyForActivation();
+	}
+
+	UMUAT_AddTagTemporary* AddingTagTask = UMUAT_AddTagTemporary::CreateTask( this, AddingTags );
+
+	if ( IsValid( AddingTagTask ) == true )
+	{
+		AddingTagTask->ReadyForActivation();	
 	}
 }

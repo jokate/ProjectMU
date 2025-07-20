@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "MUDefines.h"
+#include "Abilities/AT/MUAT_RemoveTag.h"
 #include "GameFramework/Character.h"
 
 UMUGA_Jump::UMUGA_Jump()
@@ -46,6 +47,13 @@ void UMUGA_Jump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGame
 	}
 	
 	ASC->RemoveLooseGameplayTag(MU_EVENT_BLOCKRECOVER);
+
+	UMUAT_RemoveTag* NewTask = UMUAT_RemoveTag::CreateTask( this, RelatedActionTag );
+
+	if ( IsValid(NewTask) == true )
+	{
+		NewTask->ReadyForActivation();
+	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

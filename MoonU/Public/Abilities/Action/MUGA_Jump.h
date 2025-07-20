@@ -24,4 +24,8 @@ public :
 protected:
 	UFUNCTION()
 	virtual void OnLandedCallback();
+
+public :
+	UPROPERTY( EditDefaultsOnly )
+	FGameplayTagContainer RelatedActionTag;
 };

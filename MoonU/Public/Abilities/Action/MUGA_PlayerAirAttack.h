@@ -16,4 +16,8 @@ class MOONU_API UMUGA_PlayerAirAttack : public UMUGA_PlayerAttack
 
 public :
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+public :
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer AddingTags;
 };
