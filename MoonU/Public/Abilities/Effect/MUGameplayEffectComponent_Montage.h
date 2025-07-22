@@ -16,8 +16,9 @@ class MOONU_API UMUGameplayEffectComponent_Montage : public UGameplayEffectCompo
 	GENERATED_BODY()
 
 public :
-	virtual void OnGameplayEffectApplied(FActiveGameplayEffectsContainer& ActiveGEContainer, FGameplayEffectSpec& GESpec, FPredictionKey& PredictionKey) const override;
+	virtual void OnGameplayEffectExecuted(FActiveGameplayEffectsContainer& ActiveGEContainer, FGameplayEffectSpec& GESpec, FPredictionKey& PredictionKey) const override;
 
+public:
 	UPROPERTY( EditDefaultsOnly, meta = (DisplayName = "Montage To Play"))
 	TObjectPtr<UAnimMontage> MontageToPlay;
 

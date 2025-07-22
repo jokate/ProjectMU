@@ -7,11 +7,11 @@
 #include "Attribute/MUCharacterAttributeSetBase.h"
 #include "GameFramework/Character.h"
 
-void UMUGameplayEffectComponent_Montage::OnGameplayEffectApplied(FActiveGameplayEffectsContainer& ActiveGEContainer,
-                                                                 FGameplayEffectSpec& GESpec, FPredictionKey& PredictionKey) const
+void UMUGameplayEffectComponent_Montage::OnGameplayEffectExecuted(FActiveGameplayEffectsContainer& ActiveGEContainer,
+	FGameplayEffectSpec& GESpec, FPredictionKey& PredictionKey) const
 {
-	Super::OnGameplayEffectApplied(ActiveGEContainer, GESpec, PredictionKey);
-
+	Super::OnGameplayEffectExecuted(ActiveGEContainer, GESpec, PredictionKey);
+	
 	UAbilitySystemComponent* ASC = ActiveGEContainer.Owner;
 
 	if ( IsValid( ASC ) == false )
