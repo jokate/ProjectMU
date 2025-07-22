@@ -118,11 +118,11 @@ void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 
 					if (EffectSpecHandle.IsValid())
 					{
-						SourceASC->BP_ApplyGameplayEffectSpecToTarget(EffectSpecHandle, TargetASC);
+						SourceASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), TargetASC);
 					}
 				}
 				
-				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
+				//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
 			}
 		}
 	} 

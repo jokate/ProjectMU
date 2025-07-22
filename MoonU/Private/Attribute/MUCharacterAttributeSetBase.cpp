@@ -127,6 +127,8 @@ void UMUCharacterAttributeSetBase::CheckDeath(const FGameplayEffectModCallbackDa
 		EventData.TargetData.Add(TargetData);
 		
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningAbilitySystemComponent()->GetAvatarActor(), MU_CHARACTERSTATE_DEAD, EventData);
+
+		UE_LOG(LogTemp, Log, TEXT("Character Death"));
 	}
 	
 	bOutOfHealth = (GetCurrentHp() <= 0.0f);
