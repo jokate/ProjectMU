@@ -11,5 +11,6 @@ public class MoonUEditorTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 		ExtraModuleNames.Add("MoonU");
+		ExtraModuleNames.Add("BTHTN");
 	}
 }
