@@ -36,6 +36,9 @@ public :
 
 	virtual void BeginPlay() override;
 
+	UPROPERTY( EditDefaultsOnly )
+	FGameplayTag InitialTag;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UGameplayTagWidgetContainer> GameplayTagWidgetContainer;
 };

@@ -46,7 +46,12 @@ void AMUPlayerHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UMUHUDWidget* HUDWidget = Cast<UMUHUDWidget>(GameplayTagWidgetContainer->GetWidgetByGameplayTag(MU_UI_HUD));
-	HUDWidget->SetAbilitySystemComponent(PlayerOwner->GetPawn());
-	ShowWidgetByGameplayTag(MU_UI_HUD);
+	UMUHUDWidget* HUDWidget = Cast<UMUHUDWidget>(GameplayTagWidgetContainer->GetWidgetByGameplayTag(InitialTag));
+	
+	if ( IsValid( HUDWidget ) == true )
+	{
+		HUDWidget->SetAbilitySystemComponent(PlayerOwner->GetPawn());	
+	}
+
+	ShowWidgetByGameplayTag(InitialTag);
 }
