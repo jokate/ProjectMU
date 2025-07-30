@@ -47,3 +47,13 @@ public :
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Casting Range")
 	float CastingRange = 0;
 };
+
+USTRUCT( BlueprintType )
+struct FDrawingCoordinate
+{
+	GENERATED_BODY()
+
+	public :
+		UPROPERTY( BlueprintReadOnly )
+	TArray<FVector2D> Coordinates;
+};

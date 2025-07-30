@@ -5,11 +5,13 @@
 
 #include "HighResScreenshot.h"
 #include "ImageUtils.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Components/Button.h"
 #include "Engine/Canvas.h"
 #include "Engine/CanvasRenderTarget2D.h"
 #include "Engine/DataTable.h"
+#include "Training/CanvasWidget.h"
+#include "Data/MUStruct.h"
 
 /*void UDataExtractorWidget::AddRowForTrainingInfo(UDataTable* InfoDataTable, FName InRowName, FString FileName)
 {
@@ -39,84 +41,35 @@ void UDataExtractorWidget::NativeConstruct()
 	FVector2D LocalVector = UWidgetLayoutLibrary::GetViewportSize(this);
 	CanvasRenderTarget = UCanvasRenderTarget2D::CreateCanvasRenderTarget2D( this, UCanvasRenderTarget2D::StaticClass(), LocalVector.X, LocalVector.Y );
 	CanvasRenderTarget->OnCanvasRenderTargetUpdate.AddDynamic( this, &UDataExtractorWidget::DrawToCanvas );
-}
 
-void UDataExtractorWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	if ( bMousePressed )
+	if ( IsValid(ExtractButton) == true )
 	{
-		if ( CoordinatesArray.IsValidIndex(MouseIndex) == false )
-		{
-			FDrawingCoordinate DrawingCoordinate;
-			CoordinatesArray.Add(DrawingCoordinate);
-		}
-
-		FDrawingCoordinate& TempDrawing = CoordinatesArray[MouseIndex];
-		FVector2D CurrentCoord = UWidgetLayoutLibrary::GetMousePositionOnViewport(this);
-		TempDrawing.Coordinates.Emplace(CurrentCoord);
+		ExtractButton->OnClicked.AddDynamic( this, &UDataExtractorWidget::SaveCanvas );
 	}
 }
 
 int32 UDataExtractorWidget::NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry,
-                                        const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId,
-                                        const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
+	const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId,
+	const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
 {
-	Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
-
-	FPaintContext PaintContext( AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled );
-
-	for ( const FDrawingCoordinate& Coords : CoordinatesArray )
-	{
-		UWidgetBlueprintLibrary::DrawLines( PaintContext, Coords.Coordinates, FLinearColor::Blue, true, 10);
-	}
-
-	if ( IsValid(CanvasRenderTarget) )
-	{
-		CanvasRenderTarget->UpdateResource();
-	}
-
-	return LayerId + 1;
-}
-
-FReply UDataExtractorWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-	if ( InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton )
-	{
-		bMousePressed = true;
-	}
+	CanvasRenderTarget->UpdateResource();
 	
-	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
-}
-
-FReply UDataExtractorWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-	if ( InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton )
-	{
-		bMousePressed = false;
-		++MouseIndex;
-	}
-	
-	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
-}
-
-void UDataExtractorWidget::ResetAllMember()
-{
-	bMousePressed = false;
-	CoordinatesArray.Empty();
-	MouseIndex = 0;
-
-	SaveCanvas();
+	return Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle,
+	                          bParentEnabled);
 }
 
 void UDataExtractorWidget::DrawToCanvas(UCanvas* Canvas, int32 Width, int32 Height)
 {
+	if ( IsValid( CanvasWidget ) == false )
+	{
+		return;
+	}
+	
 	FLinearColor TransparentColor = FLinearColor::White;
 	
 	Canvas->K2_DrawBox(FVector2D(0, 0), FVector2D(Width, Height), 0, TransparentColor);
 
-	for ( const FDrawingCoordinate& Coords : CoordinatesArray )
+	for ( const FDrawingCoordinate& Coords : CanvasWidget->GetAllCoordinate() )
 	{
 		const TArray<FVector2D>& Coordinate = Coords.Coordinates;
 
@@ -133,8 +86,7 @@ void UDataExtractorWidget::SaveCanvas()
 
 	TArray<FColor> OutBMP;
 	RTResource->ReadPixels(OutBMP);
-
-	// PNG 저장
+	
 	FIntPoint DestSize(RTResource->GetSizeX(), RTResource->GetSizeY());
 
 	TArray64<uint8> CompressedPNG;
@@ -142,4 +94,9 @@ void UDataExtractorWidget::SaveCanvas()
 
 	FString FilePath = FPaths::ProjectSavedDir() / TEXT("DrawnImage.png");
 	FFileHelper::SaveArrayToFile(CompressedPNG, *FilePath);
+
+	if ( IsValid( CanvasWidget) == true )
+	{
+		CanvasWidget->ResetAllMember();
+	}
 }

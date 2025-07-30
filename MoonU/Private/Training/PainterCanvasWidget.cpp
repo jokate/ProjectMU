@@ -5,6 +5,7 @@
 
 #include "Components/Button.h"
 #include "Engine/CanvasRenderTarget2D.h"
+#include "Training/CanvasWidget.h"
 #include "Training/DataExtractorWidget.h"
 
 void UPainterCanvasWidget::NativeConstruct()
@@ -19,8 +20,8 @@ void UPainterCanvasWidget::NativeConstruct()
 
 void UPainterCanvasWidget::OnPaintButtonPressed()
 {
-	if ( IsValid(DataExtractorWidget) )
+	if ( IsValid(CanvasWidget) )
 	{
-		DataExtractorWidget->ResetAllMember();
+		CanvasWidget->ResetAllMember();
 	}  
 }

@@ -76,7 +76,7 @@ FOnTimewindEnd& UTimeWindComponent::GetTimeWindEndEvent()
 	return TimeWindEndEvent;
 }
 
-void UTimeWindComponent::OnIntialize()
+void UTimeWindComponent::OnInitialize()
 {
 	UWorld* World = GetWorld();
 

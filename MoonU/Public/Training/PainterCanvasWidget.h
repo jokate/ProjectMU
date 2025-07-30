@@ -8,7 +8,7 @@
 
 class UCanvasRenderTarget2D;
 class UButton;
-class UDataExtractorWidget;
+class UCanvasWidget;
 /**
  * 
  */
@@ -18,7 +18,6 @@ class MOONU_API UPainterCanvasWidget : public UUserWidget
 	GENERATED_BODY()
 
 public : 
-
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
@@ -26,7 +25,7 @@ public :
 	
 public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	TObjectPtr<UDataExtractorWidget> DataExtractorWidget;
+	TObjectPtr<UCanvasWidget> CanvasWidget;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UButton> PaintButton;

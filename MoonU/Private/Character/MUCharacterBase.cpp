@@ -35,7 +35,7 @@ void AMUCharacterBase::BeginPlay()
 
 	if ( IsValid(TimeWindComponent) == true)
 	{
-		TimeWindComponent->OnIntialize();	
+		TimeWindComponent->OnInitialize();	
 	}
 	
 	LevelUpComponent->OnCharacterInitialized();
