@@ -4,6 +4,7 @@
 #include "Training/PainterCanvasWidget.h"
 
 #include "Components/Button.h"
+#include "Engine/CanvasRenderTarget2D.h"
 #include "Training/DataExtractorWidget.h"
 
 void UPainterCanvasWidget::NativeConstruct()

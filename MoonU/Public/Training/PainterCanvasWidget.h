@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PainterCanvasWidget.generated.h"
 
+class UCanvasRenderTarget2D;
 class UButton;
 class UDataExtractorWidget;
 /**
@@ -22,7 +23,6 @@ public :
 
 	UFUNCTION()
 	virtual void OnPaintButtonPressed();
-	
 	
 public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))

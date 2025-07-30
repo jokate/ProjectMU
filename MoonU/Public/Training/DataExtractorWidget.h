@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DataExtractorWidget.generated.h"
 
+class UCanvasRenderTarget2D;
 /**
  * 
  */
@@ -27,6 +28,8 @@ class MOONU_API UDataExtractorWidget : public UUserWidget
 
 public :
 
+	virtual void NativeConstruct() override;
+	
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	virtual int32 NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled ) const override;
@@ -36,9 +39,17 @@ public :
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 	virtual void ResetAllMember();
+
+	UFUNCTION()
+	virtual void DrawToCanvas( UCanvas* Canvas, int32 Width, int32 Height );
+
+	virtual void SaveCanvas();
 public :
 	UPROPERTY( BlueprintReadOnly )
 	TArray<FDrawingCoordinate> CoordinatesArray;
+	
+	UPROPERTY()
+	TObjectPtr<UCanvasRenderTarget2D> CanvasRenderTarget;
 
 	UPROPERTY( BlueprintReadOnly )
 	int32 MouseIndex = 0;
