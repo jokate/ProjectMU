@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DataExtractorWidget.generated.h"
 
+class UEditableTextBox;
 class UCanvasWidget;
 class UCanvasRenderTarget2D;
 /**
@@ -30,6 +31,9 @@ public :
 	UFUNCTION()
 	virtual void SaveCanvas();
 
+	UFUNCTION()
+	virtual void ResetIndex() { Index = 0; }
+
 public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UCanvasWidget> CanvasWidget;
@@ -39,4 +43,14 @@ public :
 	
 	UPROPERTY()
 	TObjectPtr<UCanvasRenderTarget2D> CanvasRenderTarget;
+
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UEditableTextBox> SignNumber;
+
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UButton> ResetButton;
+	
+public :
+	UPROPERTY()
+	int32 Index = 1;
 };

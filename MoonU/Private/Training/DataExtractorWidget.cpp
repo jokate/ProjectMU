@@ -7,6 +7,7 @@
 #include "ImageUtils.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/Button.h"
+#include "Components/EditableTextBox.h"
 #include "Engine/Canvas.h"
 #include "Engine/CanvasRenderTarget2D.h"
 #include "Engine/DataTable.h"
@@ -46,13 +47,21 @@ void UDataExtractorWidget::NativeConstruct()
 	{
 		ExtractButton->OnClicked.AddDynamic( this, &UDataExtractorWidget::SaveCanvas );
 	}
+
+	if ( IsValid( ResetButton ) == true )
+	{
+		ResetButton->OnClicked.AddDynamic( this, &UDataExtractorWidget::ResetIndex );
+	}
 }
 
 int32 UDataExtractorWidget::NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry,
 	const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId,
 	const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
 {
-	CanvasRenderTarget->UpdateResource();
+	if ( IsValid( CanvasRenderTarget ) == true )
+	{
+		CanvasRenderTarget->UpdateResource();	
+	}
 	
 	return Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle,
 	                          bParentEnabled);
@@ -75,7 +84,7 @@ void UDataExtractorWidget::DrawToCanvas(UCanvas* Canvas, int32 Width, int32 Heig
 
 		for (int32 i = 0; i < Coordinate.Num() - 1; ++i)
 		{
-			Canvas->K2_DrawLine(Coordinate[i], Coordinate[i + 1], 10.f, FLinearColor::Blue);
+			Canvas->K2_DrawLine(Coordinate[i], Coordinate[i + 1], 10.f, FLinearColor::White);
 		}
 	}
 }
@@ -91,8 +100,9 @@ void UDataExtractorWidget::SaveCanvas()
 
 	TArray64<uint8> CompressedPNG;
 	FImageUtils::PNGCompressImageArray(DestSize.X, DestSize.Y, OutBMP, CompressedPNG);
-
-	FString FilePath = FPaths::ProjectSavedDir() / TEXT("DrawnImage.png");
+	
+	
+	FString FilePath = FPaths::ProjectSavedDir() / 	FString::Printf( TEXT("Pattern/Pattern%s_%d.png"), *SignNumber->GetText().ToString(), Index++);
 	FFileHelper::SaveArrayToFile(CompressedPNG, *FilePath);
 
 	if ( IsValid( CanvasWidget) == true )
