@@ -61,7 +61,7 @@ void AMUNNETestPawn::Tick(float DeltaTime)
 			UE_LOG(LogTemp, Log, TEXT("Output : %f"), Num );
 		}
 		AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [&]()
-	{	
+		{	
 		if (ModelInstance->RunSync(InputBindings, OutputBindings) != 0)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Failed to run the model"));

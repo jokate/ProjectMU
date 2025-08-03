@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NNERuntimeCPU.h"
 #include "Blueprint/UserWidget.h"
 #include "PainterCanvasWidget.generated.h"
 
@@ -19,9 +20,13 @@ class MOONU_API UPainterCanvasWidget : public UUserWidget
 
 public : 
 	virtual void NativeConstruct() override;
+	virtual int32 NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
 
 	UFUNCTION()
 	virtual void OnPaintButtonPressed();
+
+	UFUNCTION()
+	virtual void DrawToCanvas( UCanvas* Canvas, int32 Width, int32 Height );
 	
 public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
@@ -29,4 +34,19 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UButton> PaintButton;
+
+	UPROPERTY( EditAnywhere )
+	TObjectPtr<UNNEModelData> PreloadedModelData;
+
+	UPROPERTY()
+	TObjectPtr<UCanvasRenderTarget2D> RenderTarget;
+	
+private :// 	https://dev.epicgames.com/community/learning/courses/e7w/unreal-engine-neural-network-engine-nne/34q9/unreal-engine-nne-quick-start-guide-5-3
+	TUniquePtr<UE::NNE::IModelInstanceCPU> ModelInstance;
+	TArray<float> InputData;
+	TArray<float> OutputData;
+	TArray<UE::NNE::FTensorBindingCPU> InputBindings;
+	TArray<UE::NNE::FTensorBindingCPU> OutputBindings;
+	bool bIsRunning = false;
+	
 };
