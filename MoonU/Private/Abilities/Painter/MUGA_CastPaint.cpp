@@ -1,0 +1,43 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Abilities/Painter/MUGA_CastPaint.h"
+
+#include "Abilities/AT/MUAT_DrawingCanvas.h"
+
+UMUGA_CastPaint::UMUGA_CastPaint()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
+void UMUGA_CastPaint::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+	const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	UMUAT_DrawingCanvas* DrawingCanvas = UMUAT_DrawingCanvas::CreateDrawingCanvas( this, ModelData, WidgetTag );
+
+	if ( IsValid( DrawingCanvas ) == true )
+	{
+		DrawingCanvas->OnCanvasDrawingComplete.AddDynamic( this, &UMUGA_CastPaint::CastPaint );
+	}
+}
+
+void UMUGA_CastPaint::CastPaint(const TArray<float>& OutputData)
+{
+	float MaxMem = FLT_MIN;
+	int32 MaxIndex = -1;
+	for ( int32 i = 0; i < OutputData.Num(); i++ )
+	{
+		if ( MaxMem > OutputData[i] )
+		{
+			MaxMem = OutputData[i];
+			MaxIndex = i;
+		}
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Max Target : %d"), MaxIndex + 1 );
+
+	// 문양에 대한 스킬 캐스팅까지 연동 필요.
+}
