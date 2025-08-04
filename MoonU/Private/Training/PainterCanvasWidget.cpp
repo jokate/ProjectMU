@@ -138,9 +138,9 @@ void UPainterCanvasWidget::DrawToCanvas(UCanvas* Canvas, int32 Width, int32 Heig
 	}
 
 	FVector2D CanvasSize = FVector2D(Width, Height); 
-	FVector2D ViewportSize;
-	GEngine->GameViewport->GetViewportSize(ViewportSize);
+	FVector2D ViewportSize = UWidgetLayoutLibrary::GetViewportSize( this ) / UWidgetLayoutLibrary::GetViewportScale( this );
 
+	
 	Canvas->K2_DrawBox(FVector2D(0, 0), CanvasSize, 0.f, FLinearColor::White);
 
 	for (const FDrawingCoordinate& Coords : CanvasWidget->GetAllCoordinate())
@@ -149,11 +149,11 @@ void UPainterCanvasWidget::DrawToCanvas(UCanvas* Canvas, int32 Width, int32 Heig
 
 		for (int32 i = 0; i < Coordinate.Num() - 1; ++i)
 		{
-			FVector2D StartViewport = Coordinate[i] * Width;
+			FVector2D StartViewport = Coordinate[i] * 256;
 			StartViewport.X = StartViewport.X / ViewportSize.X;
 			StartViewport.Y = StartViewport.Y / ViewportSize.Y;
 			
-			FVector2D EndViewport = Coordinate[i + 1] * Height;
+			FVector2D EndViewport = Coordinate[i + 1] * 256;
 			EndViewport.X = EndViewport.X / ViewportSize.X;
 			EndViewport.Y = EndViewport.Y / ViewportSize.Y;
 

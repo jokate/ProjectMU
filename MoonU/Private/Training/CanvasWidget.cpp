@@ -30,6 +30,7 @@ void UCanvasWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		{
 			FDrawingCoordinate& TempDrawing = CoordinatesArray[MouseIndex];
 			FVector2D CurrentCoord = UWidgetLayoutLibrary::GetMousePositionOnViewport(this);
+			UE_LOG(LogTemp, Log, TEXT("Current Coord : %s"), *CurrentCoord.ToString());
 			TempDrawing.Coordinates.Emplace(CurrentCoord);	
 		}
 	}
