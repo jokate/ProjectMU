@@ -1,44 +1,63 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Training/PainterCanvasWidget.h"
+#include "Abilities/AT/MUAT_DrawingCanvas.h"
 
 #include "ImageUtils.h"
 #include "NNE.h"
-#include "Blueprint/WidgetLayoutLibrary.h"
-#include "Components/Button.h"
-#include "Data/MUStruct.h"
-#include "Engine/Canvas.h"
 #include "Engine/CanvasRenderTarget2D.h"
-#include "Training/CanvasWidget.h"
-void UPainterCanvasWidget::NativeConstruct()
+#include "Training/PainterCanvasWidget.h"
+
+UMUAT_DrawingCanvas* UMUAT_DrawingCanvas::CreateDrawingCanvas(UGameplayAbility* GameplayAbility,
+                                                              UNNEModelData* ModelData, FGameplayTag InWidgetTag )
 {
-	Super::NativeConstruct();
+	UMUAT_DrawingCanvas* DrawingCanvas = NewAbilityTask<UMUAT_DrawingCanvas>(GameplayAbility);
+	DrawingCanvas->PreloadedModelData = ModelData;
+	DrawingCanvas->WidgetTag = InWidgetTag;
 
-	if ( IsValid(PaintButton) )
-	{
-		PaintButton->OnClicked.AddDynamic( this, &UPainterCanvasWidget::OnPaintButtonPressed );
-	}
-
-	RenderTarget = UCanvasRenderTarget2D::CreateCanvasRenderTarget2D( this, UCanvasRenderTarget2D::StaticClass(), 256, 256 );
-	RenderTarget->OnCanvasRenderTargetUpdate.AddDynamic( this, &UPainterCanvasWidget::DrawToCanvas );
+	return DrawingCanvas;
 }
 
-int32 UPainterCanvasWidget::NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry,
-	const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId,
-	const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
+void UMUAT_DrawingCanvas::Activate()
 {
-	if ( IsValid( RenderTarget ) == true )
+	Super::Activate();
+
+	UPainterCanvasWidget* CanvasWidget = Cast<UPainterCanvasWidget>(TagWidget);
+
+	if ( IsValid( CanvasWidget ) == true )
 	{
-		RenderTarget->UpdateResource();	
+		CanvasWidget->OnCanvasButtonPressed.AddDynamic( this, &UMUAT_DrawingCanvas::ProcessModelRun );
+	}
+}
+
+void UMUAT_DrawingCanvas::OnDestroy(bool bInOwnerFinished)
+{
+	UPainterCanvasWidget* CanvasWidget = Cast<UPainterCanvasWidget>(TagWidget);
+
+	if ( IsValid( CanvasWidget ) == true )
+	{
+		CanvasWidget->OnCanvasButtonPressed.RemoveAll( this );
 	}
 	
-	return Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle,
-	                          bParentEnabled);
+	Super::OnDestroy(bInOwnerFinished);
 }
 
-void UPainterCanvasWidget::OnPaintButtonPressed()
+void UMUAT_DrawingCanvas::ProcessModelRun()
 {
+	ProcessData();	
+}
+
+void UMUAT_DrawingCanvas::ProcessData()
+{
+	UPainterCanvasWidget* CanvasWidget = Cast<UPainterCanvasWidget>(TagWidget);
+
+	if ( IsValid( CanvasWidget ) == false )
+	{
+		return;
+	}
+
+	UCanvasRenderTarget2D* RenderTarget = CanvasWidget->GetRenderTarget();
+	
 	FTextureRenderTargetResource* RTResource = RenderTarget->GameThread_GetRenderTargetResource();
 
 	TArray<FColor> OutBMP;
@@ -48,7 +67,6 @@ void UPainterCanvasWidget::OnPaintButtonPressed()
 
 	TArray64<uint8> CompressedPNG;
 	FImageUtils::PNGCompressImageArray(DestSize.X, DestSize.Y, OutBMP, CompressedPNG);
-	
 	
 	FString FilePath = FPaths::ProjectSavedDir() / TEXT("Pattern/NormalizedPat.png");
 	FFileHelper::SaveArrayToFile(CompressedPNG, *FilePath);
@@ -77,10 +95,32 @@ void UPainterCanvasWidget::OnPaintButtonPressed()
 			InputData[2 * 256 * 256 + BaseIndex] = (Pixel.B / 127.5f) - 1.0f;
 		}
 	}
-	
-	
+}
+
+void UMUAT_DrawingCanvas::RunModel()
+{
+	// 런타임 생성.
 	TWeakInterfacePtr<INNERuntimeCPU> Runtime = UE::NNE::GetRuntime<INNERuntimeCPU>(FString("NNERuntimeORTCpu"));
-	ModelInstance = Runtime->CreateModel(PreloadedModelData)->CreateModelInstance();
+
+	if ( Runtime == nullptr )
+	{
+		return;
+	}
+
+	// 모델에는 유일 참조 보장.
+	TUniquePtr<UE::NNE::IModelCPU> Model = Runtime->CreateModel(PreloadedModelData.Get());
+
+	if ( Model == nullptr )
+	{
+		return;
+	}
+	
+	ModelInstance = Model->CreateModelInstance();
+
+	if ( ModelInstance == nullptr )
+	{
+		return;
+	}
 	
 	TConstArrayView<UE::NNE::FTensorDesc> InputTensorDescs = ModelInstance->GetInputTensorDescs();
 	
@@ -103,62 +143,29 @@ void UPainterCanvasWidget::OnPaintButtonPressed()
 	OutputBindings[0].Data = OutputData.GetData();
 	OutputBindings[0].SizeInBytes = OutputData.Num() * sizeof(float);
 
+	// 쿼리 자체는 백그라운드에서 싱행하는 것이 좋음. 따라서 관련 부분에 대해서 타 스레드에 위임하는 방식
 	AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [&]()
 	{	
 		if (ModelInstance->RunSync(InputBindings, OutputBindings) != 0)
 		{
 		UE_LOG(LogTemp, Error, TEXT("Failed to run the model"));
 		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("Running Model"));
+		}
 		AsyncTask(ENamedThreads::GameThread, [&]()
 		{
 			// 해당 사항의 구현화 이유는 백그라운드 스레드를 활용하는 부분이기에, 게임스레드에서 데이터 활용을 위한 부분임.
+			// 결과 확보.
 			for ( auto& Num : OutputData )
 			{
 				UE_LOG(LogTemp, Log, TEXT("Output : %f"), Num );
 			}
+			if ( OnCanvasDrawingComplete.IsBound() )
+			{
+				OnCanvasDrawingComplete.Broadcast( OutputData );	
+			}
 		});
 	});
-
-	if ( OnCanvasButtonPressed.IsBound() == true )
-	{
-		OnCanvasButtonPressed.Broadcast();
-	}
-	
-	if ( IsValid(CanvasWidget) )
-	{
-		CanvasWidget->ResetAllMember();
-	}
-}
-
-void UPainterCanvasWidget::DrawToCanvas(UCanvas* Canvas, int32 Width, int32 Height)
-{
-	if (!IsValid(CanvasWidget))
-	{
-		return;
-	}
-
-	FVector2D CanvasSize = FVector2D(Width, Height); 
-	FVector2D ViewportSize;
-	GEngine->GameViewport->GetViewportSize(ViewportSize);
-
-	Canvas->K2_DrawBox(FVector2D(0, 0), CanvasSize, 0.f, FLinearColor::White);
-
-	for (const FDrawingCoordinate& Coords : CanvasWidget->GetAllCoordinate())
-	{
-		const TArray<FVector2D>& Coordinate = Coords.Coordinates;
-
-		for (int32 i = 0; i < Coordinate.Num() - 1; ++i)
-		{
-			FVector2D StartViewport = Coordinate[i] * Width;
-			StartViewport.X = StartViewport.X / ViewportSize.X;
-			StartViewport.Y = StartViewport.Y / ViewportSize.Y;
-			
-			FVector2D EndViewport = Coordinate[i + 1] * Height;
-			EndViewport.X = EndViewport.X / ViewportSize.X;
-			EndViewport.Y = EndViewport.Y / ViewportSize.Y;
-
-			// 선 그리기
-			Canvas->K2_DrawLine(StartViewport, EndViewport, 1.f, FLinearColor::White);
-		}
-	}
 }

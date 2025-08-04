@@ -32,12 +32,15 @@ void UGameplayTagWidgetContainer::ShowWidgetByGameplayTag(const FGameplayTag& In
 	}
 	
 	UUserWidget* Widget = WidgetContainer[InGameplayTag];
-	
-	Widget->AddToViewport();
 
-	if (auto* NeedToShow = Cast<IMUWidgetInterface>(Widget))
+	if ( IsValid( Widget ) == true )
 	{
-		NeedToShow->OnWidgetShow();
+		Widget->AddToViewport();
+
+		if (auto* NeedToShow = Cast<IMUWidgetInterface>(Widget))
+		{
+			NeedToShow->OnWidgetShow();
+		}	
 	}
 }
 
@@ -49,11 +52,16 @@ void UGameplayTagWidgetContainer::HideWidgetByGameplayTag(const FGameplayTag& In
 	}
 	
 	UUserWidget* Widget = WidgetContainer[InGameplayTag];
-	if (auto* NeedToHide = Cast<IMUWidgetInterface>(Widget))
+
+	if ( IsValid( Widget ) == true)
 	{
-		NeedToHide->OnWidgetHide();
+		if (auto* NeedToHide = Cast<IMUWidgetInterface>(Widget))
+		{
+			NeedToHide->OnWidgetHide();
+		}
+		
+		Widget->RemoveFromParent();
 	}
-	Widget->RemoveFromParent();
 }
 
 bool UGameplayTagWidgetContainer::IsWidgetByGameplayTagInViewport(const FGameplayTag& InGameplayTag)

@@ -26,9 +26,12 @@ void UCanvasWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			CoordinatesArray.Add(DrawingCoordinate);
 		}
 
-		FDrawingCoordinate& TempDrawing = CoordinatesArray[MouseIndex];
-		FVector2D CurrentCoord = UWidgetLayoutLibrary::GetMousePositionOnViewport(this);
-		TempDrawing.Coordinates.Emplace(CurrentCoord);
+		if ( CoordinatesArray.IsValidIndex(MouseIndex) == true )
+		{
+			FDrawingCoordinate& TempDrawing = CoordinatesArray[MouseIndex];
+			FVector2D CurrentCoord = UWidgetLayoutLibrary::GetMousePositionOnViewport(this);
+			TempDrawing.Coordinates.Emplace(CurrentCoord);	
+		}
 	}
 }
 

@@ -13,6 +13,8 @@ class UCanvasWidget;
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnCanvasButtonPressed );
+
 UCLASS()
 class MOONU_API UPainterCanvasWidget : public UUserWidget
 {
@@ -27,6 +29,9 @@ public :
 
 	UFUNCTION()
 	virtual void DrawToCanvas( UCanvas* Canvas, int32 Width, int32 Height );
+
+	UFUNCTION()
+	virtual UCanvasRenderTarget2D* GetRenderTarget() { return RenderTarget; }
 	
 public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
@@ -35,6 +40,9 @@ public :
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UButton> PaintButton;
 
+	UPROPERTY( BlueprintAssignable )
+	FOnCanvasButtonPressed OnCanvasButtonPressed;
+	
 	UPROPERTY( EditAnywhere )
 	TObjectPtr<UNNEModelData> PreloadedModelData;
 
