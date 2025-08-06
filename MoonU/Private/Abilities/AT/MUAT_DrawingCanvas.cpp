@@ -44,7 +44,8 @@ void UMUAT_DrawingCanvas::OnDestroy(bool bInOwnerFinished)
 
 void UMUAT_DrawingCanvas::ProcessModelRun()
 {
-	ProcessData();	
+	ProcessData();
+	RunModel();
 }
 
 void UMUAT_DrawingCanvas::ProcessData()

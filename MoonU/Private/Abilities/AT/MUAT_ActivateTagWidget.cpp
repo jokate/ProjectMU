@@ -2,6 +2,8 @@
 
 
 #include "Abilities/AT/MUAT_ActivateTagWidget.h"
+
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 
 UMUAT_ActivateTagWidget* UMUAT_ActivateTagWidget::CreateTask(UGameplayAbility* InAbility, FGameplayTag InWidgetTag)
@@ -40,6 +42,8 @@ void UMUAT_ActivateTagWidget::Activate()
 	GameplayTagWidgetOwner->ShowWidgetByGameplayTag(WidgetTag);
 	
 	TagWidget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(WidgetTag);
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx( PlayerController );
+	PlayerController->bShowMouseCursor = true;
 }
 
 void UMUAT_ActivateTagWidget::OnDestroy(bool bInOwnerFinished)
@@ -66,6 +70,7 @@ void UMUAT_ActivateTagWidget::OnDestroy(bool bInOwnerFinished)
 	}
 
 	GameplayTagWidgetOwner->HideWidgetByGameplayTag(WidgetTag);
-
+	UWidgetBlueprintLibrary::SetInputMode_GameOnly( PlayerController );
+	PlayerController->bShowMouseCursor = false;
 	Super::OnDestroy(bInOwnerFinished);
 }

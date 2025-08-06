@@ -21,11 +21,19 @@ void UMUGA_CastPaint::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	if ( IsValid( DrawingCanvas ) == true )
 	{
-		DrawingCanvas->OnCanvasDrawingComplete.AddDynamic( this, &UMUGA_CastPaint::CastPaint );
+		DrawingCanvas->OnCanvasDrawingComplete.AddDynamic( this, &UMUGA_CastPaint::OnPaintComplete );
+		DrawingCanvas->ReadyForActivation();
 	}
 }
 
-void UMUGA_CastPaint::CastPaint(const TArray<float>& OutputData)
+void UMUGA_CastPaint::OnPaintComplete(const TArray<float>& OutputData)
+{
+	CastSkill( OutputData );
+
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false );
+}
+
+void UMUGA_CastPaint::CastSkill(const TArray<float>& OutputData)
 {
 	float MaxMem = FLT_MIN;
 	int32 MaxIndex = -1;
@@ -44,12 +52,12 @@ void UMUGA_CastPaint::CastPaint(const TArray<float>& OutputData)
 	{
 		return;
 	}
-	
+    
 	if ( PainterSkillSlotType.IsValidIndex(MaxIndex) == false )
 	{
 		return;
 	}
-	
+    
 	// 문양에 대한 스킬 캐스팅까지 연동 필요.
 
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility_CharacterJump.h"
+#include "Abilities/GameplayAbility.h"
 #include "Data/MUEnum.h"
 #include "MUGA_CastPaint.generated.h"
 
@@ -12,7 +12,7 @@ class UNNEModelData;
  * 
  */
 UCLASS()
-class MOONU_API UMUGA_CastPaint : public UGameplayAbility_CharacterJump
+class MOONU_API UMUGA_CastPaint : public UGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,9 @@ public :
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	UFUNCTION()
-	virtual void CastPaint( const TArray<float>& OutputData );
+	virtual void OnPaintComplete( const TArray<float>& OutputData );
+
+	virtual void CastSkill(const TArray<float>& OutputData);
 public :
 	UPROPERTY( EditDefaultsOnly )
 	TObjectPtr<UNNEModelData> ModelData;
