@@ -7,6 +7,7 @@
 #include "Data/MUEnum.h"
 #include "MUSkillSlotWidget.generated.h"
 
+class UButton;
 /**
  * 
  */
@@ -16,6 +17,7 @@ class MOONU_API UMUSkillSlotWidget : public UUserWidget
 	GENERATED_BODY()
 
 public :
+	
 	UFUNCTION( BlueprintCallable )
 	void AllocateSkillID( FName SkillID );
 
@@ -23,6 +25,12 @@ public :
 	bool GetSkillIDForSlot(FName& SkillID) const;
 	
 public :
-	UPROPERTY( EditAnywhere )
+	UPROPERTY( BlueprintReadWrite, meta = (BindWidget) )
+	TObjectPtr<UButton> SelectionButton;
+
+	UPROPERTY( BlueprintReadWrite )
+	int32 SkillID;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	ESkillSlotType SkillSlotType;
 };

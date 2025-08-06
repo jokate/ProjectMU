@@ -59,7 +59,6 @@ void UMUGA_CastPaint::CastSkill(const TArray<float>& OutputData)
 	}
     
 	// 문양에 대한 스킬 캐스팅까지 연동 필요.
-
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
 	if ( IsValid( OwnerActor ) == false )
