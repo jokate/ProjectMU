@@ -39,7 +39,7 @@ void UMUGA_CastPaint::CastSkill(const TArray<float>& OutputData)
 	int32 MaxIndex = -1;
 	for ( int32 i = 0; i < OutputData.Num(); i++ )
 	{
-		if ( MaxMem > OutputData[i] )
+		if ( MaxMem < OutputData[i] )
 		{
 			MaxMem = OutputData[i];
 			MaxIndex = i;
