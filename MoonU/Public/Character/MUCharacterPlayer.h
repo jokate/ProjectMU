@@ -104,6 +104,8 @@ protected :
 #pragma endregion IInteractor
 
 #pragma region ISkillManager
+
+	virtual void TriggerInputSkill(ESkillSlotType SkillSlot) override;
 	
 	virtual void AddSkillSlot( ESkillSlotType SkillSlotType, FName SkillID ) override;
 

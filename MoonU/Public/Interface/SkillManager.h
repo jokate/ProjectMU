@@ -23,6 +23,8 @@ class MOONU_API ISkillManager
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	virtual void TriggerInputSkill( ESkillSlotType SkillSlot ) = 0;
+	
 	virtual void AddSkillSlot( ESkillSlotType SkillSlotType, FName SkillID ) = 0;
 
 	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) = 0 ;

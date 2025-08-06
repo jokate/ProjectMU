@@ -101,7 +101,19 @@ enum class ESkillSlotType : uint8
 	NONE,
 	SkillSlot_1,
 	SkillSlot_2,
-	SkillSlot_3
+	SkillSlot_3,
+
+	// 페인터 전용 스킬 타입
+	Paint_1,
+	Paint_2,
+	Paint_3,
+	Paint_4,
+	Paint_5,
+	Paint_6,
+	Paint_7,
+	Paint_8,
+	Paint_9,
+	Paint_10,
 };
 
 UENUM( BlueprintType )

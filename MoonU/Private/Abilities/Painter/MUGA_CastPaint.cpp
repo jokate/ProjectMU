@@ -4,6 +4,7 @@
 #include "Abilities/Painter/MUGA_CastPaint.h"
 
 #include "Abilities/AT/MUAT_DrawingCanvas.h"
+#include "Components/EnforcementComponent.h"
 
 UMUGA_CastPaint::UMUGA_CastPaint()
 {
@@ -39,5 +40,29 @@ void UMUGA_CastPaint::CastPaint(const TArray<float>& OutputData)
 
 	UE_LOG(LogTemp, Log, TEXT("Max Target : %d"), MaxIndex + 1 );
 
+	if ( MaxMem < MinimumThreshold )
+	{
+		return;
+	}
+	
+	if ( PainterSkillSlotType.IsValidIndex(MaxIndex) == false )
+	{
+		return;
+	}
+	
 	// 문양에 대한 스킬 캐스팅까지 연동 필요.
+
+	AActor* OwnerActor = GetAvatarActorFromActorInfo();
+
+	if ( IsValid( OwnerActor ) == false )
+	{
+		return;
+	}
+
+	ISkillManager* SkillManager = Cast<ISkillManager>(OwnerActor);
+
+	if ( SkillManager != nullptr )
+	{
+		SkillManager->TriggerInputSkill(PainterSkillSlotType[MaxIndex]);
+	}
 }

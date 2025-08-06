@@ -29,6 +29,10 @@ public:
 	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
 
 	virtual void SetupSkillInput( FName SkillID );
+
+	// 스킬 캐스팅 관련
+	UFUNCTION()
+	virtual void TriggerInputSkill( ESkillSlotType SkillSlot ) override;
 	
 protected:
 	// Called when the game starts
@@ -41,10 +45,6 @@ protected:
 #pragma endregion
 
 	virtual void CallSkillUpdatedEvent();
-
-	// 스킬 캐스팅 관련
-	UFUNCTION()
-	virtual void TriggerInputSkill( ESkillSlotType SkillSlot );
 	
 	virtual void InitializePlayerController();
 	virtual void CastSkill( FName SkillID );

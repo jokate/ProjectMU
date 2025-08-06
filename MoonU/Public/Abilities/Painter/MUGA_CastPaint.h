@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility_CharacterJump.h"
+#include "Data/MUEnum.h"
 #include "MUGA_CastPaint.generated.h"
 
 class UNNEModelData;
@@ -28,4 +29,10 @@ public :
 
 	UPROPERTY( EditDefaultsOnly )
 	FGameplayTag WidgetTag;
+
+	UPROPERTY( EditDefaultsOnly )
+	TArray<ESkillSlotType> PainterSkillSlotType;
+
+	UPROPERTY( EditDefaultsOnly )
+	float MinimumThreshold = 5.0f;
 };

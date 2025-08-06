@@ -376,6 +376,14 @@ void AMUCharacterPlayer::SetCachedInteractionTarget(AActor* TargetActor)
 	InteractionComponent->SetCachedInteractionTarget(TargetActor);
 }
 
+void AMUCharacterPlayer::TriggerInputSkill(ESkillSlotType SkillSlot)
+{
+	if ( IsValid(EnforcementComponent) == true )
+	{
+		EnforcementComponent->TriggerInputSkill( SkillSlot );
+	}
+}
+
 void AMUCharacterPlayer::AddSkillSlot(ESkillSlotType SkillSlotType, FName SkillID)
 {
 	if ( IsValid( EnforcementComponent ) == true )
