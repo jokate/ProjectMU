@@ -109,6 +109,32 @@ bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDr
     return true;
 }
 
+bool UMUDataTableSubsystem::GetEnforcementDropDataByRegistry(FName DataRegistryName, int32 Level,
+	FMUEnforcementDropSelect& OutEnforcementDropSelect )
+{
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = DataRegistryName;
+	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), Level));;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
+	{
+		return false;
+	}
+
+	const FMUEnforcementDropSelect* EnforcementDrop = DataRegistrySubsystem->GetCachedItem<FMUEnforcementDropSelect>(RegistryId);
+	
+	if ( EnforcementDrop == nullptr )
+	{
+		return false;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	OutEnforcementDropSelect = *EnforcementDrop;
+	return true;
+}
+
 bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkillData)
 {
 	FDataRegistryId RegistryId;

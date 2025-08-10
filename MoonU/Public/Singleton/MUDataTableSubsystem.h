@@ -29,6 +29,9 @@ public :
 	UFUNCTION( BlueprintCallable )
 	virtual bool GetEnforcementDropData(int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
 
+	UFUNCTION( BlueprintPure )
+	virtual bool GetEnforcementDropDataByRegistry( FName DataRegistryName, int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect); 
+
 	UFUNCTION( BlueprintCallable )
 	virtual bool GetSkillData( FName SkillName, FMUSkillData& OutSkillData );
 
@@ -64,14 +67,14 @@ protected :
 	TObjectPtr<UDataTable> EnforcementDropTable;
 
 	UPROPERTY(Config)
-	FName SkillDataRegistryType;
+	FName SkillDataRegistryType = NAME_None;
 
 	UPROPERTY(Config)
-	FName StageInfoDataRegistryType;
+	FName StageInfoDataRegistryType = NAME_None;
 
 	UPROPERTY(Config)
-	FName StageDataRegistryType;
+	FName StageDataRegistryType = NAME_None;
 	
 	UPROPERTY( Config )
-	FName MonsterSpawnDataRegistryType;
+	FName MonsterSpawnDataRegistryType = NAME_None;
 };
