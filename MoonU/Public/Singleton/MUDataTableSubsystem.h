@@ -49,11 +49,8 @@ protected :
 	FName CharacterDataRegistryType = NAME_None;
 
 	UPROPERTY(Config)
-	TSoftObjectPtr<UDataTable> InputMapperDataTablePath;
+	FName InputMapperDataRegistryType = NAME_None;
 	
-	UPROPERTY()
-	TObjectPtr<UDataTable> InputMapperDataTable;
-
 	UPROPERTY(Config)
 	TSoftObjectPtr<UDataTable> EnforcementDataTablePath;
 
@@ -67,26 +64,14 @@ protected :
 	TObjectPtr<UDataTable> EnforcementDropTable;
 
 	UPROPERTY(Config)
-	TSoftObjectPtr<UDataTable> SkillDataTablePath;
+	FName SkillDataRegistryType;
 
-	UPROPERTY()
-	TObjectPtr<UDataTable> SkillDataTable;
+	UPROPERTY(Config)
+	FName StageInfoDataRegistryType;
 
+	UPROPERTY(Config)
+	FName StageDataRegistryType;
+	
 	UPROPERTY( Config )
-	TSoftObjectPtr<UDataTable> StageInfoDataTablePath;
-
-	UPROPERTY()
-	TObjectPtr<UDataTable> StageInfoDataTable;
-
-	UPROPERTY( Config )
-	TSoftObjectPtr<UDataTable> StageDataTablePath;
-
-	UPROPERTY()
-	TObjectPtr<UDataTable> StageDataTable;
-
-	UPROPERTY( Config )
-	TSoftObjectPtr<UDataTable> MonsterSpawnDataTablePath;
-
-	UPROPERTY()
-	TObjectPtr<UDataTable> MonsterSpawnDataTable;
+	FName MonsterSpawnDataRegistryType;
 };

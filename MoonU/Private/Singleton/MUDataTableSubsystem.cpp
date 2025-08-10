@@ -8,26 +8,26 @@
 
 bool UMUDataTableSubsystem::GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData)
 {
-	if ( IsValid(InputMapperDataTable) == false)
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = InputMapperDataRegistryType;
+	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), InCharacterID));
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
-		UDataTable* TempInputMapper = InputMapperDataTablePath.LoadSynchronous();
-		if ( IsValid(TempInputMapper) == false)
-		{
-			UE_LOG( LogTemp, Log, TEXT("Input Mapper DataTable Is Not Valid"));
-			return false;
-		}
-		InputMapperDataTable = TempInputMapper;
+		return false;
 	}
 
-	InputMapperDataTable->ForeachRow<FMUInputMapper>
-	(TEXT(""),[&] (const FName& Key, const FMUInputMapper& Value)
+	const FMUInputMapper* InputMapper = DataRegistrySubsystem->GetCachedItem<FMUInputMapper>(RegistryId);
+	
+	if ( InputMapper == nullptr )
 	{
-		if ( Value.CharacterID == InCharacterID )
-		{
-			InputMapperData = Value;
-		}	
-	});
+		return false;
+	}
 
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	InputMapperData = *InputMapper;
 	return true;
 }
 
@@ -111,79 +111,75 @@ bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDr
 
 bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkillData)
 {
-	if ( IsValid(SkillDataTable) == false)
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = SkillDataRegistryType;
+	RegistryId.ItemName = SkillName;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
-		UDataTable* SkillDataTableLoaded = SkillDataTablePath.LoadSynchronous();
-		if ( IsValid(SkillDataTableLoaded) == false)
-		{
-			UE_LOG( LogTemp, Log, TEXT("Skill DataTable Is Not Valid") );
-			return false;
-		}
-
-		SkillDataTable = SkillDataTableLoaded;
+		return false;
 	}
 
-	FMUSkillData* SkillData = SkillDataTable->FindRow<FMUSkillData>( SkillName, TEXT(""));
-
+	const FMUSkillData* SkillData = DataRegistrySubsystem->GetCachedItem<FMUSkillData>(RegistryId);
+	
 	if ( SkillData == nullptr )
 	{
 		return false;
 	}
 
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
 	OutSkillData = *SkillData;
-
 	return true;
 }
 
 bool UMUDataTableSubsystem::GetStageInfoData(FName StageInfoName, FMUStageInfo& OutStageInfo)
 {
-	if ( IsValid( StageInfoDataTable ) == false )
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = StageInfoDataRegistryType;
+	RegistryId.ItemName = StageInfoName;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
-		UDataTable* StageInfoDataTableLoaded = StageInfoDataTablePath.LoadSynchronous();
-
-		if ( IsValid( StageInfoDataTableLoaded ) == false ) 
-		{
-			UE_LOG( LogTemp, Log, TEXT("StageInfo DataTable Is Not Valid") );
-			return false;
-		}
-
-		StageInfoDataTable = StageInfoDataTableLoaded;
+		return false;
 	}
 
-	FMUStageInfo* StageInfoData = StageInfoDataTable->FindRow<FMUStageInfo>( StageInfoName, TEXT(""));
-
+	const FMUStageInfo* StageInfoData = DataRegistrySubsystem->GetCachedItem<FMUStageInfo>(RegistryId);
+	
 	if ( StageInfoData == nullptr )
 	{
 		return false;
 	}
 
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
 	OutStageInfo = *StageInfoData;
-	
 	return true;
 }
 
 bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStageData)
 {
-	if ( IsValid( StageDataTable ) == false )
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = StageDataRegistryType;
+	RegistryId.ItemName = StageName;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
-		UDataTable* StageDataTableLoaded = StageDataTablePath.LoadSynchronous();
-
-		if ( IsValid( StageDataTableLoaded ) == false ) 
-		{
-			UE_LOG( LogTemp, Log, TEXT("Stage DataTable Is Not Valid") );
-			return false;
-		}
-
-		StageInfoDataTable = StageDataTableLoaded;
+		return false;
 	}
 
-	FMUStageData* StageData = StageInfoDataTable->FindRow<FMUStageData>( StageName, TEXT(""));
-
+	const FMUStageData* StageData = DataRegistrySubsystem->GetCachedItem<FMUStageData>(RegistryId);
+	
 	if ( StageData == nullptr )
 	{
 		return false;
 	}
 
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
 	OutStageData = *StageData;
 	
 	return true;
@@ -191,28 +187,26 @@ bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStage
 
 bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData)
 {
-	if ( IsValid( MonsterSpawnDataTable ) == false )
-	{
-		UDataTable* SpawnerDataTableLoaded = MonsterSpawnDataTablePath.LoadSynchronous();
-
-		if ( IsValid( SpawnerDataTableLoaded ) == false ) 
-		{
-			UE_LOG( LogTemp, Log, TEXT("Monster DataTable Is Not Valid") );
-			return false;
-		}
-
-		MonsterSpawnDataTable = SpawnerDataTableLoaded;
-	}
-
-	FMUMonsterSpawnList* SpawnerData = MonsterSpawnDataTable->FindRow<FMUMonsterSpawnList>( SpawnerName, TEXT(""));
-
-	if ( SpawnerData == nullptr )
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = MonsterSpawnDataRegistryType;
+	RegistryId.ItemName = SpawnerName;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
 		return false;
 	}
 
-	OutSpawnerData = *SpawnerData;
+	const FMUMonsterSpawnList* MonsterSpawnerData = DataRegistrySubsystem->GetCachedItem<FMUMonsterSpawnList>(RegistryId);
 	
+	if ( MonsterSpawnerData == nullptr )
+	{
+		return false;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	OutSpawnerData = *MonsterSpawnerData;
 	return true;
 }
 
