@@ -17,7 +17,7 @@ class MOONU_API UMUSkillTreeWidget : public UUserWidget
 
 public :
 	UPROPERTY( BlueprintReadOnly )
-	TArray<UOverlay> MainOverlay;
+	TObjectPtr<UOverlay> MainOverlay;
 
-	UPROPERTY()
+	//UPROPERTY()
 };

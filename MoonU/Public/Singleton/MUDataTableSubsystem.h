@@ -46,10 +46,7 @@ protected :
 	
 protected :
 	UPROPERTY(Config)
-	TSoftObjectPtr<UDataTable> CharacterInfoDataTablePath;
-	
-	UPROPERTY()
-	TObjectPtr<UDataTable> CharacterInfoDataTable;
+	FName CharacterDataRegistryType = NAME_None;
 
 	UPROPERTY(Config)
 	TSoftObjectPtr<UDataTable> InputMapperDataTablePath;

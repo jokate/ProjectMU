@@ -3,6 +3,9 @@
 
 #include "Singleton/MUDataTableSubsystem.h"
 
+#include "DataRegistry.h"
+#include "DataRegistrySubsystem.h"
+
 bool UMUDataTableSubsystem::GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData)
 {
 	if ( IsValid(InputMapperDataTable) == false)
@@ -30,27 +33,26 @@ bool UMUDataTableSubsystem::GetInputMapperData(int32 InCharacterID, FMUInputMapp
 
 bool UMUDataTableSubsystem::GetCharacterInfoData(int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo)
 {
-	if ( IsValid(CharacterInfoDataTable) == false)
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = CharacterDataRegistryType;
+	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), InCharacterID));
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
 	{
-		UDataTable* CharacterDataTableLoader = CharacterInfoDataTablePath.LoadSynchronous();
-		if ( IsValid(CharacterDataTableLoader) == false)
-		{
-			UE_LOG( LogTemp, Log, TEXT("Character Info DataTable Is Not Valid") );
-			return false;
-		}
-
-		CharacterInfoDataTable = CharacterDataTableLoader;
+		return false;
 	}
 
-	CharacterInfoDataTable->ForeachRow<FMUCharacterInfo>
-	(TEXT(""),[&] (const FName& Key, const FMUCharacterInfo& Value)
+	const FMUCharacterInfo* CharacterInfo = DataRegistrySubsystem->GetCachedItem<FMUCharacterInfo>(RegistryId);
+	
+	if ( CharacterInfo == nullptr )
 	{
-		if ( Value.CharacterID == InCharacterID )
-		{
-			OutCharacterInfo = Value;
-		}	
-	});
+		return false;
+	}
 
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	OutCharacterInfo = *CharacterInfo;
 	return true;
 }
 

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "MUEnforcementWidget.h"
 #include "Data/MUEnum.h"
 #include "MUSkillSlotWidget.generated.h"
 
@@ -12,25 +12,14 @@ class UButton;
  * 
  */
 UCLASS()
-class MOONU_API UMUSkillSlotWidget : public UUserWidget
+class MOONU_API UMUSkillSlotWidget : public UMUEnforcementWidget
 {
 	GENERATED_BODY()
 
 public :
-	
-	UFUNCTION( BlueprintCallable )
-	void AllocateSkillID( FName SkillID );
-
-	UFUNCTION( BlueprintPure )
-	bool GetSkillIDForSlot(FName& SkillID) const;
+	virtual void OnSelectionButtonClicked_Implementation() override;
 	
 public :
-	UPROPERTY( BlueprintReadWrite, meta = (BindWidget) )
-	TObjectPtr<UButton> SelectionButton;
-
-	UPROPERTY( BlueprintReadWrite )
-	int32 SkillID;
-
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	ESkillSlotType SkillSlotType;
 };

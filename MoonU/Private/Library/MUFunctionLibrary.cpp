@@ -246,6 +246,7 @@ bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlaye
 	return true;
 }
 
+// 여기에 있었네. ( 공용화 로직 분포 ) -> 스킬과 능력치에 대한 강화 변경 필요.
 bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement)
 {
 	if (IsValid(Object) == false)
