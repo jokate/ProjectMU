@@ -12,22 +12,21 @@
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
-#include "Indicator/MUIndicatorManageSubsystem.h"
+#include "Singleton/MUEnforcementSubsystem.h"
 
 UEnforcementComponent::UEnforcementComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 // Called when the game starts
 void UEnforcementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	InitializePlayerController();
+	
 }
 
-void UEnforcementComponent::EnforceUnit(int32 InEnforcementID)
+void UEnforcementComponent::EnforceAttribute(int32 InEnforcementID)
 {
 	FMUEnforcementData EnforcementData;
 
@@ -38,34 +37,20 @@ void UEnforcementComponent::EnforceUnit(int32 InEnforcementID)
 
 	//강화 옵션에 대한 인자 추가 완료.
 	EnforcementIDs.Add(InEnforcementID);
-	
-	// 강화 선택 옵션에 따른 부분 체크.
-	switch (EnforcementData.EnforcementType)
+	EnforcementAttribute(EnforcementData.EnforcementAttributeValue);
+}
+
+void UEnforcementComponent::EnforceSkill(ESkillSlotType SkillSlot, int32 InEnforcementID)
+{
+	FMUEnforcementData EnforcementData;
+
+	if (UMUFunctionLibrary::GetEnforcementData(GetOwner(), InEnforcementID, EnforcementData) == false)
 	{
-	case Attribute:
-		{
-			EnforcementAttribute(EnforcementData.EnforcementAttributeValue);
-		}
-		break;
-
-	case SkillOpen :
-		{
-			// ASC에 Skill Ability 부여 + Input Binding이 필요한 경우에는 Input Binder 필요.
-			OpenSkill(EnforcementData.SkillID);
-		}
-		break;
-
-	case SkillEnforcement:
-		{
-			UE_LOG(LogTemp, Log, TEXT("Not Implemented Functional Operation"));
-		}
-		break;
-
-	default :
-		{
-			UE_LOG(LogTemp, Log, TEXT("Not Implemented Functional Operation"));
-		}
+		return;
 	}
+	
+	// ASC에 Skill Ability 부여 + Input Binding이 필요한 경우에는 Input Binder 필요.
+	OpenSkill(SkillSlot, EnforcementData.SkillID);
 }
 
 void UEnforcementComponent::EnforcementAttribute(FMUAttributeValue& AttributeValue)
@@ -94,14 +79,13 @@ void UEnforcementComponent::EnforcementAttribute(FMUAttributeValue& AttributeVal
 	ASC->SetNumericAttributeBase(AttributeValue.InitAttribute, CalculatedAttributeValue);
 }
 
-void UEnforcementComponent::OpenSkill(FName SkillID)
+void UEnforcementComponent::OpenSkill( ESkillSlotType SkillSlot, FName SkillID )
 {
 	FMUSkillData SkillData;
 	if ( UMUFunctionLibrary::GetSkillData(GetOwner(), SkillID, SkillData) == false )
 	{
 		return;
 	}
-
 
 	// Input Binding이 필요한 경우에는 별도 세팅이 필요한 것은 사실임.
 	FGameplayAbilitySpec AbilitySpec(SkillData.NeedToRegAbility);
@@ -115,7 +99,7 @@ void UEnforcementComponent::OpenSkill(FName SkillID)
 
 	SetupSkillInput( SkillID );
 
-	AddSkillSlot( SkillData.ApplySlotType, SkillID );
+	AddSkillSlot( SkillSlot, SkillID );
 }
 
 void UEnforcementComponent::SetupSkillInput(FName SkillID)
@@ -199,25 +183,6 @@ void UEnforcementComponent::TriggerInputSkill(ESkillSlotType SkillSlot)
 	}
 
 	CastSkill( SkillID );
-}
-
-void UEnforcementComponent::InitializePlayerController()
-{
-	AActor* OwningActor = GetOwner();
-	
-	if ( IsValid( OwningActor ) == false )
-	{
-		return;		
-	}
-
-	APlayerController* OwnerActorController = OwningActor->GetInstigatorController<APlayerController>();
-
-	if ( IsValid( OwnerActorController ) == false )
-	{
-		return;
-	}
-
-	PlayerController = OwnerActorController;
 }
 
 void UEnforcementComponent::CastSkill(FName SkillID)

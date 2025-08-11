@@ -19,9 +19,9 @@ void UMUEnforcementWidget::NativeConstruct()
 void UMUEnforcementWidget::SetupWidgetInfo()
 {
 	FMUEnforcementData EnforcementData;
-	if ( UMUFunctionLibrary::GetEnforcementData(this, EnforcementID, EnforcementData) == true )
+	if ( UMUFunctionLibrary::GetEnforcementData(this, AllocatedEnforcementID, EnforcementData) == true )
 	{
-		//EnforcementData.
+		
 	} 
 }
 

@@ -53,13 +53,6 @@ public:
 
 	virtual void RegisterLocalStage();
 
-#pragma region Enforcement
-	UFUNCTION()
-	virtual void OnLevelUpCallbackFunction(int32 InLevel);
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void EnforcementUnit(int32 EnforcementID);
-#pragma endregion
 
 #pragma region Level
 	UFUNCTION(BlueprintCallable)
@@ -112,6 +105,18 @@ protected :
 	virtual void RemoveSkillSlot( ESkillSlotType SkillSlotType ) override;
 
 	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
+
+#pragma endregion
+
+#pragma region Enforcement
+
+	void RegisterEnforcementEvent();
+
+	UFUNCTION()
+	void OnAttributeEnforcementAdded(int32 InCharacterID, int32 EnforcementID);
+
+	UFUNCTION()
+	void OnSkillEnforcementAdded(int32 InCharacterID, ESkillSlotType SkillSlotType, int32 EnforcementID);
 	
 #pragma endregion
 	

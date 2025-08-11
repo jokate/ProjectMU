@@ -18,7 +18,9 @@ public:
 	// Sets default values for this component's properties
 	UEnforcementComponent();
 	
-	virtual void EnforceUnit(int32 InEnforcementID);
+	virtual void EnforceAttribute(int32 InEnforcementID);
+	
+	virtual void EnforceSkill( ESkillSlotType SkillSlot, int32 InEnforcementID);
 	
 	virtual TArray<int32>& GetEnforcementIDs() { return EnforcementIDs; }
 
@@ -41,12 +43,11 @@ protected:
 #pragma region Enforcement
 	virtual void EnforcementAttribute(FMUAttributeValue& AttributeValue);
 
-	virtual void OpenSkill( FName SkillID );
+	virtual void OpenSkill( ESkillSlotType SkillSlot, FName SkillID );
 #pragma endregion
 
 	virtual void CallSkillUpdatedEvent();
 	
-	virtual void InitializePlayerController();
 	virtual void CastSkill( FName SkillID );
 	virtual void TriggerSkill( FName SkillID );
 	virtual void CancelSkill();
@@ -54,9 +55,6 @@ protected:
 public:
 	UPROPERTY( EditAnywhere )
 	FName ReadySkillID = NAME_None;
-
-	UPROPERTY( VisibleAnywhere )
-	APlayerController* PlayerController;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enforcement ID")
 	TArray<int32> EnforcementIDs;

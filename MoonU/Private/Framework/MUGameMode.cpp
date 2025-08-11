@@ -158,7 +158,7 @@ void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
 		return;
 	}
 
-	CurrentPlayer->EnforcementUnit(EnforcementID);
+	//CurrentPlayer->EnforcementUnit(EnforcementID);
 }
 
 void AMUGameMode::CheatLevelUp()

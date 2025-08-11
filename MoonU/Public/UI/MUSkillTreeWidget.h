@@ -16,8 +16,12 @@ class MOONU_API UMUSkillTreeWidget : public UUserWidget
 	GENERATED_BODY()
 
 public :
+	virtual void SetupCharacterID( int32 InCharacterID );
+	
+public :
 	UPROPERTY( BlueprintReadOnly )
 	TObjectPtr<UOverlay> MainOverlay;
 
-	//UPROPERTY()
+	UPROPERTY()
+	int32 CharacterID = 0;
 };

@@ -57,3 +57,16 @@ struct FDrawingCoordinate
 		UPROPERTY( BlueprintReadOnly )
 	TArray<FVector2D> Coordinates;
 };
+
+USTRUCT( BlueprintType )
+struct FMUEnforcementAllocate
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(BlueprintReadOnly)
+	TMap<FName, int32> AttributeMap;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TMap<ESkillSlotType, int32> AllocatedSkillID;
+};

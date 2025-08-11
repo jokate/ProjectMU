@@ -25,6 +25,7 @@
 #include "Interface/StageManager.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
+#include "Singleton/MUEnforcementSubsystem.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 
 // Sets default values
@@ -59,12 +60,11 @@ void AMUCharacterPlayer::BeginPlay()
 
 	SetupInputByID(COMMON_CHARACTER_INPUT);
 	SetupInputByID(CharacterID);
-
-	LevelUpComponent->OnLevelUpEventCallback.AddDynamic(this, &AMUCharacterPlayer::OnLevelUpCallbackFunction);
-
+	
 	StreamingComponent->EnableStreamingSource();
 
 	RegisterLocalStage();
+	RegisterEnforcementEvent();
 }
 
 void AMUCharacterPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -410,15 +410,41 @@ const FName AMUCharacterPlayer::GetSkillIDBySlot(ESkillSlotType SkillSlot)
 	return FName();
 }
 
-void AMUCharacterPlayer::EnforcementUnit(int32 EnforcementID)
+void AMUCharacterPlayer::RegisterEnforcementEvent()
 {
-	if ( IsValid(EnforcementComponent) == false)
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Enforcement Component Is Not Valid"));
+		UMUEnforcementSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PlayerController->GetLocalPlayer());
+		if ( !IsValid(Subsystem))
+        {
+        	return;
+        }
+
+		Subsystem->OnCharacterAttributeAdded.AddDynamic( this, &AMUCharacterPlayer::OnAttributeEnforcementAdded );
+		Subsystem->OnCharacterSkillAdded.AddDynamic( this, &AMUCharacterPlayer::OnSkillEnforcementAdded );
+	}
+}
+
+void AMUCharacterPlayer::OnAttributeEnforcementAdded(const int32 InCharacterID, 
+	const int32 EnforcementID)
+{
+	if ( CharacterID != InCharacterID || !IsValid(EnforcementComponent))
+	{
+		return;
+	}
+	
+	EnforcementComponent->EnforceAttribute(EnforcementID);
+}
+
+void AMUCharacterPlayer::OnSkillEnforcementAdded(const int32 InCharacterID, ESkillSlotType SkillSlotType,
+	const int32 EnforcementID)
+{
+	if ( CharacterID != InCharacterID || !IsValid(EnforcementComponent))
+	{
 		return;
 	}
 
-	EnforcementComponent->EnforceUnit(EnforcementID);
+	EnforcementComponent->EnforceSkill( SkillSlotType, EnforcementID );
 }
 
 void AMUCharacterPlayer::ResetContinuousEnforcementLevel()
@@ -426,20 +452,5 @@ void AMUCharacterPlayer::ResetContinuousEnforcementLevel()
 	if (IsValid(LevelUpComponent) == true )
 	{
 		LevelUpComponent->SetContinuousEnforcementLevel( 0 );
-	}
-}
-
-void AMUCharacterPlayer::OnLevelUpCallbackFunction(int32 InLevel)
-{
-	UMUWidgetDelegateSubsystem* WidgetDelegateSubsystem = GetGameInstance()->GetSubsystem<UMUWidgetDelegateSubsystem>();
-
-	if (IsValid(WidgetDelegateSubsystem) == true)
-	{
-		FOnLevelChanged& LevelChanged = WidgetDelegateSubsystem->OnLevelChanged;
-
-		if (LevelChanged.IsBound() == true)
-		{
-			LevelChanged.Broadcast(InLevel);
-		}
 	}
 }

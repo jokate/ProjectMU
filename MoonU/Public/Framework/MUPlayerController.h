@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "MUPlayerController.generated.h"
 
+class UEnforcementComponent;
 /**
  * 
  */
