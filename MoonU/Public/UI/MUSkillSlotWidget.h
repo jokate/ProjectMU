@@ -17,7 +17,11 @@ class MOONU_API UMUSkillSlotWidget : public UMUEnforcementWidget
 	GENERATED_BODY()
 
 public :
+	virtual void InitializeSkillSlot( int32 InCharacterID, ESkillSlotType InSkillSlot );
+	
 	virtual void OnSelectionButtonClicked_Implementation() override;
+
+	virtual void SetupWidgetInfo() override;
 	
 public :
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )

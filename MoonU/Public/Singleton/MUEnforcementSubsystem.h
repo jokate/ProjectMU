@@ -32,6 +32,11 @@ public :
 	UFUNCTION( BlueprintPure )
 	int32 GetLevelEnforcementCost( const int32 CharacterID ) { return CharacterEnforcementCost.FindOrAdd(CharacterID); }
 
+	UFUNCTION( BlueprintPure )
+	int32 GetAllocatedAttribute( const int32 CharacterID, const FName& AttributeSlot );
+
+	UFUNCTION( BlueprintPure )
+	int32 GetAllocatedSkill( const int32 CharacterID, const ESkillSlotType SkillSlotType );
 public :
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
 	FOnCharacterChanged	OnCharacterChanged;

@@ -30,9 +30,9 @@ public :
 
 	UPROPERTY( BlueprintReadOnly )
 	int32 AllocatedEnforcementID = 0;
-
+	
 	UPROPERTY( BlueprintReadOnly )
-	FName EnforcementSlotID = NAME_None;
+	int32 CharacterID;
 	
 	UPROPERTY( BlueprintReadWrite, meta = (BindWidget) )
 	TObjectPtr<UButton> SelectionButton;

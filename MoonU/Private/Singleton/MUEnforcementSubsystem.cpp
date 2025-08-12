@@ -64,3 +64,41 @@ void UMUEnforcementSubsystem::OnPlayerLevelUp()
 		OnEnforcementUpdated.Broadcast();
 	}
 }
+
+int32 UMUEnforcementSubsystem::GetAllocatedAttribute(const int32 CharacterID, const FName& AttributeSlot)
+{
+	if ( CharacterEnforcementAllocated.Contains( CharacterID ) == false )
+	{
+		return -1;
+	}
+
+	const FMUEnforcementAllocate& CharacterEnforcement = CharacterEnforcementAllocated[CharacterID];
+
+	const TMap<FName, int32>& AttributeMap = CharacterEnforcement.AttributeMap;
+
+	if ( AttributeMap.Contains( AttributeSlot ) == false )
+	{
+		return -1;
+	}
+
+	return AttributeMap[AttributeSlot];
+}
+
+int32 UMUEnforcementSubsystem::GetAllocatedSkill(const int32 CharacterID, const ESkillSlotType SkillSlotType)
+{
+	if ( CharacterEnforcementAllocated.Contains( CharacterID ) == false )
+	{
+		return -1;
+	}
+
+	const FMUEnforcementAllocate& CharacterEnforcement = CharacterEnforcementAllocated[CharacterID];
+
+	const TMap<ESkillSlotType, int32>& SkillSlotMap = CharacterEnforcement.AllocatedSkillID;
+
+	if (SkillSlotMap.Contains(SkillSlotType) == false )
+	{
+		return -1;
+	}
+
+	return SkillSlotMap[SkillSlotType];
+}
