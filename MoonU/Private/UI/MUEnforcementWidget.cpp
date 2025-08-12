@@ -4,6 +4,7 @@
 #include "UI/MUEnforcementWidget.h"
 
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Library/MUFunctionLibrary.h"
 
 void UMUEnforcementWidget::NativeConstruct()
@@ -21,7 +22,7 @@ void UMUEnforcementWidget::SetupWidgetInfo()
 	FMUEnforcementData EnforcementData;
 	if ( UMUFunctionLibrary::GetEnforcementData(this, AllocatedEnforcementID, EnforcementData) == true )
 	{
-		
+		PortraitImage->SetBrushFromTexture(EnforcementData.DescriptionIcon);
 	} 
 }
 

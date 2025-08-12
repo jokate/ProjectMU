@@ -119,6 +119,8 @@ protected :
 	void OnSkillEnforcementAdded(int32 InCharacterID, ESkillSlotType SkillSlotType, int32 EnforcementID);
 	
 #pragma endregion
+
+	virtual void LevelUp() override;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

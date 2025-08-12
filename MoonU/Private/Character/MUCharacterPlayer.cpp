@@ -447,6 +447,20 @@ void AMUCharacterPlayer::OnSkillEnforcementAdded(const int32 InCharacterID, ESki
 	EnforcementComponent->EnforceSkill( SkillSlotType, EnforcementID );
 }
 
+void AMUCharacterPlayer::LevelUp()
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		UMUEnforcementSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PlayerController->GetLocalPlayer());
+		if ( !IsValid(Subsystem))
+		{
+			return;
+		}
+
+		Subsystem->OnPlayerLevelUp();
+	}
+}
+
 void AMUCharacterPlayer::ResetContinuousEnforcementLevel()
 {
 	if (IsValid(LevelUpComponent) == true )

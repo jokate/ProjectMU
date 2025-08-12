@@ -179,5 +179,5 @@ void AMUGameMode::CheatLevelUp()
 		return;
 	}
 
-	CurrentPlayer->LevelUp();
+	//CurrentPlayer->LevelUp();
 }

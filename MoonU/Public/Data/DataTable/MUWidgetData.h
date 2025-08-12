@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "Data/MUEnum.h"
 #include "Engine/DataTable.h"
 #include "UObject/Object.h"
 #include "MUWidgetData.generated.h"
@@ -21,4 +22,31 @@ struct FInteractionBoardData : public FTableRowBase
 	FText InteractionText;
 };
 
+USTRUCT( BlueprintType )
+struct FAttributeEnforcementSlotData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(BlueprintReadOnly)
+	FName SlotName;
+
+	UPROPERTY(BlueprintReadOnly)
+	int32 WidgetCount;
+	
+	UPROPERTY(BlueprintReadOnly)
+	int32 Level;
+};
+
+USTRUCT( BlueprintType )
+struct FEnforcementWidgetData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<ESkillSlotType> NeedToAllocateSkillSlot;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TArray<FAttributeEnforcementSlotData> EnforcementSlotDatas;
+};
 
