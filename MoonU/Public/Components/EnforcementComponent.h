@@ -30,7 +30,7 @@ public:
 
 	virtual const FName GetSkillIDBySlot( ESkillSlotType SkillSlot ) override;
 
-	virtual void SetupSkillInput( FName SkillID );
+	virtual void SetupSkillInput( ESkillSlotType SkillSlot, FName SkillID );
 
 	// 스킬 캐스팅 관련
 	UFUNCTION()

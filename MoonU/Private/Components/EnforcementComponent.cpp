@@ -6,12 +6,15 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "EnhancedInputSubsystems.h"
+#include "MUDefines.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUWidgetDelegateSubsystem.h"
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
+#include "Data/MUPrimaryDataAsset.h"
+#include "Engine/AssetManager.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 
 UEnforcementComponent::UEnforcementComponent()
@@ -97,15 +100,32 @@ void UEnforcementComponent::OpenSkill( ESkillSlotType SkillSlot, FName SkillID )
 		MUASC->AllocateSkill( SkillID, AbilitySpec );
 	}
 
-	SetupSkillInput( SkillID );
+	SetupSkillInput( SkillSlot, SkillID );
 
 	AddSkillSlot( SkillSlot, SkillID );
 }
 
-void UEnforcementComponent::SetupSkillInput(FName SkillID)
+void UEnforcementComponent::SetupSkillInput(ESkillSlotType SkillSlot, FName SkillID)
 {
 	FMUSkillData SkillData;
 	if ( UMUFunctionLibrary::GetSkillData(GetOwner(), SkillID, SkillData) == false )
+	{
+		return;
+	}
+
+	UAssetManager& AssetManager = UAssetManager::Get();
+
+	FPrimaryAssetId AssetID(MU_ENFORCE_PRIMARY, MU_GLOBAL);
+	UMUPrimaryDataAsset* PrimaryDataAsset = AssetManager.GetPrimaryAssetObject<UMUPrimaryDataAsset>(AssetID);
+
+	if ( IsValid( PrimaryDataAsset ) == false )
+	{
+		return;
+	}
+
+	const TMap<ESkillSlotType, FGameplayTag>& SkillInputsGlobal = PrimaryDataAsset->SkillInputTags;
+
+	if ( SkillInputsGlobal.Contains(SkillSlot) == false )
 	{
 		return;
 	}
@@ -116,6 +136,7 @@ void UEnforcementComponent::SetupSkillInput(FName SkillID)
 	{
 		return;
 	}
+	
 	UMUEnhancedInputComponent* EnhancedInputComponent = Cast<UMUEnhancedInputComponent>(OwnerActor->InputComponent);
 
 	if ( IsValid( EnhancedInputComponent ) == false )
@@ -134,12 +155,12 @@ void UEnforcementComponent::SetupSkillInput(FName SkillID)
 	
 	if ( SkillInput.ReleaseEvent != ETriggerEvent::None )
 	{
-		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::CancelSkill );
+		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInputsGlobal[SkillSlot], SkillInput.TriggerEvent, this, &UEnforcementComponent::CancelSkill );
 	}
 
 	if ( SkillInput.TriggerEvent != ETriggerEvent::None )
 	{
-		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInput.InputTag, SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
+		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInputsGlobal[SkillSlot], SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
 	}
 }
 

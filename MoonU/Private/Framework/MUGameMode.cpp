@@ -157,7 +157,7 @@ void AMUGameMode::CheatSetupEnforcement(int32 EnforcementID)
 		UE_LOG(LogTemp, Log, TEXT("My Player Is Not Valid"));
 		return;
 	}
-
+    
 	//CurrentPlayer->EnforcementUnit(EnforcementID);
 }
 

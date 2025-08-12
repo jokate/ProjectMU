@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "MUDefines.h"
 #include "MUEnum.h"
 #include "Engine/DataAsset.h"
 #include "MUPrimaryDataAsset.generated.h"
@@ -25,9 +26,9 @@ public :
 
 	UPROPERTY( EditDefaultsOnly )
 	TMap<ESkillSlotType, FGameplayTag> SkillInputTags;
-
+	
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override
 	{
-		return FPrimaryAssetId( TEXT("MUEnforcement"));
+		return FPrimaryAssetId( MU_ENFORCE_PRIMARY, MU_GLOBAL);
 	};
 };

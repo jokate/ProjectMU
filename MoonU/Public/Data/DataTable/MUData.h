@@ -74,9 +74,6 @@ USTRUCT( BlueprintType )
 struct FMUSkillInput
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	FGameplayTag InputTag;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
 	ETriggerEvent TriggerEvent = ETriggerEvent::None;

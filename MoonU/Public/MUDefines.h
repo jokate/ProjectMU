@@ -9,7 +9,9 @@
 #define ORIGINALTIME 1.0f
 
 #define EMPTY_ID 0
-#define EMPTY_AMOUNT 0 
+#define EMPTY_AMOUNT 0
+#define MU_ENFORCE_PRIMARY TEXT("MUEnforcement")
+#define MU_GLOBAL TEXT("Global")
 
 #define HEAD_BONE_NAME TEXT("head")
 #define COMMON_CHARACTER_INPUT 100
