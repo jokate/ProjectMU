@@ -29,9 +29,6 @@ public :
 	
 public :
 	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
-	TObjectPtr<UOverlay> MainOverlay;
-
-	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
 	TObjectPtr<UTextBlock> CurrentCostText;
 
 	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )

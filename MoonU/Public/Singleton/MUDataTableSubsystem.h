@@ -46,7 +46,7 @@ public :
 	virtual bool GetMonsterSpawnData( FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData );
 
 	UFUNCTION( BlueprintPure )
-	virtual bool GetSkillTreeWidgetInfo( FName CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
+	virtual bool GetSkillTreeWidgetInfo( int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

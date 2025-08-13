@@ -201,6 +201,26 @@ bool UMUFunctionLibrary::GetMonsterData(UObject* Object, FName SpawnerName, FMUM
 	return DataTableSubsystem->GetMonsterSpawnData( SpawnerName, OutSpawnerData);
 }
 
+bool UMUFunctionLibrary::GetEnforcementWidgetData(UObject* Object, int32 CharacterID,
+	FEnforcementWidgetData& EnforcementWidgetData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetSkillTreeWidgetInfo(CharacterID, EnforcementWidgetData);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {

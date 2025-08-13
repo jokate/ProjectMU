@@ -10,7 +10,7 @@ bool UMUDataTableSubsystem::GetInputMapperData(int32 InCharacterID, FMUInputMapp
 {
 	FDataRegistryId RegistryId;
 	RegistryId.RegistryType = InputMapperDataRegistryType;
-	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), InCharacterID));
+	RegistryId.ItemName = FName(FString::FromInt(InCharacterID	));
 	
 	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
 	
@@ -35,7 +35,7 @@ bool UMUDataTableSubsystem::GetCharacterInfoData(int32 InCharacterID, FMUCharact
 {
 	FDataRegistryId RegistryId;
 	RegistryId.RegistryType = CharacterDataRegistryType;
-	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), InCharacterID));
+	RegistryId.ItemName = FName(FString::FromInt(InCharacterID));
 	
 	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
 	
@@ -236,11 +236,11 @@ bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpa
 	return true;
 }
 
-bool UMUDataTableSubsystem::GetSkillTreeWidgetInfo(FName CharacterID, FEnforcementWidgetData& EnforcementWidgetData)
+bool UMUDataTableSubsystem::GetSkillTreeWidgetInfo(int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData)
 {
 	FDataRegistryId RegistryId;
 	RegistryId.RegistryType = SkillTreeWidgetDatRegistryType;
-	RegistryId.ItemName = CharacterID;
+	RegistryId.ItemName = FName( FString::FromInt(CharacterID));
 	
 	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
 	

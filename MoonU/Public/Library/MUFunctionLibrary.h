@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/DataTable/MUData.h"
+#include "Data/DataTable/MUWidgetData.h"
 #include "Interface/InteractableTarget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MUFunctionLibrary.generated.h"
@@ -69,5 +70,8 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool GetMonsterData( UObject* Object, FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData );
+
+	UFUNCTION( BlueprintPure )
+	static bool GetEnforcementWidgetData(UObject* Object, int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
 #pragma endregion
 };
