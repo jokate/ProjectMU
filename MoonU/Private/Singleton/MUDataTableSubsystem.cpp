@@ -236,6 +236,31 @@ bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpa
 	return true;
 }
 
+bool UMUDataTableSubsystem::GetSkillTreeWidgetInfo(FName CharacterID, FEnforcementWidgetData& EnforcementWidgetData)
+{
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = SkillTreeWidgetDatRegistryType;
+	RegistryId.ItemName = CharacterID;
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
+	{
+		return false;
+	}
+
+	const FEnforcementWidgetData* SkillTreeData = DataRegistrySubsystem->GetCachedItem<FEnforcementWidgetData>(RegistryId);
+	
+	if ( SkillTreeData == nullptr )
+	{
+		return false;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	EnforcementWidgetData = *SkillTreeData;
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

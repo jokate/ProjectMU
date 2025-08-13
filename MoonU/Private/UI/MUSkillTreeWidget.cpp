@@ -52,3 +52,8 @@ void UMUSkillTreeWidget::OnEnforcementUpdated()
 		CurrentCostText->SetText(FText::FromString(FString::Printf(TEXT("Current Score : %d"), CurrentCost)));
 	}
 }
+
+void UMUSkillTreeWidget::InitializeWidget()
+{
+	
+}

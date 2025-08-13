@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MUSkillTreeWidget.generated.h"
 
+class UVerticalBox;
 class UOverlay;
 class UTextBlock;
 /**
@@ -23,13 +24,21 @@ public :
 
 	UFUNCTION()
 	virtual void OnEnforcementUpdated();
+
+	virtual void InitializeWidget();
 	
 public :
-	UPROPERTY( BlueprintReadOnly )
+	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
 	TObjectPtr<UOverlay> MainOverlay;
 
-	UPROPERTY( BlueprintReadOnly )
+	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
 	TObjectPtr<UTextBlock> CurrentCostText;
+
+	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
+	TObjectPtr<UVerticalBox> SkillSlotVertical;
+
+	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )
+	TObjectPtr<UVerticalBox> AttributeSlotVertical;
 	
 	UPROPERTY()
 	int32 CharacterID = 0;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/DataTable/MUData.h"
+#include "Data/DataTable/MUWidgetData.h"
 #include "Engine/DataTable.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MUDataTableSubsystem.generated.h"
@@ -43,6 +44,9 @@ public :
 
 	UFUNCTION( BlueprintCallable )
 	virtual bool GetMonsterSpawnData( FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData );
+
+	UFUNCTION( BlueprintPure )
+	virtual bool GetSkillTreeWidgetInfo( FName CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -77,4 +81,7 @@ protected :
 	
 	UPROPERTY( Config )
 	FName MonsterSpawnDataRegistryType = NAME_None;
+
+	UPROPERTY( Config )
+	FName SkillTreeWidgetDatRegistryType = NAME_None;
 };
