@@ -70,3 +70,24 @@ public :
 	UPROPERTY(BlueprintReadOnly)
 	TMap<ESkillSlotType, int32> AllocatedSkillID;
 };
+
+
+USTRUCT( BlueprintType )
+struct FMUEnforcementSelection
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( BlueprintReadOnly )
+	int32 CharacterID;
+
+	UPROPERTY( BlueprintReadOnly )
+	int32 EnforcementID;
+
+	// 구조상 맞지 않지만 포괄적인 부분을 가져가기 위함.
+	UPROPERTY( BlueprintReadOnly )
+	FName EnforcementName;
+
+	UPROPERTY( BlueprintReadOnly )
+	ESkillSlotType EnforcementSlot;
+};

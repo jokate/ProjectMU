@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/MUSkillSlotWidget.h"
+#include "UI/Enforcement/MUSkillSlotWidget.h"
 
 #include "Interface/SkillManager.h"
 #include "Singleton/MUEnforcementSubsystem.h"

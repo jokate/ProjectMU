@@ -1,14 +1,14 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/MUSkillTreeWidget.h"
+#include "UI/Enforcement/MUSkillTreeWidget.h"
 
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
-#include "UI/EnforcementHorizontalWidget.h"
-#include "UI/MUSkillSlotWidget.h"
+#include "UI/Enforcement/EnforcementHorizontalWidget.h"
+#include "UI/Enforcement/MUSkillSlotWidget.h"
 
 void UMUSkillTreeWidget::NativeConstruct()
 {

@@ -1,13 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/EnforcementHorizontalWidget.h"
+#include "UI/Enforcement/EnforcementHorizontalWidget.h"
 
 #include "Components/HorizontalBox.h"
-#include "UI/MUAttributeEnforceWidget.h"
+#include "UI/Enforcement/MUAttributeEnforceWidget.h"
 
 void UEnforcementHorizontalWidget::InitializeWidget( int32 CharacterID,
-	FAttributeEnforcementSlotData& EnforcementWidgetData, TSubclassOf<UUserWidget> AttributeWidgetClass)
+                                                     FAttributeEnforcementSlotData& EnforcementWidgetData, TSubclassOf<UUserWidget> AttributeWidgetClass)
 {
 	if ( !IsValid(EnforcementHorizontal) )
 	{

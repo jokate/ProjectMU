@@ -2,7 +2,7 @@
 
 
 #include "Abilities/AT/MUAT_ActivateTagWidget.h"
-
+#include "GameFramework/HUD.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Interface/UI/GameplayTagWidgetOwner.h"
 

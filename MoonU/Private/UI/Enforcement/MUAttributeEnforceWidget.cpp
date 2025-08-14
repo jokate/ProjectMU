@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/MUAttributeEnforceWidget.h"
+#include "UI/Enforcement/MUAttributeEnforceWidget.h"
 
 #include "Singleton/MUEnforcementSubsystem.h"
 
