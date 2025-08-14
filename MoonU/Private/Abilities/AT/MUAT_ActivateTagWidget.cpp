@@ -42,7 +42,7 @@ void UMUAT_ActivateTagWidget::Activate()
 	GameplayTagWidgetOwner->ShowWidgetByGameplayTag(WidgetTag);
 	
 	TagWidget = GameplayTagWidgetOwner->GetWidgetByGameplayTag(WidgetTag);
-	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx( PlayerController );
+	UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx( PlayerController );
 	PlayerController->bShowMouseCursor = true;
 }
 
