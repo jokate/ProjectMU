@@ -11,6 +11,8 @@ class UButton;
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnSkillSlotClicked, ESkillSlotType, SlotType);
+
 UCLASS()
 class MOONU_API UMUSkillSlotWidget : public UMUEnforcementWidget
 {
@@ -22,6 +24,10 @@ public :
 	virtual void OnSelectionButtonClicked_Implementation() override;
 
 	virtual void SetupWidgetInfo() override;
+
+public :
+	UPROPERTY( BlueprintCallable, BlueprintAssignable )
+	FOnSkillSlotClicked OnSkillSlotClicked;
 	
 public :
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )

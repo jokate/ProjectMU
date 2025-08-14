@@ -30,5 +30,14 @@ void UEnforcementHorizontalWidget::InitializeWidget( int32 CharacterID,
 		FName SlotName = FName(*(FString::Printf(TEXT("%s_%d"), *EnforcementWidgetData.SlotName.ToString(), Index)));
 		AttributeEnforceWidget->InitializeValue( CharacterID, SlotName);
 		AttributeEnforceWidget->SetPadding( FMargin( PaddingValue ));
+		AttributeEnforceWidget->OnAttributeSlotClicked.AddDynamic(this, &UEnforcementHorizontalWidget::MemberClickedCallback);
+	}
+}
+
+void UEnforcementHorizontalWidget::MemberClickedCallback(FName SlotName)
+{
+	if ( OnMemberClicked.IsBound() == true )
+	{
+		OnMemberClicked.Broadcast( SlotName );
 	}
 }

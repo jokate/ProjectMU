@@ -5,9 +5,11 @@
 
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
+#include "Data/MUPrimaryDataAsset.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementHorizontalWidget.h"
+#include "UI/Enforcement/MUAttributeEnforceWidget.h"
 #include "UI/Enforcement/MUSkillSlotWidget.h"
 
 void UMUSkillTreeWidget::NativeConstruct()
@@ -66,7 +68,8 @@ void UMUSkillTreeWidget::OnEnforcementUpdated()
 
 void UMUSkillTreeWidget::InitializeWidget()
 {
-	if ( !IsValid( SkillSlotVertical ) || !IsValid(AttributeSlotVertical))
+	UMUPrimaryDataAsset* DA = UMUFunctionLibrary::GetGlobalPrimaryDataAsset();
+	if ( !IsValid( SkillSlotVertical ) || !IsValid(AttributeSlotVertical) || !IsValid(DA))
 	{
 		return;
 	}
@@ -83,7 +86,7 @@ void UMUSkillTreeWidget::InitializeWidget()
 
 	for ( ESkillSlotType SkillSlot : EnforcementWidgetData.NeedToAllocateSkillSlot )
 	{
-		UMUSkillSlotWidget* SkillSlotWidget = CreateWidget<UMUSkillSlotWidget>(this, EnforcementWidgetData.SkillSlotWidgetClass);
+		UMUSkillSlotWidget* SkillSlotWidget = CreateWidget<UMUSkillSlotWidget>(this, DA->SkillSlotWidgetClass);
 
 		if ( IsValid(SkillSlotWidget) == false)
 		{
@@ -93,11 +96,12 @@ void UMUSkillTreeWidget::InitializeWidget()
 		SkillSlotVertical->AddChildToVerticalBox( SkillSlotWidget );
 		SkillSlotWidget->InitializeSkillSlot( CharacterID, SkillSlot );
 		SkillSlotWidget->SetPadding( 50.f );
+		SkillSlotWidget->OnSkillSlotClicked.AddDynamic( this, &UMUSkillTreeWidget::SkillTreeClicked );
 	}
 
 	for ( FAttributeEnforcementSlotData& AttributeData : EnforcementWidgetData.EnforcementSlotDatas )
 	{
-		UEnforcementHorizontalWidget* SkillTreeDepth = CreateWidget<UEnforcementHorizontalWidget>(this, EnforcementWidgetData.AttributeSlotHorizontal );
+		UEnforcementHorizontalWidget* SkillTreeDepth = CreateWidget<UEnforcementHorizontalWidget>(this, DA->AttributeSlotHorizontal );
 
 		if ( IsValid(SkillTreeDepth) == false )
 		{
@@ -105,7 +109,24 @@ void UMUSkillTreeWidget::InitializeWidget()
 		}
 		
 		AttributeSlotVertical->AddChildToVerticalBox( SkillTreeDepth );
-		SkillTreeDepth->InitializeWidget( CharacterID, AttributeData, EnforcementWidgetData.AttributeWidgetClass);
+		SkillTreeDepth->InitializeWidget( CharacterID, AttributeData, DA->AttributeWidgetClass);
 		SkillTreeDepth->SetPadding( 50.f );
+		SkillTreeDepth->OnMemberClicked.AddDynamic( this, &UMUSkillTreeWidget::AttributeTreeClicked );
+	}
+}
+
+void UMUSkillTreeWidget::SkillTreeClicked(ESkillSlotType SlotType)
+{
+	if ( OnSkillTreeClicked.IsBound() == true )
+	{
+		OnSkillTreeClicked.Broadcast(SlotType);
+	}
+}
+
+void UMUSkillTreeWidget::AttributeTreeClicked(FName SlotName)
+{
+	if (OnAttributeTreeClicked.IsBound() == true)
+	{
+		OnAttributeTreeClicked.Broadcast(SlotName);
 	}
 }

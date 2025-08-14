@@ -32,7 +32,7 @@ public :
 	static bool BindInputActionByTag( class AMUCharacterPlayer* CharacterPlayer, int32 CharacterID, FTagByInput& TagByInput);
 
 	UFUNCTION( BlueprintPure )
-	static bool GetEnforcementDropTable(UObject* Object, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement);
+	static bool GetEnforcementDropTable(UObject* Object, int32 CharacterID, EEnforcementType EnforcementType, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement);
 
 	UFUNCTION( BlueprintPure )
 	static bool IsEnforcementPrerequisiteSatisfied(UObject* Object, FMUEnforcementProbability& InProbabilityData);
@@ -45,6 +45,9 @@ public :
 
 	UFUNCTION( BlueprintCallable )
 	static class UInputConfig* GetInputConfigByOwner( AActor* Owner );
+
+	UFUNCTION( BlueprintPure )
+	static class UMUPrimaryDataAsset* GetGlobalPrimaryDataAsset();
 	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)
@@ -57,7 +60,7 @@ public :
 	static bool GetEnforcementData(UObject* Object, int32 EnforcementID, FMUEnforcementData& OutEnforcementData);
 
 	UFUNCTION(BlueprintPure)
-	static bool GetEnforcementDropData(UObject* Object, int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
+	static bool GetEnforcementDropData(UObject* Object, int32 CharacterID, EEnforcementType EnforcementType, int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect);
 
 	UFUNCTION( BlueprintPure )
 	static bool GetSkillData( UObject* Object, FName SkillID, FMUSkillData& OutSkillData);

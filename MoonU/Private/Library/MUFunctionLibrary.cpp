@@ -5,10 +5,13 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Components/EnforcementComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
+#include "Data/MUPrimaryDataAsset.h"
+#include "Engine/AssetManager.h"
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Singleton/MUDataTableSubsystem.h"
@@ -105,7 +108,7 @@ bool UMUFunctionLibrary::GetEnforcementData(UObject* Object, int32 EnforcementID
 	return DataTableSubsystem->GetEnforcementData(EnforcementID, OutEnforcementData);
 }
 
-bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Level,
+bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 CharacterID, EEnforcementType EnforcementType, int32 Level, 
 	FMUEnforcementDropSelect& OutEnforcementDropSelect)
 {
 	UGameInstance* GameInstance = GetGameInstance(Object);
@@ -115,6 +118,20 @@ bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Level,
 		return false;
 	}
 
+	UMUPrimaryDataAsset* GlobalDataAsset = GetGlobalPrimaryDataAsset();
+
+	if ( !IsValid(GlobalDataAsset ) == false)
+	{
+		return false;
+	}
+
+	const TMap<int32, FName>& RegistryName =  EnforcementType == Attribute ? GlobalDataAsset->CharacterAttributeRegistry : GlobalDataAsset->CharacterSkillRegistry;
+
+	if ( RegistryName.Contains(CharacterID) == false )
+	{
+		return false;
+	} 
+	
 	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
 
 	if ( IsValid(DataTableSubsystem) == false )
@@ -122,7 +139,7 @@ bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Level,
 		return false;
 	}
 
-	return DataTableSubsystem->GetEnforcementDropData(Level, OutEnforcementDropSelect);
+	return DataTableSubsystem->GetEnforcementDropDataByRegistry(RegistryName[CharacterID], Level, OutEnforcementDropSelect);
 }
 
 bool UMUFunctionLibrary::GetSkillData(UObject* Object, FName SkillID, FMUSkillData& OutSkillData)
@@ -286,7 +303,8 @@ bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlaye
 }
 
 // 여기에 있었네. ( 공용화 로직 분포 ) -> 스킬과 능력치에 대한 강화 변경 필요.
-bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement)
+bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 CharacterID, EEnforcementType EnforcementType,
+	int32 Level, int32 ArrCount, TSet<int32>& DropEnforcement)
 {
 	if (IsValid(Object) == false)
 	{
@@ -294,7 +312,7 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Level, i
 	}
 
 	FMUEnforcementDropSelect DropSelect;
-	if (GetEnforcementDropData(Object, Level, DropSelect) == false)
+	if (GetEnforcementDropData(Object, CharacterID, EnforcementType, Level, DropSelect) == false)
 	{
 		return false;
 	}
@@ -475,5 +493,22 @@ UInputConfig* UMUFunctionLibrary::GetInputConfigByOwner(AActor* Owner)
 	}
 
 	return InputMapper.InputConfig;
+}
+
+UMUPrimaryDataAsset* UMUFunctionLibrary::GetGlobalPrimaryDataAsset()
+{
+	UAssetManager& AssetManager = UAssetManager::Get();
+
+	FPrimaryAssetId AssetID(TEXT("MUEnforcement"), TEXT("Global"));
+	UObject* PrimaryDataAsset = AssetManager.GetPrimaryAssetObject(AssetID);
+
+	if ( IsValid( PrimaryDataAsset ) == false )
+	{
+		return nullptr;
+	}
+
+	UMUPrimaryDataAsset* PA = Cast<UMUPrimaryDataAsset>(PrimaryDataAsset);
+	
+	return PA;
 }
 

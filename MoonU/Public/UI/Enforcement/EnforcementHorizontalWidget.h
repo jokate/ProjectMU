@@ -12,6 +12,8 @@ class UHorizontalBox;
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnMemberClicked, FName, SlotName);
+
 UCLASS()
 class MOONU_API UEnforcementHorizontalWidget : public UUserWidget
 {
@@ -20,6 +22,13 @@ class MOONU_API UEnforcementHorizontalWidget : public UUserWidget
 public :
 	virtual void InitializeWidget( int32 CharacterID,
 		FAttributeEnforcementSlotData& EnforcementWidgetData, TSubclassOf<UUserWidget> AttributeWidgetClass);
+
+	UFUNCTION()
+	virtual void MemberClickedCallback(FName SlotName);
+	
+public :
+	UPROPERTY( BlueprintAssignable, BLueprintCallable )
+	FOnMemberClicked OnMemberClicked;
 	
 public :
 	UPROPERTY( BlueprintReadOnly, meta = (BindWidget))

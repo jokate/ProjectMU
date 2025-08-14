@@ -25,7 +25,7 @@ public :
 
 	UFUNCTION( BlueprintNativeEvent )
 	void OnSelectionButtonClicked();
-	virtual void OnSelectionButtonClicked_Implementation();
+	virtual void OnSelectionButtonClicked_Implementation() {};
 public :
 
 	UPROPERTY( BlueprintReadOnly )

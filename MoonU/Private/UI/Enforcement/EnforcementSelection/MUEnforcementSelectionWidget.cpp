@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/Enforcement/MUEnforcementSelectionWidget.h"
+#include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionWidget.h"
 
 #include "Components/Button.h"
 #include "Components/Image.h"

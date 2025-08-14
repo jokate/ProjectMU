@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Data/MUEnum.h"
 #include "MUSkillTreeWidget.generated.h"
 
 class UVerticalBox;
@@ -12,6 +13,9 @@ class UTextBlock;
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnSkillTreeClicked, ESkillSlotType, SlotType );
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnAttributeTreeClicked, FName, SlotName );
+
 UCLASS()
 class MOONU_API UMUSkillTreeWidget : public UUserWidget
 {
@@ -27,6 +31,19 @@ public :
 	virtual void OnEnforcementUpdated();
 
 	virtual void InitializeWidget();
+
+	UFUNCTION()
+	virtual void SkillTreeClicked( ESkillSlotType SlotType );
+
+	UFUNCTION()
+	virtual void AttributeTreeClicked(FName SlotName);
+
+public :
+	UPROPERTY( BlueprintAssignable, BlueprintCallable)
+	FOnSkillTreeClicked OnSkillTreeClicked;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnAttributeTreeClicked OnAttributeTreeClicked;
 	
 public :
 	UPROPERTY( BlueprintReadOnly, meta = (BindWidget) )

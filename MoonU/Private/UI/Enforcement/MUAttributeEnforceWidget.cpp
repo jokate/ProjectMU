@@ -3,7 +3,10 @@
 
 #include "UI/Enforcement/MUAttributeEnforceWidget.h"
 
+#include "Data/MUPrimaryDataAsset.h"
+#include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
+#include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 
 void UMUAttributeEnforceWidget::InitializeValue(int32 InCharacterID,FName InSkillSlotName)
 {
@@ -11,6 +14,14 @@ void UMUAttributeEnforceWidget::InitializeValue(int32 InCharacterID,FName InSkil
 	CharacterID = InCharacterID;
 
 	SetupWidgetInfo();
+}
+
+void UMUAttributeEnforceWidget::OnSelectionButtonClicked_Implementation()
+{
+	if ( OnAttributeSlotClicked.IsBound() == true )
+	{
+		OnAttributeSlotClicked.Broadcast(AttributeSlotName);
+	}
 }
 
 void UMUAttributeEnforceWidget::SetupWidgetInfo()

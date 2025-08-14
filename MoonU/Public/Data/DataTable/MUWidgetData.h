@@ -48,15 +48,6 @@ struct FEnforcementWidgetData : public FTableRowBase
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	TArray<FAttributeEnforcementSlotData> EnforcementSlotDatas;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> AttributeSlotHorizontal;
-	
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TSubclassOf<UUserWidget> AttributeWidgetClass;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TSubclassOf<UUserWidget> SkillSlotWidgetClass;
 };
 
 USTRUCT( BlueprintType )

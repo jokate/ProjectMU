@@ -7,8 +7,13 @@
 #include "MUDefines.h"
 #include "MUEnum.h"
 #include "Engine/DataAsset.h"
+#include "UI/Enforcement/MUSkillSlotWidget.h"
 #include "MUPrimaryDataAsset.generated.h"
 
+class UMUEnforcementSelectionCanvas;
+class UMUEnforcementSelectionWidget;
+class UEnforcementHorizontalWidget;
+class UMUAttributeEnforceWidget;
 /**
  * 
  */
@@ -26,6 +31,24 @@ public :
 
 	UPROPERTY( EditDefaultsOnly )
 	TMap<ESkillSlotType, FGameplayTag> SkillInputTags;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UEnforcementHorizontalWidget> AttributeSlotHorizontal;
+	
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSubclassOf<UMUAttributeEnforceWidget> AttributeWidgetClass;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSubclassOf<UMUSkillSlotWidget> SkillSlotWidgetClass;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UMUEnforcementSelectionWidget> SelectionClass;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	TSubclassOf<UMUEnforcementSelectionCanvas> EnforcementSelectionCanvasClass;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	int32 SelectionMaximumCount = 3;
 	
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override
 	{
