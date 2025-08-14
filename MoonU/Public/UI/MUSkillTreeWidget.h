@@ -19,8 +19,9 @@ class MOONU_API UMUSkillTreeWidget : public UUserWidget
 
 public :
 	virtual void NativeConstruct() override;
-	
-	virtual void SetupCharacterID( int32 InCharacterID );
+
+	UFUNCTION()
+	virtual void SetupCharacterID( FName InCharacterID );
 
 	UFUNCTION()
 	virtual void OnEnforcementUpdated();

@@ -29,11 +29,11 @@ void UMUSkillTreeWidget::NativeConstruct()
 	}
 }
 
-void UMUSkillTreeWidget::SetupCharacterID(int32 InCharacterID)
+void UMUSkillTreeWidget::SetupCharacterID(FName InCharacterID)
 {
 	int32 PrevCharacterID = CharacterID;
 	
-	CharacterID = InCharacterID;
+	CharacterID = FCString::Atoi(*InCharacterID.ToString());
 
 	// 캐릭터 ID에 대한 파싱 과정 필요.
 	// 스킬 트리에 따른 부분 수정 조치 필요.

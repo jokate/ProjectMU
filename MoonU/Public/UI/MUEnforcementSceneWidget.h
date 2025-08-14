@@ -11,6 +11,7 @@
  */
 
 
+class UMUTopMenuWidget;
 class UMUSkillTreeWidget;
 
 UCLASS()
@@ -19,8 +20,13 @@ class MOONU_API UMUEnforcementSceneWidget : public UUserWidget
 	GENERATED_BODY()
 
 public :
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	virtual void NativeConstruct() override;
+
+public :
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UMUSkillTreeWidget> SkillTreeWidget;
 
-	//UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UMUTopMenuWidget> MenuWidget;
+	
 };

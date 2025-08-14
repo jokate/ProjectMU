@@ -47,6 +47,9 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	virtual bool GetSkillTreeWidgetInfo( int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
+
+	UFUNCTION( BlueprintPure )
+	virtual bool GetTopMenuWidgetData( FName Name, FTopMenuData& OutMenuData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -84,4 +87,7 @@ protected :
 
 	UPROPERTY( Config )
 	FName SkillTreeWidgetDatRegistryType = NAME_None;
+
+	UPROPERTY( Config )
+	FName TopMenuWidgetDataRegistryType = NAME_None;
 };

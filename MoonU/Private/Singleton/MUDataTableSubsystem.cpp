@@ -261,6 +261,32 @@ bool UMUDataTableSubsystem::GetSkillTreeWidgetInfo(int32 CharacterID, FEnforceme
 	return true;
 }
 
+bool UMUDataTableSubsystem::GetTopMenuWidgetData(FName Name, FTopMenuData& OutMenuData)
+{
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = TopMenuWidgetDataRegistryType;
+	RegistryId.ItemName = Name;
+
+	
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
+	{
+		return false;
+	}
+
+	const FTopMenuData* TopMenuData = DataRegistrySubsystem->GetCachedItem<FTopMenuData>(RegistryId);
+	
+	if ( TopMenuData == nullptr )
+	{
+		return false;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
+	OutMenuData = *TopMenuData;
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

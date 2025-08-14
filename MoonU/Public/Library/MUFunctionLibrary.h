@@ -73,5 +73,8 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool GetEnforcementWidgetData(UObject* Object, int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData );
+
+	UFUNCTION( BlueprintPure )
+	static bool GetTopMenuWidgetData( UObject* Object, FName TopMenuID, FTopMenuData& OutTopMenuData );
 #pragma endregion
 };

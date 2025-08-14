@@ -221,6 +221,25 @@ bool UMUFunctionLibrary::GetEnforcementWidgetData(UObject* Object, int32 Charact
 	return DataTableSubsystem->GetSkillTreeWidgetInfo(CharacterID, EnforcementWidgetData);
 }
 
+bool UMUFunctionLibrary::GetTopMenuWidgetData(UObject* Object, FName TopMenuID, FTopMenuData& OutTopMenuData)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetTopMenuWidgetData(TopMenuID, OutTopMenuData);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {

@@ -59,3 +59,28 @@ struct FEnforcementWidgetData : public FTableRowBase
 	TSubclassOf<UUserWidget> SkillSlotWidgetClass;
 };
 
+USTRUCT( BlueprintType )
+struct FTopMenuItem
+{
+	GENERATED_BODY()
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText TopMenuText;
+};
+
+USTRUCT(BlueprintType)
+struct FTopMenuData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FTopMenuItem> ItemNames;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> ItemWidgetClass;
+};
+
