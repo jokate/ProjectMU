@@ -12,6 +12,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
 #include "Engine/AssetManager.h"
+#include "Framework/MUGameInstance.h"
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Singleton/MUDataTableSubsystem.h"
@@ -118,9 +119,8 @@ bool UMUFunctionLibrary::GetEnforcementDropData(UObject* Object, int32 Character
 		return false;
 	}
 
-	UMUPrimaryDataAsset* GlobalDataAsset = GetGlobalPrimaryDataAsset();
-
-	if ( !IsValid(GlobalDataAsset ) == false)
+	UMUPrimaryDataAsset* GlobalDataAsset = GetGlobalPrimaryDataAsset(Object);
+	if ( IsValid(GlobalDataAsset) == false )
 	{
 		return false;
 	}
@@ -335,11 +335,11 @@ bool UMUFunctionLibrary::GetEnforcementDropTable(UObject* Object, int32 Characte
 			}
 
 			//이미 스킬이 등록된 경우.
-			if (IsSkillRegisteredToCharacter(Object, DropProbability.EnforcementID) == true)
+			/*if (IsSkillRegisteredToCharacter(Object, DropProbability.EnforcementID) == true)
 			{
 				UE_LOG(LogTemp, Log, TEXT("Already Registered"));
 				continue;
-			}
+			}*/
 		
 			float RandomValue = FMath::RandRange(0.f, 1.0f);
 
@@ -495,20 +495,22 @@ UInputConfig* UMUFunctionLibrary::GetInputConfigByOwner(AActor* Owner)
 	return InputMapper.InputConfig;
 }
 
-UMUPrimaryDataAsset* UMUFunctionLibrary::GetGlobalPrimaryDataAsset()
+UMUPrimaryDataAsset* UMUFunctionLibrary::GetGlobalPrimaryDataAsset( UObject* Object )
 {
-	UAssetManager& AssetManager = UAssetManager::Get();
+	UGameInstance* GI = GetGameInstance(Object);
 
-	FPrimaryAssetId AssetID(TEXT("MUEnforcement"), TEXT("Global"));
-	UObject* PrimaryDataAsset = AssetManager.GetPrimaryAssetObject(AssetID);
-
-	if ( IsValid( PrimaryDataAsset ) == false )
+	if ( IsValid(GI) == false )
 	{
 		return nullptr;
 	}
 
-	UMUPrimaryDataAsset* PA = Cast<UMUPrimaryDataAsset>(PrimaryDataAsset);
-	
-	return PA;
+	UMUGameInstance* MUGI = Cast<UMUGameInstance>(GI);
+
+	if ( !IsValid(MUGI) )
+	{
+		return nullptr;
+	}
+
+	return MUGI->EnforcementGlobal.LoadSynchronous();
 }
 

@@ -9,6 +9,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MUFunctionLibrary.generated.h"
 
+class UMUPrimaryDataAsset;
 /**
  * 
  */
@@ -47,7 +48,7 @@ public :
 	static class UInputConfig* GetInputConfigByOwner( AActor* Owner );
 
 	UFUNCTION( BlueprintPure )
-	static class UMUPrimaryDataAsset* GetGlobalPrimaryDataAsset();
+	static UMUPrimaryDataAsset* GetGlobalPrimaryDataAsset( UObject* Object);
 	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)

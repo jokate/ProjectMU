@@ -113,16 +113,13 @@ void UEnforcementComponent::SetupSkillInput(ESkillSlotType SkillSlot, FName Skil
 		return;
 	}
 
-	UAssetManager& AssetManager = UAssetManager::Get();
+	UMUPrimaryDataAsset* PrimaryDataAsset = UMUFunctionLibrary::GetGlobalPrimaryDataAsset(this);
 
-	FPrimaryAssetId AssetID(MU_ENFORCE_PRIMARY, MU_GLOBAL);
-	UMUPrimaryDataAsset* PrimaryDataAsset = AssetManager.GetPrimaryAssetObject<UMUPrimaryDataAsset>(AssetID);
-
-	if ( IsValid( PrimaryDataAsset ) == false )
+	if ( IsValid(PrimaryDataAsset) == false )
 	{
 		return;
-	}
-
+	} 
+	
 	const TMap<ESkillSlotType, FGameplayTag>& SkillInputsGlobal = PrimaryDataAsset->SkillInputTags;
 
 	if ( SkillInputsGlobal.Contains(SkillSlot) == false )
@@ -160,7 +157,7 @@ void UEnforcementComponent::SetupSkillInput(ESkillSlotType SkillSlot, FName Skil
 
 	if ( SkillInput.TriggerEvent != ETriggerEvent::None )
 	{
-		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInputsGlobal[SkillSlot], SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillData.ApplySlotType );
+		EnhancedInputComponent->BindActionByTag( InputConfig, SkillInputsGlobal[SkillSlot], SkillInput.TriggerEvent, this, &UEnforcementComponent::TriggerInputSkill, SkillSlot );
 	}
 }
 

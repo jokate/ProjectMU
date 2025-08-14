@@ -32,9 +32,7 @@ void UMUEnforcementSelectionCanvas::SetupSkillAttribute(ESkillSlotType InSkillSl
 void UMUEnforcementSelectionCanvas::AddSelectionMember()
 {
 	EnforcementSelectionHorizontal->ClearChildren();
-	
-	UMUPrimaryDataAsset* DA = UMUFunctionLibrary::GetGlobalPrimaryDataAsset();
-
+	UMUPrimaryDataAsset* DA	= UMUFunctionLibrary::GetGlobalPrimaryDataAsset(this);
 	if ( IsValid(DA) == false)
 	{
 		return;

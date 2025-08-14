@@ -52,6 +52,6 @@ public :
 	
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override
 	{
-		return FPrimaryAssetId( MU_ENFORCE_PRIMARY, MU_GLOBAL);
+		return FPrimaryAssetId( MU_ENFORCE_PRIMARY, GetFName());
 	};
 };

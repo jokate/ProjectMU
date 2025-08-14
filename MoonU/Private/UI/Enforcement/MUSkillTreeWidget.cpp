@@ -68,7 +68,8 @@ void UMUSkillTreeWidget::OnEnforcementUpdated()
 
 void UMUSkillTreeWidget::InitializeWidget()
 {
-	UMUPrimaryDataAsset* DA = UMUFunctionLibrary::GetGlobalPrimaryDataAsset();
+	TSoftObjectPtr<UMUPrimaryDataAsset> DAPath = UMUFunctionLibrary::GetGlobalPrimaryDataAsset(this);
+	UMUPrimaryDataAsset* DA = DAPath.LoadSynchronous();
 	if ( !IsValid( SkillSlotVertical ) || !IsValid(AttributeSlotVertical) || !IsValid(DA))
 	{
 		return;
