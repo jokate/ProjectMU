@@ -9,7 +9,6 @@
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementHorizontalWidget.h"
-#include "UI/Enforcement/MUAttributeEnforceWidget.h"
 #include "UI/Enforcement/MUSkillSlotWidget.h"
 
 void UMUSkillTreeWidget::NativeConstruct()

@@ -3,7 +3,6 @@
 
 #include "UI/MUTimeGaugeWidget.h"
 
-#include "Attribute/MUCharacterAttributeSet.h"
 #include "Attribute/MUTimewinderAttribute.h"
 #include "Components/ProgressBar.h"
 

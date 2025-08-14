@@ -6,7 +6,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "MUDefines.h"
-#include "Interface/MUEnemy.h"
 
 UMUCharacterAttributeSetBase::UMUCharacterAttributeSetBase()
 	: Damage(0.0f),

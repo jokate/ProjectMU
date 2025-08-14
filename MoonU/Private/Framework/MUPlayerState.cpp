@@ -3,7 +3,6 @@
 
 #include "Framework/MUPlayerState.h"
 
-#include "Character/MUCharacterPlayer.h"
 #include "AbilitySystemComponent.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 

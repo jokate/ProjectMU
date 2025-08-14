@@ -5,8 +5,6 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
-#include "EnhancedInputSubsystems.h"
-#include "MUDefines.h"
 #include "Character/MUCharacterPlayer.h"
 #include "Data/DataTable/MUData.h"
 #include "Library/MUFunctionLibrary.h"
@@ -14,8 +12,6 @@
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
-#include "Engine/AssetManager.h"
-#include "Singleton/MUEnforcementSubsystem.h"
 
 UEnforcementComponent::UEnforcementComponent()
 {

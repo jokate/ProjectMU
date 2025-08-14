@@ -5,7 +5,6 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "MUDefines.h"
 #include "Abilities/GameplayAbilityTypes.h"
 
 void UAnimNotifyState_AttackTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,

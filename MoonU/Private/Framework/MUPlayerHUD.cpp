@@ -3,7 +3,6 @@
 
 #include "Framework/MUPlayerHUD.h"
 
-#include "MUDefines.h"
 #include "Components/UI/GameplayTagWidgetContainer.h"
 #include "UI/MUHUDWidget.h"
 

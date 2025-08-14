@@ -3,7 +3,6 @@
 
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "GameplayEffectExtension.h"
-#include "MUDefines.h"
 #include "Interface/LevelManager.h"
 
 UMUCharacterAttributeSet::UMUCharacterAttributeSet()

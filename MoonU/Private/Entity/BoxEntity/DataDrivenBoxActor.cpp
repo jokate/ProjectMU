@@ -2,7 +2,6 @@
 
 
 #include "Entity/BoxEntity/DataDrivenBoxActor.h"
-#include "GameFramework/Character.h"
 #include "Library/MUFunctionLibrary.h"
 
 

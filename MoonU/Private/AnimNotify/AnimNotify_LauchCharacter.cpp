@@ -4,7 +4,6 @@
 #include "AnimNotify/AnimNotify_LauchCharacter.h"
 
 #include "Character/MUCharacterPlayer.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 void UAnimNotify_LauchCharacter::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                         const FAnimNotifyEventReference& EventReference)

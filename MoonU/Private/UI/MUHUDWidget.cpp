@@ -4,7 +4,6 @@
 #include "UI/MUHUDWidget.h"
 
 #include "AbilitySystemComponent.h"
-#include "Attribute/MUCharacterAttributeSet.h"
 #include "Attribute/MUStaminaAttributeSet.h"
 #include "UI/MUHpWidget.h"
 #include "UI/MUTimeGaugeWidget.h"

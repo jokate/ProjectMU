@@ -6,7 +6,6 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interface/StageManager.h"
-#include "Components/BoxComponent.h"
 
 
 // Sets default values
