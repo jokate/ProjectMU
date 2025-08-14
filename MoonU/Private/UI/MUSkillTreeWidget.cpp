@@ -97,7 +97,7 @@ void UMUSkillTreeWidget::InitializeWidget()
 
 	for ( FAttributeEnforcementSlotData& AttributeData : EnforcementWidgetData.EnforcementSlotDatas )
 	{
-		UEnforcementHorizontalWidget* SkillTreeDepth = CreateWidget<UEnforcementHorizontalWidget>(this, EnforcementWidgetData.AttributeSlotVertical );
+		UEnforcementHorizontalWidget* SkillTreeDepth = CreateWidget<UEnforcementHorizontalWidget>(this, EnforcementWidgetData.AttributeSlotHorizontal );
 
 		if ( IsValid(SkillTreeDepth) == false )
 		{

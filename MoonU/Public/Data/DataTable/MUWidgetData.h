@@ -50,7 +50,7 @@ struct FEnforcementWidgetData : public FTableRowBase
 	TArray<FAttributeEnforcementSlotData> EnforcementSlotDatas;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> AttributeSlotVertical;
+	TSubclassOf<UUserWidget> AttributeSlotHorizontal;
 	
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	TSubclassOf<UUserWidget> AttributeWidgetClass;

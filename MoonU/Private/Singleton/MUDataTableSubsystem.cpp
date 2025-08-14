@@ -70,6 +70,7 @@ bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforce
 		EnforcementDataTable = EnforcementDataTableLoaded;
 	}
 
+	bool bEnforcementData = false;
 	EnforcementDataTable->ForeachRow<FMUEnforcementData>
 	(TEXT(""),[&] (const FName& Key, const FMUEnforcementData& Value)
 	{
@@ -77,10 +78,11 @@ bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforce
 		{
 			UE_LOG(LogTemp, Log, TEXT("Enforcement Founded"));
 			OutEnforcementData = Value;
+			bEnforcementData = true;
 		}	
 	});
 
-	return true;
+	return bEnforcementData;
 }
 
 bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDropSelect& OutEnforcementDropSelect)
