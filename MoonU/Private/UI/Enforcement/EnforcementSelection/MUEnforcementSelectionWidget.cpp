@@ -8,7 +8,6 @@
 #include "Components/MUEnforcementManageComponent.h"
 #include "Components/TextBlock.h"
 #include "Library/MUFunctionLibrary.h"
-#include "Singleton/MUEnforcementSubsystem.h"
 
 void UMUEnforcementSelectionWidget::InitializeValue(EEnforcementType InEnforcementType,
                                                     FMUEnforcementSelection& InEnforcementData)

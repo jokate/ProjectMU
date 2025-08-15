@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "Data/MUEnum.h"
+#include "UI/MUWidget.h"
 #include "MUEnforcementSceneWidget.generated.h"
 
 /**
@@ -17,7 +17,7 @@ class UMUTopMenuWidget;
 class UMUSkillTreeWidget;
 
 UCLASS()
-class MOONU_API UMUEnforcementSceneWidget : public UUserWidget
+class MOONU_API UMUEnforcementSceneWidget : public UMUWidget
 {
 	GENERATED_BODY()
 
@@ -29,6 +29,10 @@ public :
 
 	UFUNCTION()
 	virtual void SkillEnforcementClickedCallback( ESkillSlotType SlotType );
+
+	virtual void OnWidgetShow() override;
+
+	virtual void OnWidgetHide() override;
 
 public :
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

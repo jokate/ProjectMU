@@ -21,6 +21,7 @@ class MOONU_API UMUEnforcementSelectionCanvas : public UUserWidget
 public :
 	UFUNCTION()
 	virtual void SetCharacterID( FName InCharacterID );
+	virtual void SetCharacterID( int32 InCharacterID );
 	virtual void SetupAttribute( FName AttributeSlotName );
 	virtual void SetupSkillAttribute( ESkillSlotType InSkillSlot );
 	virtual void AddSelectionMember();

@@ -6,7 +6,6 @@
 #include "Components/MUEnforcementManageComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
 #include "Library/MUFunctionLibrary.h"
-#include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 
 void UMUAttributeEnforceWidget::InitializeValue(int32 InCharacterID,FName InSkillSlotName)

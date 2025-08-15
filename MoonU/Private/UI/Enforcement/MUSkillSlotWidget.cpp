@@ -6,7 +6,6 @@
 #include "Components/MUEnforcementManageComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
 #include "Library/MUFunctionLibrary.h"
-#include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 
 void UMUSkillSlotWidget::InitializeSkillSlot(int32 InCharacterID, ESkillSlotType InSkillSlot)

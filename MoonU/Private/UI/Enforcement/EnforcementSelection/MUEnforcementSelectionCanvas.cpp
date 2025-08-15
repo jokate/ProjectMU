@@ -13,6 +13,11 @@ void UMUEnforcementSelectionCanvas::SetCharacterID(FName InCharacterID)
 	CharacterID = FCString::Atoi(*InCharacterID.ToString());
 }
 
+void UMUEnforcementSelectionCanvas::SetCharacterID(int32 InCharacterID)
+{
+	CharacterID = InCharacterID;
+}
+
 void UMUEnforcementSelectionCanvas::SetupAttribute(FName AttributeSlotName)
 {
 	EnforcementSlotName = AttributeSlotName;

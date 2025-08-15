@@ -2,6 +2,8 @@
 
 
 #include "UI/Enforcement/MUEnforcementSceneWidget.h"
+
+#include "Interface/MUPlayer.h"
 #include "UI/Enforcement/MUSkillTreeWidget.h"
 #include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 #include "UI/TopMenu/MUTopMenuWidget.h"
@@ -16,7 +18,7 @@ void UMUEnforcementSceneWidget::NativeConstruct()
 	}
 
 	MenuWidget->OnChangedTopMenu.AddDynamic( SkillTreeWidget, &UMUSkillTreeWidget::SetupCharacterID);
-	MenuWidget->OnChangedTopMenu.AddDynamic( EnforcementSelectionWidget, &UMUEnforcementSelectionCanvas::UMUEnforcementSelectionCanvas::SetCharacterID);
+	MenuWidget->OnChangedTopMenu.AddDynamic( EnforcementSelectionWidget, &UMUEnforcementSelectionCanvas::SetCharacterID);
 
 	SkillTreeWidget->OnSkillTreeClicked.AddDynamic( this, &UMUEnforcementSceneWidget::SkillEnforcementClickedCallback);
 	SkillTreeWidget->OnAttributeTreeClicked.AddDynamic(this, &UMUEnforcementSceneWidget::AttributeEnforcementClickedCallback);
@@ -35,5 +37,29 @@ void UMUEnforcementSceneWidget::SkillEnforcementClickedCallback(ESkillSlotType S
 	if ( IsValid(EnforcementSelectionWidget) == true)
 	{
 		EnforcementSelectionWidget->SetupSkillAttribute(SlotType);
+	}
+}
+
+void UMUEnforcementSceneWidget::OnWidgetShow()
+{
+	Super::OnWidgetShow();
+
+	IMUPlayer* Player = Cast<IMUPlayer>(GetOwningPlayerPawn());
+
+	if (Player != nullptr)
+	{
+		int32 PlayerCharacterID = Player->GetPlayerCharacterID();
+		SkillTreeWidget->SetupCharacterID(PlayerCharacterID);
+		EnforcementSelectionWidget->SetCharacterID(PlayerCharacterID);
+	}
+}
+
+void UMUEnforcementSceneWidget::OnWidgetHide()
+{
+	Super::OnWidgetHide();
+
+	if ( IsValid(EnforcementSelectionWidget) == true )
+	{
+		EnforcementSelectionWidget->SetVisibility( ESlateVisibility::Collapsed );
 	}
 }

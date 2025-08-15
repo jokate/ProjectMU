@@ -27,6 +27,8 @@ public :
 	UFUNCTION()
 	virtual void SetupCharacterID( FName InCharacterID );
 
+	virtual void SetupCharacterID( int32 InCharacterID );
+
 	UFUNCTION()
 	virtual void OnEnforcementUpdated();
 

@@ -91,3 +91,14 @@ public :
 	UPROPERTY( BlueprintReadOnly )
 	ESkillSlotType EnforcementSlot;
 };
+
+USTRUCT( BLueprintType )
+struct FMUEnforcementRerollCost
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( BlueprintReadOnly )
+	FName EnforcementSlot;
+	
+};
