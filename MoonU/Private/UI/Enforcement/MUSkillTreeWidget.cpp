@@ -3,30 +3,25 @@
 
 #include "UI/Enforcement/MUSkillTreeWidget.h"
 
+#include "Components/MUEnforcementManageComponent.h"
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "Data/MUPrimaryDataAsset.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementHorizontalWidget.h"
+#include "UI/Enforcement/MUAttributeEnforceWidget.h"
 #include "UI/Enforcement/MUSkillSlotWidget.h"
 
 void UMUSkillTreeWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	APlayerController* PC = GetOwningPlayer();
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-	if ( IsValid( PC ) == false )
+	if ( IsValid( EnforcementManageComponent ) == true )
 	{
-		return;
-	}
-
-	UMUEnforcementSubsystem* EnforcementSubsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PC->GetLocalPlayer());
-
-	if ( IsValid( EnforcementSubsystem ) == true )
-	{
-		EnforcementSubsystem->OnEnforcementUpdated.AddDynamic( this, &UMUSkillTreeWidget::OnEnforcementUpdated );
+		EnforcementManageComponent->OnEnforcementUpdated.AddDynamic( this, &UMUSkillTreeWidget::OnEnforcementUpdated );
 	}
 }
 
@@ -48,18 +43,11 @@ void UMUSkillTreeWidget::SetupCharacterID(FName InCharacterID)
 
 void UMUSkillTreeWidget::OnEnforcementUpdated()
 {
-	APlayerController* PC = GetOwningPlayer();
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-	if ( IsValid( PC ) == false )
+	if ( IsValid( EnforcementManageComponent ) == true )
 	{
-		return;
-	}
-	
-	UMUEnforcementSubsystem* EnforcementSubsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PC->GetLocalPlayer());
-
-	if ( IsValid( EnforcementSubsystem ) == true )
-	{
-		int32 CurrentCost = EnforcementSubsystem->GetLevelEnforcementCost( CharacterID );
+		int32 CurrentCost = EnforcementManageComponent->GetLevelEnforcementCost( CharacterID );
 
 		CurrentCostText->SetText(FText::FromString(FString::Printf(TEXT("Current Score : %d"), CurrentCost)));
 	}
@@ -110,7 +98,6 @@ void UMUSkillTreeWidget::InitializeWidget()
 		
 		AttributeSlotVertical->AddChildToVerticalBox( SkillTreeDepth );
 		SkillTreeDepth->InitializeWidget( CharacterID, AttributeData, DA->AttributeWidgetClass);
-		SkillTreeDepth->SetPadding( 50.f );
 		SkillTreeDepth->OnMemberClicked.AddDynamic( this, &UMUSkillTreeWidget::AttributeTreeClicked );
 	}
 }

@@ -17,6 +17,7 @@
 #include "Components/EnforcementComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Components/MUEnforcementManageComponent.h"
 #include "Components/MULevelUpComponent.h"
 #include "Components/WorldPartitionStreamingSourceComponent.h"
 #include "Data/DataTable/MUData.h"
@@ -410,17 +411,15 @@ const FName AMUCharacterPlayer::GetSkillIDBySlot(ESkillSlotType SkillSlot)
 
 void AMUCharacterPlayer::RegisterEnforcementEvent()
 {
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		UMUEnforcementSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PlayerController->GetLocalPlayer());
-		if ( !IsValid(Subsystem))
-        {
-        	return;
-        }
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-		Subsystem->OnCharacterAttributeAdded.AddDynamic( this, &AMUCharacterPlayer::OnAttributeEnforcementAdded );
-		Subsystem->OnCharacterSkillAdded.AddDynamic( this, &AMUCharacterPlayer::OnSkillEnforcementAdded );
+	if ( IsValid( EnforcementManageComponent ) == false )
+	{
+		return;
 	}
+	
+	EnforcementManageComponent->OnCharacterAttributeAdded.AddDynamic( this, &AMUCharacterPlayer::OnAttributeEnforcementAdded );
+	EnforcementManageComponent->OnCharacterSkillAdded.AddDynamic( this, &AMUCharacterPlayer::OnSkillEnforcementAdded );
 }
 
 void AMUCharacterPlayer::OnAttributeEnforcementAdded(const int32 InCharacterID, 
@@ -447,16 +446,14 @@ void AMUCharacterPlayer::OnSkillEnforcementAdded(const int32 InCharacterID, ESki
 
 void AMUCharacterPlayer::LevelUp()
 {
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		UMUEnforcementSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PlayerController->GetLocalPlayer());
-		if ( !IsValid(Subsystem))
-		{
-			return;
-		}
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-		Subsystem->OnPlayerLevelUp();
+	if ( IsValid( EnforcementManageComponent ) == false )
+	{
+		return;
 	}
+	
+	EnforcementManageComponent->OnPlayerLevelUp();
 }
 
 void AMUCharacterPlayer::ResetContinuousEnforcementLevel()

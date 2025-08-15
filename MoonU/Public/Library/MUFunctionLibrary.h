@@ -9,6 +9,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MUFunctionLibrary.generated.h"
 
+class UMUEnforcementManageComponent;
 class UMUPrimaryDataAsset;
 /**
  * 
@@ -49,6 +50,9 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static UMUPrimaryDataAsset* GetGlobalPrimaryDataAsset( UObject* Object);
+
+	UFUNCTION( BlueprintPure )
+	static UMUEnforcementManageComponent* GetEnforcementManageComponent( const UObject* Object );
 	
 #pragma region DataGetter
 	UFUNCTION(BlueprintPure)

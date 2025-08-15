@@ -5,6 +5,7 @@
 
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/MUEnforcementManageComponent.h"
 #include "Components/TextBlock.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
@@ -25,30 +26,25 @@ void UMUEnforcementSelectionWidget::InitializeValue(EEnforcementType InEnforceme
 
 void UMUEnforcementSelectionWidget::OnSelectedButton()
 {
-	APlayerController* PC = GetOwningPlayer();
-
-	if ( IsValid( PC ) == true )
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
+	
+	if (IsValid(EnforcementManageComponent) == true )
 	{
-		UMUEnforcementSubsystem* EnforcementSubsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PC->GetLocalPlayer());
-
-		if (IsValid(EnforcementSubsystem) == true )
+		switch (EnforcementType)
 		{
-			switch (EnforcementType)
+		case EEnforcementType::Attribute :
+		case EEnforcementType::SkillEnforcement :
 			{
-			case EEnforcementType::Attribute :
-			case EEnforcementType::SkillEnforcement :
-				{
-					EnforcementSubsystem->EnforceAttributeAdded( EnforcementData.CharacterID, EnforcementData.EnforcementName, EnforcementData.EnforcementID);
-					break;
-				}
-			case EEnforcementType::SkillOpen :
-				{
-					EnforcementSubsystem->EnforceSkillAdded( EnforcementData.CharacterID, EnforcementData.EnforcementSlot, EnforcementData.EnforcementID);
-					break;
-				}
-				default:
-					break;
+				EnforcementManageComponent->EnforceAttributeAdded( EnforcementData.CharacterID, EnforcementData.EnforcementName, EnforcementData.EnforcementID);
+				break;
 			}
+		case EEnforcementType::SkillOpen :
+			{
+				EnforcementManageComponent->EnforceSkillAdded( EnforcementData.CharacterID, EnforcementData.EnforcementSlot, EnforcementData.EnforcementID);
+				break;
+			}
+		default:
+			break;
 		}
 	}
 	

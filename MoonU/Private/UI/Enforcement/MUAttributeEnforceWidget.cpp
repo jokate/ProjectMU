@@ -3,7 +3,9 @@
 
 #include "UI/Enforcement/MUAttributeEnforceWidget.h"
 
+#include "Components/MUEnforcementManageComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
+#include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 
@@ -25,18 +27,11 @@ void UMUAttributeEnforceWidget::OnSelectionButtonClicked_Implementation()
 
 void UMUAttributeEnforceWidget::SetupWidgetInfo()
 {
-	const APlayerController* PC = GetOwningPlayer();
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-	if ( IsValid( PC ) == false )
+	if ( IsValid( EnforcementManageComponent ) == true )
 	{
-		return;
-	}
-
-	UMUEnforcementSubsystem* EnforcementSubsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PC->GetLocalPlayer());
-
-	if ( IsValid( EnforcementSubsystem ) == true )
-	{
-		int32 TempAllocatedEnforcement = EnforcementSubsystem->GetAllocatedAttribute(CharacterID, AttributeSlotName);
+		int32 TempAllocatedEnforcement = EnforcementManageComponent->GetAllocatedAttribute(CharacterID, AttributeSlotName);
 
 		AllocatedEnforcementID = TempAllocatedEnforcement;
 	}

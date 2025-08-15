@@ -9,6 +9,7 @@
 #include "Interface/TimeWinder.h"
 #include "MUGameMode.generated.h"
 
+class UMUEnforcementManageComponent;
 /**
  * 
  */
@@ -20,6 +21,7 @@ class MOONU_API AMUGameMode : public AGameMode, public ITimeWinder, public ITime
 public :
 	AMUGameMode();
 
+	UMUEnforcementManageComponent* GetEnforcementManager() { return EnforcementManageComponent; }
 protected :
 
 #pragma region ITimeWinder
@@ -73,6 +75,9 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UStageManagingComponent> StageManagingComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<class UMUEnforcementManageComponent> EnforcementManageComponent;
 	
 	UFUNCTION(Exec)
 	virtual void CheatSetupEnforcement(int32 EnforcementID);

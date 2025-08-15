@@ -3,7 +3,9 @@
 
 #include "UI/Enforcement/MUSkillSlotWidget.h"
 
+#include "Components/MUEnforcementManageComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
+#include "Library/MUFunctionLibrary.h"
 #include "Singleton/MUEnforcementSubsystem.h"
 #include "UI/Enforcement/EnforcementSelection/MUEnforcementSelectionCanvas.h"
 
@@ -27,18 +29,11 @@ void UMUSkillSlotWidget::OnSelectionButtonClicked_Implementation()
 
 void UMUSkillSlotWidget::SetupWidgetInfo()
 {
-	const APlayerController* PC = GetOwningPlayer();
-
-	if ( IsValid( PC ) == false )
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
+	
+	if ( IsValid( EnforcementManageComponent ) == true )
 	{
-		return;
-	}
-
-	UMUEnforcementSubsystem* EnforcementSubsystem = ULocalPlayer::GetSubsystem<UMUEnforcementSubsystem>(PC->GetLocalPlayer());
-
-	if ( IsValid( EnforcementSubsystem ) == true )
-	{
-		int32 TempAllocatedEnforcement = EnforcementSubsystem->GetAllocatedSkill(CharacterID, SkillSlotType);
+		int32 TempAllocatedEnforcement = EnforcementManageComponent->GetAllocatedSkill(CharacterID, SkillSlotType);
 
 		AllocatedEnforcementID = TempAllocatedEnforcement;
 	}

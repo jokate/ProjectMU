@@ -4,6 +4,7 @@
 #include "Framework/MUGameMode.h"
 
 #include "Character/MUCharacterPlayer.h"
+#include "Components/MUEnforcementManageComponent.h"
 #include "Components/StageManagingComponent.h"
 #include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
@@ -13,6 +14,7 @@ AMUGameMode::AMUGameMode()
 	TimeWindManager = CreateDefaultSubobject<UTimeWindManager>(TEXT("TimeWindManager"));
 	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>(TEXT("TimeStopManager"));
 	StageManagingComponent = CreateDefaultSubobject<UStageManagingComponent>(TEXT("StageManagingComponent"));
+	EnforcementManageComponent = CreateDefaultSubobject<UMUEnforcementManageComponent>(TEXT("EnforcementManager"));
 }
 
 void AMUGameMode::TimeWindActivate()

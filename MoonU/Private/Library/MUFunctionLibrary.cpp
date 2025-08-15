@@ -13,6 +13,7 @@
 #include "Data/MUPrimaryDataAsset.h"
 #include "Engine/AssetManager.h"
 #include "Framework/MUGameInstance.h"
+#include "Framework/MUGameMode.h"
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Singleton/MUDataTableSubsystem.h"
@@ -512,5 +513,24 @@ UMUPrimaryDataAsset* UMUFunctionLibrary::GetGlobalPrimaryDataAsset( UObject* Obj
 	}
 
 	return MUGI->EnforcementGlobal.LoadSynchronous();
+}
+
+UMUEnforcementManageComponent* UMUFunctionLibrary::GetEnforcementManageComponent( const UObject* Object)
+{
+	UWorld* World = Object->GetWorld();
+
+	if ( IsValid(World) == false )
+	{
+		return nullptr;
+	}
+
+	AMUGameMode* GM = World->GetAuthGameMode<AMUGameMode>();
+
+	if ( IsValid(GM) == false )
+	{
+		return nullptr;
+	}
+
+	return GM->GetEnforcementManager();
 }
 
