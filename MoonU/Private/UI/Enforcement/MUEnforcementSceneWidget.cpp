@@ -57,7 +57,7 @@ void UMUEnforcementSceneWidget::OnWidgetShow()
 void UMUEnforcementSceneWidget::OnWidgetHide()
 {
 	Super::OnWidgetHide();
-
+	
 	if ( IsValid(EnforcementSelectionWidget) == true )
 	{
 		EnforcementSelectionWidget->SetVisibility( ESlateVisibility::Collapsed );

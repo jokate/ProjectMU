@@ -43,6 +43,7 @@ public :
 	UPROPERTY( BlueprintReadOnly )
 	TEnumAsByte<EEnforcementType> EnforcementType;
 
+	// 슬롯에 대한 부분에 고려가 필요하긴 함.
 	UPROPERTY( BlueprintReadOnly )
 	FName EnforcementSlotName;
 

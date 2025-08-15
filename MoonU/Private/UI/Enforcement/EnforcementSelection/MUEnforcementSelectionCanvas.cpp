@@ -43,7 +43,7 @@ void UMUEnforcementSelectionCanvas::AddSelectionMember()
 		return;
 	}
 	
-	// 레벨 1 고정 일단은..
+	// 레벨 1 고정 일단은.. ( 해당 부분에 대해서 코스트 정보를 자동으로 가져올 수 있도록 설계가 필요함.
 	TSet<int32> EnforcementMembers;
 	if ( UMUFunctionLibrary::GetEnforcementDropTable( this, CharacterID, EnforcementType, 1, DA->SelectionMaximumCount,  EnforcementMembers ) == false )
 	{
