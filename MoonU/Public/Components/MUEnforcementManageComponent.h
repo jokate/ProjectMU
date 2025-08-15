@@ -39,6 +39,9 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	int32 GetAllocatedSkill( const int32 CharacterID, const ESkillSlotType SkillSlotType );
+
+	UFUNCTION( BlueprintCallable  )
+	virtual void SetupCharacters( const TArray<int32>& SetupCharacterIDs );
 	public :
 		UPROPERTY( BlueprintAssignable, BlueprintCallable )
 	FOnCharacterChanged	OnCharacterChanged;

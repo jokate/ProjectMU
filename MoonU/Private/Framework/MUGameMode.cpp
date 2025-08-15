@@ -8,6 +8,7 @@
 #include "Components/StageManagingComponent.h"
 #include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
+#include "DevSetting/MUDevSettings.h"
 
 AMUGameMode::AMUGameMode()
 {
@@ -15,6 +16,21 @@ AMUGameMode::AMUGameMode()
 	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>(TEXT("TimeStopManager"));
 	StageManagingComponent = CreateDefaultSubobject<UStageManagingComponent>(TEXT("StageManagingComponent"));
 	EnforcementManageComponent = CreateDefaultSubobject<UMUEnforcementManageComponent>(TEXT("EnforcementManager"));
+}
+
+void AMUGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	const UMUDevSettings* DevSetting = GetDefault<UMUDevSettings>();
+
+	if ( IsValid(DevSetting) )
+	{
+		if ( DevSetting->bIsTestModeActive == true )
+		{
+			EnforcementManageComponent->SetupCharacters(DevSetting->TestPlayableCharacterIDs);	
+		}
+	}
 }
 
 void AMUGameMode::TimeWindActivate()

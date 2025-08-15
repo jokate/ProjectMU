@@ -21,6 +21,8 @@ class MOONU_API AMUGameMode : public AGameMode, public ITimeWinder, public ITime
 public :
 	AMUGameMode();
 
+	virtual void BeginPlay() override;
+	
 	UMUEnforcementManageComponent* GetEnforcementManager() { return EnforcementManageComponent; }
 protected :
 

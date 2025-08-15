@@ -21,6 +21,7 @@ public :
 	virtual void NativeConstruct() override;
 
 public :
+	UFUNCTION()
 	virtual void SetupWidgetInfo();
 
 	UFUNCTION( BlueprintNativeEvent )

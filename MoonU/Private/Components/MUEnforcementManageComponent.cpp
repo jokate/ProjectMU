@@ -19,7 +19,13 @@ void UMUEnforcementManageComponent::EnforceAttributeAdded(const int32 CharacterI
 		OnCharacterAttributeAdded.Broadcast( CharacterID, EnforcementID );
 	}
 
-	// 코스트 소비
+	// Enforce에 따른 Cost 소비 (Cost에 대한 임의적 조치 )
+	UseEnforcementCost(CharacterID, 0);
+	
+	if ( OnEnforcementUpdated.IsBound() == true )
+	{
+		OnEnforcementUpdated.Broadcast();
+	}
 }
 
 void UMUEnforcementManageComponent::EnforceSkillAdded(const int32 CharacterID, ESkillSlotType SkillSlotType, const int32 EnforcementID)
@@ -35,7 +41,13 @@ void UMUEnforcementManageComponent::EnforceSkillAdded(const int32 CharacterID, E
 		OnCharacterSkillAdded.Broadcast( CharacterID, SkillSlotType, EnforcementID );
 	}
 
-	// Enforce에 따른 Cost 소비/
+	// Enforce에 따른 Cost 소비 (Cost에 대한 임의적 조치 )
+	UseEnforcementCost(CharacterID, 0);
+	
+	if ( OnEnforcementUpdated.IsBound() == true )
+	{
+		OnEnforcementUpdated.Broadcast();
+	}
 }
 
 void UMUEnforcementManageComponent::UseEnforcementCost(const int32 CharacterID, const int32 EnforcementCost)
@@ -46,12 +58,6 @@ void UMUEnforcementManageComponent::UseEnforcementCost(const int32 CharacterID, 
 	}
 
 	CharacterEnforcementCost[CharacterID] -= EnforcementCost;
-
-	//이벤트 호출 필요.
-	if ( OnEnforcementUpdated.IsBound() == true )
-	{
-		OnEnforcementUpdated.Broadcast();
-	}
 }
 
 void UMUEnforcementManageComponent::OnPlayerLevelUp()
@@ -104,5 +110,14 @@ int32 UMUEnforcementManageComponent::GetAllocatedSkill(const int32 CharacterID, 
 	}
 
 	return SkillSlotMap[SkillSlotType];
+}
+
+void UMUEnforcementManageComponent::SetupCharacters(const TArray<int32>& SetupCharacterIDs)
+{
+	for ( int32 SetupCharacterID : SetupCharacterIDs )
+	{
+		CharacterEnforcementAllocated.Add( SetupCharacterID );
+		CharacterEnforcementCost.Add( SetupCharacterID );
+	}
 }
 
