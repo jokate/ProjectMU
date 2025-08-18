@@ -300,3 +300,19 @@ public :
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	TArray<FMUMonsterSpawnData> SpawnDatas;
 };
+
+USTRUCT( BlueprintType )
+struct FMUProjectileInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float CapsuleRadius = 0.f;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float CapsuleHalfHeight = 0.f;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float ProjectileSpeed = 0.f;
+};

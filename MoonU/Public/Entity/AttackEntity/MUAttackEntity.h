@@ -37,6 +37,9 @@ public:
 	virtual bool CheckReact( AActor* ReactTarget ) const;
 
 	virtual void DoAttack();
+
+	virtual TArray<AActor*> GetAttackableActorList();
+	
 public :
 	UPROPERTY( EditDefaultsOnly )
 	float ReactCheckInterval = 0.5f;

@@ -28,9 +28,7 @@ void AMUAttackEntity::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void AMUAttackEntity::DoAttack()
 {
-	TArray<AActor*> Characters;
-	UGameplayStatics::GetAllActorsOfClass(this,AMUCharacterBase::StaticClass(), Characters);
-
+	TArray<AActor*> Characters = GetAttackableActorList()
 	for ( AActor* Character : Characters )
 	{
 		if ( IsValid(Character) == false)
@@ -43,6 +41,11 @@ void AMUAttackEntity::DoAttack()
 			OnReacted(Character);
 		}	
 	}
+}
+
+TArray<AActor*> AMUAttackEntity::GetAttackableActorList()
+{
+	return TArray<AActor*>();
 }
 
 void AMUAttackEntity::RegisterOwner(AActor* InSpawnedOwwner)

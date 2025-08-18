@@ -20,6 +20,8 @@ public:
 
 	virtual bool CheckReact( AActor* ReactTarget ) const override;
 
+	virtual TArray<AActor*> GetAttackableActorList() override;
+
 public :
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	float CheckRad = 100.f;

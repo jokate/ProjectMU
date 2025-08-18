@@ -3,7 +3,9 @@
 
 #include "Entity/AttackEntity/MUCircularZone.h"
 
+#include "Character/MUCharacterBase.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -36,4 +38,11 @@ bool AMUCircularZone::CheckReact(AActor* ReactTarget) const
 	double RadSquared = FMath::Square(CheckRad);
 	
 	return DistSquared <= RadSquared;
+}
+
+TArray<AActor*> AMUCircularZone::GetAttackableActorList()
+{
+	TArray<AActor*> AttackableActorList;
+	UGameplayStatics::GetAllActorsOfClass(this,AMUCharacterBase::StaticClass(), AttackableActorList);
+	return AttackableActorList;
 }
