@@ -9,6 +9,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MUDataTableSubsystem.generated.h"
 
+
+class UMUDataPrimaryAsset;
 /**
  * 
  */
@@ -18,6 +20,7 @@ class MOONU_API UMUDataTableSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public :
+	virtual UMUDataPrimaryAsset* GetDataPrimaryAsset();
 	UFUNCTION( BlueprintCallable )
 	virtual bool GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData);
 

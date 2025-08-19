@@ -5,55 +5,57 @@
 
 #include "DataRegistry.h"
 #include "DataRegistrySubsystem.h"
+#include "Data/MUDataPrimaryAsset.h"
+#include "Framework/MUGameInstance.h"
+
+UMUDataPrimaryAsset* UMUDataTableSubsystem::GetDataPrimaryAsset()
+{
+	UWorld* World = GetWorld();
+
+	if ( IsValid(World) == false )
+	{
+		return nullptr;
+	}
+
+	UMUGameInstance* GI = World->GetGameInstance<UMUGameInstance>();
+
+	if ( IsValid(GI) == false )
+	{
+		return nullptr;
+	}
+
+	UMUDataPrimaryAsset* DA = GI->DatasetGlobal.LoadSynchronous();
+
+	if ( IsValid(DA) == false )
+	{
+		return nullptr;
+	}
+
+	return DA;
+}
 
 bool UMUDataTableSubsystem::GetInputMapperData(int32 InCharacterID, FMUInputMapper& InputMapperData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = InputMapperDataRegistryType;
-	RegistryId.ItemName = FName(FString::FromInt(InCharacterID	));
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUInputMapper* InputMapper = DataRegistrySubsystem->GetCachedItem<FMUInputMapper>(RegistryId);
 	
-	if ( InputMapper == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	InputMapperData = *InputMapper;
-	return true;
+	return GetRegistryData<FMUInputMapper>(DA->InputMapperDataRegistryType, FName(FString::FromInt(InCharacterID)), InputMapperData);
 }
 
 bool UMUDataTableSubsystem::GetCharacterInfoData(int32 InCharacterID, FMUCharacterInfo& OutCharacterInfo)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = CharacterDataRegistryType;
-	RegistryId.ItemName = FName(FString::FromInt(InCharacterID));
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUCharacterInfo* CharacterInfo = DataRegistrySubsystem->GetCachedItem<FMUCharacterInfo>(RegistryId);
 	
-	if ( CharacterInfo == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutCharacterInfo = *CharacterInfo;
-	return true;
+	return GetRegistryData<FMUCharacterInfo>(DA->CharacterDataRegistryType, FName(FString::FromInt(InCharacterID)), OutCharacterInfo);
 }
 
 bool UMUDataTableSubsystem::GetEnforcementData(int32 InEnforcementID, FMUEnforcementData& OutEnforcementData)
@@ -114,178 +116,86 @@ bool UMUDataTableSubsystem::GetEnforcementDropData(int32 Level, FMUEnforcementDr
 bool UMUDataTableSubsystem::GetEnforcementDropDataByRegistry(FName DataRegistryName, int32 Level,
 	FMUEnforcementDropSelect& OutEnforcementDropSelect )
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = DataRegistryName;
-	RegistryId.ItemName = FName(FString::Printf(TEXT("%d"), Level));;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUEnforcementDropSelect* EnforcementDrop = DataRegistrySubsystem->GetCachedItem<FMUEnforcementDropSelect>(RegistryId);
 	
-	if ( EnforcementDrop == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutEnforcementDropSelect = *EnforcementDrop;
-	return true;
+	return GetRegistryData<FMUEnforcementDropSelect>(DataRegistryName, FName(FString::FromInt(Level)), OutEnforcementDropSelect);
 }
 
 bool UMUDataTableSubsystem::GetSkillData(FName SkillName, FMUSkillData& OutSkillData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = SkillDataRegistryType;
-	RegistryId.ItemName = SkillName;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUSkillData* SkillData = DataRegistrySubsystem->GetCachedItem<FMUSkillData>(RegistryId);
 	
-	if ( SkillData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutSkillData = *SkillData;
-	return true;
+	return  GetRegistryData<FMUSkillData>(DA->SkillDataRegistryType, SkillName, OutSkillData);
 }
 
 bool UMUDataTableSubsystem::GetStageInfoData(FName StageInfoName, FMUStageInfo& OutStageInfo)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = StageInfoDataRegistryType;
-	RegistryId.ItemName = StageInfoName;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUStageInfo* StageInfoData = DataRegistrySubsystem->GetCachedItem<FMUStageInfo>(RegistryId);
 	
-	if ( StageInfoData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutStageInfo = *StageInfoData;
-	return true;
+	return  GetRegistryData<FMUStageInfo>(DA->StageInfoDataRegistryType, StageInfoName, OutStageInfo);
 }
 
 bool UMUDataTableSubsystem::GetStageData(FName StageName, FMUStageData& OutStageData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = StageDataRegistryType;
-	RegistryId.ItemName = StageName;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUStageData* StageData = DataRegistrySubsystem->GetCachedItem<FMUStageData>(RegistryId);
 	
-	if ( StageData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutStageData = *StageData;
-	
-	return true;
+	return  GetRegistryData<FMUStageData>(DA->StageDataRegistryType, StageName, OutStageData);
 }
 
 bool UMUDataTableSubsystem::GetMonsterSpawnData(FName SpawnerName, FMUMonsterSpawnList& OutSpawnerData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = MonsterSpawnDataRegistryType;
-	RegistryId.ItemName = SpawnerName;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FMUMonsterSpawnList* MonsterSpawnerData = DataRegistrySubsystem->GetCachedItem<FMUMonsterSpawnList>(RegistryId);
 	
-	if ( MonsterSpawnerData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutSpawnerData = *MonsterSpawnerData;
-	return true;
+	return GetRegistryData<FMUMonsterSpawnList>(DA->MonsterSpawnDataRegistryType, SpawnerName, OutSpawnerData);
 }
 
 bool UMUDataTableSubsystem::GetSkillTreeWidgetInfo(int32 CharacterID, FEnforcementWidgetData& EnforcementWidgetData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = SkillTreeWidgetDatRegistryType;
-	RegistryId.ItemName = FName( FString::FromInt(CharacterID));
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FEnforcementWidgetData* SkillTreeData = DataRegistrySubsystem->GetCachedItem<FEnforcementWidgetData>(RegistryId);
 	
-	if ( SkillTreeData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	EnforcementWidgetData = *SkillTreeData;
-	return true;
+	return GetRegistryData<FEnforcementWidgetData>(DA->SkillTreeWidgetDatRegistryType, FName(FString::FromInt(CharacterID)), EnforcementWidgetData);
 }
 
 bool UMUDataTableSubsystem::GetTopMenuWidgetData(FName Name, FTopMenuData& OutMenuData)
 {
-	FDataRegistryId RegistryId;
-	RegistryId.RegistryType = TopMenuWidgetDataRegistryType;
-	RegistryId.ItemName = Name;
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
 	
-	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
-	
-	if ( IsValid(DataRegistrySubsystem) == false )
+	if ( IsValid(DA) == false )
 	{
-		return false;
+		return false; 
 	}
-
-	const FTopMenuData* TopMenuData = DataRegistrySubsystem->GetCachedItem<FTopMenuData>(RegistryId);
 	
-	if ( TopMenuData == nullptr )
-	{
-		return false;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Preloaded Complete"));
-	OutMenuData = *TopMenuData;
-	return true;
+	return GetRegistryData<FTopMenuData>(DA->TopMenuWidgetDataRegistryType, Name, OutMenuData);
 }
 
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
