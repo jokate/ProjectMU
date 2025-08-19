@@ -17,6 +17,8 @@ AMUProjectileEntity::AMUProjectileEntity()
 void AMUProjectileEntity::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 }
 
 TArray<AActor*> AMUProjectileEntity::GetAttackableActorList()

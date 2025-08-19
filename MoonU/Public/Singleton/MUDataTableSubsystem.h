@@ -50,6 +50,9 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	virtual bool GetTopMenuWidgetData( FName Name, FTopMenuData& OutMenuData );
+
+	template<typename T>
+	bool GetRegistryData( FName RegistryName, FName RowName, T& OutData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

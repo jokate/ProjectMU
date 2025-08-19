@@ -307,6 +307,9 @@ struct FMUProjectileInfo : public FTableRowBase
 	GENERATED_BODY()
 
 public :
+	UPROPERTY( EditDefaultsOnly )
+	int32 HitCount = 1;	
+
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	float CapsuleRadius = 0.f;
 
@@ -315,4 +318,20 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	float ProjectileSpeed = 0.f;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	TSubclassOf<UGameplayEffect> HitEffect;
+};
+
+
+// Purpose : 강화 요소 중 다시 돌렸을 시 코스트 및 레벨을 가져올 수 있도록 설계가 필요함.
+// 데이터 구성 관련한 부분이 어떠헤 되어야 할 지 고민임.
+USTRUCT( BlueprintType )
+struct FMUEnforcementRerollCost
+{
+	GENERATED_BODY()
+
+	public :
+	
+		//UPROPERTY( BlueprintReadOnly )
 };

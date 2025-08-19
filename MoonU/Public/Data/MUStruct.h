@@ -91,15 +91,3 @@ public :
 	UPROPERTY( BlueprintReadOnly )
 	ESkillSlotType EnforcementSlot;
 };
-
-// Purpose : 강화 요소 중 다시 돌렸을 시 코스트 및 레벨을 가져올 수 있도록 설계가 필요함.
-// 데이터 구성 관련한 부분이 어떠헤 되어야 할 지 고민임.
-USTRUCT( BLueprintType )
-struct FMUEnforcementRerollCost
-{
-	GENERATED_BODY()
-
-public :
-	
-	//UPROPERTY( BlueprintReadOnly )
-};

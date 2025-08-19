@@ -20,4 +20,7 @@ class MOONU_API UMUGameInstance : public UGameInstance
 public :
 	UPROPERTY( EditDefaultsOnly )
 	TSoftObjectPtr<class UMUPrimaryDataAsset> EnforcementGlobal;
+
+	UPROPERTY( EditDefaultsOnly )
+	TSoftObjectPtr<class UMUDataPrimaryAsset> DatasetGlobal;
 };

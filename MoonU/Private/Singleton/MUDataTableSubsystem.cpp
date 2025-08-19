@@ -268,7 +268,6 @@ bool UMUDataTableSubsystem::GetTopMenuWidgetData(FName Name, FTopMenuData& OutMe
 	FDataRegistryId RegistryId;
 	RegistryId.RegistryType = TopMenuWidgetDataRegistryType;
 	RegistryId.ItemName = Name;
-
 	
 	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
 	
@@ -294,4 +293,29 @@ void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
 	UE_LOG( LogTemp, Log, TEXT("DataTableSubsystem Initialized"));
+}
+
+template <typename T>
+bool UMUDataTableSubsystem::GetRegistryData(FName RegistryName, FName RowName, T& OutData)
+{
+	FDataRegistryId RegistryId;
+	RegistryId.RegistryType = RegistryName;
+	RegistryId.ItemName = RowName;
+
+	UDataRegistrySubsystem* DataRegistrySubsystem = UDataRegistrySubsystem::Get();
+	
+	if ( IsValid(DataRegistrySubsystem) == false )
+	{
+		return false;
+	}
+
+	const T* Type = DataRegistrySubsystem->GetCachedItem<T>(RegistryId);
+
+	if ( Type == nullptr )
+	{
+		return false;
+	}
+
+	OutData = *Type;
+	return true;
 }

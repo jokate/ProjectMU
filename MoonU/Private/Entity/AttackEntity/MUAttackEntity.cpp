@@ -28,7 +28,7 @@ void AMUAttackEntity::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void AMUAttackEntity::DoAttack()
 {
-	TArray<AActor*> Characters = GetAttackableActorList()
+	TArray<AActor*> Characters = GetAttackableActorList();
 	for ( AActor* Character : Characters )
 	{
 		if ( IsValid(Character) == false)
