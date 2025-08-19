@@ -61,11 +61,6 @@ protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 protected :
-	UPROPERTY(Config)
-	FName CharacterDataRegistryType = NAME_None;
-
-	UPROPERTY(Config)
-	FName InputMapperDataRegistryType = NAME_None;
 	
 	UPROPERTY(Config)
 	TSoftObjectPtr<UDataTable> EnforcementDataTablePath;
@@ -78,22 +73,4 @@ protected :
 
 	UPROPERTY()
 	TObjectPtr<UDataTable> EnforcementDropTable;
-
-	UPROPERTY(Config)
-	FName SkillDataRegistryType = NAME_None;
-
-	UPROPERTY(Config)
-	FName StageInfoDataRegistryType = NAME_None;
-
-	UPROPERTY(Config)
-	FName StageDataRegistryType = NAME_None;
-	
-	UPROPERTY( Config )
-	FName MonsterSpawnDataRegistryType = NAME_None;
-
-	UPROPERTY( Config )
-	FName SkillTreeWidgetDatRegistryType = NAME_None;
-
-	UPROPERTY( Config )
-	FName TopMenuWidgetDataRegistryType = NAME_None;
 };
