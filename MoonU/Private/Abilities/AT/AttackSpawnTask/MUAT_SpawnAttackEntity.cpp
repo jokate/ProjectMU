@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
-#include "Abilities/AT/MUAT_SpawnAttackEntity.h"
-
+#include "Abilities/AT/AttackSpawnTask/MUAT_SpawnAttackEntity.h"
 #include "Entity/AttackEntity/MUAttackEntity.h"
 
 UMUAT_SpawnAttackEntity* UMUAT_SpawnAttackEntity::StartSpawnAttackEntity(UGameplayAbility* OwningAbility,
@@ -31,7 +29,7 @@ void UMUAT_SpawnAttackEntity::Activate()
 	}
 }
 
-void UMUAT_SpawnAttackEntity::SpawnAttackEntity() const
+void UMUAT_SpawnAttackEntity::SpawnAttackEntity()
 {
 	AMUAttackEntity* AttackEntity = GetWorld()->SpawnActorDeferred<AMUAttackEntity>(SpawnClass, SpawnTransform);
 
@@ -39,12 +37,18 @@ void UMUAT_SpawnAttackEntity::SpawnAttackEntity() const
 	{
 		return;
 	}
-
-	AttackEntity->RegisterOwner( GetAvatarActor() );
+	
+	SetupInfoBeforeFinishSpawn(AttackEntity);
 	AttackEntity->FinishSpawning(SpawnTransform);
-
+	SpawnedAttackEntity = AttackEntity;
+	
 	if ( OnSpawnActorFinished.IsBound() )
 	{
 		OnSpawnActorFinished.Broadcast();
 	}
+}
+
+void UMUAT_SpawnAttackEntity::SetupInfoBeforeFinishSpawn(AMUAttackEntity* AttackEntity)
+{
+	AttackEntity->RegisterOwner( GetAvatarActor() );
 }

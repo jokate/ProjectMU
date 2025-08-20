@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
+#include "Entity/AttackEntity/MUAttackEntity.h"
 #include "MUAT_SpawnAttackEntity.generated.h"
 
 /**
@@ -25,12 +26,18 @@ public :
 	virtual void Activate() override;
 
 	UFUNCTION()
-	void SpawnAttackEntity() const;
+	virtual void SpawnAttackEntity();
+
+	virtual void SetupInfoBeforeFinishSpawn( AMUAttackEntity* AttackEntity );
 	
 public :
 	
 	UPROPERTY( BlueprintAssignable )
 	FOnSpawnActorFininshed OnSpawnActorFinished;
+
+public :
+	UPROPERTY()
+	TWeakObjectPtr<AMUAttackEntity> SpawnedAttackEntity;
 
 protected :
 	UPROPERTY()

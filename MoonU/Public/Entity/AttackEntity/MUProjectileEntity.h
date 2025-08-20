@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MUAttackEntity.h"
+#include "Data/DataTable/MUData.h"
 #include "MUProjectileEntity.generated.h"
 
 class UProjectileMovementComponent;
@@ -17,16 +18,24 @@ public:
 	// Sets default values for this actor's properties
 	AMUProjectileEntity();
 
+	virtual void SetupProjectileInfo();
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 	virtual TArray<AActor*> GetAttackableActorList() override;
+
+	virtual void OnReacted(AActor* ReactedActor) override;
+	virtual bool CheckReact(AActor* ReactTarget) const override;
 	
 public :
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
 	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UParticleSystemComponent> ParticleSystemComponent;
+
+	UPROPERTY(EditDefaultsOnly)
 	FName ProjectileInfo;
+
+	UPROPERTY(VisibleAnywhere)
+	FMUProjectileInfo ProjectileInfoData;
 };

@@ -515,6 +515,25 @@ UMUPrimaryDataAsset* UMUFunctionLibrary::GetGlobalPrimaryDataAsset( UObject* Obj
 	return MUGI->EnforcementGlobal.LoadSynchronous();
 }
 
+UMUDataPrimaryAsset* UMUFunctionLibrary::GetDataPrimaryAsset(UObject* Object)
+{
+	UGameInstance* GI = GetGameInstance(Object);
+
+	if ( IsValid(GI) == false )
+	{
+		return nullptr;
+	}
+
+	UMUGameInstance* MUGI = Cast<UMUGameInstance>(GI);
+
+	if ( !IsValid(MUGI) )
+	{
+		return nullptr;
+	}
+
+	return MUGI->DatasetGlobal.LoadSynchronous();
+}
+
 UMUEnforcementManageComponent* UMUFunctionLibrary::GetEnforcementManageComponent( const UObject* Object)
 {
 	UWorld* World = Object->GetWorld();
@@ -532,5 +551,25 @@ UMUEnforcementManageComponent* UMUFunctionLibrary::GetEnforcementManageComponent
 	}
 
 	return GM->GetEnforcementManager();
+}
+
+template <typename T>
+bool UMUFunctionLibrary::GetRegistryData(UObject* Object, FName RegistryType, FName RowName, T& OutValue)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetRegistryData<T>(RegistryType, RowName, OutValue);
 }
 
