@@ -24,15 +24,15 @@ public :
 
 	virtual void ActivateSkill() override;
 
+	virtual void SetupReadyMontage();
+
 	UFUNCTION()
 	virtual void OnSkillInputPressed();
 
 	UFUNCTION()
 	virtual void OnSkillCanceled();
+
 public :
 	UPROPERTY()
-	FVector TargetLocation;
-
-	UPROPERTY()
-	FRotator TargetRotation;
+	TObjectPtr<UAbilityTask> MontageTask;
 };

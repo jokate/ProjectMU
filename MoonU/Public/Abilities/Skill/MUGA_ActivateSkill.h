@@ -36,6 +36,14 @@ public :
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 
 	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
+
+	virtual void SetupAnimMontage();
+	
+	UFUNCTION()
+	void OnCompleteCallback();
+
+	UFUNCTION()
+	void OnInterruptedCallback();
 	
 public :
 	UPROPERTY(EditDefaultsOnly)
@@ -46,4 +54,10 @@ public :
 	
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
+
+	UPROPERTY()
+	FVector TargetLocation;
+
+	UPROPERTY()
+	FRotator TargetRotation;
 };

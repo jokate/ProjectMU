@@ -20,12 +20,7 @@ public :
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
 	virtual void ActivateSkill() override;
-protected:
-	UFUNCTION()
-	void OnCompleteCallback();
 
-	UFUNCTION()
-	void OnInterruptedCallback();
 protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UAnimMontage> MontageToPlay;

@@ -24,7 +24,10 @@ void UMUGA_SpawnAttack::ActivateSkill()
 
 void UMUGA_SpawnAttack::OnFinishedSpawn()
 {
-	bool bReplicatedEndAbility = true;
-    bool bWasCancelled = false;
-    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+	if ( IsValid( MontageTask ) == true )
+	{
+		bool bReplicatedEndAbility = true;
+		bool bWasCancelled = false;
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);	
+	}
 }

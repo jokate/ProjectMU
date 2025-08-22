@@ -5,6 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Interface/MotionWarpTarget.h"
+#include "Library/MUFunctionLibrary.h"
 
 UMUGA_ActivateSkill::UMUGA_ActivateSkill()
 {
@@ -39,6 +42,17 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
 			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
+		}
+	}
+
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) )
+	{
+		IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
+	
+		if (MotionWarp != nullptr)
+		{
+			MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
 		}
 	}
 	
@@ -77,6 +91,8 @@ void UMUGA_ActivateSkill::ActivateSkill()
 	ApplyCost( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
 	ApplyCooldown( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
 
+	SetupAnimMontage();
+	
 	if ( OnSkillStateChanged.IsBound() == true )
 	{
 		OnSkillStateChanged.Broadcast();
@@ -102,4 +118,58 @@ void UMUGA_ActivateSkill::SkillUnTriggered(const FGameplayAbilitySpecHandle Hand
 {
 	CancelSkill();
 	EndAbility( Handle, ActorInfo, ActivationInfo, true, true );
+}
+
+void UMUGA_ActivateSkill::SetupAnimMontage()
+{
+	AActor* OwnerActor = GetOwningActorFromActorInfo();
+	
+	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor);
+	
+	if (MotionWarp == nullptr)
+	{
+		return;
+	}
+
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) == false )
+	{
+		return;
+	}
+
+	UAnimMontage* ActiveMontage = SkillData.ActiveSkillMontage.LoadSynchronous();
+
+	if ( IsValid(ActiveMontage) == false )
+	{
+		return;
+	} 
+	
+	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, SkillID, ActiveMontage,
+		1.0f, NAME_None, true );
+	
+	NewTask->OnCompleted.AddDynamic(this, &UMUGA_ActivateSkill::OnCompleteCallback);
+	NewTask->OnInterrupted.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+	NewTask->OnCancelled.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+
+	if ( SkillData.bUseMotionWarp == true)
+	{
+		MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation );	
+	}
+	
+	NewTask->ReadyForActivation();
+}
+
+void UMUGA_ActivateSkill::OnCompleteCallback()
+{
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = false;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+}
+
+void UMUGA_ActivateSkill::OnInterruptedCallback()
+{
+	bool bReplicatedEndAbility = true;
+	bool bWasCancelled = true;
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
 }

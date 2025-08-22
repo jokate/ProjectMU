@@ -6,10 +6,13 @@
 #include "MUDefines.h"
 #include "Abilities/AT/MUAT_SpawnIndicator.h"
 #include "Abilities/AT/MUAT_WaitTriggerInput.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Indicator/MUIndicatorManageSubsystem.h"
 #include "Library/MUFunctionLibrary.h"
 
+
+class UAbilityTask_PlayMontageAndWait;
 
 UMUGA_IndicatorSkill::UMUGA_IndicatorSkill()
 {
@@ -54,19 +57,20 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		IndicatorSkill->ReadyForActivation();
 		OnSkillStateChanged.AddDynamic( IndicatorSkill, &UMUAT_SpawnIndicator::EndTask);
 	}
+
+	SetupReadyMontage();
 }
 
 void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
+	MontageTask = nullptr;
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UMUGA_IndicatorSkill::ActivateSkill()
 {
-	Super::ActivateSkill();
-	
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();
 
 	if ( IsValid(OwnerActor) == false )
@@ -92,11 +96,42 @@ void UMUGA_IndicatorSkill::ActivateSkill()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Skill Active"));
+	
+	Super::ActivateSkill();
+}
+
+void UMUGA_IndicatorSkill::SetupReadyMontage()
+{
+	AActor* OwnerActor = GetOwningActorFromActorInfo();
+
+	FMUSkillData SkillData;
+	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) == false )
+	{
+		return;
+	}
+
+	UAnimMontage* ActiveMontage = SkillData.ReadySkillMontage.LoadSynchronous();
+
+	if ( IsValid(ActiveMontage) == false )
+	{
+		return;
+	}
+
+	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("Ready"), ActiveMontage,
+	1.0f, NAME_None, true );
+
+	MontageTask = NewTask;
+	NewTask->ReadyForActivation();
 }
 
 
 void UMUGA_IndicatorSkill::OnSkillInputPressed()
 {
+	if ( IsValid( MontageTask ) == true )
+	{
+		MontageTask->EndTask();	
+	}
+	
 	ActivateSkill();
 }
 

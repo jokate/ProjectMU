@@ -233,10 +233,25 @@ public :
 	ESkillSlotType ApplySlotType = ESkillSlotType::NONE;
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Visual Info")
-	UTexture2D* SkillIcon = nullptr;
+	TObjectPtr<UTexture2D> SkillIcon = nullptr;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Skill Input" )
 	FMUSkillInput SkillInput;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	TSoftObjectPtr<UAnimMontage> ActiveSkillMontage = nullptr;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	bool bUseMotionWarp = false;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	FName MotionWarpName = NAME_None;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	TEnumAsByte<EMotionWarpType> MotionWarpType = EMotionWarpType::NoneMotionWarp;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Ready")
+	TSoftObjectPtr<UAnimMontage> ReadySkillMontage = nullptr;
 };
 
 USTRUCT( BLueprintType )

@@ -40,7 +40,7 @@ void AMUCircularSkillIndicator::CalculateIndicatorMesh()
 	}
 
 	FVector DirectionVector = GroundIntersection - OwnerPawn->GetActorLocation();
-	GroundIntersection = OwnerPawn->GetActorLocation() + DirectionVector.GetClampedToMaxSize( SkillCastRadius );
+	GroundIntersection = OwnerPawn->GetActorLocation() + DirectionVector.GetClampedToMaxSize( MaxAttackDistance );
 	GroundIntersection.Z = 0.f;
 	
 	DrawDebugSphere( GetWorld(), GroundIntersection, 50, 50, FColor::Blue);
@@ -66,6 +66,6 @@ void AMUCircularSkillIndicator::CalculateIndicatorMesh()
 
 	TargetLocation = GroundIntersection;
 	
-	DrawDebugSphere( GetWorld(), ProjectedLocation, SkillAOERadius, SkillAOERadius, FColor::Red);
+	DrawDebugSphere( GetWorld(), ProjectedLocation, AOERadius, AOERadius, FColor::Red);
 }
 

@@ -25,10 +25,4 @@ public:
 
 	UPROPERTY( EditDefaultsOnly )
 	TObjectPtr<UStaticMeshComponent> RadiusComponent;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
-	float SkillCastRadius = 600.f;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
-	float SkillAOERadius = 100.f;
 };
