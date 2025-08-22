@@ -29,8 +29,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-// 테스트 폰.
+	// 테스트 폰.
 public :
 	UPROPERTY( EditAnywhere )
 	TObjectPtr<UNNEModelData> PreloadedModelData;

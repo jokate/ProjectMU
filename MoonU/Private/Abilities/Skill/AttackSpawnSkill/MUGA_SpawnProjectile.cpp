@@ -2,7 +2,6 @@
 
 
 #include "Abilities/Skill/AttackSpawnSkill/MUGA_SpawnProjectile.h"
-
 #include "Abilities/AT/AttackSpawnTask/MUAT_SpawnProjectile.h"
 
 void UMUGA_SpawnProjectile::ActivateSkill()
@@ -13,7 +12,7 @@ void UMUGA_SpawnProjectile::ActivateSkill()
 	FTransform SpawnTransform;
 	
 	SpawnTransform.SetLocation(GetOwningActorFromActorInfo()->GetActorLocation());
-	SpawnTransform.SetRotation(FRotator(-90, SpawnTransform.Rotator().Yaw, 0).Quaternion());
+	SpawnTransform.SetRotation(FRotator(0.f, TargetRotation.Yaw, 0).Quaternion());
 	
 	UMUAT_SpawnProjectile* Task = UMUAT_SpawnProjectile::SpawnProjectile(this, AttackEntityClass, SpawnTransform, SpawnWaitTime );
 

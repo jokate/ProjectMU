@@ -8,6 +8,7 @@
 #include "Data/MUDataPrimaryAsset.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Library/MUFunctionLibrary.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -18,6 +19,7 @@ AMUProjectileEntity::AMUProjectileEntity()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>("BulletParticleSystem");
+	SetRootComponent(ParticleSystemComponent);
 }
 
 TArray<AActor*> AMUProjectileEntity::GetAttackableActorList()
@@ -83,7 +85,8 @@ void AMUProjectileEntity::SetupProjectileInfo()
 
 	if ( IsValid(ProjectileMovementComponent) )
 	{
-		ProjectileMovementComponent->SetVelocityInLocalSpace(FVector(0, 0, 1) * ProjectileInfoData.ProjectileSpeed);
+		//FVector ForwardVector = 
+		ProjectileMovementComponent->SetVelocityInLocalSpace( FVector(1.0f, 0.f, 0.f) * ProjectileInfoData.ProjectileSpeed );
 	}
 }
 
