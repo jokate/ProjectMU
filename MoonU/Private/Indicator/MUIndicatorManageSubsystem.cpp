@@ -6,6 +6,7 @@
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
 #include "Data/DataTable/MUData.h"
+#include "Entity/MUCameraActor.h"
 #include "Library/MUFunctionLibrary.h"
 
 bool UMUIndicatorManageSubsystem::RegisterIndicator( FName IndicatorID )
@@ -45,6 +46,11 @@ bool UMUIndicatorManageSubsystem::RegisterIndicator( FName IndicatorID )
 	IndicatorManagement.Add(IndicatorID, SkillIndicator);
 
 	return true;
+}
+
+void UMUIndicatorManageSubsystem::ReserveCamMove()
+{
+	
 }
 
 void UMUIndicatorManageSubsystem::UnRegisterIndicator(FName IndicatorID)
@@ -102,10 +108,10 @@ void UMUIndicatorManageSubsystem::SetupCamera(FName IndicatorID)
 	{
 		return;
 	}
-	
+	FTransform ParentTransform = LocalPlayerActor->GetActorTransform();
 	if ( IsValid(IndicatorCameraActor) == false )
 	{
-		ACameraActor* CamActor = GetWorld()->SpawnActorDeferred<ACameraActor>(ACameraActor::StaticClass(), LocalPlayerActor->GetActorTransform());
+		AMUCameraActor* CamActor = GetWorld()->SpawnActorDeferred<AMUCameraActor>(AMUCameraActor::StaticClass(), ParentTransform);
 
 		if ( IsValid( CamActor ) == false )
 		{
@@ -129,11 +135,12 @@ void UMUIndicatorManageSubsystem::SetupCamera(FName IndicatorID)
 			IndicatorCameraComponent->PostProcessSettings = PlayerCam->PostProcessSettings;
 			IndicatorCameraComponent->PostProcessBlendWeight = PlayerCam->PostProcessBlendWeight;
 		}
-		
-	}
 
-	IndicatorCameraActor->SetActorRelativeLocation(SkillData.IndicatorCameraOffSet);
-	IndicatorCameraActor->SetActorRelativeRotation(SkillData.IndicatorCameraRotation);
+		CamActor->FinishSpawning( LocalPlayerActor->GetActorTransform() );
+	}
+	IndicatorCameraActor->ReserveLocationAndRotation(SkillData.IndicatorCameraOffSet, SkillData.IndicatorCameraRotation);
+	/*IndicatorCameraActor->SetActorRelativeLocation(SkillData.IndicatorCameraOffSet);
+	IndicatorCameraActor->SetActorRelativeRotation(SkillData.IndicatorCameraRotation);*/
 
 	LocalPlayerController->SetViewTargetWithBlend( IndicatorCameraActor, 0.3f );
 }

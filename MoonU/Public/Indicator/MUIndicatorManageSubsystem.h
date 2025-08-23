@@ -12,6 +12,7 @@
  * 
  */
 
+class AMUCameraActor;
 // 풀링 시스템 구축을 위한 작업.
 class AMUSkillIndicator;
 
@@ -45,13 +46,16 @@ protected :
 	
 	bool RegisterIndicator( FName IndicatorID );
 
+	UFUNCTION()
+	virtual void ReserveCamMove();
+
 	
 public :
 	UPROPERTY()
 	TMap<FName, AMUSkillIndicator*> IndicatorManagement;
 
 	UPROPERTY()
-	TObjectPtr<ACameraActor> IndicatorCameraActor;
+	TObjectPtr<AMUCameraActor> IndicatorCameraActor;
 
 	UPROPERTY()
 	APawn* LocalPlayerActor;
@@ -61,4 +65,6 @@ public :
 	
 	UPROPERTY()
 	APlayerController* LocalPlayerController;
+
+	FTimerHandle ChangeCamTimerHandle;
 };
