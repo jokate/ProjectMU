@@ -13,6 +13,7 @@
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Abilities/MUAbilitySystemComponent.h"
+#include "Animation/MUAnimInstance.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/EnforcementComponent.h"
 #include "Components/InteractionComponent.h"
@@ -49,6 +50,11 @@ AMUCharacterPlayer::AMUCharacterPlayer(const FObjectInitializer& ObjectInitializ
 	EnforcementComponent = CreateDefaultSubobject<UEnforcementComponent>("EnforcementComponent");
 
 	StreamingComponent = CreateDefaultSubobject<UWorldPartitionStreamingSourceComponent>("StreamingComponent");
+
+	if ( IsValid(GetMesh() ) )
+	{
+		GetMesh()->SetAnimInstanceClass(UMUAnimInstance::StaticClass());
+	}
 }
 
 // Called when the game starts or when spawned

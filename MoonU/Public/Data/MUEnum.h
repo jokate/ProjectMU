@@ -131,3 +131,11 @@ enum class ESkillIndicatorType : uint8
 	LINEAR,
 	CIRCULAR
 };
+
+UENUM( BlueprintType )
+enum class EBlendSpaceType : uint8
+{
+	NONE,
+	OneDim,
+	TwoDims,
+};
