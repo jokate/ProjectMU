@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/ObjectPoolingTarget.h"
 #include "MUAttackEntity.generated.h"
 
 UENUM(BlueprintType)
@@ -15,7 +16,7 @@ enum class EAttackingType : uint8
 };
 
 UCLASS()
-class MOONU_API AMUAttackEntity : public AActor
+class MOONU_API AMUAttackEntity : public AActor, public IObjectPoolingTarget
 {
 	GENERATED_BODY()
 
@@ -39,6 +40,16 @@ public:
 	virtual void DoAttack();
 
 	virtual TArray<AActor*> GetAttackableActorList();
+
+#pragma region ObjectPoolingTarget
+
+	virtual void ReturnToPooling() override;
+
+	virtual bool CanActivateObject() override;
+
+	virtual void ActivateObject(FTransform Transform) override;
+	
+#pragma endregion
 	
 public :
 	UPROPERTY( EditDefaultsOnly )
@@ -50,11 +61,17 @@ public :
 	UPROPERTY( EditDefaultsOnly )
 	bool bHitOnce = false;
 
+public :
+	
 	UPROPERTY()
 	TObjectPtr<AActor> SpawnedOwner;
 
+	UPROPERTY()
+	bool bIsActive = false;
+	
 	FTimerHandle ReactCheckTimer;
 
 	UPROPERTY()
 	TArray<TWeakObjectPtr<AActor>> ReactedActors;
+	
 };

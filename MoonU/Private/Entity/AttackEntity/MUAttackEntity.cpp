@@ -48,6 +48,35 @@ TArray<AActor*> AMUAttackEntity::GetAttackableActorList()
 	return TArray<AActor*>();
 }
 
+void AMUAttackEntity::ReturnToPooling()
+{
+	SetActorHiddenInGame( false );
+	SetActorTickEnabled( true );
+	
+	// 타이머 비할성화 조치.
+	GetWorldTimerManager().ClearTimer( ReactCheckTimer );
+	ReactedActors.Empty();
+
+	bIsActive = false;
+}
+
+bool AMUAttackEntity::CanActivateObject()
+{
+	// 비활성화 된 경우에 한해서는 작동.
+	return !bIsActive;
+}
+
+void AMUAttackEntity::ActivateObject(FTransform Transform)
+{
+	SetActorHiddenInGame( false );
+	SetActorTickEnabled( true );
+	SetActorTransform( Transform );
+
+	bIsActive = true;
+	
+	GetWorldTimerManager().SetTimer( ReactCheckTimer, this, &AMUAttackEntity::DoAttack, ReactCheckInterval, true );
+}
+
 void AMUAttackEntity::RegisterOwner(AActor* InSpawnedOwwner)
 {
 	SpawnedOwner = InSpawnedOwwner;
