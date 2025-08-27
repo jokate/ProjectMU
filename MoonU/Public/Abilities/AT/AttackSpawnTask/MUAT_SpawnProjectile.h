@@ -17,7 +17,7 @@ class MOONU_API UMUAT_SpawnProjectile : public UMUAT_SpawnAttackEntity
 
 public :
 	UFUNCTION(BlueprintCallable, meta=(HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"), Category="Ability|Tasks")
-	static UMUAT_SpawnProjectile* SpawnProjectile(UGameplayAbility* OwningAbility, TSubclassOf<AMUAttackEntity> InClass, FTransform InSpawnTransform, float InSpawnWaitTime = 0.f  );
+	static UMUAT_SpawnProjectile* SpawnProjectile(UGameplayAbility* OwningAbility, FName InSkillID, FTransform InSpawnTransform, float InSpawnWaitTime = 0.f  );
 
 protected :
 	

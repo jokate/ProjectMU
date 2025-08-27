@@ -24,6 +24,9 @@ public :
 	virtual void BeginPlay() override;
 	
 	UMUEnforcementManageComponent* GetEnforcementManager() { return EnforcementManageComponent; }
+	
+	virtual AActor* GetPoolingObject(FName InSkillName, FTransform TargetTransform);
+
 protected :
 
 #pragma region ITimeWinder
@@ -80,6 +83,9 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UMUEnforcementManageComponent> EnforcementManageComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<class UMUObjectPoolingManager> ObjectPoolingManager;
 	
 	UFUNCTION(Exec)
 	virtual void CheatSetupEnforcement(int32 EnforcementID);

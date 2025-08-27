@@ -20,7 +20,7 @@ class MOONU_API UMUAT_SpawnAttackEntity : public UAbilityTask
 	GENERATED_BODY()
 
 public :
-	static UMUAT_SpawnAttackEntity* StartSpawnAttackEntity( UGameplayAbility* OwningAbility, TSubclassOf<AMUAttackEntity> InClass,
+	static UMUAT_SpawnAttackEntity* StartSpawnAttackEntity( UGameplayAbility* OwningAbility, FName SkillName,
 		FTransform InSpawnTransform, float InSpawnWaitTime = 0.f );
 
 	virtual void Activate() override;
@@ -44,7 +44,7 @@ protected :
 	FTransform SpawnTransform;
 
 	UPROPERTY()
-	TSubclassOf<AMUAttackEntity> SpawnClass;
+	FName SkillID = NAME_None;
 
 	UPROPERTY()
 	float SpawnWaitTime;

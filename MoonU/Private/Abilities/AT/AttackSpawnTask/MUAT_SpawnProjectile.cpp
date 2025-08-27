@@ -6,13 +6,13 @@
 #include "Entity/AttackEntity/MUProjectileEntity.h"
 
 UMUAT_SpawnProjectile* UMUAT_SpawnProjectile::SpawnProjectile(UGameplayAbility* OwningAbility,
-                                                              TSubclassOf<AMUAttackEntity> InClass, FTransform InSpawnTransform, float InSpawnWaitTime)
+                                                              FName InSkillID,  FTransform InSpawnTransform, float InSpawnWaitTime)
 {
 	UMUAT_SpawnProjectile* MyTask = NewAbilityTask<UMUAT_SpawnProjectile>(OwningAbility);
 
 	MyTask->SpawnTransform = InSpawnTransform;
 	MyTask->SpawnWaitTime = InSpawnWaitTime;
-	MyTask->SpawnClass = InClass;
+	MyTask->SkillID = InSkillID;
 
 	return MyTask;
 }

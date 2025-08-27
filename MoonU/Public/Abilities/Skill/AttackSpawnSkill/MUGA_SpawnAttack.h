@@ -22,8 +22,6 @@ public :
 	virtual void OnFinishedSpawn();
 	
 public :
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
-	TSubclassOf<AMUAttackEntity> AttackEntityClass;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
 	float SpawnWaitTime = 0.f;

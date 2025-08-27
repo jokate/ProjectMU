@@ -42,6 +42,9 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ProjectileRegistryType = NAME_None;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName AttackEntityRegistryType = NAME_None;
+
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override
 	{
 		return FPrimaryAssetId( TEXT("Data"), GetFName());

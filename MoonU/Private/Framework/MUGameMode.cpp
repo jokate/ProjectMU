@@ -5,6 +5,7 @@
 
 #include "Character/MUCharacterPlayer.h"
 #include "Components/MUEnforcementManageComponent.h"
+#include "Components/MUObjectPoolingManager.h"
 #include "Components/StageManagingComponent.h"
 #include "Components/TimeStopManager.h"
 #include "Components/TimeWindManager.h"
@@ -16,6 +17,7 @@ AMUGameMode::AMUGameMode()
 	TimeStopManager = CreateDefaultSubobject<UTimeStopManager>(TEXT("TimeStopManager"));
 	StageManagingComponent = CreateDefaultSubobject<UStageManagingComponent>(TEXT("StageManagingComponent"));
 	EnforcementManageComponent = CreateDefaultSubobject<UMUEnforcementManageComponent>(TEXT("EnforcementManager"));
+	ObjectPoolingManager = CreateDefaultSubobject<UMUObjectPoolingManager>(TEXT("ObjectPoolingManager"));
 }
 
 void AMUGameMode::BeginPlay()
@@ -198,4 +200,9 @@ void AMUGameMode::CheatLevelUp()
 	}
 
 	//CurrentPlayer->LevelUp();
+}
+
+AActor* AMUGameMode::GetPoolingObject(FName InSkillName, FTransform TargetTransform)
+{
+	return ObjectPoolingManager->GetPoolingObject(InSkillName, TargetTransform);
 }

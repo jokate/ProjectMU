@@ -14,7 +14,7 @@ void UMUGA_SpawnProjectile::ActivateSkill()
 	SpawnTransform.SetLocation(GetOwningActorFromActorInfo()->GetActorLocation());
 	SpawnTransform.SetRotation(FRotator(0.f, TargetRotation.Yaw, 0).Quaternion());
 	
-	UMUAT_SpawnProjectile* Task = UMUAT_SpawnProjectile::SpawnProjectile(this, AttackEntityClass, SpawnTransform, SpawnWaitTime );
+	UMUAT_SpawnProjectile* Task = UMUAT_SpawnProjectile::SpawnProjectile(this, SkillID, SpawnTransform, SpawnWaitTime );
 
 	if ( IsValid(Task) == true )
 	{

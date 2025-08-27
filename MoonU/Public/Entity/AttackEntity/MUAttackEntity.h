@@ -50,6 +50,7 @@ public:
 	virtual void ActivateObject(FTransform Transform) override;
 	
 #pragma endregion
+	virtual void LifeSpanExpired() override;
 	
 public :
 	UPROPERTY( EditDefaultsOnly )

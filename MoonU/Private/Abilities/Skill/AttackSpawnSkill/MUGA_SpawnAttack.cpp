@@ -13,7 +13,7 @@ void UMUGA_SpawnAttack::ActivateSkill()
 	SpawnTransform.SetLocation(TargetLocation);
 	SpawnTransform.SetRotation(TargetRotation.Quaternion());
 	
-	UMUAT_SpawnAttackEntity* Task = UMUAT_SpawnAttackEntity::StartSpawnAttackEntity(this, AttackEntityClass, SpawnTransform, SpawnWaitTime );
+	UMUAT_SpawnAttackEntity* Task = UMUAT_SpawnAttackEntity::StartSpawnAttackEntity(this, SkillID, SpawnTransform, SpawnWaitTime );
 
 	if ( IsValid(Task) == true )
 	{

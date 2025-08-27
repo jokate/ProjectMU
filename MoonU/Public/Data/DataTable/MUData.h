@@ -252,6 +252,12 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Ready")
 	TSoftObjectPtr<UAnimMontage> ReadySkillMontage = nullptr;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	bool bUseObjectPooling = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseObjectPooling == true", EditConditionHides))
+	int32 MaxCount = 1;
 };
 
 USTRUCT( BLueprintType )
@@ -348,5 +354,21 @@ struct FMUEnforcementRerollCost
 
 	public :
 	
-		//UPROPERTY( BlueprintReadOnly )
+	//UPROPERTY( BlueprintReadOnly )
+};
+
+USTRUCT( BlueprintType )
+struct FMUAttackEntityData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly )
+	TSubclassOf<class AMUAttackEntity> AttackEntityClass;
+
+	UPROPERTY( EditDefaultsOnly )
+	int32 MaxPoolingCount = 1;
+
+	UPROPERTY( EditDefaultsOnly )
+	float LifeSpan = 1.f;
 };

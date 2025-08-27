@@ -15,7 +15,7 @@ struct FObjectPoolInfo
 
 public :
 	UPROPERTY()
-	TArray<UObject*> PoolingObjects;
+	TArray<AActor*> PoolingObjects;
 
 	UPROPERTY()
 	int32 PoolingMaxCount = 1;
@@ -31,7 +31,7 @@ public:
 	UMUObjectPoolingManager();
 
 public :
-	virtual void GetPoolingObject( FName InSkillName ); 
+	virtual AActor* GetPoolingObject( FName InSkillName, FTransform TargetTransform ); 
 	
 public :
 	UPROPERTY(BlueprintReadOnly)
