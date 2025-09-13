@@ -40,7 +40,7 @@ public :
 	
 private :
 	// 	https://dev.epicgames.com/community/learning/courses/e7w/unreal-engine-neural-network-engine-nne/34q9/unreal-engine-nne-quick-start-guide-5-3
-	TUniquePtr<UE::NNE::IModelInstanceCPU> ModelInstance;
+	TSharedPtr<UE::NNE::IModelInstanceCPU> ModelInstance;
 	TArray<float> InputData;
 	TArray<float> OutputData;
 	TArray<UE::NNE::FTensorBindingCPU> InputBindings;

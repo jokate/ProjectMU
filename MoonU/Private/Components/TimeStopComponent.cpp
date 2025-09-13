@@ -2,7 +2,7 @@
 
 
 #include "Components/TimeStopComponent.h"
-
+#include "GameFramework/GameModeBase.h"
 #include "Interface/TimeStopper.h"
 
 

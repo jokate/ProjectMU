@@ -23,9 +23,9 @@ public:
 
 	virtual void SetupIndicatorInfo( APlayerController* OwnerController, float AttackDistance = 0, float InAOERadius = 0 );
 
-	virtual FVector GetTargetLocation() { return TargetLocation; }
+	virtual FVector GetIndicatorTargetLocation() { return TargetLocation; }
 
-	virtual FRotator GetTargetRotation() { return TargetRotation; }
+	virtual FRotator GetIndicatorTargetRotation() { return TargetRotation; }
 	
 	virtual void ActivateSkillIndicator();
 	virtual void DeactivateSkillIndicator();

@@ -229,3 +229,5 @@ bool UMUDataTableSubsystem::GetRegistryData(FName RegistryName, FName RowName, T
 	OutData = *Type;
 	return true;
 }
+template bool UMUDataTableSubsystem::GetRegistryData<FMUAttackEntityData>(FName, FName, FMUAttackEntityData&);
+template bool UMUDataTableSubsystem::GetRegistryData<FMUProjectileInfo>(FName, FName, FMUProjectileInfo&);

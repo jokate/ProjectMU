@@ -20,7 +20,7 @@ class MOONU_API UMUTopMenuButton : public UUserWidget
 	GENERATED_BODY()
 
 public :
-	virtual void Initialize( FTopMenuItem InTopMenuItem);
+	virtual void InitializeWidget( FTopMenuItem InTopMenuItem );
 
 	UFUNCTION()
 	void OnClickedButtonCallback();

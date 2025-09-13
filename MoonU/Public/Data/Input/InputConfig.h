@@ -2,8 +2,8 @@
 #pragma once
  
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
-#include "GameplayTags/Classes/GameplayTagContainer.h"
 #include "InputConfig.generated.h"
  
 class UInputAction;

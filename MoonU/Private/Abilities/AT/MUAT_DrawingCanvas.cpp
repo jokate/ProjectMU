@@ -109,14 +109,14 @@ void UMUAT_DrawingCanvas::RunModel()
 	}
 
 	// 모델에는 유일 참조 보장.
-	TUniquePtr<UE::NNE::IModelCPU> Model = Runtime->CreateModel(PreloadedModelData.Get());
+	TSharedPtr<UE::NNE::IModelCPU> Model = Runtime->CreateModelCPU(PreloadedModelData.Get());
 
 	if ( Model == nullptr )
 	{
 		return;
 	}
 	
-	ModelInstance = Model->CreateModelInstance();
+	ModelInstance = Model->CreateModelInstanceCPU();
 
 	if ( ModelInstance == nullptr )
 	{
@@ -147,7 +147,7 @@ void UMUAT_DrawingCanvas::RunModel()
 	// 쿼리 자체는 백그라운드에서 싱행하는 것이 좋음. 따라서 관련 부분에 대해서 타 스레드에 위임하는 방식
 	AsyncTask(ENamedThreads::AnyNormalThreadNormalTask, [&]()
 	{	
-		if (ModelInstance->RunSync(InputBindings, OutputBindings) != 0)
+		if (ModelInstance->RunSync(InputBindings, OutputBindings) != UE::NNE::EResultStatus::Ok)
 		{
 		UE_LOG(LogTemp, Error, TEXT("Failed to run the model"));
 		}

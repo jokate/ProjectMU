@@ -49,7 +49,7 @@ bool UMUAIAbilitySystemComponent::RetriggerAbility(FGameplayAbilitySpecHandle& A
 	}
 
 	UGameplayAbility* InstancedAbility = Spec->GetPrimaryInstance();
-	UGameplayAbility* Ability = InstancedAbility ? InstancedAbility : Spec->Ability;
+	UGameplayAbility* Ability = InstancedAbility ? InstancedAbility : Spec->Ability.Get();
 
 	if ( IsValid(Ability) == false )
 	{

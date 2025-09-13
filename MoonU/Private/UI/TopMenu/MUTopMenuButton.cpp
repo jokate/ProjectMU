@@ -6,7 +6,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 
-void UMUTopMenuButton::Initialize(FTopMenuItem InTopMenuItem)
+void UMUTopMenuButton::InitializeWidget(FTopMenuItem InTopMenuItem)
 {
 	TopMenuItem = InTopMenuItem;
 

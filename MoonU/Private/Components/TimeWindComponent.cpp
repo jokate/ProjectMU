@@ -2,7 +2,7 @@
 
 
 #include "Components/TimeWindComponent.h"
-
+#include "GameFramework/GameModeBase.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "MUDefines.h"
 #include "GameFramework/Character.h"	

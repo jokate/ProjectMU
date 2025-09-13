@@ -62,7 +62,7 @@ void AMUAttackEntity::ReturnToPooling()
 }
 
 bool AMUAttackEntity::CanActivateObject()
-{
+{ 
 	// 비활성화 된 경우에 한해서는 작동.
 	return !bIsActive;
 }

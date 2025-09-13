@@ -7,6 +7,7 @@
 #include "Data/DataTable/MUWidgetData.h"
 #include "Interface/InteractableTarget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Singleton/MUDataTableSubsystem.h"
 #include "MUFunctionLibrary.generated.h"
 
 class UMUDataPrimaryAsset;

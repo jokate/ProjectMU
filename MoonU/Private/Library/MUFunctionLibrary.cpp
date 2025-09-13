@@ -11,6 +11,7 @@
 #include "Components/EnforcementComponent.h"
 #include "Components/Input/MUEnhancedInputComponent.h"
 #include "Data/MUPrimaryDataAsset.h"
+#include "Data/MUDataPrimaryAsset.h"
 #include "Engine/AssetManager.h"
 #include "Framework/MUGameInstance.h"
 #include "Framework/MUGameMode.h"
@@ -553,6 +554,7 @@ UMUEnforcementManageComponent* UMUFunctionLibrary::GetEnforcementManageComponent
 	return GM->GetEnforcementManager();
 }
 
+
 template <typename T>
 bool UMUFunctionLibrary::GetRegistryData(UObject* Object, FName RegistryType, FName RowName, T& OutValue)
 {
@@ -573,3 +575,5 @@ bool UMUFunctionLibrary::GetRegistryData(UObject* Object, FName RegistryType, FN
 	return DataTableSubsystem->GetRegistryData<T>(RegistryType, RowName, OutValue);
 }
 
+template bool UMUFunctionLibrary::GetRegistryData<FMUAttackEntityData>(UObject*, FName, FName, FMUAttackEntityData&);
+template bool UMUFunctionLibrary::GetRegistryData<FMUProjectileInfo>(UObject*, FName, FName, FMUProjectileInfo&);

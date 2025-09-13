@@ -37,7 +37,7 @@ void UMUTopMenuWidget::NativeConstruct()
 		TopMenuHorizontalBox->AddChildToHorizontalBox(TopMenuButton);
 		
 		TopMenuButton->SetPadding( PaddingValue);
-		TopMenuButton->Initialize(ItemName);
+		TopMenuButton->InitializeWidget(ItemName);
 		TopMenuButton->OnClickedButton.AddDynamic( this, &UMUTopMenuWidget::OnTopMenuChanged);
 	}
 }

@@ -19,7 +19,7 @@ AMUNNETestPawn::AMUNNETestPawn()
 void AMUNNETestPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	TWeakInterfacePtr<INNERuntimeCPU> Runtime = UE::NNE::GetRuntime<INNERuntimeCPU>(FString("NNERuntimeORTCpu"));
+	/*TWeakInterfacePtr<INNERuntimeCPU> Runtime = UE::NNE::GetRuntime<INNERuntimeCPU>(FString("NNERuntimeORTCpu"));
 	ModelInstance = Runtime->CreateModel(PreloadedModelData)->CreateModelInstance();
 	
 	TConstArrayView<UE::NNE::FTensorDesc> InputTensorDescs = ModelInstance->GetInputTensorDescs();
@@ -44,7 +44,7 @@ void AMUNNETestPawn::BeginPlay()
 	OutputData.SetNumZeroed(OutputTensorShapes[0].Volume());
 	OutputBindings.SetNumZeroed(1);
 	OutputBindings[0].Data = OutputData.GetData();
-	OutputBindings[0].SizeInBytes = OutputData.Num() * sizeof(float);
+	OutputBindings[0].SizeInBytes = OutputData.Num() * sizeof(float);*/
 }
 
 // Called every frame
@@ -52,6 +52,7 @@ void AMUNNETestPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	/*
 	if ( !bIsRunning )
 	{
 		bIsRunning = true;
@@ -71,7 +72,7 @@ void AMUNNETestPawn::Tick(float DeltaTime)
 			bIsRunning = false;
 		});
 	});
-	}
+	}*/
 }
 
 // Called to bind functionality to input

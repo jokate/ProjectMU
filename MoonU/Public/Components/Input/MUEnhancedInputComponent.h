@@ -98,6 +98,6 @@ void UMUEnhancedInputComponent::RemoveActionBinding(const UInputConfig* InputCon
 
 	if (const UInputAction* IA = InputConfig->FindInputActionForTag(InputTag))
 	{
-		RemoveBinding()
+		//RemoveBinding(IA);
 	}
 }

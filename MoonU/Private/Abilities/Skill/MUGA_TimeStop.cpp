@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Attribute/MUCharacterAttributeSet.h"
+#include "GameFramework/GameModeBase.h"
 #include "Attribute/MUTimewinderAttribute.h"
 #include "Interface/TimeStopper.h"
 

@@ -164,7 +164,7 @@ FVector UMUIndicatorManageSubsystem::GetIndicatorTargetLocation(FName IndicatorI
     	return FVector::ZeroVector;
     }
 
-	return SkillIndicator->GetTargetLocation();
+	return SkillIndicator->GetIndicatorTargetLocation();
 }
 
 FRotator UMUIndicatorManageSubsystem::GetIndicatorTargetRotation(FName IndicatorID)
@@ -176,7 +176,7 @@ FRotator UMUIndicatorManageSubsystem::GetIndicatorTargetRotation(FName Indicator
 		return FRotator::ZeroRotator;
 	}
 
-	return SkillIndicator->GetTargetRotation();
+	return SkillIndicator->GetIndicatorTargetRotation();
 }
 
 void UMUIndicatorManageSubsystem::ActivateSkillIndicator(FName IndicatorID)
