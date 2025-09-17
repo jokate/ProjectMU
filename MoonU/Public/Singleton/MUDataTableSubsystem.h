@@ -56,6 +56,9 @@ public :
 
 	template<typename T>
 	bool GetRegistryData( FName RegistryName, FName RowName, T& OutData );
+
+	UFUNCTION( BlueprintPure )
+	virtual bool GetAllCombatComboData( TArray<FMUInputCommandList>& OutCombatComboData );
 	
 protected :
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -73,4 +76,10 @@ protected :
 
 	UPROPERTY()
 	TObjectPtr<UDataTable> EnforcementDropTable;
+
+	UPROPERTY(Config)
+	TSoftObjectPtr<UDataTable> CombatComboDataTablePath;
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> CombatComboDataTable;
 };

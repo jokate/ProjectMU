@@ -92,5 +92,8 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool GetTopMenuWidgetData( UObject* Object, FName TopMenuID, FTopMenuData& OutTopMenuData );
+
+	UFUNCTION( BlueprintPure )
+	static bool GetAllInputCommandList( UObject* Object, TArray<FMUInputCommandList>& OutInputCommandList );
 #pragma endregion
 };

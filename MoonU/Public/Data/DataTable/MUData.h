@@ -372,3 +372,42 @@ public :
 	UPROPERTY( EditDefaultsOnly )
 	float LifeSpan = 1.f;
 };
+
+USTRUCT( BlueprintType )
+struct FMUInputCommandList : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+
+	void ConsumeInput(ECombatInputType InputType );
+
+	bool CanConsumeInput() const;
+
+	bool CanProcessInput() const;
+
+	void Reset()
+	{
+		ProcessIndex = 0;
+		bool bCanConsume = true;
+	}
+
+public :
+	// 태그 리스트에 이미 있는 경우.
+	UPROPERTY( EditDefaultsOnly )
+	TArray<ECombatInputType> InputTypes;
+
+	// 리턴될 태그 트리거.
+	UPROPERTY( EditDefaultsOnly )
+	FGameplayTag TargetGameplayTag;
+
+	UPROPERTY( EditDefaultsOnly )
+	bool bExactlyMatch = false;
+
+	// 런타임 인풋
+	UPROPERTY()
+	int32 ProcessIndex = 0;
+
+	UPROPERTY()
+	bool bCanConsume = true;
+};

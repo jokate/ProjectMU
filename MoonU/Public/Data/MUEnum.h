@@ -139,3 +139,12 @@ enum class EBlendSpaceType : uint8
 	OneDim,
 	TwoDims,
 };
+
+UENUM( BLueprintType )
+enum class ECombatInputType : uint8
+{
+	None,
+	Jump,
+	BasicAttack,
+	Defense,
+};

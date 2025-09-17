@@ -198,6 +198,29 @@ bool UMUDataTableSubsystem::GetTopMenuWidgetData(FName Name, FTopMenuData& OutMe
 	return GetRegistryData<FTopMenuData>(DA->TopMenuWidgetDataRegistryType, Name, OutMenuData);
 }
 
+bool UMUDataTableSubsystem::GetAllCombatComboData(TArray<FMUInputCommandList>& OutCombatComboData)
+{
+	if ( IsValid(CombatComboDataTable) == false)
+	{
+		UDataTable* CombatComboDataTableLoaded = CombatComboDataTablePath.LoadSynchronous();
+		if ( IsValid(CombatComboDataTableLoaded) == false)
+		{
+			UE_LOG( LogTemp, Log, TEXT("Combat Combo DataTable Is Not Valid") );
+			return false;
+		}
+
+		CombatComboDataTable = CombatComboDataTableLoaded;
+	}
+
+	CombatComboDataTable->ForeachRow<FMUInputCommandList>
+	(TEXT(""),[&] (const FName& Key, const FMUInputCommandList& Value)
+	{
+		OutCombatComboData.Add(Value);
+	});
+
+	return true;
+}
+
 void UMUDataTableSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -218,9 +241,9 @@ bool UMUDataTableSubsystem::GetRegistryData(FName RegistryName, FName RowName, T
 	{
 		return false;
 	}
-
+	
 	const T* Type = DataRegistrySubsystem->GetCachedItem<T>(RegistryId);
-
+	
 	if ( Type == nullptr )
 	{
 		return false;
@@ -229,5 +252,6 @@ bool UMUDataTableSubsystem::GetRegistryData(FName RegistryName, FName RowName, T
 	OutData = *Type;
 	return true;
 }
+
 template bool UMUDataTableSubsystem::GetRegistryData<FMUAttackEntityData>(FName, FName, FMUAttackEntityData&);
 template bool UMUDataTableSubsystem::GetRegistryData<FMUProjectileInfo>(FName, FName, FMUProjectileInfo&);

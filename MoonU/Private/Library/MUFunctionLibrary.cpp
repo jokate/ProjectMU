@@ -259,6 +259,24 @@ bool UMUFunctionLibrary::GetTopMenuWidgetData(UObject* Object, FName TopMenuID, 
 	return DataTableSubsystem->GetTopMenuWidgetData(TopMenuID, OutTopMenuData);
 }
 
+bool UMUFunctionLibrary::GetAllInputCommandList(UObject* Object, TArray<FMUInputCommandList>& OutInputCommandList)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+    if ( IsValid(GameInstance) == false)
+    {
+    	return false;
+    }
+
+    UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+	return DataTableSubsystem->GetAllCombatComboData(OutInputCommandList);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {
