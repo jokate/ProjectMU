@@ -3,6 +3,7 @@
  
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "Data/MUEnum.h"
 #include "Engine/DataAsset.h"
 #include "InputConfig.generated.h"
  
@@ -28,6 +29,19 @@ public:
 	FGameplayTag InputTag;
 };
 
+USTRUCT(BlueprintType)
+struct FComboRelatedAction
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY( EditDefaultsOnly )
+	const UInputAction* InputAction = nullptr;
+
+	UPROPERTY( EditDefaultsOnly )
+	ECombatInputType InputType;
+};
+
 /**
  *
  */
@@ -44,4 +58,7 @@ public:
 	// List of input actions used by the owner. These input actions are mapped to a gameplay tag and must be manually bound.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
 	TArray<FTaggedInputAction> TaggedInputActions;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
+	TArray<FComboRelatedAction> ComboRelatedActions;
 };

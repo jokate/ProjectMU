@@ -8,7 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "MUPlayerController.generated.h"
 
-class UEnforcementComponent;
+class UMUInputConsumeComponent;
 /**
  * 
  */
@@ -20,17 +20,29 @@ class MOONU_API AMUPlayerController : public APlayerController, public IGenericT
 public :
 	AMUPlayerController();
 
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
 	
 	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override;
 
+#pragma region IGenericTeamAgentInterface
+	
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 	
+#pragma endregion IGenericTeamAgentInterface
+
+	virtual void SetupInputComponent() override;
+
+	virtual void SendInput(ECombatInputType CombatInput);
+	
+public : 
 	UPROPERTY()
 	FGenericTeamId TeamId;
 
 	UPROPERTY(EditDefaultsOnly)
 	TEnumAsByte<ECharacterType> CharacterType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input Consumer")
+	TObjectPtr<UMUInputConsumeComponent> InputConsumeComponent;
 };

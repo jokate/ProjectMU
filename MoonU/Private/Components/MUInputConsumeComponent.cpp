@@ -31,26 +31,44 @@ void UMUInputConsumeComponent::ProcessConsumeInput()
 {
 	// 커맨드에 대한 처리 분기.
 	// Client Side 처리
-	for ( ECombatInputType CombatInput : InputCombatQueue)
+	TArray<FMUInputCommandList> TempInputCommandLists = AllInputCommandLists;
+
+	bool bHasProcessedCombo = false;
+	while ( InputCombatQueue.Num() > 0 )
 	{
-		for ( FMUInputCommandList& InputCommandList : AllInputCommandLists )
+		if ( bHasProcessedCombo == true )
+		{
+			break;
+		}
+		
+		ECombatInputType FirstInput = InputCombatQueue.Pop();
+		TArray<FMUInputCommandList> PendingToRemoveCommands;
+		
+		for ( FMUInputCommandList& InputCommandList : TempInputCommandLists )
 		{
 			if ( InputCommandList.CanProcessInput() == false )
 			{
+				PendingToRemoveCommands.Add(InputCommandList);
 				continue;
 			}
 
-			InputCommandList.ConsumeInput(CombatInput);
+			InputCommandList.ConsumeInput(FirstInput);
 
 			if ( InputCommandList.CanProcessInput() == true )
 			{
 				UE_LOG(LogTemp, Log, TEXT("Consume Input Tag : %s"), *InputCommandList.TargetGameplayTag.ToString());
+				// 이 부분에서 실질적 처리 필요.
+				bHasProcessedCombo = true;
 				break;
 			}
-		}	
-	}
+		}
 
-
+		for ( FMUInputCommandList& InputCommandList : PendingToRemoveCommands )
+		{
+			TempInputCommandLists.Remove(InputCommandList);
+		}
+	} 
+	
 	for ( FMUInputCommandList& InputCommandList : AllInputCommandLists )
 	{
 		InputCommandList.Reset();
@@ -66,6 +84,7 @@ void UMUInputConsumeComponent::MULTI_ConsumeInput_Implementation(FGameplayTag Co
 
 void UMUInputConsumeComponent::SendInput(ECombatInputType CombatInput)
 {
+	UE_LOG(LogTemp, Log, TEXT("UMUInputConsumeComponent::SendInput %d"), CombatInput);
 	InputCombatQueue.Add(CombatInput);	
 }
 

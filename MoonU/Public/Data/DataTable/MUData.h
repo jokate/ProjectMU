@@ -379,7 +379,11 @@ struct FMUInputCommandList : public FTableRowBase
 	GENERATED_BODY()
 
 public :
-
+	bool operator==(const FMUInputCommandList& Other) const
+	{
+		return Other.TargetGameplayTag == TargetGameplayTag;
+	}
+	
 	void ConsumeInput(ECombatInputType InputType );
 
 	bool CanConsumeInput() const;
@@ -389,7 +393,7 @@ public :
 	void Reset()
 	{
 		ProcessIndex = 0;
-		bool bCanConsume = true;
+		bCanConsume = true;
 	}
 
 public :

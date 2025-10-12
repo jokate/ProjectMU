@@ -8,7 +8,7 @@ void FMUInputCommandList::ConsumeInput(ECombatInputType InputType )
 	// 정학한 순서대로 들어와야 하는경우. 인덱스 여부 판단.
 	if ( bExactlyMatch )
 	{
-		if (InputTypes.Contains(ProcessIndex) == true && InputTypes[ProcessIndex] == InputType )
+		if (InputTypes.IsValidIndex(ProcessIndex) == true && InputTypes[ProcessIndex] == InputType )
 		{
 			++ProcessIndex;
 		}

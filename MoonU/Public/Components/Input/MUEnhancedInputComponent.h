@@ -39,6 +39,9 @@ public:
 	template<class UserClass, typename FuncType>
 	void BindActionByTag(const UInputConfig* InputConfig, const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func);
 
+	template<class UserClass, typename FuncType>
+	void BindComboAction(const UInputConfig* InputConfig, UserClass* Object, FuncType Func);
+
 	const FGameplayTag& GetGameplayTagByInputAction(const UInputAction* InputAction);
 
 	virtual void ClearActionBindings() override;
@@ -81,5 +84,20 @@ void UMUEnhancedInputComponent::BindActionByTag(const UInputConfig* InputConfig,
 		FInputActionWrapper Wrapper(IA);
 
 		InputGameplayTagMap.Emplace(Wrapper,InputTag);
+	}
+}
+
+template <class UserClass, typename FuncType>
+void UMUEnhancedInputComponent::BindComboAction(const UInputConfig* InputConfig,
+	UserClass* Object, FuncType Func)
+{
+	if (InputConfig == nullptr)
+	{
+		return;
+	}
+	
+	for ( const FComboRelatedAction& IA : InputConfig->ComboRelatedActions )
+	{
+		BindAction(IA.InputAction, ETriggerEvent::Triggered, Object, Func, IA.InputType);
 	}
 }

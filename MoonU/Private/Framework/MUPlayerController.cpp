@@ -3,9 +3,12 @@
 
 #include "Framework/MUPlayerController.h"
 
+#include "Components/MUInputConsumeComponent.h"
+
 AMUPlayerController::AMUPlayerController()
 {
 	CharacterType = ECharacterType::Player;
+	InputConsumeComponent = CreateDefaultSubobject<UMUInputConsumeComponent>("InputConsumeComponent");
 }
 
 void AMUPlayerController::BeginPlay()
@@ -48,4 +51,17 @@ ETeamAttitude::Type AMUPlayerController::GetTeamAttitudeTowards(const AActor& Ot
 	}
 
 	return ETeamAttitude::Neutral;
+}
+
+void AMUPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+}
+
+void AMUPlayerController::SendInput(ECombatInputType CombatInput)
+{
+	if ( IsValid(InputConsumeComponent) == true )
+	{
+		InputConsumeComponent->SendInput(CombatInput);
+	} 
 }

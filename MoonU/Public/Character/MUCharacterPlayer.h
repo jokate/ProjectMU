@@ -53,6 +53,9 @@ public:
 
 	virtual void RegisterLocalStage();
 
+	UFUNCTION()
+	void ComboInputPressed(ECombatInputType InputType);
+	
 
 #pragma region Level
 	UFUNCTION(BlueprintCallable)

@@ -22,6 +22,7 @@
 #include "Components/MULevelUpComponent.h"
 #include "Components/WorldPartitionStreamingSourceComponent.h"
 #include "Data/DataTable/MUData.h"
+#include "Framework/MUPlayerController.h"
 #include "GameFramework/GameModeBase.h"
 #include "Indicator/MUIndicatorManageSubsystem.h"
 #include "Interface/StageManager.h"
@@ -132,6 +133,7 @@ void AMUCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	
 	SetupDefaultInput(PlayerInputComponent);
 	SetupGASInputComponent(CharacterID);
+	//SetupComboInput(CharacterID);
 }
 
 void AMUCharacterPlayer::SetupDefaultInput(UInputComponent* PlayerInputComponent)
@@ -250,6 +252,9 @@ void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 			
 			UMUFunctionLibrary::BindInputActionByTag(this, InputID, InputByTag);
 		}
+
+		// Setup all combo RelatedInput
+		EnhancedInputComponent->BindComboAction(InputMapper.InputConfig, this, &AMUCharacterPlayer::ComboInputPressed);
 	}
 }
 
@@ -302,6 +307,16 @@ void AMUCharacterPlayer::RegisterLocalStage()
 	}
 
 	StageManager->RegisterOwnerActor( this );
+}
+
+void AMUCharacterPlayer::ComboInputPressed(ECombatInputType InputType)
+{
+	AMUPlayerController* PC = Cast<AMUPlayerController>(Controller);
+
+	if ( IsValid(PC) )
+	{
+		PC->SendInput(InputType);
+	}
 }
 
 void AMUCharacterPlayer::Move(const FInputActionValue& Value)
