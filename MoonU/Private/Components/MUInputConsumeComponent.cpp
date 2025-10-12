@@ -3,6 +3,8 @@
 
 #include "Components/MUInputConsumeComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Framework/MUPlayerController.h"
 #include "Library/MUFunctionLibrary.h"
 
 
@@ -24,6 +26,13 @@ void UMUInputConsumeComponent::BeginPlay()
 	if ( GetNetMode() == NM_Client || GetNetMode() == NM_Standalone )
 	{
 		GetWorld()->GetTimerManager().SetTimer(InputConsumeTimer, this, &UMUInputConsumeComponent::ProcessConsumeInput, InputConsumeTimeInterval, true );	
+	}
+
+	AMUPlayerController* MUPlayerController = GetOwner<AMUPlayerController>();
+
+	if ( IsValid(MUPlayerController) )
+	{
+		OwnerPawn = MUPlayerController->GetPawn();
 	}
 }
 
@@ -60,6 +69,7 @@ void UMUInputConsumeComponent::ProcessConsumeInput()
 				UE_LOG(LogTemp, Log, TEXT("Consume Input Tag : %s"), *InputCommandList.TargetGameplayTag.ToString());
 				// 이 부분에서 실질적 처리 필요.
 				bHasProcessedCombo = true;
+				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerPawn.Get(), InputCommandList.TargetGameplayTag, FGameplayEventData());
 				break;
 			}
 		}

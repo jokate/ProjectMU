@@ -39,12 +39,14 @@ public :
 	UPROPERTY()
 	TArray<FMUInputCommandList> AllInputCommandLists;
 	
-	// 타이머 돌리면서 인풋 관련 처리.
-
-	TQueue<ECombatInputType> InputCombatQueue;
 
 	UPROPERTY(EditDefaultsOnly)
 	float InputConsumeTimeInterval = 0.2f;
-	
+
+	UPROPERTY()
+	TWeakObjectPtr<APawn> OwnerPawn;
+		
+		// 타이머 돌리면서 인풋 관련 처리.
+	TQueue<ECombatInputType> InputCombatQueue;
 	FTimerHandle InputConsumeTimer;
 };
