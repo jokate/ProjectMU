@@ -10,6 +10,7 @@ void FMUInputCommandList::ConsumeInput(ECombatInputType InputType )
 	{
 		if (InputTypes.IsValidIndex(ProcessIndex) == true && InputTypes[ProcessIndex] == InputType )
 		{
+			UE_LOG(LogTemp, Log, TEXT( "Combo Input Type : %d / Target Tag : %s / Current Index %d"), InputType, *TargetGameplayTag.ToString(), ProcessIndex);
 			++ProcessIndex;
 		}
 		else
@@ -39,5 +40,5 @@ bool FMUInputCommandList::CanConsumeInput() const
 // 모든 처리가 완료되었을 시, 처리.
 bool FMUInputCommandList::CanProcessInput() const
 {
-	return ProcessIndex == InputTypes.Num() - 1;
+	return ProcessIndex == InputTypes.Num();
 }

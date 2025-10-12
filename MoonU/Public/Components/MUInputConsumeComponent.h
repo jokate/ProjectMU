@@ -40,8 +40,8 @@ public :
 	TArray<FMUInputCommandList> AllInputCommandLists;
 	
 	// 타이머 돌리면서 인풋 관련 처리.
-	UPROPERTY()
-	TArray<ECombatInputType> InputCombatQueue;
+
+	TQueue<ECombatInputType> InputCombatQueue;
 
 	UPROPERTY(EditDefaultsOnly)
 	float InputConsumeTimeInterval = 0.2f;

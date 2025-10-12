@@ -34,19 +34,20 @@ void UMUInputConsumeComponent::ProcessConsumeInput()
 	TArray<FMUInputCommandList> TempInputCommandLists = AllInputCommandLists;
 
 	bool bHasProcessedCombo = false;
-	while ( InputCombatQueue.Num() > 0 )
+	while ( InputCombatQueue.IsEmpty() == false )
 	{
 		if ( bHasProcessedCombo == true )
 		{
 			break;
 		}
 		
-		ECombatInputType FirstInput = InputCombatQueue.Pop();
+		ECombatInputType FirstInput;
+		InputCombatQueue.Dequeue(FirstInput);
 		TArray<FMUInputCommandList> PendingToRemoveCommands;
 		
 		for ( FMUInputCommandList& InputCommandList : TempInputCommandLists )
 		{
-			if ( InputCommandList.CanProcessInput() == false )
+			if ( InputCommandList.CanConsumeInput() == false )
 			{
 				PendingToRemoveCommands.Add(InputCommandList);
 				continue;
@@ -85,6 +86,6 @@ void UMUInputConsumeComponent::MULTI_ConsumeInput_Implementation(FGameplayTag Co
 void UMUInputConsumeComponent::SendInput(ECombatInputType CombatInput)
 {
 	UE_LOG(LogTemp, Log, TEXT("UMUInputConsumeComponent::SendInput %d"), CombatInput);
-	InputCombatQueue.Add(CombatInput);	
+	InputCombatQueue.Enqueue(CombatInput);	
 }
 
