@@ -28,10 +28,6 @@ public :
 	virtual bool CanUseSkill();
 
 	virtual void CastSkill();
-	
-	virtual void ActivateSkill() override;
-
-	virtual void CancelSkill() override;
 
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 
@@ -44,7 +40,24 @@ public :
 
 	UFUNCTION()
 	void OnInterruptedCallback();
+
+#pragma region Skill State
+	virtual void ActivateSkill() override;
+	virtual void CancelSkill() override;
+	virtual FTransform GetTargetTransform() override
+	{
+		FTransform Result;
+		Result.SetLocation(TargetLocation);
+		Result.SetRotation(TargetRotation.Quaternion());
+		return Result;
+	}
 	
+	virtual FName GetSkillID() override
+	{
+		return SkillID;
+	};
+#pragma endregion
+
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;

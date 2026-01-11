@@ -31,4 +31,5 @@ public:
 public :
 	UPROPERTY()
 	TMap<FName, FGameplayAbilitySpecHandle> SkillAbilitySpec;
+	
 };

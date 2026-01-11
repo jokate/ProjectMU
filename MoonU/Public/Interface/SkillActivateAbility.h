@@ -24,4 +24,14 @@ class MOONU_API ISkillActivateAbility
 public:
 	virtual void ActivateSkill() = 0;
 	virtual void CancelSkill() = 0;
+
+	virtual FName GetSkillID()
+	{
+		return NAME_None;
+	}
+
+	virtual FTransform GetTargetTransform()
+	{
+		return FTransform();
+	}
 };

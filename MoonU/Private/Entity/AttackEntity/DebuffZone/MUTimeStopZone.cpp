@@ -39,3 +39,20 @@ void AMUTimeStopZone::OnReacted(AActor* ReactedActor)
 		
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ReactedActor, MU_EVENT_TIMESTOP, FGameplayEventData());
 }
+
+void AMUTimeStopZone::ReturnToPooling()
+{
+	for ( TWeakObjectPtr<AActor>& TargetActor : ReactedActors )
+	{
+		AActor* ReactedActor = TargetActor.Get();
+
+		if ( IsValid(ReactedActor) == false )
+		{
+			continue;
+		}
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ReactedActor, MU_EVENT_TIMESTOPEND, FGameplayEventData());
+	}
+	
+	Super::ReturnToPooling();
+}

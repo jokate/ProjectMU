@@ -18,4 +18,5 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	virtual void OnReacted(AActor* ReactedActor) override;
+	virtual void ReturnToPooling() override;
 };
