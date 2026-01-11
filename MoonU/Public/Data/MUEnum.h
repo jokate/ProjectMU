@@ -148,3 +148,14 @@ enum class ECombatInputType : uint8
 	BasicAttack,
 	Defense,
 };
+
+UENUM(BlueprintType)
+enum class ESkillType : uint8
+{
+	None,
+	Instant,
+	Indicator,
+	Charge,
+	Combo,
+	End
+};

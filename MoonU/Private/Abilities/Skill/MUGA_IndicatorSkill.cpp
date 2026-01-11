@@ -17,6 +17,9 @@ class UAbilityTask_PlayMontageAndWait;
 UMUGA_IndicatorSkill::UMUGA_IndicatorSkill()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
+	CancelAbilitiesWithTag.AddTag(MU_SKILL_INDICATOR);
+	ActivationOwnedTags.AddTag(MU_SKILL_INDICATOR);
 }
 
 void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -103,12 +106,6 @@ void UMUGA_IndicatorSkill::ActivateSkill()
 void UMUGA_IndicatorSkill::SetupReadyMontage()
 {
 	AActor* OwnerActor = GetOwningActorFromActorInfo();
-
-	FMUSkillData SkillData;
-	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) == false )
-	{
-		return;
-	}
 
 	UAnimMontage* ActiveMontage = SkillData.ReadySkillMontage.LoadSynchronous();
 

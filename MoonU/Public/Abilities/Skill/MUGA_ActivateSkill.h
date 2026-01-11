@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Data/MUEnum.h"
+#include "Data/DataTable/MUData.h"
 #include "Interface/SkillActivateAbility.h"
 #include "MUGA_ActivateSkill.generated.h"
 
+struct FMUSkillData;
 /**
  * 
  */
@@ -20,7 +23,8 @@ class MOONU_API UMUGA_ActivateSkill : public UGameplayAbility, public ISkillActi
 public :
 	
 	UMUGA_ActivateSkill();
-	
+
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
@@ -56,8 +60,17 @@ public :
 	{
 		return SkillID;
 	};
+
+	
+	void SetMontageSection(FName MontageSectionName) override;
 #pragma endregion
 
+	virtual ESkillType GetSkillType() const override { return SkillData.SkillType; }
+	
+public :
+	virtual void SetComboPressed() override { bIsComboPressed = true; }
+	virtual bool IsComboPressed() const override { return bIsComboPressed; }
+	virtual void ResetComboPressed() override { bIsComboPressed = false; }
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;
@@ -69,8 +82,14 @@ public :
 	FName SkillID = NAME_None;
 
 	UPROPERTY()
+	FMUSkillData SkillData;
+	
+	UPROPERTY()
 	FVector TargetLocation;
 
 	UPROPERTY()
 	FRotator TargetRotation;
+
+	UPROPERTY()
+	bool bIsComboPressed = false;
 };

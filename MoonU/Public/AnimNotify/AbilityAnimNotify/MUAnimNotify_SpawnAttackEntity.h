@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animation/AnimNotifies/AnimNotify.h"
+#include "MUAnimNotify_Ability.h"
 #include "MUAnimNotify_SpawnAttackEntity.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MOONU_API UMUAnimNotify_SpawnAttackEntity : public UAnimNotify
+class MOONU_API UMUAnimNotify_SpawnAttackEntity : public UMUAnimNotify_Ability
 {
 	GENERATED_BODY()
 

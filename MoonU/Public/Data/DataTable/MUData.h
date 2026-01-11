@@ -258,6 +258,9 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bUseObjectPooling == true", EditConditionHides))
 	int32 MaxCount = 1;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "SkillType")
+	ESkillType SkillType = ESkillType::None;
 };
 
 USTRUCT( BLueprintType )

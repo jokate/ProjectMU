@@ -14,6 +14,20 @@ UMUGA_ActivateSkill::UMUGA_ActivateSkill()
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
+bool UMUGA_ActivateSkill::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	FMUSkillData TempSkill;
+	if ( UMUFunctionLibrary::GetSkillData(ActorInfo->AvatarActor.Get(), SkillID, TempSkill) == false )
+	{
+		UE_LOG(LogTemp, Error, TEXT("스킬 없음!"));
+		return false;
+	}
+	
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+
 void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                           const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                           const FGameplayEventData* TriggerEventData)
@@ -29,6 +43,7 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 			ASC->ExecuteGameplayCue(GameplayCueTag);
 		}
 	}
+	UMUFunctionLibrary::GetSkillData(ActorInfo->AvatarActor.Get(), SkillID, SkillData);
 }
 
 void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
@@ -45,15 +60,11 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 		}
 	}
 
-	FMUSkillData SkillData;
-	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) )
-	{
-		IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
+	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
 	
-		if (MotionWarp != nullptr)
-		{
-			MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
-		}
+	if (MotionWarp != nullptr)
+	{
+		MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
 	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
@@ -107,6 +118,11 @@ void UMUGA_ActivateSkill::CancelSkill()
 	}
 }
 
+void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
+{
+	MontageJumpToSection(MontageSectionName);	
+}
+
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,
                                          const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
@@ -130,13 +146,7 @@ void UMUGA_ActivateSkill::SetupAnimMontage()
 	{
 		return;
 	}
-
-	FMUSkillData SkillData;
-	if ( UMUFunctionLibrary::GetSkillData( this, SkillID, SkillData) == false )
-	{
-		return;
-	}
-
+	
 	UAnimMontage* ActiveMontage = SkillData.ActiveSkillMontage.LoadSynchronous();
 
 	if ( IsValid(ActiveMontage) == false )

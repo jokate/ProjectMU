@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/MUEnum.h"
 #include "UObject/Interface.h"
 #include "SkillActivateAbility.generated.h"
 
@@ -24,6 +25,14 @@ class MOONU_API ISkillActivateAbility
 public:
 	virtual void ActivateSkill() = 0;
 	virtual void CancelSkill() = 0;
+	
+	virtual void SetComboPressed() {}
+	virtual bool IsComboPressed() const { return false; }
+	virtual void ResetComboPressed() {}
+
+	virtual void SetMontageSection(FName MontageSectionName) {}
+ 
+#pragma region Getter
 
 	virtual FName GetSkillID()
 	{
@@ -34,4 +43,30 @@ public:
 	{
 		return FTransform();
 	}
+
+	virtual ESkillType GetSkillType() const
+	{
+		return ESkillType::None;
+	}
+
+	virtual bool IsSkillCombo() const
+	{
+		return GetSkillType() == ESkillType::Combo;
+	}
+
+	virtual bool IsSkillInstant() const
+	{
+		return GetSkillType() == ESkillType::Instant;
+	}
+
+	virtual bool IsSkillIndicator() const
+	{
+		return GetSkillType() == ESkillType::Indicator;
+	}
+
+	virtual bool IsSkillCharge() const
+	{
+		return GetSkillType() == ESkillType::Charge;
+	}
+#pragma endregion Getter
 };
