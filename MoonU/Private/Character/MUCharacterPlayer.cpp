@@ -259,7 +259,7 @@ void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 	}
 }
 
-void AMUCharacterPlayer::GASInputPressed(const FGameplayTag& InputTag)
+void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 {
 	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(InputTag);
 	if (AbilSpec)
@@ -276,7 +276,7 @@ void AMUCharacterPlayer::GASInputPressed(const FGameplayTag& InputTag)
 	}
 }
 
-void AMUCharacterPlayer::GASInputReleased(const FGameplayTag& ReleasedTag)
+void AMUCharacterPlayer::GASInputReleased(const FGameplayTag ReleasedTag)
 {
 	// 태그별로 어빌리티 스펙에 등록 절차가 필요함.
 	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(ReleasedTag);
