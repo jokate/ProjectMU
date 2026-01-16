@@ -159,3 +159,11 @@ enum class ESkillType : uint8
 	Combo,
 	End
 };
+
+UENUM(BlueprintType)
+enum class EAbilityChainingType : uint8
+{
+	NONE,
+	Ability,
+	Montage
+};

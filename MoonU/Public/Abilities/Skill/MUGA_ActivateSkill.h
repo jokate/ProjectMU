@@ -13,6 +13,8 @@ struct FMUSkillData;
 /**
  * 
  */
+
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillStateChanged );
 
 UCLASS()
@@ -26,19 +28,16 @@ public :
 
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+// 스킬 사용 영역에 관한 부분.
 	virtual bool CanUseSkill();
-
 	virtual void CastSkill();
-
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
-
 	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
-
 	virtual void SetupAnimMontage();
-	
+
+	//몽타주 관련한 부분임.
 	UFUNCTION()
 	void OnCompleteCallback();
 
@@ -60,9 +59,8 @@ public :
 	{
 		return SkillID;
 	};
-
 	
-	void SetMontageSection(FName MontageSectionName) override;
+	virtual void SetMontageSection(FName MontageSectionName) override;
 #pragma endregion
 
 	virtual ESkillType GetSkillType() const override { return SkillData.SkillType; }

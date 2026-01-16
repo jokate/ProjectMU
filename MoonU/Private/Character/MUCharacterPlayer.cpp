@@ -25,6 +25,7 @@
 #include "Framework/MUPlayerController.h"
 #include "GameFramework/GameModeBase.h"
 #include "Indicator/MUIndicatorManageSubsystem.h"
+#include "Interface/SkillActivateAbility.h"
 #include "Interface/StageManager.h"
 #include "Library/MUFunctionLibrary.h"
 
@@ -261,31 +262,93 @@ void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 
 void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 {
-	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(InputTag);
-	if (AbilSpec)
+	// 현재 동작중인 어빌리티들을 끌고 오는게 좋아보임.
+	// 없다면? 차라리 여기서 태깅 처리를 들어가는게 맞다고는 봄.
+	const TArray<TWeakObjectPtr<UGameplayAbility>>& CurrentAbilities = ASC->GetCurrentActiveAbilities();
+
+	// 비어있는 경우에는 별개처리
+	if ( CurrentAbilities.IsEmpty() )
 	{
-		AbilSpec->InputPressed = true;
-		if (AbilSpec->IsActive())
+		FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(InputTag);
+		if (AbilSpec)
 		{
-			ASC->AbilitySpecInputPressed(*AbilSpec);	
-		}
-		else
+			AbilSpec->InputPressed = true;
+			if (AbilSpec->IsActive())
+			{
+				ASC->AbilitySpecInputPressed(*AbilSpec);	
+			}
+			else
+			{
+				// 액티브 되지 않은 경우에는 어찌되었던 강제적인 처리는 필요함.
+				ASC->TryActivateAbility(AbilSpec->Handle);
+			}
+		}	
+	}
+	else
+	{
+		// 현재 액티브 된 스킬이 있는 경우에는 스킬 이벤트에 대한 송신을 하나, 아닌 경우에는 기본적인 인풋 시스템 처리를 하도록 합니다.
+		// 근데 지금 상황에서는 스킬만 강제적으로 액티베이션 로직을 넣어줘서 나중에 고려할까? ( 이건 장기적으로 고민해봅시다. ) 
+		for ( TWeakObjectPtr<UGameplayAbility> CurrentAbility : CurrentAbilities)
 		{
-			ASC->TryActivateAbility(AbilSpec->Handle);
-		}
+			UGameplayAbility* Abil = CurrentAbility.Get();
+
+			if ( IsValid(Abil) == false )
+			{
+				continue;
+			}
+
+			if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
+			{
+				SkillAbil->SendInputPressedTag(InputTag);
+			}
+			/*else
+			{
+				FGameplayAbilitySpec* AbilSpec = Abil->GetCurrentAbilitySpec();
+				AbilSpec->InputPressed = true;
+				ASC->AbilitySpecInputPressed(*AbilSpec);
+			}*/
+ 		}
 	}
 }
 
 void AMUCharacterPlayer::GASInputReleased(const FGameplayTag ReleasedTag)
 {
-	// 태그별로 어빌리티 스펙에 등록 절차가 필요함.
-	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(ReleasedTag);
-	if (AbilSpec)
+	const TArray<TWeakObjectPtr<UGameplayAbility>>& CurrentAbilities = ASC->GetCurrentActiveAbilities();
+
+	// 비어있는 경우에는 별개처리
+	if ( CurrentAbilities.IsEmpty() )
 	{
-		AbilSpec->InputPressed = false;
-		if (AbilSpec->IsActive())
+		FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(ReleasedTag);
+		if (AbilSpec)
 		{
-			ASC->AbilitySpecInputReleased(*AbilSpec);
+			AbilSpec->InputPressed = false;
+			if (AbilSpec->IsActive())
+			{
+				ASC->AbilitySpecInputReleased(*AbilSpec);	
+			}
+		}	
+	}
+	else
+	{
+		for ( TWeakObjectPtr<UGameplayAbility> CurrentAbility : CurrentAbilities)
+		{
+			UGameplayAbility* Abil = CurrentAbility.Get();
+
+			if ( IsValid(Abil) == false )
+			{
+				continue;
+			}
+
+			if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
+			{
+				SkillAbil->SendInputReleasedTag(ReleasedTag);
+			}
+			/*else
+			{
+				FGameplayAbilitySpec* AbilSpec = Abil->GetCurrentAbilitySpec();
+				AbilSpec->InputPressed = true;
+				ASC->AbilitySpecInputPressed(*AbilSpec);
+			}*/
 		}
 	}
 }

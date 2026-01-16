@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Data/MUEnum.h"
 #include "UObject/Interface.h"
+#include "GameplayTags.h"
 #include "SkillActivateAbility.generated.h"
 
 // This class does not need to be modified.
@@ -31,6 +32,8 @@ public:
 	virtual void ResetComboPressed() {}
 
 	virtual void SetMontageSection(FName MontageSectionName) {}
+	virtual void SendInputPressedTag(const FGameplayTag& InputTag) {}
+	virtual void SendInputReleasedTag(const FGameplayTag& InputTag) {}
  
 #pragma region Getter
 

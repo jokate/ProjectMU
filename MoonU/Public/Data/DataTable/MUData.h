@@ -17,6 +17,8 @@
  * 
  */
 
+class UGameplayAbility;
+
 USTRUCT( BlueprintType )
 struct FMUAttributeValue
 {
@@ -37,6 +39,41 @@ struct FMUAttributeInitValues
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	TArray<FMUAttributeValue> Attributes;
+};
+
+USTRUCT(BlueprintType)
+struct FMUAbilityChainingData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability")
+	EAbilityChainingType AbilityChainingType = EAbilityChainingType::NONE;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
+		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Ability", EditConditionHides))
+	TObjectPtr<UGameplayAbility> ChainTargetAbility;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
+		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Montage", EditConditionHides))
+	TObjectPtr<UAnimMontage> MontageToPlay;
+};
+
+USTRUCT( BlueprintType )
+struct FMUAbilityStepData
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int32 AbilityStep = 0;
+
+	// 인풋에 대한 체이닝이 필요한 경우 (차지 공격 중에 구른다는 가정, 그러면 구르고 쏜다 이런 식. 아니면 몽타주로 가던가.)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TMap<FGameplayTag, FMUAbilityChainingData> InputChainingAbility;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSubclassOf<AActor> TargetToSpawnActor;
 };
 
 USTRUCT( BlueprintType )
@@ -262,8 +299,15 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "SkillType")
 	ESkillType SkillType = ESkillType::None;
-};
 
+	// 1가지 고민중.. (스킬 인풋에 관한 Granting 처리를 위해서 어떻게 동작해야 할까? )
+	// 예를 들어서 콤보 관련한 부분의 경우에는 1 / 2 / 3 이런 식 가능 기본 공격하다가 구르기하면 다른 돌진이 나간다던가... 그런게 있으면 야무치란 말이지.. )
+	// 조금 생각을 해보면 말야 일반 공격 ( 4타 / 3타 후 구르기 같은 콤보를 따로 두고 싶다면, 몽타주 섹션에 대한 처리를 하던지 아니면, 다른 어빌리티를 작동시켜야 할 듯 함 -> 연계의 기능이라면 더더.. )
+	// 또 예를 들면 구르기 중에 다른 인풋이 들어왔다고 하면, 다른 어빌리티 연계적으로 실행도 가능했으면 좋겠단 말이지..
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkillStepData")
+	FMUAbilityStepData AbilityStepData;
+};
+	
 USTRUCT( BLueprintType )
 struct FMULevelData : public FTableRowBase
 {

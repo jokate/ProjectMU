@@ -29,7 +29,25 @@ public:
 	virtual void TryCancelSkill( FName SkillID );
 	void GiveAbility(const FGameplayAbilitySpec& AbilitySpec, const FGameplayTag& InputTag);
 	FGameplayAbilitySpec* GetAbilityByInputTag(const FGameplayTag& InputGameplayTag);
+
+	// 아무래도 몽타주 어빌리티로 동작하는게 영 껄끄럽단 말이지..
+	void AddActiveAbility(UGameplayAbility* GA)
+	{
+		ActiveAbilities.AddUnique(GA);
+	}
+
+	void RemoveActiveAbility( UGameplayAbility* TargetToRemove )
+	{
+		ActiveAbilities.Remove(TargetToRemove);
+	}
+
+	const TArray<TWeakObjectPtr<UGameplayAbility>>& GetCurrentActiveAbilities() const
+	{
+		return ActiveAbilities;
+	}
+	
 protected :
+	
 	
 	virtual void AddAbilitySpecWithTag(const FGameplayTag& InputGameplayTag, FGameplayAbilitySpecHandle& AbilitySpec);
 	virtual void RemoveAbilitySpecWithTag(const FGameplayTag& InputGameplayTag)
@@ -44,4 +62,7 @@ public :
 	// Local Client Only.
 	UPROPERTY()
 	TMap<FGameplayTag, FGameplayAbilitySpecHandle> InputAbilitySpecHandle;
+
+	UPROPERTY()
+	TArray<TWeakObjectPtr<UGameplayAbility>> ActiveAbilities;
 };

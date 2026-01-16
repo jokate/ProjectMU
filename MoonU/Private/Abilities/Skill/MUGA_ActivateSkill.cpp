@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Abilities/MUAbilitySystemComponent.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Interface/MotionWarpTarget.h"
 #include "Library/MUFunctionLibrary.h"
@@ -34,7 +35,7 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	UMUAbilitySystemComponent* ASC = Cast<UMUAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo()));
 
 	if ( IsValid(ASC) == true )
 	{
@@ -42,7 +43,10 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 		{
 			ASC->ExecuteGameplayCue(GameplayCueTag);
 		}
+
+		ASC->AddActiveAbility(this);
 	}
+	
 	UMUFunctionLibrary::GetSkillData(ActorInfo->AvatarActor.Get(), SkillID, SkillData);
 }
 
@@ -50,7 +54,7 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get());
+	UMUAbilitySystemComponent* ASC = Cast<UMUAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ActorInfo->AvatarActor.Get()));
 
 	if ( IsValid(ASC) == true )
 	{
@@ -58,6 +62,8 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 		{
 			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
 		}
+
+		ASC->RemoveActiveAbility(this);
 	}
 
 	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
