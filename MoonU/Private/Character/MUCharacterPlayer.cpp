@@ -299,7 +299,7 @@ void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 
 			if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
 			{
-				SkillAbil->SendInputPressedTag(InputTag);
+				SkillAbil->ReceivePressedTag(InputTag);
 			}
 			/*else
 			{
@@ -341,7 +341,7 @@ void AMUCharacterPlayer::GASInputReleased(const FGameplayTag ReleasedTag)
 
 			if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
 			{
-				SkillAbil->SendInputReleasedTag(ReleasedTag);
+				SkillAbil->ReceiveReleasedTag(ReleasedTag);
 			}
 			/*else
 			{

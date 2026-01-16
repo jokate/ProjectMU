@@ -9,6 +9,7 @@
 #include "Interface/SkillActivateAbility.h"
 #include "MUGA_ActivateSkill.generated.h"
 
+class UAbilityTask_PlayMontageAndWait;
 struct FMUSkillData;
 /**
  * 
@@ -35,7 +36,7 @@ public :
 	virtual void CastSkill();
 	virtual void SkillTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
 	virtual void SkillUnTriggered( const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo );
-	virtual void SetupAnimMontage();
+	virtual void SetupAnimMontage(UAnimMontage* TargetToPlayMontage);
 
 	//몽타주 관련한 부분임.
 	UFUNCTION()
@@ -69,25 +70,28 @@ public :
 	virtual void SetComboPressed() override { bIsComboPressed = true; }
 	virtual bool IsComboPressed() const override { return bIsComboPressed; }
 	virtual void ResetComboPressed() override { bIsComboPressed = false; }
+
+	virtual void ReceivePressedTag(const FGameplayTag& InputTag) override;
+	virtual void ReceiveReleasedTag(const FGameplayTag& InputTag) override;
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;
-
 	UPROPERTY( BlueprintAssignable )
 	FOnSkillStateChanged OnSkillStateChanged;
-	
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
 
-	UPROPERTY()
-	FMUSkillData SkillData;
 	
 	UPROPERTY()
+	FMUSkillData SkillData;
+	UPROPERTY()
 	FVector TargetLocation;
-
 	UPROPERTY()
 	FRotator TargetRotation;
-
 	UPROPERTY()
 	bool bIsComboPressed = false;
+	UPROPERTY()
+	int32 SkillStepCount = 0;
+	UPROPERTY()
+	TWeakObjectPtr<UAbilityTask_PlayMontageAndWait> Task_PlayMontageAndWait;
 };

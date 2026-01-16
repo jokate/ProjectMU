@@ -52,7 +52,7 @@ public :
 		
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
 		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Ability", EditConditionHides))
-	TObjectPtr<UGameplayAbility> ChainTargetAbility;
+	TSubclassOf<UGameplayAbility> ChainTargetAbility;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
 		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Montage", EditConditionHides))
@@ -65,9 +65,6 @@ struct FMUAbilityStepData
 	GENERATED_BODY()
 
 public :
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	int32 AbilityStep = 0;
-
 	// 인풋에 대한 체이닝이 필요한 경우 (차지 공격 중에 구른다는 가정, 그러면 구르고 쏜다 이런 식. 아니면 몽타주로 가던가.)
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<FGameplayTag, FMUAbilityChainingData> InputChainingAbility;
@@ -243,6 +240,12 @@ struct FMUSkillData : public FTableRowBase
 	GENERATED_BODY()
 
 public :
+	FMUAbilityStepData* GetStepData(int32 StepID)
+	{
+		return AbilityStepData.Find(StepID);
+	}
+	
+public :
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool bUseIndicator = false;
 	
@@ -305,7 +308,7 @@ public :
 	// 조금 생각을 해보면 말야 일반 공격 ( 4타 / 3타 후 구르기 같은 콤보를 따로 두고 싶다면, 몽타주 섹션에 대한 처리를 하던지 아니면, 다른 어빌리티를 작동시켜야 할 듯 함 -> 연계의 기능이라면 더더.. )
 	// 또 예를 들면 구르기 중에 다른 인풋이 들어왔다고 하면, 다른 어빌리티 연계적으로 실행도 가능했으면 좋겠단 말이지..
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkillStepData")
-	FMUAbilityStepData AbilityStepData;
+	TMap<int32, FMUAbilityStepData> AbilityStepData;
 };
 	
 USTRUCT( BLueprintType )

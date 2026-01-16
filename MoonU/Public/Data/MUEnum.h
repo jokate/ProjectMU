@@ -165,5 +165,6 @@ enum class EAbilityChainingType : uint8
 {
 	NONE,
 	Ability,
-	Montage
+	Montage,
+	SetCombo,
 };

@@ -108,7 +108,14 @@ void UMUGA_ActivateSkill::ActivateSkill()
 	ApplyCost( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
 	ApplyCooldown( CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo );
 
-	SetupAnimMontage();
+	UAnimMontage* ActiveMontage = SkillData.ActiveSkillMontage.LoadSynchronous();
+
+	if ( IsValid(ActiveMontage) == false )
+	{
+		return;
+	}
+	
+	SetupAnimMontage(ActiveMontage);
 	
 	if ( OnSkillStateChanged.IsBound() == true )
 	{
@@ -129,6 +136,63 @@ void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
 	MontageJumpToSection(MontageSectionName);	
 }
 
+// 보통 콤보의 경우에는 특정 상황 중에 눌렀다 뗐따 눌렀다 뗐다 하지 않나..?
+void UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
+{
+	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
+	
+	if ( StepData == nullptr )
+	{
+		return;
+	}
+	
+	FMUAbilityChainingData* InputChainingData = StepData->InputChainingAbility.Find(InputTag);
+
+	if ( InputChainingData == nullptr )
+	{
+		return;
+	}
+
+	// 만약 체이닝할 수 있는 경우
+	switch (InputChainingData->AbilityChainingType)
+	{
+	case EAbilityChainingType::Ability :
+		{
+			// 연계할 어빌리티를 트리거 한다.
+			UAbilitySystemComponent* ASC = GetAbilitySystemComponentFromActorInfo();
+			if ( IsValid(ASC) == true )
+			{
+				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(InputChainingData->ChainTargetAbility);
+
+				if ( AbilitySpec != nullptr && 	ASC->TryActivateAbility(AbilitySpec->Handle))
+				{
+					EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+				}
+			}
+			break;
+		}
+	case EAbilityChainingType::Montage :
+		{
+			// 연계할 새로운 몽타주를 재생한다.
+			SetupAnimMontage(InputChainingData->MontageToPlay);
+			break;
+		}
+	case EAbilityChainingType::SetCombo :
+		{
+			bIsComboPressed = true;
+			break;
+		}
+	default :
+		break;
+	}
+}
+
+// 얘는 우얄까.. 조준 같은 경우에는 조준이 끝났다! 라는 사실을 알리기는 해야 함.. 차지 공격의 경우에는 차징중... 똭! 이렇게 들어가야 하고 말이지..
+void UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
+{
+	ISkillActivateAbility::ReceiveReleasedTag(InputTag);
+}
+
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,
                                          const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
@@ -142,38 +206,38 @@ void UMUGA_ActivateSkill::SkillUnTriggered(const FGameplayAbilitySpecHandle Hand
 	EndAbility( Handle, ActorInfo, ActivationInfo, true, true );
 }
 
-void UMUGA_ActivateSkill::SetupAnimMontage()
+void UMUGA_ActivateSkill::SetupAnimMontage(UAnimMontage* TargetToPlayMontage)
 {
 	AActor* OwnerActor = GetOwningActorFromActorInfo();
 	
 	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor);
 	
-	if (MotionWarp == nullptr)
+	if (MotionWarp == nullptr || IsValid(TargetToPlayMontage) == false )
 	{
 		return;
 	}
-	
-	UAnimMontage* ActiveMontage = SkillData.ActiveSkillMontage.LoadSynchronous();
 
-	if ( IsValid(ActiveMontage) == false )
+	// 태스크 처리 되고 있는 부분을 리셋.
+	if ( Task_PlayMontageAndWait.IsValid() ) 
 	{
-		return;
-	} 
+		Task_PlayMontageAndWait->EndTask();
+		Task_PlayMontageAndWait = nullptr;
+	}
 	
-	UAbilityTask_PlayMontageAndWait* NewTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, SkillID, ActiveMontage,
+	Task_PlayMontageAndWait = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, SkillID, TargetToPlayMontage,
 		1.0f, NAME_None, true );
 	
-	NewTask->OnCompleted.AddDynamic(this, &UMUGA_ActivateSkill::OnCompleteCallback);
-	NewTask->OnInterrupted.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
-	NewTask->OnCancelled.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
-	NewTask->OnBlendOut.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+	Task_PlayMontageAndWait->OnCompleted.AddDynamic(this, &UMUGA_ActivateSkill::OnCompleteCallback);
+	Task_PlayMontageAndWait->OnInterrupted.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+	Task_PlayMontageAndWait->OnCancelled.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
+	Task_PlayMontageAndWait->OnBlendOut.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
 
 	if ( SkillData.bUseMotionWarp == true)
 	{
 		MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation );	
 	}
 	
-	NewTask->ReadyForActivation();
+	Task_PlayMontageAndWait->ReadyForActivation();
 }
 
 void UMUGA_ActivateSkill::OnCompleteCallback()
