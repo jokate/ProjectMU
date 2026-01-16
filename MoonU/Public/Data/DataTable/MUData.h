@@ -60,8 +60,9 @@ struct FTagByInput
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
 	FGameplayTag InputTag;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
-	int32 InputID = 0;
+	// Deprecated ID 기반으로 동작하는 방식은 이제 없습니다.
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSetter)
+	int32 InputID = 0;*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputAbility)
 	TSubclassOf<class UGameplayAbility> InputAbility;

@@ -244,12 +244,13 @@ void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 			return;
 		}
 
+		// 결국에 여기를 변경해야 함. (인풋 자체에 대한 부분 처리는 옳다고 보나, ID 기반의 처리는 그닥 매력적이지는 않은 듯.. )
+		// 2026-01-16 지금 노트북이 안돌아가는 관계로 선제적으로 예상하에 구현한다.
+		
 		for ( FTagByInput& InputByTag : InputMapper.InputByTags )
 		{
 			FGameplayAbilitySpec StartSpec(InputByTag.InputAbility);
-			StartSpec.InputID = InputByTag.InputID;
-			ASC->GiveAbility(StartSpec);
-			
+			ASC->GiveAbility(StartSpec, InputByTag.InputTag);
 			UMUFunctionLibrary::BindInputActionByTag(this, InputID, InputByTag);
 		}
 
@@ -258,34 +259,33 @@ void AMUCharacterPlayer::SetupGASInputComponent( int32 InputID )
 	}
 }
 
-void AMUCharacterPlayer::GASInputPressed(int32 InputId)
+void AMUCharacterPlayer::GASInputPressed(const FGameplayTag& InputTag)
 {
-	FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputId);
-
-	if (Spec)
+	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(InputTag);
+	if (AbilSpec)
 	{
-		Spec->InputPressed = true;
-		if (Spec->IsActive())
+		AbilSpec->InputPressed = true;
+		if (AbilSpec->IsActive())
 		{
-			ASC->AbilitySpecInputPressed(*Spec);	
+			ASC->AbilitySpecInputPressed(*AbilSpec);	
 		}
 		else
 		{
-			ASC->TryActivateAbility(Spec->Handle);
+			ASC->TryActivateAbility(AbilSpec->Handle);
 		}
 	}
 }
 
-void AMUCharacterPlayer::GASInputReleased(int32 InputId)
+void AMUCharacterPlayer::GASInputReleased(const FGameplayTag& ReleasedTag)
 {
-	FGameplayAbilitySpec* Spec = ASC->FindAbilitySpecFromInputID(InputId);
-
-	if (Spec)
+	// 태그별로 어빌리티 스펙에 등록 절차가 필요함.
+	FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(ReleasedTag);
+	if (AbilSpec)
 	{
-		Spec->InputPressed = false;
-		if (Spec->IsActive())
+		AbilSpec->InputPressed = false;
+		if (AbilSpec->IsActive())
 		{
-			ASC->AbilitySpecInputReleased(*Spec);
+			ASC->AbilitySpecInputReleased(*AbilSpec);
 		}
 	}
 }

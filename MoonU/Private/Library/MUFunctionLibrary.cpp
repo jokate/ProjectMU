@@ -302,14 +302,14 @@ bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlaye
 		case Pressed:
 			{
 				EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig,  TagByInput.InputTag,
-					InputFunctionalType.TriggerEvent, CharacterPlayer, &AMUCharacterPlayer::GASInputPressed, TagByInput.InputID);
+					InputFunctionalType.TriggerEvent, CharacterPlayer, &AMUCharacterPlayer::GASInputPressed, TagByInput.InputTag);
 				break;
 			}
 
 		case Released:
 			{
 				EnhancedInputComponent->BindActionByTag(InputMapper.InputConfig, TagByInput.InputTag,
-					InputFunctionalType.TriggerEvent, CharacterPlayer, &AMUCharacterPlayer::GASInputReleased, TagByInput.InputID);
+					InputFunctionalType.TriggerEvent, CharacterPlayer, &AMUCharacterPlayer::GASInputReleased, TagByInput.InputTag);
 				break;
 			}
 		default:

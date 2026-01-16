@@ -27,9 +27,21 @@ public:
 	virtual void TryTriggerSkill( FName SkillID );
 
 	virtual void TryCancelSkill( FName SkillID );
-
+	void GiveAbility(const FGameplayAbilitySpec& AbilitySpec, const FGameplayTag& InputTag);
+	FGameplayAbilitySpec* GetAbilityByInputTag(const FGameplayTag& InputGameplayTag);
+protected :
+	
+	virtual void AddAbilitySpecWithTag(const FGameplayTag& InputGameplayTag, FGameplayAbilitySpecHandle& AbilitySpec);
+	virtual void RemoveAbilitySpecWithTag(const FGameplayTag& InputGameplayTag)
+	{
+		InputAbilitySpecHandle.Remove(InputGameplayTag);
+	}
+	
 public :
 	UPROPERTY()
 	TMap<FName, FGameplayAbilitySpecHandle> SkillAbilitySpec;
-	
+
+	// Local Client Only.
+	UPROPERTY()
+	TMap<FGameplayTag, FGameplayAbilitySpecHandle> InputAbilitySpecHandle;
 };

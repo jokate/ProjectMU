@@ -45,9 +45,9 @@ public:
 
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f) override;
 	
-	void GASInputPressed(int32 InputId);
+	void GASInputPressed(const FGameplayTag& InputTag);
 
-	void GASInputReleased(int32 InputId);
+	void GASInputReleased(const FGameplayTag& ReleasedTag);
 
 	virtual const int32 GetPlayerCharacterID() override { return GetCharacterID(); }
 
