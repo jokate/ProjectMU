@@ -72,6 +72,9 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
 	}
+
+	SkillStepCount = 0;
+	bIsComboPressed = false;
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
@@ -133,7 +136,18 @@ void UMUGA_ActivateSkill::CancelSkill()
 
 void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
 {
-	MontageJumpToSection(MontageSectionName);	
+	MontageJumpToSection(MontageSectionName);
+	bIsComboPressed = false;
+
+	SkillStepCount++;
+	
+	AActor* OwnerActor = GetOwningActorFromActorInfo();
+	
+	if (IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(OwnerActor)  )
+	{
+		if ( SkillData.bUseMotionWarp ) 
+			MotionWarp->SetMotionWarp(SkillData.MotionWarpName, SkillData.MotionWarpType);
+	}
 }
 
 // 보통 콤보의 경우에는 특정 상황 중에 눌렀다 뗐따 눌렀다 뗐다 하지 않나..?
