@@ -71,8 +71,8 @@ public :
 	virtual bool IsComboPressed() const override { return bIsComboPressed; }
 	virtual void ResetComboPressed() override { bIsComboPressed = false; }
 
-	virtual void ReceivePressedTag(const FGameplayTag& InputTag) override;
-	virtual void ReceiveReleasedTag(const FGameplayTag& InputTag) override;
+	virtual bool ReceivePressedTag(const FGameplayTag& InputTag) override;
+	virtual bool ReceiveReleasedTag(const FGameplayTag& InputTag) override;
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;

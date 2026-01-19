@@ -266,8 +266,28 @@ void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 	// 없다면? 차라리 여기서 태깅 처리를 들어가는게 맞다고는 봄.
 	const TArray<TWeakObjectPtr<UGameplayAbility>>& CurrentAbilities = ASC->GetCurrentActiveAbilities();
 
+	
+	// 현재 액티브 된 스킬이 있는 경우에는 스킬 이벤트에 대한 송신을 하나, 아닌 경우에는 기본적인 인풋 시스템 처리를 하도록 합니다.
+	// 근데 지금 상황에서는 스킬만 강제적으로 액티베이션 로직을 넣어줘서 나중에 고려할까? ( 이건 장기적으로 고민해봅시다. )
+	bool TotalResult = false;
+	for ( TWeakObjectPtr<UGameplayAbility> CurrentAbility : CurrentAbilities)
+	{
+		UGameplayAbility* Abil = CurrentAbility.Get();
+
+		if ( IsValid(Abil) == false )
+		{
+			continue;
+		}
+
+		if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
+		{
+			//1개라도 소모했다면 이 외의 처리는 안되도 된다.
+			TotalResult |= SkillAbil->ReceivePressedTag(InputTag);
+		}
+	}
+	
 	// 비어있는 경우에는 별개처리
-	if ( CurrentAbilities.IsEmpty() )
+	if ( !TotalResult )
 	{
 		FGameplayAbilitySpec* AbilSpec = ASC->GetAbilityByInputTag(InputTag);
 		if (AbilSpec)
@@ -283,31 +303,6 @@ void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 				ASC->TryActivateAbility(AbilSpec->Handle);
 			}
 		}	
-	}
-	else
-	{
-		// 현재 액티브 된 스킬이 있는 경우에는 스킬 이벤트에 대한 송신을 하나, 아닌 경우에는 기본적인 인풋 시스템 처리를 하도록 합니다.
-		// 근데 지금 상황에서는 스킬만 강제적으로 액티베이션 로직을 넣어줘서 나중에 고려할까? ( 이건 장기적으로 고민해봅시다. ) 
-		for ( TWeakObjectPtr<UGameplayAbility> CurrentAbility : CurrentAbilities)
-		{
-			UGameplayAbility* Abil = CurrentAbility.Get();
-
-			if ( IsValid(Abil) == false )
-			{
-				continue;
-			}
-
-			if ( ISkillActivateAbility* SkillAbil = Cast<ISkillActivateAbility>(Abil))
-			{
-				SkillAbil->ReceivePressedTag(InputTag);
-			}
-			/*else
-			{
-				FGameplayAbilitySpec* AbilSpec = Abil->GetCurrentAbilitySpec();
-				AbilSpec->InputPressed = true;
-				ASC->AbilitySpecInputPressed(*AbilSpec);
-			}*/
- 		}
 	}
 }
 

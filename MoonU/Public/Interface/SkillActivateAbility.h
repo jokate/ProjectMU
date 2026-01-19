@@ -32,8 +32,8 @@ public:
 	virtual void ResetComboPressed() {}
 
 	virtual void SetMontageSection(FName MontageSectionName) {}
-	virtual void ReceivePressedTag(const FGameplayTag& InputTag) {}
-	virtual void ReceiveReleasedTag(const FGameplayTag& InputTag) {}
+	virtual bool ReceivePressedTag(const FGameplayTag& InputTag) { return false; }
+	virtual bool ReceiveReleasedTag(const FGameplayTag& InputTag) { return false; }
  
 #pragma region Getter
 

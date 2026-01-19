@@ -151,20 +151,20 @@ void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
 }
 
 // 보통 콤보의 경우에는 특정 상황 중에 눌렀다 뗐따 눌렀다 뗐다 하지 않나..?
-void UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
+bool UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
 {
 	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
 	
 	if ( StepData == nullptr )
 	{
-		return;
+		return false;
 	}
 	
 	FMUAbilityChainingData* InputChainingData = StepData->InputChainingAbility.Find(InputTag);
 
 	if ( InputChainingData == nullptr )
 	{
-		return;
+		return false;
 	}
 
 	// 만약 체이닝할 수 있는 경우
@@ -196,15 +196,19 @@ void UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
 			bIsComboPressed = true;
 			break;
 		}
+	case EAbilityChainingType::NONE:
+		break;
 	default :
 		break;
 	}
+
+	return true;
 }
 
 // 얘는 우얄까.. 조준 같은 경우에는 조준이 끝났다! 라는 사실을 알리기는 해야 함.. 차지 공격의 경우에는 차징중... 똭! 이렇게 들어가야 하고 말이지..
-void UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
+bool UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
 {
-	ISkillActivateAbility::ReceiveReleasedTag(InputTag);
+	return true;
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,
