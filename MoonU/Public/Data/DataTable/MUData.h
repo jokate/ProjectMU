@@ -284,11 +284,11 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
 	bool bUseMotionWarp = false;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active", meta = (EditCondition = "bUseMotionWarp == true", EditConditionHides))
 	FName MotionWarpName = NAME_None;
 
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active", meta = (EditCondition = "bUseMotionWarp == true", EditConditionHides))
 	TEnumAsByte<EMotionWarpType> MotionWarpType = EMotionWarpType::NoneMotionWarp;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Ready")

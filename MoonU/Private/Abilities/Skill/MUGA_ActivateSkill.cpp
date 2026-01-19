@@ -68,7 +68,7 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 
 	IMotionWarpTarget* MotionWarp = Cast<IMotionWarpTarget>(ActorInfo->OwnerActor.Get());
 	
-	if (MotionWarp != nullptr)
+	if (MotionWarp != nullptr && SkillData.bUseMotionWarp )
 	{
 		MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
 	}
@@ -252,7 +252,9 @@ void UMUGA_ActivateSkill::SetupAnimMontage(UAnimMontage* TargetToPlayMontage)
 
 	if ( SkillData.bUseMotionWarp == true)
 	{
-		MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation );	
+		SkillData.bUseIndicator ?
+			MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation )
+			: MotionWarp->SetMotionWarp(SkillData.MotionWarpName, SkillData.MotionWarpType);
 	}
 	
 	Task_PlayMontageAndWait->ReadyForActivation();
