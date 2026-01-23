@@ -73,6 +73,10 @@ public :
 
 	virtual bool ReceivePressedTag(const FGameplayTag& InputTag) override;
 	virtual bool ReceiveReleasedTag(const FGameplayTag& InputTag) override;
+
+	void OnStepTimeComplete();
+	virtual void SetupAbilityStepTimer();
+
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;

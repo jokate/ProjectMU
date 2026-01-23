@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/MUAbilitySystemComponent.h"
+#include "Abilities/AT/MUAT_SetTimerAndWait.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Interface/MotionWarpTarget.h"
 #include "Library/MUFunctionLibrary.h"
@@ -48,6 +49,7 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	}
 	
 	UMUFunctionLibrary::GetSkillData(ActorInfo->AvatarActor.Get(), SkillID, SkillData);
+	SetupAbilityStepTimer();
 }
 
 void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
@@ -209,6 +211,37 @@ bool UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
 bool UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
 {
 	return true;
+}
+
+void UMUGA_ActivateSkill::OnStepTimeComplete()
+{
+	++SkillStepCount;
+
+	SetupAbilityStepTimer();
+}
+
+void UMUGA_ActivateSkill::SetupAbilityStepTimer()
+{
+	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
+	
+	if ( StepData == nullptr )
+	{
+		return;
+	} 
+	
+	// 딜레이 옵션 없으면 굳이 미실행.
+	if ( StepData->WaitTimeDelayToEndStep <= 0.f )
+	{
+		return;
+	}
+	
+	UMUAT_SetTimerAndWait* TimerWait = UMUAT_SetTimerAndWait::CreateTask(this, StepData->WaitTimeDelayToEndStep);
+	
+	if ( IsValid(TimerWait) )
+	{
+		TimerWait->OnFinished.BindUObject(this, &UMUGA_ActivateSkill::OnStepTimeComplete);
+		TimerWait->ReadyForActivation();
+	}
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,

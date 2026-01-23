@@ -71,6 +71,13 @@ public :
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<AActor> TargetToSpawnActor;
+	
+	// 스탭에 대한 증가 처리가 필요가 없는 경우에는 그냥 ㅃㅇ
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	float WaitTimeDelayToEndStep = 0.f;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bNeedToStepUp = false;
 };
 
 USTRUCT( BlueprintType )
