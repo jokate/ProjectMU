@@ -13,4 +13,13 @@ UCLASS()
 class MOONU_API AMUWorldSetting : public AWorldSettings
 {
 	GENERATED_BODY()
+	
+public :
+
+#pragma region StagePool
+	
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	FName StageName = NAME_None;
+
+#pragma endregion 
 };

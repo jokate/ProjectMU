@@ -2,6 +2,8 @@
 
 
 #include "Components/StageManagingComponent.h"
+
+#include "DevSetting/MUWorldSetting.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Library/MUFunctionLibrary.h"
 
@@ -45,8 +47,15 @@ bool UStageManagingComponent::IsStageCleared(FName StageID)
 
 void UStageManagingComponent::SetupStage()
 {
+	AMUWorldSetting* MUWorldSetting = Cast<AMUWorldSetting>(GetWorld()->GetWorldSettings());
+		
+	if ( IsValid(MUWorldSetting) == false )
+	{
+		return;
+	}
+	
 	FMUStageInfo StageInfo;
-	if ( UMUFunctionLibrary::GetStageInfoData( this, StageName, StageInfo) == false )
+	if ( UMUFunctionLibrary::GetStageInfoData( this, MUWorldSetting->StageName, StageInfo) == false )
 	{
 		return;
 	}

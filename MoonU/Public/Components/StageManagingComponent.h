@@ -75,7 +75,6 @@ public :
 	FOnStageEvents StageEvents;
 
 public :
-	
 	UPROPERTY( VisibleAnywhere )
 	TMap<FName, int32> StageCount;
 
@@ -103,7 +102,7 @@ public :
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
 	FName StageName = NAME_None;
 	
-	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	UPROPERTY( BlueprintReadOnly )
 	TArray<FStagePoolingData> StagePools;
 
 #pragma endregion 
