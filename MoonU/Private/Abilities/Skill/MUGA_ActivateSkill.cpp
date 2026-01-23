@@ -215,9 +215,22 @@ bool UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
 
 void UMUGA_ActivateSkill::OnStepTimeComplete()
 {
-	++SkillStepCount;
-
-	SetupAbilityStepTimer();
+	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
+	
+	if ( StepData == nullptr )
+	{
+		return;
+	}
+	
+	if ( StepData->bNeedToStepUp )
+	{
+		++SkillStepCount;
+		SetupAbilityStepTimer();	
+	}
+	else
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
 }
 
 void UMUGA_ActivateSkill::SetupAbilityStepTimer()
