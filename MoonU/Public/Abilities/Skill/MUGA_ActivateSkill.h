@@ -7,6 +7,7 @@
 #include "Data/MUEnum.h"
 #include "Data/DataTable/MUData.h"
 #include "Interface/SkillActivateAbility.h"
+#include "StructUtils/InstancedStruct.h"
 #include "MUGA_ActivateSkill.generated.h"
 
 class UAbilityTask_PlayMontageAndWait;
@@ -14,6 +15,15 @@ struct FMUSkillData;
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FMUInputStepData
+{
+	GENERATED_BODY()
+	
+public : 
+	UPROPERTY(EditAnywhere, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	TArray<FInstancedStruct> InstancedStructContainer;
+};
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillStateChanged );
@@ -76,6 +86,10 @@ public :
 
 	void OnStepTimeComplete();
 	virtual void SetupAbilityStepTimer();
+	virtual void TriggerAbility(TSubclassOf<UGameplayAbility> AbilityClass);
+protected : 
+	
+	bool ProcessInput(bool bIsPressed, const FGameplayTag& InputTag);
 
 public :
 	UPROPERTY(EditDefaultsOnly)
@@ -84,7 +98,12 @@ public :
 	FOnSkillStateChanged OnSkillStateChanged;
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
-
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	TMap<int32, FMUInputStepData> InputPressedFunctor;
+	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	TMap<int32, FMUInputStepData> InputReleasedFunctor;
+	
 	
 	UPROPERTY()
 	FMUSkillData SkillData;

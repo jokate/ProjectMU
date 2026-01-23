@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/MUAbilitySystemComponent.h"
+#include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
 #include "Abilities/AT/MUAT_SetTimerAndWait.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Interface/MotionWarpTarget.h"
@@ -155,62 +156,13 @@ void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
 // 보통 콤보의 경우에는 특정 상황 중에 눌렀다 뗐따 눌렀다 뗐다 하지 않나..?
 bool UMUGA_ActivateSkill::ReceivePressedTag(const FGameplayTag& InputTag)
 {
-	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
-	
-	if ( StepData == nullptr )
-	{
-		return false;
-	}
-	
-	FMUAbilityChainingData* InputChainingData = StepData->InputChainingAbility.Find(InputTag);
-
-	if ( InputChainingData == nullptr )
-	{
-		return false;
-	}
-
-	// 만약 체이닝할 수 있는 경우
-	switch (InputChainingData->AbilityChainingType)
-	{
-	case EAbilityChainingType::Ability :
-		{
-			// 연계할 어빌리티를 트리거 한다.
-			UAbilitySystemComponent* ASC = GetAbilitySystemComponentFromActorInfo();
-			if ( IsValid(ASC) == true )
-			{
-				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(InputChainingData->ChainTargetAbility);
-
-				if ( AbilitySpec != nullptr && 	ASC->TryActivateAbility(AbilitySpec->Handle))
-				{
-					EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-				}
-			}
-			break;
-		}
-	case EAbilityChainingType::Montage :
-		{
-			// 연계할 새로운 몽타주를 재생한다.
-			SetupAnimMontage(InputChainingData->MontageToPlay);
-			break;
-		}
-	case EAbilityChainingType::SetCombo :
-		{
-			bIsComboPressed = true;
-			break;
-		}
-	case EAbilityChainingType::NONE:
-		break;
-	default :
-		break;
-	}
-
-	return true;
+	return ProcessInput(true, InputTag);
 }
 
 // 얘는 우얄까.. 조준 같은 경우에는 조준이 끝났다! 라는 사실을 알리기는 해야 함.. 차지 공격의 경우에는 차징중... 똭! 이렇게 들어가야 하고 말이지..
 bool UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
 {
-	return true;
+	return ProcessInput(false, InputTag);
 }
 
 void UMUGA_ActivateSkill::OnStepTimeComplete()
@@ -225,6 +177,12 @@ void UMUGA_ActivateSkill::OnStepTimeComplete()
 	if ( StepData->bNeedToStepUp )
 	{
 		++SkillStepCount;
+		// 몽타주 점프.
+		if ( StepData->JumpToMontageSection != NAME_None )
+		{
+			SetMontageSection(StepData->JumpToMontageSection);
+		}
+		
 		SetupAbilityStepTimer();	
 	}
 	else
@@ -255,6 +213,51 @@ void UMUGA_ActivateSkill::SetupAbilityStepTimer()
 		TimerWait->OnFinished.BindUObject(this, &UMUGA_ActivateSkill::OnStepTimeComplete);
 		TimerWait->ReadyForActivation();
 	}
+}
+
+void UMUGA_ActivateSkill::TriggerAbility(TSubclassOf<UGameplayAbility> AbilityClass)
+{
+	// 연계할 어빌리티를 트리거 한다.
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponentFromActorInfo();
+	if ( IsValid(ASC) == true )
+	{
+		FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(AbilityClass);
+
+		if ( AbilitySpec != nullptr && 	ASC->TryActivateAbility(AbilitySpec->Handle))
+		{
+			EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+		}
+	}
+}
+
+bool UMUGA_ActivateSkill::ProcessInput(bool bIsPressed, const FGameplayTag& InputTag)
+{
+	bool bIsProcessed = false;
+	
+	TMap<int32, FMUInputStepData>& Functor = bIsPressed ? InputPressedFunctor : InputReleasedFunctor;
+	
+	FMUInputStepData* StepData = Functor.Find(SkillStepCount);
+	if ( StepData == nullptr )
+	{
+		return false;
+	}
+	
+	for ( FInstancedStruct& PressFunctor : StepData->InstancedStructContainer)
+	{
+		FAbilityInputActionBase* AbilityInputActionBase = PressFunctor.GetMutablePtr<FAbilityInputActionBase>();
+		
+		if ( AbilityInputActionBase == nullptr )
+		{
+			continue;
+		}
+		
+		if ( AbilityInputActionBase->IsSatisfiedInput(InputTag) )
+		{
+			bIsProcessed = AbilityInputActionBase->OnInputEventCallback(this);	
+		}
+	}
+	
+	return bIsProcessed;
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,

@@ -78,6 +78,10 @@ public :
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	bool bNeedToStepUp = false;
+	
+	// 생각해보니까 차징 공격할 때 몽타주 점핑 필요할 거 같음.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FName JumpToMontageSection = NAME_None;
 };
 
 USTRUCT( BlueprintType )
