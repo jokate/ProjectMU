@@ -4,20 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "StructUtils/InstancedStruct.h"
 #include "UObject/Object.h"
 #include "MUAbilityInputActionData.generated.h"
 
 /**
  * 
  */
-#define RETURN_FALSE_IF_INVALID(Obj) \
-if (!IsValid(Obj))               \
-{                                \
-	return false;                \
-}
 
 class UGameplayAbility;
 class UMUGA_ActivateSkill;
+
+USTRUCT(BlueprintType)
+struct FMUInputStepData
+{
+	GENERATED_BODY()
+	
+public : 
+	UPROPERTY(EditAnywhere, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	TArray<FInstancedStruct> InstancedStructContainer;
+};
 
 USTRUCT(BlueprintType)
 struct FAbilityInputActionBase

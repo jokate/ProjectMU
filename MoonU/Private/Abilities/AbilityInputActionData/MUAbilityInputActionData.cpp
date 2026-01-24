@@ -2,6 +2,8 @@
 
 
 #include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
+
+#include "MUDefines.h"
 #include "Abilities/Skill/MUGA_ActivateSkill.h"
 
 bool FAbilityInputActionBase::IsSatisfiedInput(const FGameplayTag& SkillInputTag)

@@ -9,7 +9,7 @@
 /**
  * 
  */
-DECLARE_DELEGATE(FOnTimerFinished);
+DECLARE_DELEGATE_OneParam(FOnTimerFinished, bool);
 
 UCLASS()
 class MOONU_API UMUAT_SetTimerAndWait : public UAbilityTask
@@ -17,7 +17,7 @@ class MOONU_API UMUAT_SetTimerAndWait : public UAbilityTask
 	GENERATED_BODY()
 	
 public :
-	static UMUAT_SetTimerAndWait* CreateTask(UGameplayAbility* TargetAbility, float TimerToAction);
+	static UMUAT_SetTimerAndWait* CreateTask(UGameplayAbility* TargetAbility, float TimerToAction, bool bInNeedToIncrementStep);
 
 	void OnTimerEnd();
 	virtual void Activate() override;
@@ -27,4 +27,5 @@ public :
 	FTimerHandle WaitTimeHandle;
 	
 	float TimeToWait = 0.f;
+	bool bNeedToIncrementStep = false;
 };

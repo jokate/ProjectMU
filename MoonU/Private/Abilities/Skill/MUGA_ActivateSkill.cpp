@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
+#include "Abilities/AbilityInputActionData/MUAbilityStepAction.h"
 #include "Abilities/AT/MUAT_SetTimerAndWait.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Interface/MotionWarpTarget.h"
@@ -50,7 +51,7 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	}
 	
 	UMUFunctionLibrary::GetSkillData(ActorInfo->AvatarActor.Get(), SkillID, SkillData);
-	SetupAbilityStepTimer();
+	ProcessStep();
 }
 
 void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
@@ -141,8 +142,6 @@ void UMUGA_ActivateSkill::SetMontageSection(FName MontageSectionName)
 {
 	MontageJumpToSection(MontageSectionName);
 	bIsComboPressed = false;
-
-	SkillStepCount++;
 	
 	AActor* OwnerActor = GetOwningActorFromActorInfo();
 	
@@ -165,7 +164,7 @@ bool UMUGA_ActivateSkill::ReceiveReleasedTag(const FGameplayTag& InputTag)
 	return ProcessInput(false, InputTag);
 }
 
-void UMUGA_ActivateSkill::OnStepTimeComplete()
+void UMUGA_ActivateSkill::OnStepTimeComplete(bool bNeedToIncrement)
 {
 	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
 	
@@ -174,16 +173,10 @@ void UMUGA_ActivateSkill::OnStepTimeComplete()
 		return;
 	}
 	
-	if ( StepData->bNeedToStepUp )
+	// 차지 공격의 한하여 다음과 같이 동작한다는 거군...
+	if (bNeedToIncrement)
 	{
-		++SkillStepCount;
-		// 몽타주 점프.
-		if ( StepData->JumpToMontageSection != NAME_None )
-		{
-			SetMontageSection(StepData->JumpToMontageSection);
-		}
-		
-		SetupAbilityStepTimer();	
+		ProcessStep();
 	}
 	else
 	{
@@ -191,22 +184,15 @@ void UMUGA_ActivateSkill::OnStepTimeComplete()
 	}
 }
 
-void UMUGA_ActivateSkill::SetupAbilityStepTimer()
+void UMUGA_ActivateSkill::SetupAbilityStepTimer(float TargetTime, bool bNeedToIncreaseStepWhenEnded)
 {
-	FMUAbilityStepData* StepData = SkillData.GetStepData(SkillStepCount);
-	
-	if ( StepData == nullptr )
-	{
-		return;
-	} 
-	
 	// 딜레이 옵션 없으면 굳이 미실행.
-	if ( StepData->WaitTimeDelayToEndStep <= 0.f )
+	if ( TargetTime <= 0.f )
 	{
 		return;
 	}
 	
-	UMUAT_SetTimerAndWait* TimerWait = UMUAT_SetTimerAndWait::CreateTask(this, StepData->WaitTimeDelayToEndStep);
+	UMUAT_SetTimerAndWait* TimerWait = UMUAT_SetTimerAndWait::CreateTask(this, TargetTime, bNeedToIncreaseStepWhenEnded);
 	
 	if ( IsValid(TimerWait) )
 	{
@@ -214,6 +200,7 @@ void UMUGA_ActivateSkill::SetupAbilityStepTimer()
 		TimerWait->ReadyForActivation();
 	}
 }
+
 
 void UMUGA_ActivateSkill::TriggerAbility(TSubclassOf<UGameplayAbility> AbilityClass)
 {
@@ -258,6 +245,28 @@ bool UMUGA_ActivateSkill::ProcessInput(bool bIsPressed, const FGameplayTag& Inpu
 	}
 	
 	return bIsProcessed;
+}
+
+void UMUGA_ActivateSkill::ProcessStep()
+{
+	++SkillStepCount;
+	FMUAbilityStepActionData* StepData = AbilityStepActionData.Find(SkillStepCount);
+	if ( StepData == nullptr )
+	{
+		return;
+	}
+	
+	for ( FInstancedStruct& PressFunctor : StepData->InstancedStructContainer)
+	{
+		FMUStepActionBase* AbilityStepActionBase = PressFunctor.GetMutablePtr<FMUStepActionBase>();
+		
+		if ( AbilityStepActionBase == nullptr )
+		{
+			continue;
+		}
+		
+		AbilityStepActionBase->OnStepIncreased(this);
+	}
 }
 
 void UMUGA_ActivateSkill::SkillTriggered(const FGameplayAbilitySpecHandle Handle,

@@ -2,6 +2,18 @@
 
 #pragma once
 
+
+#define RETURN_FALSE_IF_INVALID(Obj) \
+if (!IsValid(Obj))               \
+{                                \
+return false;                \
+}
+
+#define RETURN_IF_INVALID(Obj) \
+if (!IsValid(Obj))               \
+{                                \
+return;                \
+}
 #define SPRINT_SPEED 800.0f
 #define WALK_SPEED 400.0f
 

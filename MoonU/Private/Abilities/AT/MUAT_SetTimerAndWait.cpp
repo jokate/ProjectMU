@@ -3,10 +3,11 @@
 
 #include "Abilities/AT/MUAT_SetTimerAndWait.h"
 
-UMUAT_SetTimerAndWait* UMUAT_SetTimerAndWait::CreateTask(UGameplayAbility* TargetAbility, float TimerToAction)
+UMUAT_SetTimerAndWait* UMUAT_SetTimerAndWait::CreateTask(UGameplayAbility* TargetAbility, float TimerToAction, bool bInNeedToIncrementStep)
 {
 	UMUAT_SetTimerAndWait* Task = NewAbilityTask<UMUAT_SetTimerAndWait>(TargetAbility);
 	Task->TimeToWait = TimerToAction;
+	Task->bNeedToIncrementStep = bInNeedToIncrementStep;
 	return Task;
 }
 
@@ -14,7 +15,7 @@ void UMUAT_SetTimerAndWait::OnTimerEnd()
 {
 	if ( OnFinished.IsBound() )
 	{
-		OnFinished.Execute();
+		OnFinished.Execute(bNeedToIncrementStep);
 	}
 }
 

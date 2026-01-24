@@ -41,47 +41,14 @@ struct FMUAttributeInitValues
 	TArray<FMUAttributeValue> Attributes;
 };
 
-USTRUCT(BlueprintType)
-struct FMUAbilityChainingData
-{
-	GENERATED_BODY()
-
-public :
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability")
-	EAbilityChainingType AbilityChainingType = EAbilityChainingType::NONE;
-		
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
-		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Ability", EditConditionHides))
-	TSubclassOf<UGameplayAbility> ChainTargetAbility;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability",
-		meta = (EditCondition = "AbilityChainingType==EAbilityChainingType::Montage", EditConditionHides))
-	TObjectPtr<UAnimMontage> MontageToPlay;
-};
-
 USTRUCT( BlueprintType )
 struct FMUAbilityStepData
 {
 	GENERATED_BODY()
 
 public :
-	// 인풋에 대한 체이닝이 필요한 경우 (차지 공격 중에 구른다는 가정, 그러면 구르고 쏜다 이런 식. 아니면 몽타주로 가던가.)
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TMap<FGameplayTag, FMUAbilityChainingData> InputChainingAbility;
-
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<AActor> TargetToSpawnActor;
-	
-	// 스탭에 대한 증가 처리가 필요가 없는 경우에는 그냥 ㅃㅇ
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	float WaitTimeDelayToEndStep = 0.f;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool bNeedToStepUp = false;
-	
-	// 생각해보니까 차징 공격할 때 몽타주 점핑 필요할 거 같음.
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FName JumpToMontageSection = NAME_None;
 };
 
 USTRUCT( BlueprintType )

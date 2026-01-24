@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
+#include "Abilities/AbilityInputActionData/MUAbilityStepAction.h"
 #include "Data/MUEnum.h"
 #include "Data/DataTable/MUData.h"
 #include "Interface/SkillActivateAbility.h"
@@ -15,15 +17,6 @@ struct FMUSkillData;
 /**
  * 
  */
-USTRUCT(BlueprintType)
-struct FMUInputStepData
-{
-	GENERATED_BODY()
-	
-public : 
-	UPROPERTY(EditAnywhere, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
-	TArray<FInstancedStruct> InstancedStructContainer;
-};
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillStateChanged );
@@ -84,13 +77,14 @@ public :
 	virtual bool ReceivePressedTag(const FGameplayTag& InputTag) override;
 	virtual bool ReceiveReleasedTag(const FGameplayTag& InputTag) override;
 
-	void OnStepTimeComplete();
-	virtual void SetupAbilityStepTimer();
+	void OnStepTimeComplete(bool bNeedToIncrement);
+	virtual void SetupAbilityStepTimer(float TargetTime, bool bNeedToIncreaseStepWhenEnded);
 	virtual void TriggerAbility(TSubclassOf<UGameplayAbility> AbilityClass);
 protected : 
 	
 	bool ProcessInput(bool bIsPressed, const FGameplayTag& InputTag);
-
+	void ProcessStep();
+	
 public :
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer GameplayCueTags;
@@ -99,10 +93,12 @@ public :
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
 	
-	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct, DisplayName = "인풋 눌렀을 시, 행동 구성."))
 	TMap<int32, FMUInputStepData> InputPressedFunctor;
-	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct))
+	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Script/MoonU.AbilityInputActionBase", ExcludeBaseStruct, DisplayName = "인풋 뗐을 시, 행동 구성."))
 	TMap<int32, FMUInputStepData> InputReleasedFunctor;
+	UPROPERTY(EditDefaultsOnly, meta = (BaseStruct = "/Scrip/MoonU.MUStepActionBase", ExcludeBaseStruct, DisplayName = "어빌리티 스텝에 따른 행동 구성."))
+	TMap<int32, FMUAbilityStepActionData> AbilityStepActionData;
 	
 	
 	UPROPERTY()
