@@ -75,3 +75,19 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "타겟 어빌리티"))
 	TSubclassOf<UGameplayAbility> AbilityClass;
 };
+
+USTRUCT(BlueprintType, DisplayName = "어빌리티 종료")
+struct FAbilityInputAction_EndAbility : public FAbilityInputActionBase
+{
+	GENERATED_BODY()
+
+	virtual bool OnInputEventCallback(UMUGA_ActivateSkill* SkillAbility) override;
+};
+
+USTRUCT(BlueprintType, DisplayName = "스킬 캐스팅")
+struct FAbilityInputAction_CastSkill : public FAbilityInputActionBase
+{
+	GENERATED_BODY()
+
+	virtual bool OnInputEventCallback(UMUGA_ActivateSkill* SkillAbility) override;
+};

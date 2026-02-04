@@ -20,6 +20,21 @@ UMUGA_IndicatorSkill::UMUGA_IndicatorSkill()
 
 	CancelAbilitiesWithTag.AddTag(MU_SKILL_INDICATOR);
 	ActivationOwnedTags.AddTag(MU_SKILL_INDICATOR);
+
+	FMUInputStepData& StepData = InputPressedFunctor.FindOrAdd(1);
+		
+	FInstancedStruct& RightClick = StepData.InstancedStructContainer.AddDefaulted_GetRef();
+	RightClick.InitializeAs(FAbilityInputAction_EndAbility::StaticStruct());
+
+	FAbilityInputAction_EndAbility* InputAction_EndAbility = RightClick.GetMutablePtr<FAbilityInputAction_EndAbility>();
+	InputAction_EndAbility->InputTagContainer.AddTag(MU_INPUT_DODGE);
+
+
+	FInstancedStruct& LeftClick = StepData.InstancedStructContainer.AddDefaulted_GetRef();
+	LeftClick.InitializeAs(FAbilityInputAction_CastSkill::StaticStruct());
+
+	FAbilityInputAction_CastSkill* InputAction_CastSkill = LeftClick.GetMutablePtr<FAbilityInputAction_CastSkill>();
+	InputAction_CastSkill->InputTagContainer.AddTag(MU_INPUT_LMATTACK);
 }
 
 void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -32,25 +47,6 @@ void UMUGA_IndicatorSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	{
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, false );
 		return;
-	}
-
-	UMUAT_WaitTriggerInput* SkillCastInput = UMUAT_WaitTriggerInput::CreateTask(this, MU_INPUT_SIMPLE_CAST, ETriggerEvent::Triggered);
-	if ( IsValid( SkillCastInput ) == true )
-	{
-		SkillCastInput->InputPressedCallback.AddDynamic( this, &UMUGA_IndicatorSkill::OnSkillInputPressed);
-		SkillCastInput->ReadyForActivation();
-
-		OnSkillStateChanged.AddDynamic( SkillCastInput, &UMUAT_WaitTriggerInput::EndTask);
-	}
-
-	UMUAT_WaitTriggerInput* SkillCancelInput = UMUAT_WaitTriggerInput::CreateTask(this, MU_INPUT_CANCEL, ETriggerEvent::Triggered);
-
-	if ( IsValid( SkillCancelInput ) == true )
-	{
-		SkillCancelInput->InputPressedCallback.AddDynamic( this, &UMUGA_IndicatorSkill::OnSkillCanceled);
-		SkillCancelInput->ReadyForActivation();
-		
-		OnSkillStateChanged.AddDynamic( SkillCancelInput, &UMUAT_WaitTriggerInput::EndTask);
 	}
 
 	UMUAT_SpawnIndicator* IndicatorSkill = UMUAT_SpawnIndicator::CreateTask(this, SkillID);
@@ -121,8 +117,7 @@ void UMUGA_IndicatorSkill::SetupReadyMontage()
 	NewTask->ReadyForActivation();
 }
 
-
-void UMUGA_IndicatorSkill::OnSkillInputPressed()
+void UMUGA_IndicatorSkill::CastSkill()
 {
 	if ( IsValid( MontageTask ) == true )
 	{
@@ -130,14 +125,6 @@ void UMUGA_IndicatorSkill::OnSkillInputPressed()
 	}
 	
 	ActivateSkill();
-}
-
-void UMUGA_IndicatorSkill::OnSkillCanceled()
-{
-	CancelSkill();
 	
-	bool bReplicateEndAbility = true;
-	bool bWasCancelled = false;
-
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
+	ProcessStep();
 }

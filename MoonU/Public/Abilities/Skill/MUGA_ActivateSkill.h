@@ -80,6 +80,7 @@ public :
 	void OnStepTimeComplete(bool bNeedToIncrement);
 	virtual void SetupAbilityStepTimer(float TargetTime, bool bNeedToIncreaseStepWhenEnded);
 	virtual void TriggerAbility(TSubclassOf<UGameplayAbility> AbilityClass);
+	virtual void CancelAbility_External();
 protected : 
 	
 	bool ProcessInput(bool bIsPressed, const FGameplayTag& InputTag);

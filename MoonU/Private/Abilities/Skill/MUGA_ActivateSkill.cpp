@@ -217,6 +217,16 @@ void UMUGA_ActivateSkill::TriggerAbility(TSubclassOf<UGameplayAbility> AbilityCl
 	}
 }
 
+void UMUGA_ActivateSkill::CancelAbility_External()
+{
+	if ( OnSkillStateChanged.IsBound() == true )
+	{
+		OnSkillStateChanged.Broadcast();
+	}
+	
+	CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
+}
+
 bool UMUGA_ActivateSkill::ProcessInput(bool bIsPressed, const FGameplayTag& InputTag)
 {
 	bool bIsProcessed = false;

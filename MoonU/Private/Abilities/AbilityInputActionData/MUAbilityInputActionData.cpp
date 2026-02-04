@@ -39,3 +39,19 @@ bool FAbilityInputAction_TriggerAbility::OnInputEventCallback(UMUGA_ActivateSkil
 	SkillAbility->TriggerAbility(AbilityClass);
 	return true;
 }
+
+bool FAbilityInputAction_EndAbility::OnInputEventCallback(UMUGA_ActivateSkill* SkillAbility)
+{
+	RETURN_FALSE_IF_INVALID(SkillAbility);
+	
+	SkillAbility->CancelAbility_External();
+	return true;
+}
+
+bool FAbilityInputAction_CastSkill::OnInputEventCallback(UMUGA_ActivateSkill* SkillAbility)
+{
+	RETURN_FALSE_IF_INVALID(SkillAbility);
+	
+	SkillAbility->CastSkill();
+	return true;
+}

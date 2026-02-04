@@ -26,12 +26,7 @@ public :
 
 	virtual void SetupReadyMontage();
 
-	UFUNCTION()
-	virtual void OnSkillInputPressed();
-
-	UFUNCTION()
-	virtual void OnSkillCanceled();
-
+	virtual void CastSkill() override;
 public :
 	UPROPERTY()
 	TObjectPtr<UAbilityTask> MontageTask;
