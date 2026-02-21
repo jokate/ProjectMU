@@ -149,8 +149,3 @@ void UMUGA_IndicatorSkill::CastSkill()
 	ProcessStep();
 	GetCurrentAbilitySpec()->GetDynamicSpecSourceTags().RemoveTag(MU_SKILL_INDICATOR);
 }
-
-bool UMUGA_IndicatorSkill::CanBeCanceled() const
-{
-	return Super::CanBeCanceled();
-}
