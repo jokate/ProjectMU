@@ -264,7 +264,7 @@ void AMUCharacterPlayer::GASInputPressed(const FGameplayTag InputTag)
 {
 	// 현재 동작중인 어빌리티들을 끌고 오는게 좋아보임.
 	// 없다면? 차라리 여기서 태깅 처리를 들어가는게 맞다고는 봄.
-	const TArray<TWeakObjectPtr<UGameplayAbility>>& CurrentAbilities = ASC->GetCurrentActiveAbilities();
+	const TArray<TWeakObjectPtr<UGameplayAbility>> CurrentAbilities = ASC->GetCurrentActiveAbilities();
 
 	
 	// 현재 액티브 된 스킬이 있는 경우에는 스킬 이벤트에 대한 송신을 하나, 아닌 경우에는 기본적인 인풋 시스템 처리를 하도록 합니다.

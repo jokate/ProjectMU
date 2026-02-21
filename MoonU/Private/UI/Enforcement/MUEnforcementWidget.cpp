@@ -27,12 +27,18 @@ void UMUEnforcementWidget::NativeConstruct()
 
 void UMUEnforcementWidget::NativeDestruct()
 {
-	Super::NativeDestruct();
+	UMUEnforcementManageComponent* ManagerComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
 
-	if ( IsValid(SelectionButton) )
+	if ( IsValid(ManagerComponent) == true )
 	{
-		SelectionButton->OnClicked.RemoveAll( this );
+		ManagerComponent->OnEnforcementUpdated.RemoveAll( this );
 	}
+	
+	if ( IsValid(SelectionButton) )
+    {
+    	SelectionButton->OnClicked.RemoveAll( this );
+    }
+	Super::NativeDestruct();
 }
 
 void UMUEnforcementWidget::SetupWidgetInfo()
