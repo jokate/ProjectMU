@@ -25,6 +25,16 @@ void UMUEnforcementWidget::NativeConstruct()
 	}
 }
 
+void UMUEnforcementWidget::NativeDestruct()
+{
+	Super::NativeDestruct();
+
+	if ( IsValid(SelectionButton) )
+	{
+		SelectionButton->OnClicked.RemoveAll( this );
+	}
+}
+
 void UMUEnforcementWidget::SetupWidgetInfo()
 {
 	FMUEnforcementData EnforcementData;

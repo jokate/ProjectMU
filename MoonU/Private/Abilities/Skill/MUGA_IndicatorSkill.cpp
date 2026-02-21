@@ -3,6 +3,7 @@
 
 #include "Abilities/Skill/MUGA_IndicatorSkill.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "MUDefines.h"
 #include "Abilities/AT/MUAT_SpawnIndicator.h"
 #include "Abilities/AT/MUAT_WaitTriggerInput.h"
@@ -65,6 +66,13 @@ void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
 	MontageTask = nullptr;
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	if ( IsValid(ASC) == true )
+	{
+		ASC->RemoveLooseGameplayTag(MU_CHARACTERSTATE_READYSKILL);
+	}
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -95,14 +103,19 @@ void UMUGA_IndicatorSkill::ActivateSkill()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Skill Active"));
+
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	if ( IsValid(ASC) == true )
+	{
+		ASC->RemoveLooseGameplayTag(MU_CHARACTERSTATE_READYSKILL);
+	}
 	
 	Super::ActivateSkill();
 }
 
 void UMUGA_IndicatorSkill::SetupReadyMontage()
 {
-	AActor* OwnerActor = GetOwningActorFromActorInfo();
-
 	UAnimMontage* ActiveMontage = SkillData.ReadySkillMontage.LoadSynchronous();
 
 	if ( IsValid(ActiveMontage) == false )
@@ -115,6 +128,13 @@ void UMUGA_IndicatorSkill::SetupReadyMontage()
 
 	MontageTask = NewTask;
 	NewTask->ReadyForActivation();
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+
+	if ( IsValid(ASC) == true )
+	{
+		ASC->AddLooseGameplayTag(MU_CHARACTERSTATE_READYSKILL);
+	}
 }
 
 void UMUGA_IndicatorSkill::CastSkill()
@@ -127,4 +147,10 @@ void UMUGA_IndicatorSkill::CastSkill()
 	ActivateSkill();
 	
 	ProcessStep();
+	GetCurrentAbilitySpec()->GetDynamicSpecSourceTags().RemoveTag(MU_SKILL_INDICATOR);
+}
+
+bool UMUGA_IndicatorSkill::CanBeCanceled() const
+{
+	return Super::CanBeCanceled();
 }

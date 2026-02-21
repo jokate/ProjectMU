@@ -19,7 +19,7 @@ class MOONU_API UMUEnforcementWidget : public UUserWidget
 
 public : 
 	virtual void NativeConstruct() override;
-
+	virtual void NativeDestruct() override;
 public :
 	UFUNCTION()
 	virtual void SetupWidgetInfo();

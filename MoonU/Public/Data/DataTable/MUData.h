@@ -262,6 +262,9 @@ public :
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active")
 	bool bUseMotionWarp = false;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active" )
+	bool bIsCancelableMontage = true;
 	
 	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly, Category = "Montage | Active", meta = (EditCondition = "bUseMotionWarp == true", EditConditionHides))
 	FName MotionWarpName = NAME_None;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Abilities/MUGameplayAbility.h"
 #include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
 #include "Abilities/AbilityInputActionData/MUAbilityStepAction.h"
 #include "Data/MUEnum.h"
@@ -22,7 +23,7 @@ struct FMUSkillData;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnSkillStateChanged );
 
 UCLASS()
-class MOONU_API UMUGA_ActivateSkill : public UGameplayAbility, public ISkillActivateAbility
+class MOONU_API UMUGA_ActivateSkill : public UMUGameplayAbility, public ISkillActivateAbility
 {
 	GENERATED_BODY()
 
@@ -114,4 +115,5 @@ public :
 	int32 SkillStepCount = 0;
 	UPROPERTY()
 	TWeakObjectPtr<UAbilityTask_PlayMontageAndWait> Task_PlayMontageAndWait;
+	
 };

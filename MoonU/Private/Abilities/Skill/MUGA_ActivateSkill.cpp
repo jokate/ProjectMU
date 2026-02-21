@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "MUDefines.h"
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Abilities/AbilityInputActionData/MUAbilityInputActionData.h"
 #include "Abilities/AbilityInputActionData/MUAbilityStepAction.h"
@@ -76,7 +77,7 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		MotionWarp->ReleaseMotionWarp(SkillData.MotionWarpName);
 	}
-
+	
 	SkillStepCount = 0;
 	bIsComboPressed = false;
 	
@@ -337,7 +338,5 @@ void UMUGA_ActivateSkill::OnCompleteCallback()
 
 void UMUGA_ActivateSkill::OnInterruptedCallback()
 {
-	bool bReplicatedEndAbility = true;
-	bool bWasCancelled = true;
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
+	CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
 }
