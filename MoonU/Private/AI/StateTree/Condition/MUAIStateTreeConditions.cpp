@@ -3,7 +3,33 @@
 
 #include "AI/StateTree/Condition/MUAIStateTreeConditions.h"
 
-bool FMUAIStateTreeCondition_IsAttackable::TestCondition(FStateTreeExecutionContext& Context) const
+#include "AIController.h"
+#include "StateTreeExecutionContext.h"
+
+bool FMUAIStateTreeCondition_IsAttackableDistance::TestCondition(FStateTreeExecutionContext& Context) const
 {
-	return FStateTreeConditionCommonBase::TestCondition(Context);
+	UObject* ContextObject = Context.GetOwner();
+	if ( IsValid(ContextObject) == false )
+	{
+		return false;
+	}
+
+	AAIController* AIController = Cast<AAIController>(ContextObject);
+
+	if (IsValid(AIController) == false)
+	{
+		return false;
+	}
+
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	AActor* TargetActor = InstanceData.Target;
+	AActor* SourceActor = InstanceData.Source;
+	if ( IsValid(TargetActor) == false || IsValid(SourceActor) == false )
+	{
+		return false;
+	}
+
+	const float ToDistance = TargetActor->GetDistanceTo(SourceActor);
+
+	return ToDistance - ErrorMargin <= Distance;
 }

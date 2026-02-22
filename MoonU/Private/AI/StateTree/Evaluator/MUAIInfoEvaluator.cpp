@@ -28,7 +28,6 @@ void FMUAIInfoEvaluator::TreeStart(FStateTreeExecutionContext& Context) const
 	if (ASC == nullptr)
 	{
 		return;
-
 	}
 
 	const UMUCharacterAttributeSetBase* AttributeSet = ASC->GetSet<UMUCharacterAttributeSetBase>();

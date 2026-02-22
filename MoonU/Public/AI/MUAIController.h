@@ -45,5 +45,4 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly)
 	TEnumAsByte<ECharacterType> CharacterType;
-	
 };

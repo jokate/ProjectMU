@@ -11,6 +11,8 @@
  * 
  */
 
+class UEnvQuery;
+
 USTRUCT()
 struct FMUAITargetInstancedData
 {

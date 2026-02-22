@@ -6,6 +6,7 @@
 #include "StateTreeExecutionContext.h"
 #include "AI/MUAIController.h"
 #include "Character/MUCharacterBase.h"
+#include "EnvironmentQuery/EnvQueryManager.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISense_Sight.h"
 
@@ -33,7 +34,7 @@ void FMUAIPerceptionEvaluator::Tick(FStateTreeExecutionContext& Context, const f
 	{
 		return;
 	}
-
+	
 	TArray<AActor*> FoundActors;
 	PerceptionComponent->GetKnownPerceivedActors(UAISense_Sight::StaticClass(), FoundActors);
 
