@@ -10,6 +10,7 @@
 #include "Components/EQSActivationComponent.h"
 #include "Components/TimeStopComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Perception/AIPerceptionComponent.h"
 
 
 // Sets default values

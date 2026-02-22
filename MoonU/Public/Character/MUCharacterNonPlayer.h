@@ -8,6 +8,10 @@
 #include "Interface/MUEnemy.h"
 #include "MUCharacterNonPlayer.generated.h"
 
+/*
+ * AI 용도로 만들어진 클래스임.
+ */
+
 struct FGameplayEventData;
 
 UCLASS()

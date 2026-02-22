@@ -4,74 +4,39 @@
 #include "AI/MUAIController.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "StateTree.h"
 #include "AI/MUAIDefines.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/EQSActivationComponent.h"
 #include "Perception/AIPerceptionComponent.h"
+#include "Components/StateTreeAIComponent.h"
+#include "Perception/AISense_Sight.h"
 
 
 // Sets default values
 AMUAIController::AMUAIController()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerception");
-	EQSActivationComponent = CreateDefaultSubobject<UEQSActivationComponent>("EQSActivation");
+	StateTreeAIComponent = CreateDefaultSubobject<UStateTreeAIComponent>("StateTreeComponent");
 }
 
 void AMUAIController::RunAI()
 {
-	UBlackboardComponent* BlackboardComp = Blackboard.Get();
-
-	bool bUseBlackBoard = UseBlackboard(BBAsset, BlackboardComp);
-
-	if (bUseBlackBoard)
-	{
-		RunBehaviorTree(BTAsset);
-	}
-
 	OnInitialize();
 }
 
 void AMUAIController::StopAI()
 {
-	UBehaviorTreeComponent* BTComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
-
-	if (BTComponent)
-	{
-		BTComponent->StopTree();
-	}
-
-	PerceptionComponent->OnTargetPerceptionUpdated.RemoveAll(this);
+	StateTreeAIComponent->StopLogic(TEXT("StopAI"));
 }
 
 void AMUAIController::OnInitialize()
 {
-	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
-
-	if (ASC == nullptr)
-	{
-		return;
-
-	}
-
-	const UMUCharacterAttributeSetBase* AttributeSet = ASC->GetSet<UMUCharacterAttributeSetBase>();
-
-	if (AttributeSet == nullptr)
-	{
-		return;
-	}
-
-	if (Blackboard)
-	{
-		Blackboard->SetValueAsFloat(MU_AI_ATTACK_RADIUS, AttributeSet->GetAttackRange());
-		Blackboard->SetValueAsFloat(MU_AI_DEFEND_RADIUS, AttributeSet->GetDefendRange());
-	}
-
-	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AMUAIController::OnTargetPerceptionUpdated);
+	StateTreeAIComponent->StartLogic();
 }
 
 void AMUAIController::OnPossess(APawn* InPawn)
@@ -83,44 +48,9 @@ void AMUAIController::OnPossess(APawn* InPawn)
 	SetGenericTeamId(FGenericTeamId(CharacterType));
 }
 
-void AMUAIController::OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus)
-{
-	if (InActor == nullptr)
-	{
-		return;
-	}
-
-	if (InActor == GetPawn())
-	{
-		return;
-	}
-	
-	TSubclassOf<UAISense> CurrentSense = UAIPerceptionSystem::GetSenseClassForStimulus(this, Stimulus);
-	
-	if (CurrentSense == nullptr)
-	{
-		return;
-	}
-
-	if (KeyForBlackboard.Contains(CurrentSense) == false)
-	{
-		return;
-	}
-
-	const bool CurrentValue = Stimulus.WasSuccessfullySensed();
-	const FName KeyName = KeyForBlackboard[CurrentSense];
-	
-	Blackboard->SetValueAsBool(KeyName, CurrentValue);	
-}
-
 void AMUAIController::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-	
-	if ( IsValid(EQSActivationComponent) == true )
-	{
-		EQSActivationComponent->InitializeEQSActivationComponent(BBAsset);
-	}
 }
 
 ETeamAttitude::Type AMUAIController::GetTeamAttitudeTowards(const AActor& Other) const

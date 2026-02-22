@@ -22,13 +22,13 @@ public:
 	void RunAI();
 
 	void StopAI();
-
+	
 	virtual void OnInitialize();
 	
 	virtual void OnPossess(APawn* InPawn) override;
 
-	UFUNCTION()
-	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);
+	/*UFUNCTION()
+	virtual void OnTargetPerceptionUpdated(AActor* InActor, FAIStimulus Stimulus);*/
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -39,20 +39,11 @@ public:
 protected :
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAIPerceptionComponent> AIPerceptionComponent;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<class UEQSActivationComponent> EQSActivationComponent;
-
-	UPROPERTY(EditDefaultsOnly)
-	TMap<TSubclassOf<class UAISense>, FName> KeyForBlackboard;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UBlackboardData> BBAsset;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UBehaviorTree> BTAsset;
-
+	TObjectPtr<class UStateTreeAIComponent> StateTreeAIComponent;
 
 	UPROPERTY(EditDefaultsOnly)
 	TEnumAsByte<ECharacterType> CharacterType;
+	
 };

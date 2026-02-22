@@ -11,7 +11,7 @@ public class MoonU : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "UMG", 
-			"GameplayAbilities", "MotionWarping", "NavigationSystem", "AIModule", "GameplayTasks", "NNE", "DataRegistry", "DeveloperSettings", "StateTreeModule"
+			"GameplayAbilities", "MotionWarping", "NavigationSystem", "AIModule", "GameplayTasks", "NNE", "DataRegistry", "DeveloperSettings", "StateTreeModule", "GameplayStateTreeModule"
 		});
 		
 		PrivateDependencyModuleNames.AddRange(new string[] {
