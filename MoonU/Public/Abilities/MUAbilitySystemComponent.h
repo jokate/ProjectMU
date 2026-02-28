@@ -16,6 +16,8 @@ public:
 	// Sets default values for this component's properties
 	UMUAbilitySystemComponent();
 
+	static UMUAbilitySystemComponent* Get(AActor* InActor);
+	
 public:
 	
 	virtual void AllocateSkill( FName SkillID, const FGameplayAbilitySpec& AbilitySpec );

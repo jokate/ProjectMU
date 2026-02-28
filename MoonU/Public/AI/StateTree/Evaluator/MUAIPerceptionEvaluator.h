@@ -21,11 +21,14 @@ struct FMUAITargetInstancedData
 public :
 	void Reset()
 	{
-		PendingTargetActors.Empty();
+		TargetActor = nullptr;
 	}
 	
 	UPROPERTY(VisibleAnywhere, Category = "Output")
-	TArray<AActor*> PendingTargetActors;
+	TObjectPtr<AActor> TargetActor;
+
+	UPROPERTY(EditAnywhere, Category = "TargetEQS")
+	TObjectPtr<UEnvQuery> TargetingEQS;
 };
 
 

@@ -13,6 +13,17 @@ UMUAbilitySystemComponent::UMUAbilitySystemComponent()
 
 }
 
+UMUAbilitySystemComponent* UMUAbilitySystemComponent::Get(AActor* InActor)
+{
+	IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(InActor);
+	if (!ASI)
+	{
+		return nullptr;
+	}
+
+	return Cast<UMUAbilitySystemComponent>(ASI->GetAbilitySystemComponent());
+}
+
 
 void UMUAbilitySystemComponent::AllocateSkill(FName SkillID, const FGameplayAbilitySpec& AbilitySpec)
 {

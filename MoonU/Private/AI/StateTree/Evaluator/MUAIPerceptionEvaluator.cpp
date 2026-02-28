@@ -27,21 +27,22 @@ void FMUAIPerceptionEvaluator::Tick(FStateTreeExecutionContext& Context, const f
 	
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	InstanceData.Reset();
-	
-	UAIPerceptionComponent* PerceptionComponent = AIController->PerceptionComponent;
 
-	if ( IsValid(PerceptionComponent) == false )
+	UEnvQueryManager* QueryManager = UEnvQueryManager::GetCurrent(AIController->GetWorld());
+
+	if ( IsValid(QueryManager) == false )
+	{
+		return;
+	} 
+	
+	FEnvQueryRequest Request(InstanceData.TargetingEQS, AIController);
+
+	TSharedPtr<FEnvQueryResult> Result = QueryManager->RunInstantQuery(Request, EEnvQueryRunMode::Type::SingleResult);
+
+	if ( Result.IsValid() == false )
 	{
 		return;
 	}
-	
-	TArray<AActor*> FoundActors;
-	PerceptionComponent->GetKnownPerceivedActors(UAISense_Sight::StaticClass(), FoundActors);
 
-	FoundActors = FoundActors.FilterByPredicate([](const AActor* Actor)
-	{
-		return Actor->IsA(AMUCharacterBase::StaticClass());
-	});
-	
-	InstanceData.PendingTargetActors.Append(FoundActors);
+	InstanceData.TargetActor = Result->GetItemAsActor(0);
 }
