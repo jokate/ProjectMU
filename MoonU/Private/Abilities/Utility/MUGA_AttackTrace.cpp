@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Abilities/MUAbilityTriggerPayload.h"
 #include "Abilities/AT/MUAT_Trace.h"
 
 UMUGA_AttackTrace::UMUGA_AttackTrace()
@@ -18,7 +19,15 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceName);
+	const UMUAbilityTriggerPayload_Trace* TraceData = UMUAbilityTriggerPayload_Trace::GetTracePayload(TriggerEventData);
+
+	if (IsValid(TraceData) == false )
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	}
+	
+	// 여기부분을 가급적이면 넘겨받는게 좋긴 하지/
+	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceData->DamageInfoName);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
 	AttackTraceTask->ReadyForActivation();

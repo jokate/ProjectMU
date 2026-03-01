@@ -19,8 +19,6 @@ void UAnimNotifyState_AttackTrace::NotifyBegin(USkeletalMeshComponent* MeshComp,
 	}
 
 	FGameplayEventData PayLoadData;
-
-	PayLoadData.EventMagnitude = ComboAttackStat;
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshOwner, TriggerGameplayTag, PayLoadData);
 }

@@ -26,8 +26,4 @@ public :
 
 	UPROPERTY(EditAnywhere)
 	FGameplayTag EndTriggerGameplayTag;
-
-	UPROPERTY(EditAnywhere)
-	int32 ComboAttackStat;
-	
 };
