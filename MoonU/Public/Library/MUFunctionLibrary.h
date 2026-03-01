@@ -95,5 +95,8 @@ public :
 
 	UFUNCTION( BlueprintPure )
 	static bool GetAllInputCommandList( UObject* Object, TArray<FMUInputCommandList>& OutInputCommandList );
+
+	UFUNCTION(BlueprintPure)
+	static bool GetDamageInfo( UObject* Object, FName DamageInfo, FMUDamageInfo& OutDamageInfo );
 #pragma endregion
 };

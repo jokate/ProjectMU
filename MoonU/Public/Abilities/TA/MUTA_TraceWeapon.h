@@ -15,11 +15,4 @@ class MOONU_API AMUTA_TraceWeapon : public AMUTA_Trace
 	GENERATED_BODY()
 	
 	AMUTA_TraceWeapon();
-
-	virtual void Tick(float DeltaSeconds) override;
-	
-	virtual void TraceStart() override;
-	
-	UPROPERTY()
-	FName WeaponSocketName;
 };

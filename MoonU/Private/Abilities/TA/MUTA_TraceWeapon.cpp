@@ -15,34 +15,3 @@ AMUTA_TraceWeapon::AMUTA_TraceWeapon()
 	PrimaryActorTick.bCanEverTick = true;
 	WeaponSocketName = TEXT("Weapon_R_Trail_A");
 }
-
-void AMUTA_TraceWeapon::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	TraceStart();
-}
-
-void AMUTA_TraceWeapon::TraceStart()
-{
-	ACharacter* Character = CastChecked<ACharacter>(SourceActor);
-	const IGenericTeamAgentInterface* SourceActorTeam = CastChecked<IGenericTeamAgentInterface>(SourceActor);
-
-	const auto* MeshComp = Character->GetMesh();
-
-	if (!MeshComp)
-	{
-		return;
-	}
-	
-	const FVector& WeaponSocketLocation = MeshComp->GetSocketLocation(WeaponSocketName);
-	const FVector End = WeaponSocketLocation + FVector::UpVector;
-	TArray<AActor*> ActorsToIgnore;
-	TArray<FHitResult> HitResults;
-	ActorsToIgnore.Add(Character);
-	UKismetSystemLibrary::SphereTraceMultiByProfile(this, WeaponSocketLocation,
-		End, 50.0f, TEXT("Weapon"), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true,
-		FLinearColor::Red, FLinearColor::Green, 0.0f);
-	
-	ProcessHitResult(HitResults);
-}

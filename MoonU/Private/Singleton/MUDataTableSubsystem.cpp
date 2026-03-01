@@ -198,6 +198,18 @@ bool UMUDataTableSubsystem::GetTopMenuWidgetData(FName Name, FTopMenuData& OutMe
 	return GetRegistryData<FTopMenuData>(DA->TopMenuWidgetDataRegistryType, Name, OutMenuData);
 }
 
+bool UMUDataTableSubsystem::GetDamageInfoData(FName Name, FMUDamageInfo& OutDamageInfo)
+{
+	UMUDataPrimaryAsset* DA = GetDataPrimaryAsset();
+	
+	if ( IsValid(DA) == false )
+	{
+		return false; 
+	}
+
+	return GetRegistryData<FMUDamageInfo>(DA->DamageDataRegistryType, Name, OutDamageInfo);
+}
+
 bool UMUDataTableSubsystem::GetAllCombatComboData(TArray<FMUInputCommandList>& OutCombatComboData)
 {
 	if ( IsValid(CombatComboDataTable) == false)

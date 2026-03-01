@@ -8,14 +8,49 @@
 #include "GenericTeamAgentInterface.h"
 #include "MUDefines.h"
 #include "Abilities/GameplayAbility.h"
+#include "Attribute/MUCharacterAttributeSet.h"
+#include "Components/ShapeComponent.h"
 #include "GameFramework/Character.h"
 #include "Interface/MUPlayer.h"
+#include "Library/MUFunctionLibrary.h"
 
 
 class IGenericTeamAgentInterface;
 // Sets default values
 AMUTA_Trace::AMUTA_Trace()
 {
+	RootCollisionComponent = CreateDefaultSubobject<USceneComponent>("RootCollisionComponent");
+	SetRootComponent(RootCollisionComponent);
+}
+
+void AMUTA_Trace::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	TArray<USceneComponent*> ChildrenComponents;
+	RootCollisionComponent->GetChildrenComponents(true, ChildrenComponents);
+
+	for ( USceneComponent* Child : ChildrenComponents )
+	{
+		UShapeComponent* ShapeComponent = Cast<UShapeComponent>(Child);
+
+		if ( IsValid(ShapeComponent) )
+		{
+			ShapeComponent->SetCollisionProfileName(TEXT("Weapon"));
+			ShapeComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+			DamageShapes.Add(ShapeComponent);
+		}
+	}
+}
+
+void AMUTA_Trace::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if ( IsValid(SourceActor) )
+	{
+		AttachToActor(SourceActor, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
+	}
 }
 
 void AMUTA_Trace::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -26,8 +61,20 @@ void AMUTA_Trace::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		ASC->GenericGameplayEventCallbacks.Remove(MU_EVENT_TRACEEND);
 	}
+
+	if ( IsValid(SourceActor) )
+	{
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	}
 	
 	Super::EndPlay(EndPlayReason);
+}
+
+void AMUTA_Trace::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	TraceStart();
 }
 
 void AMUTA_Trace::StartTargeting(UGameplayAbility* Ability)
@@ -70,13 +117,32 @@ void AMUTA_Trace::OnAnimNotifyStateEnd(const FGameplayEventData* EventData)
 
 void AMUTA_Trace::TraceStart()
 {
-	//Need To Define When Inherited
+	//Redefine : 2026-03-01 : Check All Shape Overlap Actors
+
+	TArray<FHitResult> HitResults;
+	for ( UShapeComponent* DamageShape : DamageShapes )
+	{
+		TArray<FOverlapInfo> OverlapInfos = DamageShape->GetOverlapInfos();
+
+		for ( FOverlapInfo& OverlapInfo : OverlapInfos )
+		{
+			FHitResult HitResult = OverlapInfo.OverlapInfo;
+
+			if (SourceActor && HitResult.GetActor())
+			{
+				continue;
+			}
+
+			HitResults.Add(HitResult);
+		}
+	}
+
+	ProcessHitResult(HitResults);
 }
 
-void AMUTA_Trace::InitializeData(int32 Combo, TSubclassOf<UGameplayEffect> DamageEffect)
+void AMUTA_Trace::InitializeData(const FName& InTargetDamageInfo)
 {
-	CurrentCombo = Combo;
-	DamageEffectClass = DamageEffect;
+	TargetDamageInfo = InTargetDamageInfo;
 }
 
 void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
@@ -104,7 +170,6 @@ void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 				
 				FGameplayEventData GameplayEventData;
 				GameplayEventData.Instigator = OwningAbility->GetAvatarActorFromActorInfo();
-				GameplayEventData.EventMagnitude = CurrentCombo;
 				FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = new FGameplayAbilityTargetData_SingleTargetHit(HitResult);
 				
 				GameplayEventData.TargetData.Add(SingleTargetHit);
@@ -113,17 +178,56 @@ void AMUTA_Trace::ProcessHitResult(const TArray<FHitResult>& HitResults)
 				UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitActor);
 				if ( IsValid(SourceASC) == true ) 
 				{
-					FGameplayEffectContextHandle EffectContext = SourceASC->MakeEffectContext();
-					FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, CurrentCombo, EffectContext);
-
-					if (EffectSpecHandle.IsValid())
-					{
-						SourceASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), TargetASC);
-					}
+					ProcessDamage(SourceASC, TargetASC);
 				}
 				
 				//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitActor, MU_EVENT_ONHIT, GameplayEventData);
 			}
 		}
 	} 
+}
+
+void AMUTA_Trace::ProcessDamage(UAbilitySystemComponent* SourceASC, UAbilitySystemComponent* TargetASC)
+{
+	FMUDamageInfo DamageInfo;
+	if ( UMUFunctionLibrary::GetDamageInfo(this, TargetDamageInfo, DamageInfo) == false )
+	{
+		return;
+	}
+
+	const UMUCharacterAttributeSet* SourceAttributeSet = Cast<UMUCharacterAttributeSet>(SourceASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()));
+	const UMUCharacterAttributeSet* TargetAttributeSet = Cast<UMUCharacterAttributeSet>(TargetASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()));
+
+	if ( IsValid(SourceAttributeSet) == false || IsValid(TargetAttributeSet) == false )
+	{
+		return;
+	}
+	
+	UMUCharacterAttributeSet* ModifiableTarget = const_cast<UMUCharacterAttributeSet*>(TargetAttributeSet);
+	int32 FinalDamage = FMath::RoundToInt(DamageInfo.ConstantDamage + SourceAttributeSet->GetAttackDamage() * DamageInfo.DamageRatio);
+
+	float CurHp = TargetAttributeSet->GetCurrentHp();
+	float ExpectHp = CurHp - FinalDamage;
+
+	ModifiableTarget->SetCurrentHp(FMath::Clamp(ExpectHp, 0.f, ExpectHp));
+
+	// 사실상 공격구조에 대한 변동.
+	ApplyBuff(SourceASC, SourceASC, DamageInfo.ApplyBuffToSource);
+	ApplyBuff(SourceASC, TargetASC, DamageInfo.ApplyBuffToTarget);
+}
+
+void AMUTA_Trace::ApplyBuff(UAbilitySystemComponent* SourceASC, UAbilitySystemComponent* TargetASC, TSubclassOf<UGameplayEffect> BuffEffectClass)
+{
+	if ( IsValid(SourceASC) == false || IsValid(TargetASC) == false || BuffEffectClass == nullptr ) 
+	{
+		return;
+	}
+	
+	FGameplayEffectContextHandle SourceEffectContext = SourceASC->MakeEffectContext();
+	FGameplayEffectSpecHandle SourceEffectSpecHandle = SourceASC->MakeOutgoingSpec(BuffEffectClass, 1, SourceEffectContext);
+
+	if (SourceEffectSpecHandle.IsValid())
+	{
+		SourceASC->ApplyGameplayEffectSpecToTarget(*SourceEffectSpecHandle.Data.Get(), TargetASC);
+	}
 }

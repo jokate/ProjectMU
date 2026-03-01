@@ -277,6 +277,25 @@ bool UMUFunctionLibrary::GetAllInputCommandList(UObject* Object, TArray<FMUInput
 	return DataTableSubsystem->GetAllCombatComboData(OutInputCommandList);
 }
 
+bool UMUFunctionLibrary::GetDamageInfo(UObject* Object, FName DamageInfo, FMUDamageInfo& OutDamageInfo)
+{
+	UGameInstance* GameInstance = GetGameInstance(Object);
+
+	if ( IsValid(GameInstance) == false)
+	{
+		return false;
+	}
+
+	UMUDataTableSubsystem* DataTableSubsystem = GameInstance->GetSubsystem<UMUDataTableSubsystem>();
+
+	if ( IsValid(DataTableSubsystem) == false )
+	{
+		return false;
+	}
+
+	return DataTableSubsystem->GetDamageInfoData(DamageInfo, OutDamageInfo);
+}
+
 bool UMUFunctionLibrary::BindInputActionByTag(AMUCharacterPlayer* CharacterPlayer, int32 CharacterID,
                                               FTagByInput& TagByInput)
 {

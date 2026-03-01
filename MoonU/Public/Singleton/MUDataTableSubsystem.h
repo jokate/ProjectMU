@@ -54,6 +54,9 @@ public :
 	UFUNCTION( BlueprintPure )
 	virtual bool GetTopMenuWidgetData( FName Name, FTopMenuData& OutMenuData );
 
+	UFUNCTION( BlueprintPure )
+	virtual bool GetDamageInfoData( FName Name, FMUDamageInfo& OutDamageInfo );
+
 	template<typename T>
 	bool GetRegistryData( FName RegistryName, FName RowName, T& OutData );
 

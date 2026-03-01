@@ -11,6 +11,7 @@
 #include "UObject/Object.h"
 #include "Engine/DataTable.h"
 #include "Indicator/MUSkillIndicator.h"
+#include "StructUtils/InstancedStruct.h"
 #include "MUData.generated.h"
 
 /**
@@ -446,4 +447,76 @@ public :
 
 	UPROPERTY()
 	bool bCanConsume = true;
+};
+
+USTRUCT(BlueprintType)
+struct FMUDamageRange
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AMUTA_Trace> TraceClass;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(BaseStruct="/Script/MoonU.MUTraceRangeConfigBase", ExcluseBaseStruct))
+	FInstancedStruct RangeConfig;
+};
+
+
+USTRUCT(BlueprintType)
+struct FMUTraceRangeConfigBase
+{
+	GENERATED_BODY()
+};
+
+USTRUCT(BlueprintType)
+struct FMUTraceRangeConfig_Box : public FMUTraceRangeConfigBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FVector BoxExtent = FVector(50.f);
+};
+
+USTRUCT(BlueprintType)
+struct FMUTraceRangeConfig_Sphere : public FMUTraceRangeConfigBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float Radius = 100.f;
+};
+
+USTRUCT(BlueprintType)
+struct FMUTraceRangeConfig_Capsule : public FMUTraceRangeConfigBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float Radius = 50.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float HalfHeight = 88.f;
+};
+
+USTRUCT( BlueprintType )
+struct FMUDamageInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadOnly )
+	float ConstantDamage = 0.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	float DamageRatio = 0.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	TSubclassOf<UGameplayEffect> ApplyBuffToSource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly )
+	TSubclassOf<UGameplayEffect> ApplyBuffToTarget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly )
+	TArray<FMUDamageRange> DamageRanges;
 };

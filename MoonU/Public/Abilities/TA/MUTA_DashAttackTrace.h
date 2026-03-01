@@ -14,10 +14,4 @@ class MOONU_API AMUTA_DashAttackTrace : public AMUTA_Trace
 public:
 	// Sets default values for this actor's properties
 	AMUTA_DashAttackTrace();
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void TraceStart() override; 
 };
