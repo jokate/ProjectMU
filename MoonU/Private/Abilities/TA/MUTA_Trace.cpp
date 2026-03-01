@@ -46,11 +46,7 @@ void AMUTA_Trace::PostInitializeComponents()
 void AMUTA_Trace::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if ( IsValid(SourceActor) )
-	{
-		AttachToActor(SourceActor, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
-	}
+	
 }
 
 void AMUTA_Trace::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -89,6 +85,11 @@ void AMUTA_Trace::StartTargeting(UGameplayAbility* Ability)
 		return;	
 	}
 
+	if ( IsValid(SourceActor) )
+	{
+		AttachToActor(SourceActor, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
+	}
+	
 	ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_EVENT_TRACEEND).AddUObject(this, &ThisClass::OnAnimNotifyStateEnd);
 }
 
