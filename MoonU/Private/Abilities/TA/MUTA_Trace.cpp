@@ -125,7 +125,7 @@ void AMUTA_Trace::TraceStart()
 		{
 			FHitResult HitResult = OverlapInfo.OverlapInfo;
 
-			if (SourceActor && HitResult.GetActor())
+			if (SourceActor == HitResult.GetActor())
 			{
 				continue;
 			}
@@ -192,15 +192,15 @@ void AMUTA_Trace::ProcessDamage(UAbilitySystemComponent* SourceASC, UAbilitySyst
 		return;
 	}
 
-	const UMUCharacterAttributeSet* SourceAttributeSet = Cast<UMUCharacterAttributeSet>(SourceASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()));
-	const UMUCharacterAttributeSet* TargetAttributeSet = Cast<UMUCharacterAttributeSet>(TargetASC->GetAttributeSet(UMUCharacterAttributeSet::StaticClass()));
+	const UMUCharacterAttributeSetBase* SourceAttributeSet = Cast<UMUCharacterAttributeSetBase>(SourceASC->GetAttributeSet(UMUCharacterAttributeSetBase::StaticClass()));
+	const UMUCharacterAttributeSetBase* TargetAttributeSet = Cast<UMUCharacterAttributeSetBase>(TargetASC->GetAttributeSet(UMUCharacterAttributeSetBase::StaticClass()));
 
 	if ( IsValid(SourceAttributeSet) == false || IsValid(TargetAttributeSet) == false )
 	{
 		return;
 	}
 	
-	UMUCharacterAttributeSet* ModifiableTarget = const_cast<UMUCharacterAttributeSet*>(TargetAttributeSet);
+	UMUCharacterAttributeSetBase* ModifiableTarget = const_cast<UMUCharacterAttributeSetBase*>(TargetAttributeSet);
 	int32 FinalDamage = FMath::RoundToInt(DamageInfo.ConstantDamage + SourceAttributeSet->GetAttackDamage() * DamageInfo.DamageRatio);
 
 	float CurHp = TargetAttributeSet->GetCurrentHp();

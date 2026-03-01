@@ -40,6 +40,7 @@ void UMUAT_Trace::SetupTraceData()
 	FMUDamageInfo DamageInfo;
 	if ( UMUFunctionLibrary::GetDamageInfo(this, TargetDamageInfo, DamageInfo) == false  || IsValid(AvatarActor) == false )
 	{
+		OnComplete.Broadcast(FGameplayAbilityTargetDataHandle());
 		return;
 	}
 
