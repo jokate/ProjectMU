@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
+#include "StructUtils/InstancedStruct.h"
 #include "MUAT_Trace.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTraceResultDelegate, const FGameplayAbilityTargetDataHandle&, TargetDataHandle);
+class AMUTA_Trace;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTraceResultDelegate, const FGameplayAbilityTargetDataHandle&,
+                                            TargetDataHandle);
 /**
  * 
  */
@@ -18,15 +21,17 @@ class MOONU_API UMUAT_Trace : public UAbilityTask
 	UMUAT_Trace();
 	
 public :
-	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, TSubclassOf<class AMUTA_Trace> TargetActorClass, const FName& TargetDamageInfo );
+	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, const FName& TargetDamageInfo );
 
 	virtual void Activate() override;
 
 	virtual void OnDestroy(bool bInOwnerFinished) override;
 
-	void SpawnAndInitializeTargetActor();
+	void SetupTraceData();
 
-	void FinalizeTargetActor();
+	AMUTA_Trace* SpawnAndInitializeTargetActor(TSubclassOf<AMUTA_Trace> TraceClass );
+
+	void FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform);
 protected:
 	
 	void OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& DataHandle);
@@ -38,10 +43,7 @@ public :
 	FTraceResultDelegate OnComplete;
 	
 	UPROPERTY()
-	TObjectPtr<class AMUTA_Trace> SpawnedTargetActor; 
-	
-	UPROPERTY()
-	TSubclassOf<class AMUTA_Trace> TargetActorClass;
+	TArray<AMUTA_Trace*> SpawnedTargetActors; 
 
 	UPROPERTY()
 	FName TargetDamageInfo;

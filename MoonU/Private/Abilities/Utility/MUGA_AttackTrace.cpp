@@ -18,7 +18,7 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceClass, TraceName);
+	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceName);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
 	AttackTraceTask->ReadyForActivation();

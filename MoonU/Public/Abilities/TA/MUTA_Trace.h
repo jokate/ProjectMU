@@ -41,7 +41,7 @@ public:
 
 	virtual void ProcessDamage(UAbilitySystemComponent* SourceASC, UAbilitySystemComponent* TargetASC);
 
-	virtual void ApplyBuff(UAbilitySystemComponent* SourceASC, UAbilitySystemComponent* TargetASC, TSubclassOf<UGameplayEffect> BuffEffectClass ); 
+	virtual void ApplyBuff(UAbilitySystemComponent* SourceASC, UAbilitySystemComponent* TargetASC, TSubclassOf<UGameplayEffect> BuffEffectClass );
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MUTA")

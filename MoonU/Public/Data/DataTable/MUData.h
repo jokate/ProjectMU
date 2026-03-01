@@ -467,9 +467,12 @@ USTRUCT(BlueprintType)
 struct FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FTransform OffSetTransform;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "원형")
 struct FMUTraceRangeConfig_Box : public FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
@@ -478,7 +481,7 @@ struct FMUTraceRangeConfig_Box : public FMUTraceRangeConfigBase
 	FVector BoxExtent = FVector(50.f);
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "사각형")
 struct FMUTraceRangeConfig_Sphere : public FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
@@ -487,7 +490,7 @@ struct FMUTraceRangeConfig_Sphere : public FMUTraceRangeConfigBase
 	float Radius = 100.f;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, DisplayName = "캡슐")
 struct FMUTraceRangeConfig_Capsule : public FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
