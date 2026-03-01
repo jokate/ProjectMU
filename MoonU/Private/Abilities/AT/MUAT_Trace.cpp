@@ -55,12 +55,14 @@ void UMUAT_Trace::SetupTraceData()
 			continue;
 		}
 		FTransform FinalTransform = AvatarActor->GetActorTransform();
+		FName AttachmentSocket = NAME_None;
 		if (AMUTA_BoxTrace* BoxTrace = Cast<AMUTA_BoxTrace>(Trace))
 		{
 			const FMUTraceRangeConfig_Box* Cfg = RangeConfig.GetPtr<FMUTraceRangeConfig_Box>();
 			if ( Cfg != nullptr )
 			{
 				FinalTransform += Cfg->OffSetTransform;
+				AttachmentSocket = Cfg->AttachmentSocketName;
 				BoxTrace->SetupBoxExtent(Cfg->BoxExtent);
 			}
 		}
@@ -72,6 +74,7 @@ void UMUAT_Trace::SetupTraceData()
 			if ( Cfg != nullptr )
 			{
 				FinalTransform += Cfg->OffSetTransform;
+				AttachmentSocket = Cfg->AttachmentSocketName;
 				CapsuleTrace->SetupCapsule(Cfg->HalfHeight, Cfg->Radius);
 			}
 		}
@@ -83,11 +86,12 @@ void UMUAT_Trace::SetupTraceData()
 			if ( Cfg != nullptr )
 			{
 				FinalTransform += Cfg->OffSetTransform;
+				AttachmentSocket = Cfg->AttachmentSocketName;
 				SphereTrace->SetupRadius(Cfg->Radius);
 			}
 		}
 
-		FinalizeTargetActor(Trace, FinalTransform);
+		FinalizeTargetActor(Trace, FinalTransform, AttachmentSocket);
 	}
 }
 
@@ -105,14 +109,20 @@ nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn));
 	return SpawnedTargetActor;
 }
 
-void UMUAT_Trace::FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform)
+void UMUAT_Trace::FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform, const FName& AttachmentSocket)
 {
+	AActor* AvatarActor = GetAvatarActor();
 	UAbilitySystemComponent* ASC = AbilitySystemComponent.Get();
-	if (ASC)
+	if (IsValid(ASC) && IsValid(AvatarActor))
 	{
 		TraceTarget->FinishSpawning(FinalizeTransform);
 		ASC->SpawnedTargetActors.Push(TraceTarget);
 		TraceTarget->StartTargeting(Ability);
+		TraceTarget->AttachToActor(AvatarActor,
+			AttachmentSocket == NAME_None ?
+			FAttachmentTransformRules::KeepWorldTransform
+			: FAttachmentTransformRules::SnapToTargetIncludingScale
+			, AttachmentSocket);
 	}
 	
 	SpawnedTargetActors.AddUnique(TraceTarget);

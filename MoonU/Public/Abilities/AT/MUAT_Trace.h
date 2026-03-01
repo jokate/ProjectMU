@@ -31,7 +31,7 @@ public :
 
 	AMUTA_Trace* SpawnAndInitializeTargetActor(TSubclassOf<AMUTA_Trace> TraceClass );
 
-	void FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform);
+	void FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform, const FName& AttachmentSocket = NAME_None);
 protected:
 	
 	void OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& DataHandle);

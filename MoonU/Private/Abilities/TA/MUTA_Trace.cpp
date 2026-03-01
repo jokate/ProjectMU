@@ -21,6 +21,7 @@ AMUTA_Trace::AMUTA_Trace()
 {
 	RootCollisionComponent = CreateDefaultSubobject<USceneComponent>("RootCollisionComponent");
 	SetRootComponent(RootCollisionComponent);
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AMUTA_Trace::PostInitializeComponents()
@@ -79,15 +80,11 @@ void AMUTA_Trace::StartTargeting(UGameplayAbility* Ability)
 	SourceActor = Ability->GetCurrentActorInfo()->AvatarActor.Get();
 
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(SourceActor);
-
-	if (!ASC)
+	FMUDamageInfo DamageInfo;
+	
+	if (!ASC || !UMUFunctionLibrary::GetDamageInfo(this, TargetDamageInfo, DamageInfo))
 	{
 		return;	
-	}
-
-	if ( IsValid(SourceActor) )
-	{
-		AttachToActor(SourceActor, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
 	}
 	
 	ASC->GenericGameplayEventCallbacks.FindOrAdd(MU_EVENT_TRACEEND).AddUObject(this, &ThisClass::OnAnimNotifyStateEnd);
@@ -119,7 +116,6 @@ void AMUTA_Trace::OnAnimNotifyStateEnd(const FGameplayEventData* EventData)
 void AMUTA_Trace::TraceStart()
 {
 	//Redefine : 2026-03-01 : Check All Shape Overlap Actors
-
 	TArray<FHitResult> HitResults;
 	for ( UShapeComponent* DamageShape : DamageShapes )
 	{

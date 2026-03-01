@@ -470,6 +470,9 @@ struct FMUTraceRangeConfigBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FTransform OffSetTransform;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName AttachmentSocketName = NAME_None;
 };
 
 USTRUCT(BlueprintType, DisplayName = "박스")
