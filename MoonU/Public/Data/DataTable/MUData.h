@@ -472,7 +472,7 @@ struct FMUTraceRangeConfigBase
 	FTransform OffSetTransform;
 };
 
-USTRUCT(BlueprintType, DisplayName = "원형")
+USTRUCT(BlueprintType, DisplayName = "박스")
 struct FMUTraceRangeConfig_Box : public FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
@@ -481,7 +481,7 @@ struct FMUTraceRangeConfig_Box : public FMUTraceRangeConfigBase
 	FVector BoxExtent = FVector(50.f);
 };
 
-USTRUCT(BlueprintType, DisplayName = "사각형")
+USTRUCT(BlueprintType, DisplayName = "원형")
 struct FMUTraceRangeConfig_Sphere : public FMUTraceRangeConfigBase
 {
 	GENERATED_BODY()
