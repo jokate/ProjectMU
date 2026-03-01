@@ -112,19 +112,23 @@ nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn));
 
 void UMUAT_Trace::FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform, const FName& AttachmentSocket)
 {
-	AActor* AvatarActor = GetAvatarActor();
+	ACharacter* AvatarActor = Cast<ACharacter>(GetAvatarActor());
+	USkeletalMeshComponent* SkeletalComponent = AvatarActor->GetMesh();
 	UAbilitySystemComponent* ASC = AbilitySystemComponent.Get();
-	if (IsValid(ASC) && IsValid(AvatarActor))
+
+	if ( IsValid(AvatarActor) == false || IsValid(SkeletalComponent) == false || IsValid(ASC) == false )
 	{
-		TraceTarget->FinishSpawning(FinalizeTransform);
-		ASC->SpawnedTargetActors.Push(TraceTarget);
-		TraceTarget->StartTargeting(Ability);
-		TraceTarget->AttachToActor(AvatarActor,
-			AttachmentSocket == NAME_None ?
-			FAttachmentTransformRules::KeepWorldTransform
-			: FAttachmentTransformRules::SnapToTargetIncludingScale
-			, AttachmentSocket);
+		return;
 	}
+	
+	TraceTarget->FinishSpawning(FinalizeTransform);
+	ASC->SpawnedTargetActors.Push(TraceTarget);
+	TraceTarget->StartTargeting(Ability);
+	TraceTarget->AttachToComponent(SkeletalComponent,
+		AttachmentSocket == NAME_None ?
+		FAttachmentTransformRules::KeepWorldTransform
+		: FAttachmentTransformRules::SnapToTargetIncludingScale
+		, AttachmentSocket);
 	
 	SpawnedTargetActors.AddUnique(TraceTarget);
 }
