@@ -29,9 +29,6 @@ public :
 	void OnMontageInterrupted();
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UAnimMontage> MontageToPlay;
-
-	UPROPERTY(EditDefaultsOnly)
 	bool bUseMotionWarp = false;
 
 	UPROPERTY(EditDefaultsOnly)

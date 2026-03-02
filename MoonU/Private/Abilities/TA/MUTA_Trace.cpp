@@ -208,6 +208,9 @@ void AMUTA_Trace::ProcessDamage(UAbilitySystemComponent* SourceASC, UAbilitySyst
 
 	ModifiableTarget->SetCurrentHp(FMath::Clamp(ExpectHp, 0.f, ExpectHp));
 
+	// 데미지 관련한 부분에 대해서 콜백 처리.
+	//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(SourceActor, MU_EVENT_HITCOMPLETE, FGameplayEventData());
+
 	// 사실상 공격구조에 대한 변동.
 	ApplyBuff(SourceASC, SourceASC, DamageInfo.ApplyBuffToSource);
 	ApplyBuff(SourceASC, TargetASC, DamageInfo.ApplyBuffToTarget);

@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Abilities/MUAbilityTriggerPayload.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Interface/MotionWarpTarget.h"
 
@@ -19,8 +20,16 @@ void UMUGA_PlayMontage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                   const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	const UMUAbilityTriggerPayload_Montage* MontagePayload = UMUAbilityTriggerPayload_Montage::GetMontagePayload(TriggerEventData);
+
+	if ( IsValid(MontagePayload) == false || IsValid(MontagePayload->MontageToPlay) == false )
+	{
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+		return;
+	}
 	
-	UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayMontage"), MontageToPlay);
+	UAbilityTask_PlayMontageAndWait* PlayMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, TEXT("PlayMontage"), MontagePayload->MontageToPlay);
 
 	PlayMontageTask->OnCompleted.AddDynamic(this, &UMUGA_PlayMontage::OnMontagePlayed);
 	PlayMontageTask->OnInterrupted.AddDynamic(this, &UMUGA_PlayMontage::OnMontageInterrupted);

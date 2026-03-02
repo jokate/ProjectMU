@@ -31,3 +31,16 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
 	FName DamageInfoName;
 };
+
+UCLASS(BlueprintType, Blueprintable, DefaultToInstanced, EditInlineNew)
+class MOONU_API UMUAbilityTriggerPayload_Montage : public UMUAbilityTriggerPayload
+{
+	GENERATED_BODY()
+
+public :
+	static const UMUAbilityTriggerPayload_Montage* GetMontagePayload(const FGameplayEventData* EventData);
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+	TObjectPtr<UAnimMontage> MontageToPlay;
+};
