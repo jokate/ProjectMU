@@ -33,7 +33,7 @@ public :
 	virtual void PlayerControllerChanged(APlayerController* NewPlayerController) override;
 
 	virtual void SetupCamera( FName IndicatorID );
-	virtual void DeactivateCamera();
+	virtual void DeactivateCamera(FName IndicatorID);
 
 	virtual FVector GetIndicatorTargetLocation( FName IndicatorID );
 	virtual FRotator GetIndicatorTargetRotation( FName IndicatorID );

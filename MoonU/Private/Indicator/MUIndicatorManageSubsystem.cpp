@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "Entity/MUCameraActor.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Library/MUFunctionLibrary.h"
 
 bool UMUIndicatorManageSubsystem::RegisterIndicator( FName IndicatorID )
@@ -145,15 +146,42 @@ void UMUIndicatorManageSubsystem::SetupCamera(FName IndicatorID)
 	LocalPlayerController->SetViewTargetWithBlend( IndicatorCameraActor, 0.3f );
 }
 
-void UMUIndicatorManageSubsystem::DeactivateCamera()
+void UMUIndicatorManageSubsystem::DeactivateCamera(FName IndicatorID)
 {
 	if ( IsValid( LocalPlayerController) == false || IsValid(LocalPlayerActor) == false || IsValid(IndicatorCameraActor) == false)
 	{
 		return;
 	}
+	
+	LocalPlayerController->SetControlRotation(GetIndicatorTargetRotation(IndicatorID));
 
-	LocalPlayerController->SetViewTargetWithBlend( LocalPlayerActor, 0.3f );
+	if (USpringArmComponent* SpringArm = LocalPlayerActor->FindComponentByClass<USpringArmComponent>())
+	{
+		SpringArm->bEnableCameraLag = false;
+		SpringArm->bEnableCameraRotationLag = false;
+	}
+
+	LocalPlayerController->SetViewTargetWithBlend(LocalPlayerActor, 0.3f);
+	
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		[this]()
+		{
+			if (IsValid(LocalPlayerActor))
+			{
+				if (USpringArmComponent* SpringArm = LocalPlayerActor->FindComponentByClass<USpringArmComponent>())
+				{
+					SpringArm->bEnableCameraLag = true;
+					SpringArm->bEnableCameraRotationLag = true;
+				}
+			}
+		},
+		0.15f,
+		false
+	);
 }
+
 
 FVector UMUIndicatorManageSubsystem::GetIndicatorTargetLocation(FName IndicatorID)
 {
@@ -206,7 +234,7 @@ void UMUIndicatorManageSubsystem::DeactivateSkillIndicator(FName IndicatorID)
 
 	SkillIndicator->DeactivateSkillIndicator();
 
-	DeactivateCamera();
+	DeactivateCamera(IndicatorID);
 
 	bIsSkillMode = false;
 }
