@@ -76,6 +76,19 @@ void UMUGA_IndicatorSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+bool UMUGA_IndicatorSkill::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	if ( IsValid(ASC) == true && ASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_READYSKILL))
+	{
+		return false;
+	}
+	
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+
 void UMUGA_IndicatorSkill::ActivateSkill()
 {
 	AActor* OwnerActor = GetAvatarActorFromActorInfo();

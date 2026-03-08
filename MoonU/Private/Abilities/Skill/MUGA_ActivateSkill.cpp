@@ -45,7 +45,7 @@ void UMUGA_ActivateSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	{
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
-			ASC->ExecuteGameplayCue(GameplayCueTag);
+			ASC->AddGameplayCue(GameplayCueTag);
 		}
 
 		ASC->AddActiveAbility(this);
@@ -65,7 +65,7 @@ void UMUGA_ActivateSkill::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		for (const FGameplayTag& GameplayCueTag : GameplayCueTags)
 		{
-			ASC->InvokeGameplayCueEvent(GameplayCueTag, EGameplayCueEvent::Removed);
+			ASC->RemoveGameplayCue(GameplayCueTag);
 		}
 
 		ASC->RemoveActiveAbility(this);
@@ -310,6 +310,13 @@ void UMUGA_ActivateSkill::SetupAnimMontage(UAnimMontage* TargetToPlayMontage)
 		Task_PlayMontageAndWait->EndTask();
 		Task_PlayMontageAndWait = nullptr;
 	}
+
+	if ( SkillData.bUseMotionWarp == true)
+	{
+		SkillData.bUseIndicator ?
+			MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation )
+			: MotionWarp->SetMotionWarp(SkillData.MotionWarpName, SkillData.MotionWarpType);
+	}
 	
 	Task_PlayMontageAndWait = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, SkillID, TargetToPlayMontage,
 		1.0f, NAME_None, true );
@@ -318,13 +325,6 @@ void UMUGA_ActivateSkill::SetupAnimMontage(UAnimMontage* TargetToPlayMontage)
 	Task_PlayMontageAndWait->OnInterrupted.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
 	Task_PlayMontageAndWait->OnCancelled.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
 	Task_PlayMontageAndWait->OnBlendOut.AddDynamic(this, &UMUGA_ActivateSkill::OnInterruptedCallback);
-
-	if ( SkillData.bUseMotionWarp == true)
-	{
-		SkillData.bUseIndicator ?
-			MotionWarp->SetMotionWarpToCursorDirection(SkillData.MotionWarpName,SkillData.MotionWarpType, TargetLocation, TargetRotation )
-			: MotionWarp->SetMotionWarp(SkillData.MotionWarpName, SkillData.MotionWarpType);
-	}
 	
 	Task_PlayMontageAndWait->ReadyForActivation();
 }

@@ -7,7 +7,7 @@
 #include "MUGC_IndicatorCam.generated.h"
 
 UCLASS()
-class MOONU_API AMUGC_IndicatorCam : public AMUGC_PlayTimeline
+class MOONU_API AMUGC_IndicatorCam : public AGameplayCueNotify_Actor
 {
 	GENERATED_BODY()
 
@@ -20,8 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual bool OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;
+	virtual bool OnActive_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;	
 
 	virtual bool OnRemove_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;
-	
 };

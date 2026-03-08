@@ -8,7 +8,7 @@
 
 AMUGC_IndicatorCam::AMUGC_IndicatorCam()
 {
-
+	bAutoDestroyOnRemove = true;
 }
 
 void AMUGC_IndicatorCam::BeginPlay()
@@ -17,10 +17,10 @@ void AMUGC_IndicatorCam::BeginPlay()
 	
 }
 
-bool AMUGC_IndicatorCam::OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
+bool AMUGC_IndicatorCam::OnActive_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
 {
-	Super::OnExecute_Implementation(MyTarget, Parameters);
-
+	Super::OnActive_Implementation(MyTarget, Parameters);
+	
 	AMUCharacterPlayer* CharacterPlayer = Cast<AMUCharacterPlayer>(MyTarget);
 
 	if ( IsValid(CharacterPlayer) == true )
