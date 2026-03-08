@@ -23,6 +23,7 @@ class MOONU_API UMUEnforcementSceneWidget : public UMUWidget
 
 public :
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 	UFUNCTION()
 	virtual void AttributeEnforcementClickedCallback( FName SlotName );

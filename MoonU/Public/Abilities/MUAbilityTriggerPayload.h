@@ -39,6 +39,7 @@ class MOONU_API UMUAbilityTriggerPayload_Montage : public UMUAbilityTriggerPaylo
 
 public :
 	static const UMUAbilityTriggerPayload_Montage* GetMontagePayload(const FGameplayEventData* EventData);
+	static UMUAbilityTriggerPayload_Montage* InitDamageMontageData(AActor* Owner, float Damage);
 
 public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")

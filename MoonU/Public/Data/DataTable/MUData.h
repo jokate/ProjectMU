@@ -18,6 +18,7 @@
  * 
  */
 
+class UMUMontageAssetData;
 class UGameplayAbility;
 
 USTRUCT( BlueprintType )
@@ -145,6 +146,9 @@ public :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TMap<int32, FMUAttributeInitValues> AttributeValueByLevel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Montage")
+	TObjectPtr<UMUMontageAssetData> MontageAssetData;
 };
 
 USTRUCT( BlueprintType )

@@ -3,6 +3,8 @@
 
 #include "Data/DataTable/MUData.h"
 
+#include "Library/MUFunctionLibrary.h"
+
 void FMUInputCommandList::ConsumeInput(ECombatInputType InputType )
 {
 	// 정학한 순서대로 들어와야 하는경우. 인덱스 여부 판단.

@@ -8,6 +8,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "MUDefines.h"
 #include "Abilities/GameplayAbility.h"
+#include "Abilities/MUAbilityTriggerPayload.h"
 #include "Attribute/MUCharacterAttributeSet.h"
 #include "Components/ShapeComponent.h"
 #include "GameFramework/Character.h"
@@ -209,8 +210,18 @@ void AMUTA_Trace::ProcessDamage(UAbilitySystemComponent* SourceASC, UAbilitySyst
 	ModifiableTarget->SetCurrentHp(FMath::Clamp(ExpectHp, 0.f, ExpectHp));
 
 	// 데미지 관련한 부분에 대해서 콜백 처리.
-	//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(SourceActor, MU_EVENT_HITCOMPLETE, FGameplayEventData());
-
+	AActor* TargetActor = TargetASC->GetAvatarActor();
+	if ( IsValid(TargetActor))
+	{
+		UMUAbilityTriggerPayload_Montage* MontagePayload = UMUAbilityTriggerPayload_Montage::InitDamageMontageData(TargetActor, FinalDamage);
+		if ( IsValid(MontagePayload) && IsValid(TargetActor) )
+		{
+			FGameplayEventData EventData;
+			EventData.OptionalObject = MontagePayload;
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(TargetActor, MU_EVENT_PLAYMONTAGE, EventData);
+		}	
+	}
+	
 	// 사실상 공격구조에 대한 변동.
 	ApplyBuff(SourceASC, SourceASC, DamageInfo.ApplyBuffToSource);
 	ApplyBuff(SourceASC, TargetASC, DamageInfo.ApplyBuffToTarget);

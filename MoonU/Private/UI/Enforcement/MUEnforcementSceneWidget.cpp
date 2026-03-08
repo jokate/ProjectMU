@@ -24,6 +24,16 @@ void UMUEnforcementSceneWidget::NativeConstruct()
 	SkillTreeWidget->OnAttributeTreeClicked.AddDynamic(this, &UMUEnforcementSceneWidget::AttributeEnforcementClickedCallback);
 }
 
+void UMUEnforcementSceneWidget::NativeDestruct()
+{
+	MenuWidget->OnChangedTopMenu.RemoveDynamic( SkillTreeWidget, &UMUSkillTreeWidget::SetupCharacterID);
+	MenuWidget->OnChangedTopMenu.RemoveDynamic( EnforcementSelectionWidget, &UMUEnforcementSelectionCanvas::SetCharacterID);
+
+	SkillTreeWidget->OnSkillTreeClicked.RemoveDynamic( this, &UMUEnforcementSceneWidget::SkillEnforcementClickedCallback);
+	SkillTreeWidget->OnAttributeTreeClicked.RemoveDynamic(this, &UMUEnforcementSceneWidget::AttributeEnforcementClickedCallback);
+	Super::NativeDestruct();
+}
+
 void UMUEnforcementSceneWidget::AttributeEnforcementClickedCallback(FName SlotName)
 {
 	if ( IsValid(EnforcementSelectionWidget) == true )

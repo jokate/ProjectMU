@@ -59,6 +59,7 @@ return;                \
 #define MU_EVENT_TIMEREWINDEND FGameplayTag::RequestGameplayTag(FName("Event.TimeRewindEnd"))
 #define MU_EVENT_DROPITEM FGameplayTag::RequestGameplayTag(FName("Event.DropItem"))
 #define MU_EVENT_DROP_EXP FGameplayTag::RequestGameplayTag(FName("Event.DropExperience"))
+#define MU_EVENT_PLAYMONTAGE FGameplayTag::RequestGameplayTag(FName("Event.PlayMontage"))
 
 #define MU_EVENT_ATTACKFINISHED FGameplayTag::RequestGameplayTag(FName("Event.AttackFinished"))
 #define MU_EVENT_ATTACKSTARTED FGameplayTag::RequestGameplayTag(FName("Event.AttackStarted"))
