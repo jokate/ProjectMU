@@ -18,8 +18,38 @@ UMUGA_Rollout::UMUGA_Rollout()
 	ActivationBlockedTags.AddTag( MU_CHARACTERSTATE_READYSKILL );
 }
 
+bool UMUGA_Rollout::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	AMUCharacterPlayer* Character = Cast<AMUCharacterPlayer>(ActorInfo->AvatarActor.Get());
+
+	if (Character == nullptr)
+	{
+		return false;
+	}
+
+	UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return false;
+	}
+	const float CurrentStamina = ASC->GetNumericAttribute(UMUStaminaAttributeSet::GetCurrentStaminaAttribute());
+	
+	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
+
+	if (RecentlyMoved.IsNearlyZero() || CurrentStamina < MinStaminaToUse)
+	{
+		//명시적으로 Ability가 끝났음을 알림
+		return false;
+	}
+	
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+
 void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+                                    const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
@@ -29,28 +59,10 @@ void UMUGA_Rollout::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	{
 		return;
 	}
-
-	UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
-
-	if (!ASC)
-	{
-		return;
-	}
-	const float CurrentStamina = ASC->GetNumericAttribute(UMUStaminaAttributeSet::GetCurrentStaminaAttribute());
 	
 	FVector2D RecentlyMoved = Character->GetRecentlyMovedVector().GetSafeNormal();
 
 	int32 Sign = RecentlyMoved.X > 0.0f ? 1 : -1;
- 	
-	if (RecentlyMoved.IsNearlyZero() || CurrentStamina < MinStaminaToUse)
-	{
-		//명시적으로 Ability가 끝났음을 알림
-		bool bReplicatedEndAbility = true;
-		bool bWasCancelled = false;
-		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicatedEndAbility, bWasCancelled);
-		return;
-	}
-
 	
 	float Angle = FMath::RadiansToDegrees(acosf(FVector2D::DotProduct(RecentlyMoved, FVector2D(0, 1)))) * Sign;
 	FName SectionName = GetCurrentMontageSection(Angle);

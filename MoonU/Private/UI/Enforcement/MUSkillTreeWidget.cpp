@@ -24,6 +24,18 @@ void UMUSkillTreeWidget::NativeConstruct()
 	}
 }
 
+void UMUSkillTreeWidget::NativeDestruct()
+{
+	UMUEnforcementManageComponent* EnforcementManageComponent = UMUFunctionLibrary::GetEnforcementManageComponent( this );
+    
+    if ( IsValid( EnforcementManageComponent ) == true )
+    {
+    	EnforcementManageComponent->OnEnforcementUpdated.RemoveDynamic( this, &UMUSkillTreeWidget::OnEnforcementUpdated );
+    }
+	
+	Super::NativeDestruct();
+}
+
 void UMUSkillTreeWidget::SetupCharacterID(FName InCharacterID)
 {
 	int32 PrevCharacterID = CharacterID;
