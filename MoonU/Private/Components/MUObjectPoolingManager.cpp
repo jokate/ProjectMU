@@ -66,16 +66,12 @@ AActor* UMUObjectPoolingManager::GetPoolingObject(FName InSkillName, FTransform 
 				continue;
 			}
 			
-			IObjectPoolingTarget* PoolingTarget = Cast<IObjectPoolingTarget>(TempPoolingObject);
-
-			if ( PoolingTarget == nullptr )
+			if (IObjectPoolingTarget* PoolingTarget = Cast<IObjectPoolingTarget>(TempPoolingObject) )
 			{
-				continue;
-			}
-
-			if ( PoolingTarget->CanActivateObject() == false )
-			{
-				continue;
+				if ( PoolingTarget->CanActivateObject() == false )
+				{
+					continue;
+				}
 			}
 			
 			return TempPoolingObject;

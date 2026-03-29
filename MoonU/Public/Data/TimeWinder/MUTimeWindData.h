@@ -8,7 +8,7 @@
 #include "MUTimeWindData.generated.h"
 
 USTRUCT(BlueprintType)
-struct FTimeWindMontageRecordData
+struct FMUCharacterMontageRecordData
 {
 	GENERATED_BODY()
 	
@@ -32,7 +32,7 @@ struct FAttributeChangedRecord
 };
 
 USTRUCT(BlueprintType)
-struct FTimeWindRecordData
+struct FMUCharacterRecordData
 {
 	GENERATED_BODY()
 	
@@ -43,7 +43,7 @@ struct FTimeWindRecordData
 	FRotator Rotation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FTimeWindMontageRecordData MontageRecordData;
+	FMUCharacterMontageRecordData MontageRecordData;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FVector RewindVelocity;

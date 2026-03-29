@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Entity/AttackEntity/DebuffZone/MUTimeStopZone.h"
+#include "Entity/AttackEntity/Reactor/DebuffZone/MUTimeStopZone.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "MUDefines.h"

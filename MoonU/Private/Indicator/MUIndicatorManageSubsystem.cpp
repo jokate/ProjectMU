@@ -161,7 +161,7 @@ void UMUIndicatorManageSubsystem::DeactivateCamera(FName IndicatorID)
 		SpringArm->bEnableCameraRotationLag = false;
 	}
 
-	LocalPlayerController->SetViewTargetWithBlend(LocalPlayerActor, 0.3f);
+	LocalPlayerController->SetViewTargetWithBlend(LocalPlayerActor, 0.5f);
 	
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(

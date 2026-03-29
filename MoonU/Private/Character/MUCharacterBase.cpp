@@ -7,7 +7,7 @@
 #include "Abilities/MUAbilitySystemComponent.h"
 #include "Components/AbilityInitComponent.h"
 #include "Components/MULevelUpComponent.h"
-#include "Components/TimeWindComponent.h"
+#include "Components/MUCharacterRecordComponent.h"
 #include "Data/DataTable/MUData.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Library/MUFunctionLibrary.h"
@@ -20,7 +20,7 @@ AMUCharacterBase::AMUCharacterBase( const FObjectInitializer& ObjectInitializer 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	TimeWindComponent = CreateDefaultSubobject<UTimeWindComponent>(TEXT("TimeWinder"));
+	TimeWindComponent = CreateDefaultSubobject<UMUCharacterRecordComponent>(TEXT("TimeWinder"));
 	AbilityInitComponent = CreateDefaultSubobject<UAbilityInitComponent>(TEXT("AbilityInitComponent"));
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpComponent"));
 	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliComponent"));

@@ -88,3 +88,9 @@ return;                \
 
 #define MU_SKILL_INSTANT FGameplayTag::RequestGameplayTag(FName("SkillTag.Instant"))
 #define MU_SKILL_INDICATOR FGameplayTag::RequestGameplayTag(FName("SkillTag.Indicator"))
+
+#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
+GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)

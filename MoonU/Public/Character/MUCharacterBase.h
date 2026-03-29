@@ -46,7 +46,7 @@ public:
 #pragma endregion
 
 #pragma region IMotionWarpTarget
-	virtual class UMotionWarpingComponent* GetMotionWarpComponent(); 
+	virtual class UMotionWarpingComponent* GetMotionWarpComponent() override; 
 	
 	virtual void SetMotionWarp(const FName InName, EMotionWarpType InMotionWarpType, const float MotionWarpValue = 0.0f);
 
@@ -118,7 +118,7 @@ protected :
 	TObjectPtr<class UAbilityInitComponent> AbilityInitComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Time Wind Component")
-	TObjectPtr<class UTimeWindComponent> TimeWindComponent;
+	TObjectPtr<class UMUCharacterRecordComponent> TimeWindComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Level Up Component")
 	TObjectPtr<class UMULevelUpComponent> LevelUpComponent;

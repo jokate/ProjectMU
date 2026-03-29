@@ -6,17 +6,29 @@
 #include "Components/ActorComponent.h"
 #include "Data/TimeWinder/MUTimeWindData.h"
 #include "Interface/TimerWindTarget.h"
-#include "TimeWindComponent.generated.h"
+#include "MUCharacterRecordComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FMUCharacterRecordPolicy
+{
+	GENERATED_BODY()
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bForce;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer Tags;
+};
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MOONU_API UTimeWindComponent : public UActorComponent, public ITimeWindTarget
+class MOONU_API UMUCharacterRecordComponent : public UActorComponent, public ITimeWindTarget
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
-	UTimeWindComponent();
+	UMUCharacterRecordComponent();
 
 protected:
 	virtual void BeginPlay() override;
@@ -29,21 +41,37 @@ public:
 	void OnInitialize();
 	
 protected :
-	void TimeRewind();
-	
+	void Rewind();
 	void Record();
-
+	void Play();
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
+
+	void PlayRecord(const FMUCharacterRecordData& CharacterRecordData);
+
+	
+	bool CheckPolicy(const FMUCharacterRecordPolicy& Policy) const;
+
+public : 
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<FTimeWindRecordData> RecordDatas;
+	TArray<FMUCharacterRecordData> RecordDatas;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FAttributeChangedRecord> AttributeRecords;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<FGameplayAttribute> RecordGameplayAttributes;
+	
+	UPROPERTY(EditDefaultsOnly)
+	FMUCharacterRecordPolicy RecordPolicy;
 
+	UPROPERTY(EditDefaultsOnly)
+	FMUCharacterRecordPolicy RewindPolicy;
+
+	UPROPERTY(EditDefaultsOnly)
+	FMUCharacterRecordPolicy PlayPolicy;
+	
+public : 
 	UPROPERTY(EditDefaultsOnly)
 	float RecordTime = 3.0f;
 
@@ -61,7 +89,7 @@ protected :
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	uint8 bIsMaxRecordInit : 1;
+	
 
 	FOnTimewindEnd TimeWindEndEvent;
 };
-

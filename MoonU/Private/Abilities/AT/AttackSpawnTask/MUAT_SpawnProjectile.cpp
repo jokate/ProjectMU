@@ -3,7 +3,6 @@
 
 #include "Abilities/AT/AttackSpawnTask/MUAT_SpawnProjectile.h"
 #include "Entity/AttackEntity/MUAttackEntity.h"
-#include "Entity/AttackEntity/MUProjectileEntity.h"
 
 UMUAT_SpawnProjectile* UMUAT_SpawnProjectile::SpawnProjectile(UGameplayAbility* OwningAbility,
                                                               FName InSkillID,  FTransform InSpawnTransform, float InSpawnWaitTime)

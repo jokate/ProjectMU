@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Entity/AttackEntity/MUProjectileEntity.h"
+#include "Entity/AttackEntity/Reactor/MUProjectileEntity.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/MUAbilitySystemComponent.h"
@@ -28,7 +28,7 @@ TArray<AActor*> AMUProjectileEntity::GetAttackableActorList()
 	FVector StartLoc = GetActorLocation();
 
 	TArray<AActor*> ActorsToIgnore;
-	ActorsToIgnore.Add(SpawnedOwner);
+	ActorsToIgnore.Add(SpawnedOwner.Get());
 
 	// 사실 Sphere로 해도 괼거 같기는 하다..
 	UKismetSystemLibrary::SphereTraceMultiByProfile(this, StartLoc, StartLoc + FVector::OneVector,
@@ -48,7 +48,7 @@ void AMUProjectileEntity::OnReacted(AActor* ReactedActor)
 	Super::OnReacted(ReactedActor);
 
 	// 적용 목적으로 하는 이펙트셋 적용.
-	UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(SpawnedOwner);
+	UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(SpawnedOwner.Get());
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ReactedActor);
 	if ( IsValid(SourceASC) == true ) 
 	{

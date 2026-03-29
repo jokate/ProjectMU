@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MUAttackEntity.h"
+#include "MUAttackEntityReactor.h"
 #include "Data/DataTable/MUData.h"
 #include "MUProjectileEntity.generated.h"
 
 class UProjectileMovementComponent;
 
 UCLASS()
-class MOONU_API AMUProjectileEntity : public AMUAttackEntity
+class MOONU_API AMUProjectileEntity : public AMUAttackEntityReactor
 {
 	GENERATED_BODY()
 

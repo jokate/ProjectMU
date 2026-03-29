@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Entity/AttackEntity/MUCircularZone.h"
+#include "Entity/AttackEntity/Reactor/MUCircularZone.h"
 #include "MUTimeStopZone.generated.h"
 
 UCLASS()

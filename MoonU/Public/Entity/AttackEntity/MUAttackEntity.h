@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Actor.h"
 #include "Interface/ObjectPoolingTarget.h"
 #include "MUAttackEntity.generated.h"
@@ -16,63 +17,25 @@ enum class EAttackingType : uint8
 };
 
 UCLASS()
-class MOONU_API AMUAttackEntity : public AActor, public IObjectPoolingTarget
+class MOONU_API AMUAttackEntity : public AActor, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
 	AMUAttackEntity();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
-public:
 	virtual void RegisterOwner( AActor* InSpawnedOwner );
-
-	virtual void OnReacted( AActor* ReactedActor );
-
-	virtual bool CheckReact( AActor* ReactTarget ) const;
-
-	virtual void DoAttack();
-
-	virtual TArray<AActor*> GetAttackableActorList();
-
-#pragma region ObjectPoolingTarget
-
-	virtual void ReturnToPooling() override;
-
-	virtual bool CanActivateObject() override;
-
-	virtual void ActivateObject(FTransform Transform) override;
+protected:
 	
-#pragma endregion
-	virtual void LifeSpanExpired() override;
-	
-public :
-	UPROPERTY( EditDefaultsOnly )
-	float ReactCheckInterval = 0.5f;
-
 	UPROPERTY( EditDefaultsOnly )
 	EAttackingType AttackTo = EAttackingType::ENEMY;
-
-	UPROPERTY( EditDefaultsOnly )
-	bool bHitOnce = false;
-
-public :
 	
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+public :
 	UPROPERTY()
-	TObjectPtr<AActor> SpawnedOwner;
+	TWeakObjectPtr<AActor> SpawnedOwner;
 
 	UPROPERTY()
 	bool bIsActive = false;
-	
-	FTimerHandle ReactCheckTimer;
-
-	UPROPERTY()
-	TArray<TWeakObjectPtr<AActor>> ReactedActors;
-	
 };

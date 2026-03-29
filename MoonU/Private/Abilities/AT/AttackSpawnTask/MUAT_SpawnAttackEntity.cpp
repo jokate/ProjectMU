@@ -2,8 +2,11 @@
 
 #include "Abilities/AT/AttackSpawnTask/MUAT_SpawnAttackEntity.h"
 
+#include "Components/MUCharacterRecordComponent.h"
 #include "Data/MUDataPrimaryAsset.h"
 #include "Entity/AttackEntity/MUAttackEntity.h"
+#include "Entity/AttackEntity/Reactor/MUAttackEntityReactor.h"
+#include "Entity/AttackEntity/Record/MUAttackEntityRecord.h"
 #include "Framework/MUGameMode.h"
 #include "Library/MUFunctionLibrary.h"
 
@@ -65,8 +68,29 @@ void UMUAT_SpawnAttackEntity::SpawnAttackEntity()
 	}
 	
 	SetupInfoBeforeFinishSpawn(AttackEntity);
-	AttackEntity->ActivateObject(SpawnTransform);
+
+	if ( AMUAttackEntityReactor* EntityReactor = Cast<AMUAttackEntityReactor>(AttackEntity))
+	{
+		EntityReactor->ActivateObject(SpawnTransform);
+	}
+
+	if ( AMUAttackEntityRecord* EntityRecord = Cast<AMUAttackEntityRecord>(AttackEntity) )
+	{
+		AActor* OwnerActor = GetOwnerActor();
+
+		if (IsValid(OwnerActor) == true )
+		{
+			UMUCharacterRecordComponent* RecordComponent = OwnerActor->GetComponentByClass<UMUCharacterRecordComponent>();
+
+			if ( IsValid(RecordComponent) == true )
+			{
+				EntityRecord->AllocateRecord(RecordComponent->RecordDatas);
+			}
+		}
+	}
+	
 	AttackEntity->SetLifeSpan(AttackEntityData.LifeSpan);
+
 	
 	SpawnedAttackEntity = AttackEntity;
 	
