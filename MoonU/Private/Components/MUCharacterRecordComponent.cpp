@@ -55,6 +55,11 @@ void UMUCharacterRecordComponent::TickComponent(float DeltaTime, ELevelTick Tick
                                        FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if ( IsValid(CachedASC) == false )
+	{
+		return;
+	}
 	
 	if (CachedASC->HasMatchingGameplayTag(MU_CHARACTERSTATE_TIMESTOP))
 	{
@@ -71,7 +76,7 @@ void UMUCharacterRecordComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	}
 	else if ( CheckPolicy(RecordPolicy) )
 	{
-		Record();
+		Record(DeltaTime);
 	}
 }
 
@@ -131,7 +136,7 @@ void UMUCharacterRecordComponent::Rewind()
 	if (RecordDatas.Num() > 0)
 	{
 		const FMUCharacterRecordData& RecordData = RecordDatas[0];
-		PlayRecord(RecordData);
+		PlayRecord(RecordData, RewindPolicy.bUseVelocity);
 		RecordDatas.RemoveAt(0);
 	}
 	else
@@ -143,7 +148,7 @@ void UMUCharacterRecordComponent::Rewind()
 	}
 }
 
-void UMUCharacterRecordComponent::Record()
+void UMUCharacterRecordComponent::Record(float DeltaTime)
 {
 	MaxRecord = FMath::RoundToInt32(RecordTime/ GetWorld()->GetDeltaSeconds());
 	
@@ -178,7 +183,8 @@ void UMUCharacterRecordComponent::Record()
 	}
 	
 	RecordData.RewindVelocity = FVector(CachedCharacter->GetVelocity().X, CachedCharacter->GetVelocity().Y, 0); 
-		
+
+	RecordData.DeltaTime = DeltaTime;
 	RecordDatas.Insert(RecordData, 0);
 }
 
@@ -187,13 +193,21 @@ void UMUCharacterRecordComponent::Play()
 	if (RecordDatas.Num() > 0)
 	{
 		const FMUCharacterRecordData& RecordData = RecordDatas.Pop();
-		PlayRecord(RecordData);
+		PlayRecord(RecordData, PlayPolicy.bUseVelocity);
 	}
 }
 
-void UMUCharacterRecordComponent::PlayRecord(const FMUCharacterRecordData& CharacterRecordData)
+void UMUCharacterRecordComponent::PlayRecord(const FMUCharacterRecordData& CharacterRecordData, bool bUseVelocity)
 {
-	GetOwner()->SetActorLocation(CharacterRecordData.Position);
+	if ( bUseVelocity == false )
+	{
+		GetOwner()->SetActorLocation(CharacterRecordData.Position);
+	}
+	else
+	{
+		GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + CharacterRecordData.RewindVelocity * CharacterRecordData.DeltaTime);
+	}
+
 	GetOwner()->SetActorRotation(CharacterRecordData.Rotation);
 
 	if (CharacterRecordData.MontageRecordData.Montage.Get() && CachedAnimInstance)

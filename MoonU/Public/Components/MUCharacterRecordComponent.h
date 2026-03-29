@@ -19,6 +19,9 @@ public :
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTagContainer Tags;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bUseVelocity = false;
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -42,11 +45,11 @@ public:
 	
 protected :
 	void Rewind();
-	void Record();
+	void Record(float DeltaTime);
 	void Play();
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
 
-	void PlayRecord(const FMUCharacterRecordData& CharacterRecordData);
+	void PlayRecord(const FMUCharacterRecordData& CharacterRecordData, bool bUseVelocity);
 
 	
 	bool CheckPolicy(const FMUCharacterRecordPolicy& Policy) const;

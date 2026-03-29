@@ -153,7 +153,7 @@ void UMUIndicatorManageSubsystem::DeactivateCamera(FName IndicatorID)
 		return;
 	}
 	
-	LocalPlayerController->SetControlRotation(GetIndicatorTargetRotation(IndicatorID));
+	//LocalPlayerController->SetControlRotation(GetIndicatorTargetRotation(IndicatorID));
 
 	if (USpringArmComponent* SpringArm = LocalPlayerActor->FindComponentByClass<USpringArmComponent>())
 	{

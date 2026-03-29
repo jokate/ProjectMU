@@ -17,10 +17,14 @@ class MOONU_API AMUAttackEntityRecord : public AMUAttackEntity
 public:
 	// Sets default values for this actor's properties
 	AMUAttackEntityRecord();
+	virtual void RegisterOwner(AActor* InSpawnedOwner) override;
 	void AllocateRecord(const TArray<FMUCharacterRecordData>& DataArray) const;
 protected:
 	
 public :
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USceneComponent> Root;
+		
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;
 

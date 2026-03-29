@@ -49,5 +49,8 @@ struct FMUCharacterRecordData
 	FVector RewindVelocity;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float DeltaTime = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FAttributeChangedRecord> AttributeChangedRecords;
 };
