@@ -53,15 +53,11 @@ TArray<AActor*> AMUAttackEntityReactor::GetAttackableActorList()
 
 void AMUAttackEntityReactor::ReturnToPooling()
 {
-	SetActorHiddenInGame( true );
-	SetActorTickEnabled( false );
+	Super::ReturnToPooling();
 	
 	// 타이머 비할성화 조치.
 	GetWorldTimerManager().ClearTimer( ReactCheckTimer );
 	ReactedActors.Empty();
-	SpawnedOwner = nullptr;
-
-	bIsActive = false;
 }
 
 bool AMUAttackEntityReactor::CanActivateObject()
@@ -72,18 +68,8 @@ bool AMUAttackEntityReactor::CanActivateObject()
 
 void AMUAttackEntityReactor::ActivateObject(FTransform Transform)
 {
-	SetActorHiddenInGame( false );
-	SetActorTickEnabled( true );
-	SetActorTransform( Transform );
-
-	bIsActive = true;
-	
+	Super::ActivateObject(Transform);
 	GetWorldTimerManager().SetTimer( ReactCheckTimer, this, &AMUAttackEntityReactor::DoAttack, ReactCheckInterval, true );
-}
-
-void AMUAttackEntityReactor::LifeSpanExpired()
-{
-	ReturnToPooling();
 }
 
 void AMUAttackEntityReactor::OnReacted(AActor* ReactedActor)

@@ -2,6 +2,8 @@
 
 #include "Abilities/AT/AttackSpawnTask/MUAT_SpawnAttackEntity.h"
 
+#include "NavigationSystem.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/MUCharacterRecordComponent.h"
 #include "Data/MUDataPrimaryAsset.h"
 #include "Entity/AttackEntity/MUAttackEntity.h"
@@ -57,7 +59,7 @@ void UMUAT_SpawnAttackEntity::SpawnAttackEntity()
 	{
 		return;
 	}
-
+	
 	AActor* PoolingObject = GM->GetPoolingObject(SkillID, SpawnTransform);
 	
 	AMUAttackEntity* AttackEntity = Cast<AMUAttackEntity>(PoolingObject);
@@ -69,9 +71,25 @@ void UMUAT_SpawnAttackEntity::SpawnAttackEntity()
 	
 	SetupInfoBeforeFinishSpawn(AttackEntity);
 
-	if ( AMUAttackEntityReactor* EntityReactor = Cast<AMUAttackEntityReactor>(AttackEntity))
+	UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
+
+	if ( IsValid( NavSystem ) == false )
 	{
-		EntityReactor->ActivateObject(SpawnTransform);
+		return;
+	}
+	FNavLocation OutLocation;
+	FVector Extent = FVector(0.f, 0.f, 10000.f);
+			
+	if ( NavSystem->ProjectPointToNavigation(SpawnTransform.GetLocation(), OutLocation, Extent) == true )
+	{
+		UCapsuleComponent* Capsule = PoolingObject->GetComponentByClass<UCapsuleComponent>();
+
+		if ( IsValid(Capsule))
+		{
+			OutLocation.Location.Z += Capsule->GetScaledCapsuleHalfHeight();
+		}
+
+		SpawnTransform.SetLocation(OutLocation);
 	}
 
 	if ( AMUAttackEntityRecord* EntityRecord = Cast<AMUAttackEntityRecord>(AttackEntity) )
@@ -89,8 +107,8 @@ void UMUAT_SpawnAttackEntity::SpawnAttackEntity()
 		}
 	}
 	
+	AttackEntity->ActivateObject(SpawnTransform);
 	AttackEntity->SetLifeSpan(AttackEntityData.LifeSpan);
-
 	
 	SpawnedAttackEntity = AttackEntity;
 	

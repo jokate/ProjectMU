@@ -6,7 +6,6 @@ public class MoonU : ModuleRules
 {
 	public MoonU(ReadOnlyTargetRules Target) : base(Target)
 	{
-		bEnableUndefinedIdentifierWarnings = false;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -18,7 +17,7 @@ public class MoonU : ModuleRules
 			"GameFeatures",
 			"GameplayAbilities",
 			"GameplayTasks",
-			"GameplayTags"
+			"GameplayTags",
 		});
 		
 		PublicIncludePaths.AddRange(new string[] {"MoonU"});

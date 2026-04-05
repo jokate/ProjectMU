@@ -30,6 +30,33 @@ UAbilitySystemComponent* AMUAttackEntity::GetAbilitySystemComponent() const
 	return UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TempSpawnedOwner);
 }
 
+void AMUAttackEntity::LifeSpanExpired()
+{
+	ReturnToPooling();
+}
+
+void AMUAttackEntity::ReturnToPooling()
+{
+	SetActorHiddenInGame( true );
+	SetActorTickEnabled( false );
+	
+	SpawnedOwner = nullptr;
+	bIsActive = false;
+}
+
+bool AMUAttackEntity::CanActivateObject()
+{
+	return !bIsActive;
+}
+
+void AMUAttackEntity::ActivateObject(FTransform Transform)
+{
+	SetActorHiddenInGame( false );
+	SetActorTickEnabled( true );
+	SetActorTransform( Transform );
+	bIsActive = true;
+}
+
 
 
 

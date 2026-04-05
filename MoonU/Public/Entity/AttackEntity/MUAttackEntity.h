@@ -17,7 +17,7 @@ enum class EAttackingType : uint8
 };
 
 UCLASS()
-class MOONU_API AMUAttackEntity : public AActor, public IAbilitySystemInterface
+class MOONU_API AMUAttackEntity : public AActor, public IAbilitySystemInterface, public IObjectPoolingTarget
 {
 	GENERATED_BODY()
 
@@ -26,12 +26,21 @@ public:
 	AMUAttackEntity();
 	
 	virtual void RegisterOwner( AActor* InSpawnedOwner );
+	
+	virtual void ReturnToPooling() override;
+	
+	virtual bool CanActivateObject() override;
+
+	virtual void ActivateObject(FTransform Transform) override;
+	
 protected:
 	
 	UPROPERTY( EditDefaultsOnly )
 	EAttackingType AttackTo = EAttackingType::ENEMY;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	virtual void LifeSpanExpired() override;
 public :
 	UPROPERTY()
 	TWeakObjectPtr<AActor> SpawnedOwner;

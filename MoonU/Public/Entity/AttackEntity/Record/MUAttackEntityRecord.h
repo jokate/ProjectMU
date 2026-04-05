@@ -6,6 +6,7 @@
 #include "Entity/AttackEntity/MUAttackEntity.h"
 #include "MUAttackEntityRecord.generated.h"
 
+class UCapsuleComponent;
 struct FMUCharacterRecordData;
 class UMUCharacterRecordComponent;
 
@@ -19,11 +20,15 @@ public:
 	AMUAttackEntityRecord();
 	virtual void RegisterOwner(AActor* InSpawnedOwner) override;
 	void AllocateRecord(const TArray<FMUCharacterRecordData>& DataArray) const;
+	
 protected:
 	
 public :
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USceneComponent> Root;
+		
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UCapsuleComponent> CollisionCapsule;
 		
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;

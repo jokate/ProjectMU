@@ -3,6 +3,7 @@
 
 #include "Entity/AttackEntity/Record/MUAttackEntityRecord.h"
 
+#include "Components/CapsuleComponent.h"
 #include "Components/MUCharacterRecordComponent.h"
 
 
@@ -13,8 +14,11 @@ AMUAttackEntityRecord::AMUAttackEntityRecord()
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMesh");
 	CharacterRecordComponent = CreateDefaultSubobject<UMUCharacterRecordComponent>("CharacterRecordComponent");
 
+	CollisionCapsule = CreateDefaultSubobject<UCapsuleComponent>("CollisionCapsule");
 	SetRootComponent(Root);
-	SkeletalMesh->SetupAttachment(Root);
+
+	CollisionCapsule->SetupAttachment(Root);
+	SkeletalMesh->SetupAttachment(CollisionCapsule);
 	
 	CharacterRecordComponent->PlayPolicy.bForce = true;
 }

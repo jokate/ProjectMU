@@ -7,7 +7,7 @@
 #include "MUAttackEntityReactor.generated.h"
 
 UCLASS()
-class MOONU_API AMUAttackEntityReactor : public AMUAttackEntity, public IObjectPoolingTarget
+class MOONU_API AMUAttackEntityReactor : public AMUAttackEntity
 {
 	GENERATED_BODY()
 
@@ -38,7 +38,6 @@ protected:
 
 	virtual TArray<AActor*> GetAttackableActorList();
 	
-	virtual void LifeSpanExpired() override;
 	public :
 		UPROPERTY( EditDefaultsOnly )
 	float ReactCheckInterval = 0.5f;
