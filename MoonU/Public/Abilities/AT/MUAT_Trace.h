@@ -21,7 +21,7 @@ class MOONU_API UMUAT_Trace : public UAbilityTask
 	UMUAT_Trace();
 	
 public :
-	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, const FName& TargetDamageInfo );
+	static UMUAT_Trace* CreateTask(UGameplayAbility* OwningAbility, const FName& TargetDamageInfo, const AActor* DamageCauser );
 
 	virtual void Activate() override;
 
@@ -47,4 +47,7 @@ public :
 
 	UPROPERTY()
 	FName TargetDamageInfo;
+
+	UPROPERTY()
+	const AActor* TargetActor;
 };

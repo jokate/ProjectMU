@@ -15,7 +15,10 @@ UCLASS(BlueprintType, Blueprintable, DefaultToInstanced, EditInlineNew )
 class MOONU_API UMUAbilityTriggerPayload : public UObject
 {
 	GENERATED_BODY()
-	
+
+public :
+	UPROPERTY()
+	TWeakObjectPtr<AActor> OwnerActor;
 };
 
 

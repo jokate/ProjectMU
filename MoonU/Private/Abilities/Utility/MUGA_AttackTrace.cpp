@@ -26,8 +26,8 @@ void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 	}
 	
-	// 여기부분을 가급적이면 넘겨받는게 좋긴 하지/
-	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceData->DamageInfoName);
+	// 여기부분을 가급적이면 넘겨받는게 좋긴 하지
+	UMUAT_Trace* AttackTraceTask = UMUAT_Trace::CreateTask(this, TraceData->DamageInfoName, TriggerEventData->Instigator);
 
 	AttackTraceTask->OnComplete.AddDynamic(this, &UMUGA_AttackTrace::OnTraceResultCallback);
 	AttackTraceTask->ReadyForActivation();

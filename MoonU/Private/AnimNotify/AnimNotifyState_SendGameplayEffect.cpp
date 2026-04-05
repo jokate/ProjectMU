@@ -42,7 +42,8 @@ void UAnimNotifyState_SendGameplayEffect::SendGameplayEvent(USkeletalMeshCompone
 
 		i == 0 ? EventData.OptionalObject = Payloads[i] : EventData.OptionalObject2 = Payloads[i];
 	}
-	
+
+	EventData.Instigator = OwnerActor;
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, NotifyData.TargetToTrigger, EventData);
 }
 

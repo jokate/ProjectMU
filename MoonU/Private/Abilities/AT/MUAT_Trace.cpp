@@ -12,14 +12,16 @@
 
 UMUAT_Trace::UMUAT_Trace()
 {
-	
+	TargetActor = nullptr;
 }
 
-UMUAT_Trace* UMUAT_Trace::CreateTask(UGameplayAbility* OwningAbility, const FName& TargetDamageInfo )
+UMUAT_Trace* UMUAT_Trace::CreateTask(UGameplayAbility* OwningAbility, const FName& TargetDamageInfo,
+	const AActor* DamageCauser)
 {
 	UMUAT_Trace* NewTask = NewAbilityTask<UMUAT_Trace>(OwningAbility);
-	NewTask->TargetDamageInfo = TargetDamageInfo;
-	return NewTask;
+    NewTask->TargetDamageInfo = TargetDamageInfo;
+	NewTask->TargetActor = DamageCauser;
+    return NewTask;
 }
 
 void UMUAT_Trace::Activate()
@@ -112,11 +114,13 @@ nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn));
 
 void UMUAT_Trace::FinalizeTargetActor(AMUTA_Trace* TraceTarget, const FTransform& FinalizeTransform, const FName& AttachmentSocket)
 {
-	ACharacter* AvatarActor = Cast<ACharacter>(GetAvatarActor());
-	USkeletalMeshComponent* SkeletalComponent = AvatarActor->GetMesh();
+	if ( IsValid(TargetActor) == false )
+		return;
+	
+	USkeletalMeshComponent* SkeletalComponent = TargetActor->GetComponentByClass<USkeletalMeshComponent>();
 	UAbilitySystemComponent* ASC = AbilitySystemComponent.Get();
 
-	if ( IsValid(AvatarActor) == false || IsValid(SkeletalComponent) == false || IsValid(ASC) == false )
+	if ( IsValid(SkeletalComponent) == false || IsValid(ASC) == false )
 	{
 		return;
 	}
