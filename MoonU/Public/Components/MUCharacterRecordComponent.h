@@ -48,10 +48,7 @@ protected :
 	void Record(float DeltaTime);
 	void Play();
 	void OnChangedAttribute(const FOnAttributeChangeData& Payload);
-
 	void PlayRecord(const FMUCharacterRecordData& CharacterRecordData, bool bUseVelocity);
-
-	
 	bool CheckPolicy(const FMUCharacterRecordPolicy& Policy) const;
 
 public : 

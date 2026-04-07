@@ -10,7 +10,7 @@
 
 UMUGA_AttackTrace::UMUGA_AttackTrace()
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerExecution;
 }
 
 void UMUGA_AttackTrace::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

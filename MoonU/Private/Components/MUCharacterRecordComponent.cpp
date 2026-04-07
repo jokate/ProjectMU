@@ -23,13 +23,11 @@ void UMUCharacterRecordComponent::BeginPlay()
 
 void UMUCharacterRecordComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	auto* GM = GetWorld()->GetAuthGameMode();
+	AGameModeBase* GM = GetWorld()->GetAuthGameMode();
 
-	if (GM)
+	if (IsValid(GM))
 	{
-		const auto* Owner = GetOwner<ITimeWindTarget>();
-
-		if (Owner)
+		if (const ITimeWindTarget* Owner = GetOwner<ITimeWindTarget>())
 		{
 			if (auto* TGM = Cast<ITimeWinder>(GM))
 			{
@@ -40,7 +38,7 @@ void UMUCharacterRecordComponent::EndPlay(const EEndPlayReason::Type EndPlayReas
 
 	UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
 
-	if (AbilitySystemComponent)
+	if (IsValid(AbilitySystemComponent))
 	{
 		for (const auto& RecordAttribute : RecordGameplayAttributes)
 		{
@@ -89,7 +87,7 @@ void UMUCharacterRecordComponent::OnInitialize()
 {
 	UWorld* World = GetWorld();
 
-	if (World == nullptr)
+	if (IsValid(World) == false)
 	{
 		return;
 	}

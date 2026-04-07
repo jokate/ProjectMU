@@ -92,6 +92,7 @@ public :
 	FGameplayTagContainer GameplayCueTags;
 	UPROPERTY( BlueprintAssignable )
 	FOnSkillStateChanged OnSkillStateChanged;
+	
 	UPROPERTY( EditDefaultsOnly )
 	FName SkillID = NAME_None;
 	
